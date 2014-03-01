@@ -1,0 +1,7 @@
+#!/bin/bash -eu
+echo "module protocols where" >$1
+git ls-files . |
+  grep -v '^protocols.agda$' |
+  grep '\.agda$' |
+  sed -e 's|\(.*\)\.agda|import \1|' |
+  tr / . >>$1
