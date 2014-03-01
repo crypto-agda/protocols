@@ -27,3 +27,11 @@ module _ {A : ★} (Aᴾ : A → Proto){{_ : FunExt}} where
     dual-extend-send (recv P) = send=′ λ m → dual-extend-send (P m)
     dual-extend-send (send P) = recv=′ [inl: (λ m → dual-extend-send (P m))
                                        ,inr: (λ x → refl) ]
+
+data Abort : ★ where abort : Abort
+
+Abortᴾ : Abort → Proto
+Abortᴾ _ = end
+
+add-abort : Proto → Proto
+add-abort = extend-send Abortᴾ
