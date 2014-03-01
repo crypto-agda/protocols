@@ -172,10 +172,12 @@ module _ {{_ : FunExt}}{{_ : UA}} where
   ⅋-sendL : ∀ {M}{P : M → Proto} Q (m : M) → ⟦ P m ⅋ Q ⟧ → ⟦ send P ⅋ Q ⟧
   ⅋-sendL {M} {P} Q m pq = coe (⅋-comm Q (send P)) (⅋-sendR Q m (coe (⅋-comm (P m) Q) pq))
 
-  ⅋-id : ∀ P → ⟦ dual P ⅋ P ⟧
-  ⅋-id end      = end
-  ⅋-id (recv P) = λ x → ⅋-sendL (P x) x (⅋-id (P x))
-  ⅋-id (send P) = λ x → ⅋-sendR (dual (P x)) x (⅋-id (P x))
+  fwd : ∀ P → ⟦ dual P ⅋ P ⟧
+  fwd end      = end
+  fwd (recv P) = λ x → ⅋-sendL (P x) x (fwd (P x))
+  fwd (send P) = λ x → ⅋-sendR (dual (P x)) x (fwd (P x))
+
+  ⅋-id = fwd
 
   -- left-biased “strategy”
   par : ∀ P Q → ⟦ P ⟧ → ⟦ Q ⟧ → ⟦ P ⅋ Q ⟧
@@ -277,6 +279,45 @@ module _ {{_ : FunExt}}{{_ : UA}} where
     -- multiplicative mix (left-biased)
     mmix : ∀ P Q → ⟦ P ⊗ Q ⟧ → ⟦ P ⅋ Q ⟧
     mmix P Q pq = par P Q (⊗-fst P Q pq) (⊗-snd P Q pq)
+
+data View-∘-proto : (P Q R : Proto) → ★₁ where
+  sendLL : ∀ {M N}(P : M → Proto)(Q : N → Proto) R
+           → View-∘-proto (send P) (send Q) R
+  recvLL : ∀ {M} (P : M → Proto) Q R
+           → View-∘-proto (recv P) Q R
+  recvR-sendR : ∀ {MP MQ MR}ioP(P : MP → Proto)(Q : MQ → Proto)(R : MR → Proto)
+                → View-∘-proto (com ioP P) (recv Q) (send R)
+  recvRR : ∀ {MP MQ MR}(P : MP → Proto)(Q : MQ → Proto)(R : MR → Proto)
+           → View-∘-proto (send P) (recv Q) (recv R)
+  endL : ∀ Q R → View-∘-proto end Q R
+  sendLM : ∀ {MP}(P : MP → Proto)R → View-∘-proto (send P) end R
+  recvL-sendR : ∀ {MP MQ}(P : MP → Proto)(Q : MQ → Proto)
+                → View-∘-proto (send P) (recv Q) end
+
+view-∘-proto : ∀ P Q R → View-∘-proto P Q R
+view-∘-proto end      Q        R        = endL Q R
+view-∘-proto (recv P) Q        R        = recvLL P Q R
+view-∘-proto (send P) end      R        = sendLM P R
+view-∘-proto (send P) (recv Q) end      = recvL-sendR P Q
+view-∘-proto (send P) (recv Q) (recv R) = recvRR P Q R
+view-∘-proto (send P) (recv Q) (send R) = recvR-sendR Out P Q R
+view-∘-proto (send P) (send Q) R        = sendLL P Q R
+
+module _ {{_ : FunExt}}{{_ : UA}} where
+    ⅋-∘ : ∀ {P Q R} → ⟦ P ⅋ Q ⟧ → ⟦ dual Q ⅋ R ⟧ → ⟦ P ⅋ R ⟧
+    ⅋-∘ {P} {Q} {R} pq qr with view-∘-proto P Q R
+    ⅋-∘ (inl m , pq) qr | sendLL P Q R = ⅋-sendL R m (⅋-∘ {P m} {send Q} {R} pq qr)
+    ⅋-∘ (inr m , pq) qr | sendLL P Q R = ⅋-∘ {send P} {Q m} pq (qr m)
+    ⅋-∘ pq qr           | recvLL P Q M = λ m → ⅋-∘ {P m} (pq m) qr
+    ⅋-∘ pq (inl m , qr) | recvR-sendR ioP P Q R = ⅋-∘ {com ioP P} {Q m} {send R} (coe (⅋-recvR (com ioP P) Q) pq m) qr
+    ⅋-∘ pq (inr m , qr) | recvR-sendR ioP P Q R = ⅋-sendR (com ioP P) m (⅋-∘ {com ioP P} {recv Q} {R m} pq qr)
+    ⅋-∘ pq qr           | recvRR P Q R = λ m → ⅋-∘ {send P} {recv Q} {R m} pq (qr m)
+    ⅋-∘ pq qr           | endL Q R = ⊸-apply {Q} {R} qr pq
+    ⅋-∘ (m , pq) qr     | sendLM P R = ⅋-sendL R m (par (P m) R pq qr)
+    ⅋-∘ pq (m , qr)     | recvL-sendR P Q = ⅋-∘ {send P} {Q m} {end} (pq m) (coe! (ap ⟦_⟧ (⅋-endR (dual (Q m)))) qr)
+
+-- -}
+-- -}
 -- -}
 -- -}
 -- -}
