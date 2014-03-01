@@ -3,6 +3,7 @@
 *~
 *.swp
 \.gup/
+\.\#*
 \#*\#
 /html/
 /MAlonzo/
