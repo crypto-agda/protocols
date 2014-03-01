@@ -1,0 +1,757 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Control.Protocol.CLL</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Keyword"
+      >open</a
+      ><a name="33"
+      > </a
+      ><a name="34" class="Keyword"
+      >import</a
+      ><a name="40"
+      > </a
+      ><a name="41" href="Type.html#1" class="Module"
+      >Type</a
+      ><a name="45"
+      >
+</a
+      ><a name="46" class="Keyword"
+      >open</a
+      ><a name="50"
+      > </a
+      ><a name="51" class="Keyword"
+      >import</a
+      ><a name="57"
+      > </a
+      ><a name="58" href="Control.Protocol.html#1" class="Module"
+      >Control.Protocol</a
+      ><a name="74"
+      >
+</a
+      ><a name="75" class="Keyword"
+      >open</a
+      ><a name="79"
+      > </a
+      ><a name="80" class="Keyword"
+      >import</a
+      ><a name="86"
+      > </a
+      ><a name="87" href="Control.Protocol.Additive.html#1" class="Module"
+      >Control.Protocol.Additive</a
+      ><a name="112"
+      >
+</a
+      ><a name="113" class="Keyword"
+      >open</a
+      ><a name="117"
+      > </a
+      ><a name="118" class="Keyword"
+      >import</a
+      ><a name="124"
+      > </a
+      ><a name="125" href="Control.Protocol.Multiplicative.html#1" class="Module"
+      >Control.Protocol.Multiplicative</a
+      ><a name="156"
+      >
+
+</a
+      ><a name="158" class="Keyword"
+      >module</a
+      ><a name="164"
+      > </a
+      ><a name="165" href="Control.Protocol.CLL.html#1" class="Module"
+      >Control.Protocol.CLL</a
+      ><a name="185"
+      > </a
+      ><a name="186" class="Keyword"
+      >where</a
+      ><a name="191"
+      >
+</a
+      ><a name="192" class="Comment"
+      >{-
+A `&#8855; B 'times', context chooses how A and B are used
+A `&#8523; B 'par', &quot;we&quot; chooses how A and B are used
+A `&#8853; B 'plus', select from A or B
+A `&amp; B 'with', offer choice of A or B
+`! A   'of course!', server accept
+`? A   'why not?', client request
+`1     unit for `&#8855;
+`&#8869;     unit for `&#8523;
+`0     unit for `&#8853;
+`&#8868;     unit for `&amp;
+-}</a
+      ><a name="515"
+      >
+</a
+      ><a name="516" class="Keyword"
+      >data</a
+      ><a name="520"
+      > </a
+      ><a name="521" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="524"
+      > </a
+      ><a name="525" class="Symbol"
+      >:</a
+      ><a name="526"
+      > </a
+      ><a name="527" href="Type.html#125" class="Function"
+      >&#9733;</a
+      ><a name="528"
+      > </a
+      ><a name="529" class="Keyword"
+      >where</a
+      ><a name="534"
+      >
+  </a
+      ><a name="537" href="Control.Protocol.CLL.html#537" class="InductiveConstructor"
+      >`1</a
+      ><a name="539"
+      > </a
+      ><a name="540" href="Control.Protocol.CLL.html#540" class="InductiveConstructor"
+      >`&#8868;</a
+      ><a name="542"
+      > </a
+      ><a name="543" href="Control.Protocol.CLL.html#543" class="InductiveConstructor"
+      >`0</a
+      ><a name="545"
+      > </a
+      ><a name="546" href="Control.Protocol.CLL.html#546" class="InductiveConstructor"
+      >`&#8869;</a
+      ><a name="548"
+      > </a
+      ><a name="549" class="Symbol"
+      >:</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="554"
+      >
+  </a
+      ><a name="557" href="Control.Protocol.CLL.html#557" class="InductiveConstructor Operator"
+      >_`&#8855;_</a
+      ><a name="561"
+      > </a
+      ><a name="562" href="Control.Protocol.CLL.html#562" class="InductiveConstructor Operator"
+      >_`&#8523;_</a
+      ><a name="566"
+      > </a
+      ><a name="567" href="Control.Protocol.CLL.html#567" class="InductiveConstructor Operator"
+      >_`&#8853;_</a
+      ><a name="571"
+      > </a
+      ><a name="572" href="Control.Protocol.CLL.html#572" class="InductiveConstructor Operator"
+      >_`&amp;_</a
+      ><a name="576"
+      > </a
+      ><a name="577" class="Symbol"
+      >:</a
+      ><a name="578"
+      > </a
+      ><a name="579" class="Symbol"
+      >(</a
+      ><a name="580" href="Control.Protocol.CLL.html#580" class="Bound"
+      >A</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Control.Protocol.CLL.html#582" class="Bound"
+      >B</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >:</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="589" class="Symbol"
+      >)</a
+      ><a name="590"
+      > </a
+      ><a name="591" class="Symbol"
+      >&#8594;</a
+      ><a name="592"
+      > </a
+      ><a name="593" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="596"
+      >
+  </a
+      ><a name="599" class="Comment"
+      >-- `!_ `?_ : (A : CLL) &#8594; CLL</a
+      ><a name="627"
+      >
+
+</a
+      ><a name="629" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >_&#8869;</a
+      ><a name="631"
+      > </a
+      ><a name="632" class="Symbol"
+      >:</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="637"
+      > </a
+      ><a name="638" class="Symbol"
+      >&#8594;</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="643"
+      >
+</a
+      ><a name="644" href="Control.Protocol.CLL.html#537" class="InductiveConstructor"
+      >`1</a
+      ><a name="646"
+      > </a
+      ><a name="647" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="648"
+      > </a
+      ><a name="649" class="Symbol"
+      >=</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="Control.Protocol.CLL.html#546" class="InductiveConstructor"
+      >`&#8869;</a
+      ><a name="653"
+      >
+</a
+      ><a name="654" href="Control.Protocol.CLL.html#546" class="InductiveConstructor"
+      >`&#8869;</a
+      ><a name="656"
+      > </a
+      ><a name="657" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="658"
+      > </a
+      ><a name="659" class="Symbol"
+      >=</a
+      ><a name="660"
+      > </a
+      ><a name="661" href="Control.Protocol.CLL.html#537" class="InductiveConstructor"
+      >`1</a
+      ><a name="663"
+      >
+</a
+      ><a name="664" href="Control.Protocol.CLL.html#543" class="InductiveConstructor"
+      >`0</a
+      ><a name="666"
+      > </a
+      ><a name="667" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="668"
+      > </a
+      ><a name="669" class="Symbol"
+      >=</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Control.Protocol.CLL.html#540" class="InductiveConstructor"
+      >`&#8868;</a
+      ><a name="673"
+      >
+</a
+      ><a name="674" href="Control.Protocol.CLL.html#540" class="InductiveConstructor"
+      >`&#8868;</a
+      ><a name="676"
+      > </a
+      ><a name="677" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="678"
+      > </a
+      ><a name="679" class="Symbol"
+      >=</a
+      ><a name="680"
+      > </a
+      ><a name="681" href="Control.Protocol.CLL.html#543" class="InductiveConstructor"
+      >`0</a
+      ><a name="683"
+      >
+</a
+      ><a name="684" class="Symbol"
+      >(</a
+      ><a name="685" href="Control.Protocol.CLL.html#685" class="Bound"
+      >A</a
+      ><a name="686"
+      > </a
+      ><a name="687" href="Control.Protocol.CLL.html#557" class="InductiveConstructor Operator"
+      >`&#8855;</a
+      ><a name="689"
+      > </a
+      ><a name="690" href="Control.Protocol.CLL.html#690" class="Bound"
+      >B</a
+      ><a name="691" class="Symbol"
+      >)</a
+      ><a name="692" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="693"
+      > </a
+      ><a name="694" class="Symbol"
+      >=</a
+      ><a name="695"
+      > </a
+      ><a name="696" href="Control.Protocol.CLL.html#685" class="Bound"
+      >A</a
+      ><a name="697"
+      > </a
+      ><a name="698" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="699"
+      > </a
+      ><a name="700" href="Control.Protocol.CLL.html#562" class="InductiveConstructor Operator"
+      >`&#8523;</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="Control.Protocol.CLL.html#690" class="Bound"
+      >B</a
+      ><a name="704"
+      > </a
+      ><a name="705" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="706"
+      >
+</a
+      ><a name="707" class="Symbol"
+      >(</a
+      ><a name="708" href="Control.Protocol.CLL.html#708" class="Bound"
+      >A</a
+      ><a name="709"
+      > </a
+      ><a name="710" href="Control.Protocol.CLL.html#562" class="InductiveConstructor Operator"
+      >`&#8523;</a
+      ><a name="712"
+      > </a
+      ><a name="713" href="Control.Protocol.CLL.html#713" class="Bound"
+      >B</a
+      ><a name="714" class="Symbol"
+      >)</a
+      ><a name="715" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="716"
+      > </a
+      ><a name="717" class="Symbol"
+      >=</a
+      ><a name="718"
+      > </a
+      ><a name="719" href="Control.Protocol.CLL.html#708" class="Bound"
+      >A</a
+      ><a name="720"
+      > </a
+      ><a name="721" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="Control.Protocol.CLL.html#557" class="InductiveConstructor Operator"
+      >`&#8855;</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Control.Protocol.CLL.html#713" class="Bound"
+      >B</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="729"
+      >
+</a
+      ><a name="730" class="Symbol"
+      >(</a
+      ><a name="731" href="Control.Protocol.CLL.html#731" class="Bound"
+      >A</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Control.Protocol.CLL.html#567" class="InductiveConstructor Operator"
+      >`&#8853;</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Control.Protocol.CLL.html#736" class="Bound"
+      >B</a
+      ><a name="737" class="Symbol"
+      >)</a
+      ><a name="738" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >=</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Control.Protocol.CLL.html#731" class="Bound"
+      >A</a
+      ><a name="743"
+      > </a
+      ><a name="744" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="745"
+      > </a
+      ><a name="746" href="Control.Protocol.CLL.html#572" class="InductiveConstructor Operator"
+      >`&amp;</a
+      ><a name="748"
+      > </a
+      ><a name="749" href="Control.Protocol.CLL.html#736" class="Bound"
+      >B</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="752"
+      >
+</a
+      ><a name="753" class="Symbol"
+      >(</a
+      ><a name="754" href="Control.Protocol.CLL.html#754" class="Bound"
+      >A</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Control.Protocol.CLL.html#572" class="InductiveConstructor Operator"
+      >`&amp;</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Control.Protocol.CLL.html#759" class="Bound"
+      >B</a
+      ><a name="760" class="Symbol"
+      >)</a
+      ><a name="761" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >=</a
+      ><a name="764"
+      > </a
+      ><a name="765" href="Control.Protocol.CLL.html#754" class="Bound"
+      >A</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Control.Protocol.CLL.html#567" class="InductiveConstructor Operator"
+      >`&#8853;</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="Control.Protocol.CLL.html#759" class="Bound"
+      >B</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Control.Protocol.CLL.html#629" class="Function Operator"
+      >&#8869;</a
+      ><a name="775"
+      >
+</a
+      ><a name="776" class="Comment"
+      >{-
+(`! A)&#8869; = `?(A &#8869;)
+(`? A)&#8869; = `!(A &#8869;)
+-}</a
+      ><a name="817"
+      >
+
+</a
+      ><a name="819" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="828"
+      > </a
+      ><a name="829" class="Symbol"
+      >:</a
+      ><a name="830"
+      > </a
+      ><a name="831" href="Control.Protocol.CLL.html#521" class="Datatype"
+      >CLL</a
+      ><a name="834"
+      > </a
+      ><a name="835" class="Symbol"
+      >&#8594;</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Control.Protocol.html#1090" class="Function"
+      >Proto</a
+      ><a name="842"
+      >
+</a
+      ><a name="843" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="852"
+      > </a
+      ><a name="853" href="Control.Protocol.CLL.html#537" class="InductiveConstructor"
+      >`1</a
+      ><a name="855"
+      >       </a
+      ><a name="862" class="Symbol"
+      >=</a
+      ><a name="863"
+      > </a
+      ><a name="864" href="Control.Protocol.html#957" class="InductiveConstructor"
+      >end</a
+      ><a name="867"
+      >
+</a
+      ><a name="868" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="877"
+      > </a
+      ><a name="878" href="Control.Protocol.CLL.html#546" class="InductiveConstructor"
+      >`&#8869;</a
+      ><a name="880"
+      >       </a
+      ><a name="887" class="Symbol"
+      >=</a
+      ><a name="888"
+      > </a
+      ><a name="889" href="Control.Protocol.html#957" class="InductiveConstructor"
+      >end</a
+      ><a name="892"
+      >
+</a
+      ><a name="893" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="902"
+      > </a
+      ><a name="903" href="Control.Protocol.CLL.html#543" class="InductiveConstructor"
+      >`0</a
+      ><a name="905"
+      >       </a
+      ><a name="912" class="Symbol"
+      >=</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Control.Protocol.Additive.html#639" class="Function"
+      >P0</a
+      ><a name="916"
+      >
+</a
+      ><a name="917" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Control.Protocol.CLL.html#540" class="InductiveConstructor"
+      >`&#8868;</a
+      ><a name="929"
+      >       </a
+      ><a name="936" class="Symbol"
+      >=</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Control.Protocol.Additive.html#604" class="Function"
+      >P&#8868;</a
+      ><a name="940"
+      >
+</a
+      ><a name="941" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >(</a
+      ><a name="952" href="Control.Protocol.CLL.html#952" class="Bound"
+      >A</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Control.Protocol.CLL.html#557" class="InductiveConstructor Operator"
+      >`&#8855;</a
+      ><a name="956"
+      > </a
+      ><a name="957" href="Control.Protocol.CLL.html#957" class="Bound"
+      >B</a
+      ><a name="958" class="Symbol"
+      >)</a
+      ><a name="959"
+      > </a
+      ><a name="960" class="Symbol"
+      >=</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Control.Protocol.CLL.html#952" class="Bound"
+      >A</a
+      ><a name="973"
+      > </a
+      ><a name="974" href="Control.Protocol.Multiplicative.html#916" class="Function Operator"
+      >&#8855;</a
+      ><a name="975"
+      > </a
+      ><a name="976" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="985"
+      > </a
+      ><a name="986" href="Control.Protocol.CLL.html#957" class="Bound"
+      >B</a
+      ><a name="987"
+      >
+</a
+      ><a name="988" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="997"
+      > </a
+      ><a name="998" class="Symbol"
+      >(</a
+      ><a name="999" href="Control.Protocol.CLL.html#999" class="Bound"
+      >A</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Control.Protocol.CLL.html#562" class="InductiveConstructor Operator"
+      >`&#8523;</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Control.Protocol.CLL.html#1004" class="Bound"
+      >B</a
+      ><a name="1005" class="Symbol"
+      >)</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" class="Symbol"
+      >=</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="Control.Protocol.CLL.html#999" class="Bound"
+      >A</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Control.Protocol.Multiplicative.html#671" class="Function Operator"
+      >&#8523;</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="Control.Protocol.CLL.html#1004" class="Bound"
+      >B</a
+      ><a name="1034"
+      >
+</a
+      ><a name="1035" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" class="Symbol"
+      >(</a
+      ><a name="1046" href="Control.Protocol.CLL.html#1046" class="Bound"
+      >A</a
+      ><a name="1047"
+      > </a
+      ><a name="1048" href="Control.Protocol.CLL.html#567" class="InductiveConstructor Operator"
+      >`&#8853;</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Control.Protocol.CLL.html#1051" class="Bound"
+      >B</a
+      ><a name="1052" class="Symbol"
+      >)</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" class="Symbol"
+      >=</a
+      ><a name="1055"
+      > </a
+      ><a name="1056" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Control.Protocol.CLL.html#1046" class="Bound"
+      >A</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Control.Protocol.Additive.html#903" class="Function Operator"
+      >&#8853;</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Control.Protocol.CLL.html#1051" class="Bound"
+      >B</a
+      ><a name="1081"
+      >
+</a
+      ><a name="1082" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Symbol"
+      >(</a
+      ><a name="1093" href="Control.Protocol.CLL.html#1093" class="Bound"
+      >A</a
+      ><a name="1094"
+      > </a
+      ><a name="1095" href="Control.Protocol.CLL.html#572" class="InductiveConstructor Operator"
+      >`&amp;</a
+      ><a name="1097"
+      > </a
+      ><a name="1098" href="Control.Protocol.CLL.html#1098" class="Bound"
+      >B</a
+      ><a name="1099" class="Symbol"
+      >)</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" class="Symbol"
+      >=</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" href="Control.Protocol.CLL.html#1093" class="Bound"
+      >A</a
+      ><a name="1114"
+      > </a
+      ><a name="1115" href="Control.Protocol.Additive.html#958" class="Function Operator"
+      >&amp;</a
+      ><a name="1116"
+      > </a
+      ><a name="1117" href="Control.Protocol.CLL.html#819" class="Function"
+      >CLL-proto</a
+      ><a name="1126"
+      > </a
+      ><a name="1127" href="Control.Protocol.CLL.html#1098" class="Bound"
+      >B</a
+      ><a name="1128"
+      >
+
+</a
+      ><a name="1130" class="Comment"
+      >{- The point of this could be to devise a particular equivalence
+   relation for processes. It could properly deal with &#8523;. -}</a
+      ><a name="1255"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

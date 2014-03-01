@@ -1,0 +1,1306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Algebra.RingSolver.Natural-coefficients</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Instantiates the ring solver, using the natural numbers as the</a
+      ><a name="199"
+      >
+</a
+      ><a name="200" class="Comment"
+      >-- coefficient &quot;ring&quot;</a
+      ><a name="221"
+      >
+</a
+      ><a name="222" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="294"
+      >
+
+</a
+      ><a name="296" class="Keyword"
+      >open</a
+      ><a name="300"
+      > </a
+      ><a name="301" class="Keyword"
+      >import</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="Algebra.html#1" class="Module"
+      >Algebra</a
+      ><a name="315"
+      >
+</a
+      ><a name="316" class="Keyword"
+      >import</a
+      ><a name="322"
+      > </a
+      ><a name="323" href="Algebra.Operations.html#1" class="Module"
+      >Algebra.Operations</a
+      ><a name="341"
+      >
+</a
+      ><a name="342" class="Keyword"
+      >open</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Keyword"
+      >import</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Relation.Nullary.html#1" class="Module"
+      >Relation.Nullary</a
+      ><a name="370"
+      >
+
+</a
+      ><a name="372" class="Keyword"
+      >module</a
+      ><a name="378"
+      > </a
+      ><a name="379" href="Algebra.RingSolver.Natural-coefficients.html#1" class="Module"
+      >Algebra.RingSolver.Natural-coefficients</a
+      ><a name="418"
+      >
+         </a
+      ><a name="428" class="Symbol"
+      >{</a
+      ><a name="429" href="Algebra.RingSolver.Natural-coefficients.html#429" class="Bound"
+      >r&#8321;</a
+      ><a name="431"
+      > </a
+      ><a name="432" href="Algebra.RingSolver.Natural-coefficients.html#432" class="Bound"
+      >r&#8322;</a
+      ><a name="434" class="Symbol"
+      >}</a
+      ><a name="435"
+      >
+         </a
+      ><a name="445" class="Symbol"
+      >(</a
+      ><a name="446" href="Algebra.RingSolver.Natural-coefficients.html#446" class="Bound"
+      >R</a
+      ><a name="447"
+      > </a
+      ><a name="448" class="Symbol"
+      >:</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Algebra.html#7890" class="Record"
+      >CommutativeSemiring</a
+      ><a name="469"
+      > </a
+      ><a name="470" href="Algebra.RingSolver.Natural-coefficients.html#429" class="Bound"
+      >r&#8321;</a
+      ><a name="472"
+      > </a
+      ><a name="473" href="Algebra.RingSolver.Natural-coefficients.html#432" class="Bound"
+      >r&#8322;</a
+      ><a name="475" class="Symbol"
+      >)</a
+      ><a name="476"
+      >
+         </a
+      ><a name="486" class="Symbol"
+      >(</a
+      ><a name="487" href="Algebra.RingSolver.Natural-coefficients.html#487" class="Bound"
+      >dec</a
+      ><a name="490"
+      > </a
+      ><a name="491" class="Symbol"
+      >:</a
+      ><a name="492"
+      > </a
+      ><a name="493" class="Keyword"
+      >let</a
+      ><a name="496"
+      > </a
+      ><a name="497" class="Keyword"
+      >open</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Algebra.html#7890" class="Module"
+      >CommutativeSemiring</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Algebra.RingSolver.Natural-coefficients.html#446" class="Bound"
+      >R</a
+      ><a name="523"
+      >
+                    </a
+      ><a name="544" class="Keyword"
+      >open</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Algebra.Operations.html#1" class="Module"
+      >Algebra.Operations</a
+      ><a name="567"
+      > </a
+      ><a name="568" href="Algebra.html#8351" class="Function"
+      >semiring</a
+      ><a name="576"
+      > </a
+      ><a name="577" class="Keyword"
+      >in</a
+      ><a name="579"
+      >
+                </a
+      ><a name="596" class="Symbol"
+      >&#8704;</a
+      ><a name="597"
+      > </a
+      ><a name="598" href="Algebra.RingSolver.Natural-coefficients.html#598" class="Bound"
+      >m</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Algebra.RingSolver.Natural-coefficients.html#600" class="Bound"
+      >n</a
+      ><a name="601"
+      > </a
+      ><a name="602" class="Symbol"
+      >&#8594;</a
+      ><a name="603"
+      > </a
+      ><a name="604" href="Relation.Nullary.Core.html#496" class="Datatype"
+      >Dec</a
+      ><a name="607"
+      > </a
+      ><a name="608" class="Symbol"
+      >(</a
+      ><a name="609" href="Algebra.RingSolver.Natural-coefficients.html#598" class="Bound"
+      >m</a
+      ><a name="610"
+      > </a
+      ><a name="611" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="615"
+      > </a
+      ><a name="616" href="Algebra.html#8031" class="Function Operator"
+      >&#8776;</a
+      ><a name="617"
+      > </a
+      ><a name="618" href="Algebra.RingSolver.Natural-coefficients.html#600" class="Bound"
+      >n</a
+      ><a name="619"
+      > </a
+      ><a name="620" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="621"
+      > </a
+      ><a name="622" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="624" class="Symbol"
+      >))</a
+      ><a name="626"
+      > </a
+      ><a name="627" class="Keyword"
+      >where</a
+      ><a name="632"
+      >
+
+</a
+      ><a name="634" class="Keyword"
+      >import</a
+      ><a name="640"
+      > </a
+      ><a name="641" href="Algebra.RingSolver.html#1" class="Module"
+      >Algebra.RingSolver</a
+      ><a name="659"
+      >
+</a
+      ><a name="660" class="Keyword"
+      >open</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Keyword"
+      >import</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="Algebra.RingSolver.AlmostCommutativeRing.html#1" class="Module"
+      >Algebra.RingSolver.AlmostCommutativeRing</a
+      ><a name="712"
+      >
+</a
+      ><a name="713" class="Keyword"
+      >open</a
+      ><a name="717"
+      > </a
+      ><a name="718" class="Keyword"
+      >import</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="733"
+      > </a
+      ><a name="734" class="Symbol"
+      >as</a
+      ><a name="736"
+      > </a
+      ><a name="737" class="Module"
+      >&#8469;</a
+      ><a name="738"
+      >
+</a
+      ><a name="739" class="Keyword"
+      >open</a
+      ><a name="743"
+      > </a
+      ><a name="744" class="Keyword"
+      >import</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="763"
+      > </a
+      ><a name="764" class="Keyword"
+      >using</a
+      ><a name="769"
+      > </a
+      ><a name="770" class="Symbol"
+      >(</a
+      ><a name="771" class="Keyword"
+      >module</a
+      ><a name="777"
+      > &#931;</a
+      ><a name="779" class="Symbol"
+      >)</a
+      ><a name="780"
+      >
+</a
+      ><a name="781" class="Keyword"
+      >open</a
+      ><a name="785"
+      > </a
+      ><a name="786" class="Keyword"
+      >import</a
+      ><a name="792"
+      > </a
+      ><a name="793" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="801"
+      >
+</a
+      ><a name="802" class="Keyword"
+      >import</a
+      ><a name="808"
+      > </a
+      ><a name="809" href="Relation.Binary.EqReasoning.html#1" class="Module"
+      >Relation.Binary.EqReasoning</a
+      ><a name="836"
+      >
+</a
+      ><a name="837" class="Keyword"
+      >import</a
+      ><a name="843"
+      > </a
+      ><a name="844" href="Relation.Nullary.Decidable.html#1" class="Module"
+      >Relation.Nullary.Decidable</a
+      ><a name="870"
+      > </a
+      ><a name="871" class="Symbol"
+      >as</a
+      ><a name="873"
+      > </a
+      ><a name="874" class="Module"
+      >Dec</a
+      ><a name="877"
+      >
+
+</a
+      ><a name="879" class="Keyword"
+      >open</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="Algebra.html#7890" class="Module"
+      >CommutativeSemiring</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Algebra.RingSolver.Natural-coefficients.html#446" class="Bound"
+      >R</a
+      ><a name="905"
+      >
+</a
+      ><a name="906" class="Keyword"
+      >open</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="Algebra.Operations.html#1" class="Module"
+      >Algebra.Operations</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Algebra.html#8351" class="Function"
+      >semiring</a
+      ><a name="938"
+      >
+</a
+      ><a name="939" class="Keyword"
+      >open</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Relation.Binary.EqReasoning.html#1" class="Module"
+      >Relation.Binary.EqReasoning</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Algebra.html#873" class="Function"
+      >setoid</a
+      ><a name="978"
+      >
+
+</a
+      ><a name="980" class="Keyword"
+      >private</a
+      ><a name="987"
+      >
+
+  </a
+      ><a name="991" class="Comment"
+      >-- The coefficient &quot;ring&quot;.</a
+      ><a name="1017"
+      >
+
+  </a
+      ><a name="1021" href="Algebra.RingSolver.Natural-coefficients.html#1021" class="Function"
+      >&#8469;-ring</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" class="Symbol"
+      >:</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Algebra.html#9203" class="Record"
+      >RawRing</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" class="Symbol"
+      >_</a
+      ><a name="1039"
+      >
+  </a
+      ><a name="1042" href="Algebra.RingSolver.Natural-coefficients.html#1021" class="Function"
+      >&#8469;-ring</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" class="Symbol"
+      >=</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" class="Keyword"
+      >record</a
+      ><a name="1057"
+      >
+    </a
+      ><a name="1062" class="Symbol"
+      >{</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" class="Field"
+      >Carrier</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" class="Symbol"
+      >=</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Data.Nat.html#726" class="Datatype"
+      >&#8469;</a
+      ><a name="1075"
+      >
+    </a
+      ><a name="1080" class="Symbol"
+      >;</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" class="Field Operator"
+      >_+_</a
+      ><a name="1085"
+      >     </a
+      ><a name="1090" class="Symbol"
+      >=</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;._+_</a
+      ><a name="1097"
+      >
+    </a
+      ><a name="1102" class="Symbol"
+      >;</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" class="Field Operator"
+      >_*_</a
+      ><a name="1107"
+      >     </a
+      ><a name="1112" class="Symbol"
+      >=</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;._*_</a
+      ><a name="1119"
+      >
+    </a
+      ><a name="1124" class="Symbol"
+      >;</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" class="Field Operator"
+      >-_</a
+      ><a name="1128"
+      >      </a
+      ><a name="1134" class="Symbol"
+      >=</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Function.html#1040" class="Function"
+      >id</a
+      ><a name="1138"
+      >
+    </a
+      ><a name="1143" class="Symbol"
+      >;</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" class="Field"
+      >0#</a
+      ><a name="1147"
+      >      </a
+      ><a name="1153" class="Symbol"
+      >=</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" class="Number"
+      >0</a
+      ><a name="1156"
+      >
+    </a
+      ><a name="1161" class="Symbol"
+      >;</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" class="Field"
+      >1#</a
+      ><a name="1165"
+      >      </a
+      ><a name="1171" class="Symbol"
+      >=</a
+      ><a name="1172"
+      > </a
+      ><a name="1173" class="Number"
+      >1</a
+      ><a name="1174"
+      >
+    </a
+      ><a name="1179" class="Symbol"
+      >}</a
+      ><a name="1180"
+      >
+
+  </a
+      ><a name="1184" class="Comment"
+      >-- There is a homomorphism from &#8469; to R.</a
+      ><a name="1223"
+      >
+  </a
+      ><a name="1226" class="Comment"
+      >--</a
+      ><a name="1228"
+      >
+  </a
+      ><a name="1231" class="Comment"
+      >-- Note that _&#215;&#8242;_ is used rather than _&#215;_. If _&#215;_ were used, then</a
+      ><a name="1296"
+      >
+  </a
+      ><a name="1299" class="Comment"
+      >-- Function.Related.TypeIsomorphisms.test would fail to type-check.</a
+      ><a name="1366"
+      >
+
+  </a
+      ><a name="1370" href="Algebra.RingSolver.Natural-coefficients.html#1370" class="Function"
+      >homomorphism</a
+      ><a name="1382"
+      > </a
+      ><a name="1383" class="Symbol"
+      >:</a
+      ><a name="1384"
+      >
+    </a
+      ><a name="1389" href="Algebra.RingSolver.Natural-coefficients.html#1021" class="Function"
+      >&#8469;-ring</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" href="Algebra.RingSolver.AlmostCommutativeRing.html#2276" class="Record Operator"
+      >-Raw-AlmostCommutative&#10230;</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" href="Algebra.RingSolver.AlmostCommutativeRing.html#4248" class="Function"
+      >fromCommutativeSemiring</a
+      ><a name="1443"
+      > </a
+      ><a name="1444" href="Algebra.RingSolver.Natural-coefficients.html#446" class="Bound"
+      >R</a
+      ><a name="1445"
+      >
+  </a
+      ><a name="1448" href="Algebra.RingSolver.Natural-coefficients.html#1370" class="Function"
+      >homomorphism</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" class="Symbol"
+      >=</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" class="Keyword"
+      >record</a
+      ><a name="1469"
+      >
+    </a
+      ><a name="1474" class="Symbol"
+      >{</a
+      ><a name="1475"
+      > </a
+      ><a name="1476" class="Field Operator"
+      >&#10214;_&#10215;</a
+      ><a name="1479"
+      >    </a
+      ><a name="1483" class="Symbol"
+      >=</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" class="Symbol"
+      >&#955;</a
+      ><a name="1486"
+      > </a
+      ><a name="1487" href="Algebra.RingSolver.Natural-coefficients.html#1487" class="Bound"
+      >n</a
+      ><a name="1488"
+      > </a
+      ><a name="1489" class="Symbol"
+      >&#8594;</a
+      ><a name="1490"
+      > </a
+      ><a name="1491" href="Algebra.RingSolver.Natural-coefficients.html#1487" class="Bound"
+      >n</a
+      ><a name="1492"
+      > </a
+      ><a name="1493" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1495"
+      > </a
+      ><a name="1496" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1498"
+      >
+    </a
+      ><a name="1503" class="Symbol"
+      >;</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" class="Field"
+      >+-homo</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" class="Symbol"
+      >=</a
+      ><a name="1513"
+      > </a
+      ><a name="1514" href="Algebra.Operations.html#2176" class="Function"
+      >&#215;&#8242;-homo-+</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1526"
+      >
+    </a
+      ><a name="1531" class="Symbol"
+      >;</a
+      ><a name="1532"
+      > </a
+      ><a name="1533" class="Field"
+      >*-homo</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" class="Symbol"
+      >=</a
+      ><a name="1541"
+      > </a
+      ><a name="1542" href="Algebra.Operations.html#3054" class="Function"
+      >&#215;&#8242;1-homo-*</a
+      ><a name="1552"
+      >
+    </a
+      ><a name="1557" class="Symbol"
+      >;</a
+      ><a name="1558"
+      > </a
+      ><a name="1559" class="Field"
+      >-&#8255;homo</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" class="Symbol"
+      >=</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" class="Symbol"
+      >&#955;</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" href="Algebra.RingSolver.Natural-coefficients.html#1570" class="Bound"
+      >_</a
+      ><a name="1571"
+      > </a
+      ><a name="1572" class="Symbol"
+      >&#8594;</a
+      ><a name="1573"
+      > </a
+      ><a name="1574" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="1578"
+      >
+    </a
+      ><a name="1583" class="Symbol"
+      >;</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" class="Field"
+      >0-homo</a
+      ><a name="1591"
+      > </a
+      ><a name="1592" class="Symbol"
+      >=</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="1598"
+      >
+    </a
+      ><a name="1603" class="Symbol"
+      >;</a
+      ><a name="1604"
+      > </a
+      ><a name="1605" class="Field"
+      >1-homo</a
+      ><a name="1611"
+      > </a
+      ><a name="1612" class="Symbol"
+      >=</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="1618"
+      >
+    </a
+      ><a name="1623" class="Symbol"
+      >}</a
+      ><a name="1624"
+      >
+
+  </a
+      ><a name="1628" class="Comment"
+      >-- Equality of certain expressions can be decided.</a
+      ><a name="1678"
+      >
+
+  </a
+      ><a name="1682" href="Algebra.RingSolver.Natural-coefficients.html#1682" class="Function"
+      >dec&#8242;</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" class="Symbol"
+      >:</a
+      ><a name="1688"
+      > </a
+      ><a name="1689" class="Symbol"
+      >&#8704;</a
+      ><a name="1690"
+      > </a
+      ><a name="1691" href="Algebra.RingSolver.Natural-coefficients.html#1691" class="Bound"
+      >m</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Algebra.RingSolver.Natural-coefficients.html#1693" class="Bound"
+      >n</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" class="Symbol"
+      >&#8594;</a
+      ><a name="1696"
+      > </a
+      ><a name="1697" href="Relation.Nullary.Core.html#496" class="Datatype"
+      >Dec</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" class="Symbol"
+      >(</a
+      ><a name="1702" href="Algebra.RingSolver.Natural-coefficients.html#1691" class="Bound"
+      >m</a
+      ><a name="1703"
+      > </a
+      ><a name="1704" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1709"
+      > </a
+      ><a name="1710" href="Algebra.html#8031" class="Function Operator"
+      >&#8776;</a
+      ><a name="1711"
+      > </a
+      ><a name="1712" href="Algebra.RingSolver.Natural-coefficients.html#1693" class="Bound"
+      >n</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1716"
+      > </a
+      ><a name="1717" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1719" class="Symbol"
+      >)</a
+      ><a name="1720"
+      >
+  </a
+      ><a name="1723" href="Algebra.RingSolver.Natural-coefficients.html#1682" class="Function"
+      >dec&#8242;</a
+      ><a name="1727"
+      > </a
+      ><a name="1728" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1729"
+      > </a
+      ><a name="1730" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1731"
+      > </a
+      ><a name="1732" class="Symbol"
+      >=</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" href="Relation.Nullary.Decidable.html#1790" class="Function"
+      >Dec.map&#8242;</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" href="Algebra.RingSolver.Natural-coefficients.html#1775" class="Function"
+      >to</a
+      ><a name="1745"
+      > </a
+      ><a name="1746" href="Algebra.RingSolver.Natural-coefficients.html#1947" class="Function"
+      >from</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" class="Symbol"
+      >(</a
+      ><a name="1752" href="Algebra.RingSolver.Natural-coefficients.html#487" class="Bound"
+      >dec</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1759" class="Symbol"
+      >)</a
+      ><a name="1760"
+      >
+    </a
+      ><a name="1765" class="Keyword"
+      >where</a
+      ><a name="1770"
+      >
+    </a
+      ><a name="1775" href="Algebra.RingSolver.Natural-coefficients.html#1775" class="Function"
+      >to</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" class="Symbol"
+      >:</a
+      ><a name="1779"
+      > </a
+      ><a name="1780" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1783"
+      > </a
+      ><a name="1784" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1786"
+      > </a
+      ><a name="1787" href="Algebra.html#8031" class="Function Operator"
+      >&#8776;</a
+      ><a name="1788"
+      > </a
+      ><a name="1789" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1790"
+      > </a
+      ><a name="1791" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" class="Symbol"
+      >&#8594;</a
+      ><a name="1797"
+      > </a
+      ><a name="1798" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1802"
+      > </a
+      ><a name="1803" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Algebra.html#8031" class="Function Operator"
+      >&#8776;</a
+      ><a name="1807"
+      > </a
+      ><a name="1808" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1812"
+      > </a
+      ><a name="1813" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1815"
+      >
+    </a
+      ><a name="1820" href="Algebra.RingSolver.Natural-coefficients.html#1775" class="Function"
+      >to</a
+      ><a name="1822"
+      > </a
+      ><a name="1823" href="Algebra.RingSolver.Natural-coefficients.html#1823" class="Bound"
+      >m&#8776;n</a
+      ><a name="1826"
+      > </a
+      ><a name="1827" class="Symbol"
+      >=</a
+      ><a name="1828"
+      > </a
+      ><a name="1829" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1834"
+      >
+      </a
+      ><a name="1841" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1845"
+      > </a
+      ><a name="1846" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1848"
+      >  </a
+      ><a name="1850" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1852"
+      > </a
+      ><a name="1853" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="1856"
+      > </a
+      ><a name="1857" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="1858"
+      > </a
+      ><a name="1859" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="1863"
+      > </a
+      ><a name="1864" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1865"
+      > </a
+      ><a name="1866" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1868"
+      > </a
+      ><a name="1869" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1870"
+      >
+      </a
+      ><a name="1877" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1878"
+      > </a
+      ><a name="1879" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1880"
+      >  </a
+      ><a name="1882" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1884"
+      >  </a
+      ><a name="1886" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1888"
+      > </a
+      ><a name="1889" href="Algebra.RingSolver.Natural-coefficients.html#1823" class="Bound"
+      >m&#8776;n</a
+      ><a name="1892"
+      > </a
+      ><a name="1893" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1894"
+      >
+      </a
+      ><a name="1901" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1904"
+      >  </a
+      ><a name="1906" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1908"
+      >  </a
+      ><a name="1910" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1912"
+      > </a
+      ><a name="1913" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="1917"
+      > </a
+      ><a name="1918" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1919"
+      > </a
+      ><a name="1920" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1922"
+      > </a
+      ><a name="1923" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1924"
+      >
+      </a
+      ><a name="1931" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1932"
+      > </a
+      ><a name="1933" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1935"
+      > </a
+      ><a name="1936" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1938"
+      >  </a
+      ><a name="1940" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1941"
+      >
+
+    </a
+      ><a name="1947" href="Algebra.RingSolver.Natural-coefficients.html#1947" class="Function"
+      >from</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" class="Symbol"
+      >:</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1955"
+      > </a
+      ><a name="1956" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1958"
+      > </a
+      ><a name="1959" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1961"
+      > </a
+      ><a name="1962" href="Algebra.html#8031" class="Function Operator"
+      >&#8776;</a
+      ><a name="1963"
+      > </a
+      ><a name="1964" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1965"
+      > </a
+      ><a name="1966" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1968"
+      > </a
+      ><a name="1969" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" class="Symbol"
+      >&#8594;</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1980"
+      > </a
+      ><a name="1981" href="Algebra.html#8031" class="Function Operator"
+      >&#8776;</a
+      ><a name="1982"
+      > </a
+      ><a name="1983" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="1989"
+      >
+    </a
+      ><a name="1994" href="Algebra.RingSolver.Natural-coefficients.html#1947" class="Function"
+      >from</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" href="Algebra.RingSolver.Natural-coefficients.html#1999" class="Bound"
+      >m&#8776;n</a
+      ><a name="2002"
+      > </a
+      ><a name="2003" class="Symbol"
+      >=</a
+      ><a name="2004"
+      > </a
+      ><a name="2005" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="2010"
+      >
+      </a
+      ><a name="2017" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="2018"
+      > </a
+      ><a name="2019" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2020"
+      >  </a
+      ><a name="2022" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="2024"
+      >  </a
+      ><a name="2026" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2028"
+      > </a
+      ><a name="2029" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="2033"
+      > </a
+      ><a name="2034" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="2035"
+      > </a
+      ><a name="2036" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2040"
+      >
+      </a
+      ><a name="2047" href="Algebra.RingSolver.Natural-coefficients.html#1728" class="Bound"
+      >m</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2051"
+      > </a
+      ><a name="2052" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="2054"
+      >  </a
+      ><a name="2056" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2058"
+      > </a
+      ><a name="2059" href="Algebra.RingSolver.Natural-coefficients.html#1999" class="Bound"
+      >m&#8776;n</a
+      ><a name="2062"
+      > </a
+      ><a name="2063" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2064"
+      >
+      </a
+      ><a name="2071" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="2072"
+      > </a
+      ><a name="2073" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="2078"
+      >  </a
+      ><a name="2080" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2082"
+      > </a
+      ><a name="2083" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2086"
+      > </a
+      ><a name="2087" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="2088"
+      > </a
+      ><a name="2089" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="2093"
+      > </a
+      ><a name="2094" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="2095"
+      > </a
+      ><a name="2096" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="2098"
+      > </a
+      ><a name="2099" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2100"
+      >
+      </a
+      ><a name="2107" href="Algebra.RingSolver.Natural-coefficients.html#1730" class="Bound"
+      >n</a
+      ><a name="2108"
+      > </a
+      ><a name="2109" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2110"
+      >  </a
+      ><a name="2112" href="Algebra.html#8189" class="Function"
+      >1#</a
+      ><a name="2114"
+      >  </a
+      ><a name="2116" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="2117"
+      >
+
+</a
+      ><a name="2119" class="Comment"
+      >-- The instantiation.</a
+      ><a name="2140"
+      >
+
+</a
+      ><a name="2142" class="Keyword"
+      >open</a
+      ><a name="2146"
+      > </a
+      ><a name="2147" href="Algebra.RingSolver.html#1" class="Module"
+      >Algebra.RingSolver</a
+      ><a name="2165"
+      > </a
+      ><a name="2166" class="Symbol"
+      >_</a
+      ><a name="2167"
+      > </a
+      ><a name="2168" class="Symbol"
+      >_</a
+      ><a name="2169"
+      > </a
+      ><a name="2170" href="Algebra.RingSolver.Natural-coefficients.html#1370" class="Function"
+      >homomorphism</a
+      ><a name="2182"
+      > </a
+      ><a name="2183" href="Algebra.RingSolver.Natural-coefficients.html#1682" class="Function"
+      >dec&#8242;</a
+      ><a name="2187"
+      > </a
+      ><a name="2188" class="Keyword"
+      >public</a
+      ><a name="2194"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,1627 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Function.Bijection</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Bijections</a
+      ><a name="147"
+      >
+</a
+      ><a name="148" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="220"
+      >
+
+</a
+      ><a name="222" class="Keyword"
+      >module</a
+      ><a name="228"
+      > </a
+      ><a name="229" href="Function.Bijection.html#1" class="Module"
+      >Function.Bijection</a
+      ><a name="247"
+      > </a
+      ><a name="248" class="Keyword"
+      >where</a
+      ><a name="253"
+      >
+
+</a
+      ><a name="255" class="Keyword"
+      >open</a
+      ><a name="259"
+      > </a
+      ><a name="260" class="Keyword"
+      >import</a
+      ><a name="266"
+      > </a
+      ><a name="267" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="279"
+      >
+</a
+      ><a name="280" class="Keyword"
+      >open</a
+      ><a name="284"
+      > </a
+      ><a name="285" class="Keyword"
+      >import</a
+      ><a name="291"
+      > </a
+      ><a name="292" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="297"
+      >
+</a
+      ><a name="298" class="Keyword"
+      >open</a
+      ><a name="302"
+      > </a
+      ><a name="303" class="Keyword"
+      >import</a
+      ><a name="309"
+      > </a
+      ><a name="310" href="Relation.Binary.html#1" class="Module"
+      >Relation.Binary</a
+      ><a name="325"
+      >
+</a
+      ><a name="326" class="Keyword"
+      >open</a
+      ><a name="330"
+      > </a
+      ><a name="331" class="Keyword"
+      >import</a
+      ><a name="337"
+      > </a
+      ><a name="338" href="Function.Equality.html#1" class="Module"
+      >Function.Equality</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Symbol"
+      >as</a
+      ><a name="358"
+      > </a
+      ><a name="359" class="Module"
+      >F</a
+      ><a name="360"
+      >
+  </a
+      ><a name="363" class="Keyword"
+      >using</a
+      ><a name="368"
+      > </a
+      ><a name="369" class="Symbol"
+      >(</a
+      ><a name="370"
+      >_&#10230;_</a
+      ><a name="373" class="Symbol"
+      >;</a
+      ><a name="374"
+      > _&#10216;$&#10217;_</a
+      ><a name="380" class="Symbol"
+      >)</a
+      ><a name="381"
+      > </a
+      ><a name="382" class="Keyword"
+      >renaming</a
+      ><a name="390"
+      > </a
+      ><a name="391" class="Symbol"
+      >(</a
+      ><a name="392"
+      >_&#8728;_ </a
+      ><a name="396" class="Symbol"
+      >to</a
+      ><a name="398"
+      > _&#10218;&#8728;&#10219;_</a
+      ><a name="404" class="Symbol"
+      >)</a
+      ><a name="405"
+      >
+</a
+      ><a name="406" class="Keyword"
+      >open</a
+      ><a name="410"
+      > </a
+      ><a name="411" class="Keyword"
+      >import</a
+      ><a name="417"
+      > </a
+      ><a name="418" href="Function.Injection.html#1" class="Module"
+      >Function.Injection</a
+      ><a name="436"
+      >   </a
+      ><a name="439" class="Symbol"
+      >as</a
+      ><a name="441"
+      > </a
+      ><a name="442" class="Module"
+      >Inj</a
+      ><a name="445"
+      >  </a
+      ><a name="447" class="Keyword"
+      >hiding</a
+      ><a name="453"
+      > </a
+      ><a name="454" class="Symbol"
+      >(</a
+      ><a name="455"
+      >id</a
+      ><a name="457" class="Symbol"
+      >;</a
+      ><a name="458"
+      > _&#8728;_</a
+      ><a name="462" class="Symbol"
+      >)</a
+      ><a name="463"
+      >
+</a
+      ><a name="464" class="Keyword"
+      >open</a
+      ><a name="468"
+      > </a
+      ><a name="469" class="Keyword"
+      >import</a
+      ><a name="475"
+      > </a
+      ><a name="476" href="Function.Surjection.html#1" class="Module"
+      >Function.Surjection</a
+      ><a name="495"
+      >  </a
+      ><a name="497" class="Symbol"
+      >as</a
+      ><a name="499"
+      > </a
+      ><a name="500" class="Module"
+      >Surj</a
+      ><a name="504"
+      > </a
+      ><a name="505" class="Keyword"
+      >hiding</a
+      ><a name="511"
+      > </a
+      ><a name="512" class="Symbol"
+      >(</a
+      ><a name="513"
+      >id</a
+      ><a name="515" class="Symbol"
+      >;</a
+      ><a name="516"
+      > _&#8728;_</a
+      ><a name="520" class="Symbol"
+      >)</a
+      ><a name="521"
+      >
+</a
+      ><a name="522" class="Keyword"
+      >open</a
+      ><a name="526"
+      > </a
+      ><a name="527" class="Keyword"
+      >import</a
+      ><a name="533"
+      > </a
+      ><a name="534" href="Function.LeftInverse.html#1" class="Module"
+      >Function.LeftInverse</a
+      ><a name="554"
+      > </a
+      ><a name="555" class="Symbol"
+      >as</a
+      ><a name="557"
+      > </a
+      ><a name="558" class="Module"
+      >Left</a
+      ><a name="562"
+      > </a
+      ><a name="563" class="Keyword"
+      >hiding</a
+      ><a name="569"
+      > </a
+      ><a name="570" class="Symbol"
+      >(</a
+      ><a name="571"
+      >id</a
+      ><a name="573" class="Symbol"
+      >;</a
+      ><a name="574"
+      > _&#8728;_</a
+      ><a name="578" class="Symbol"
+      >)</a
+      ><a name="579"
+      >
+
+</a
+      ><a name="581" class="Comment"
+      >-- Bijective functions.</a
+      ><a name="604"
+      >
+
+</a
+      ><a name="606" class="Keyword"
+      >record</a
+      ><a name="612"
+      > </a
+      ><a name="613" href="Function.Bijection.html#613" class="Record"
+      >Bijective</a
+      ><a name="622"
+      > </a
+      ><a name="623" class="Symbol"
+      >{</a
+      ><a name="624" href="Function.Bijection.html#624" class="Bound"
+      >f&#8321;</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Function.Bijection.html#627" class="Bound"
+      >f&#8322;</a
+      ><a name="629"
+      > </a
+      ><a name="630" href="Function.Bijection.html#630" class="Bound"
+      >t&#8321;</a
+      ><a name="632"
+      > </a
+      ><a name="633" href="Function.Bijection.html#633" class="Bound"
+      >t&#8322;</a
+      ><a name="635" class="Symbol"
+      >}</a
+      ><a name="636"
+      >
+                 </a
+      ><a name="654" class="Symbol"
+      >{</a
+      ><a name="655" href="Function.Bijection.html#655" class="Bound"
+      >From</a
+      ><a name="659"
+      > </a
+      ><a name="660" class="Symbol"
+      >:</a
+      ><a name="661"
+      > </a
+      ><a name="662" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="668"
+      > </a
+      ><a name="669" href="Function.Bijection.html#624" class="Bound"
+      >f&#8321;</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="Function.Bijection.html#627" class="Bound"
+      >f&#8322;</a
+      ><a name="674" class="Symbol"
+      >}</a
+      ><a name="675"
+      > </a
+      ><a name="676" class="Symbol"
+      >{</a
+      ><a name="677" href="Function.Bijection.html#677" class="Bound"
+      >To</a
+      ><a name="679"
+      > </a
+      ><a name="680" class="Symbol"
+      >:</a
+      ><a name="681"
+      > </a
+      ><a name="682" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="688"
+      > </a
+      ><a name="689" href="Function.Bijection.html#630" class="Bound"
+      >t&#8321;</a
+      ><a name="691"
+      > </a
+      ><a name="692" href="Function.Bijection.html#633" class="Bound"
+      >t&#8322;</a
+      ><a name="694" class="Symbol"
+      >}</a
+      ><a name="695"
+      >
+                 </a
+      ><a name="713" class="Symbol"
+      >(</a
+      ><a name="714" href="Function.Bijection.html#714" class="Bound"
+      >to</a
+      ><a name="716"
+      > </a
+      ><a name="717" class="Symbol"
+      >:</a
+      ><a name="718"
+      > </a
+      ><a name="719" href="Function.Bijection.html#655" class="Bound"
+      >From</a
+      ><a name="723"
+      > </a
+      ><a name="724" href="Function.Equality.html#875" class="Function Operator"
+      >&#10230;</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Function.Bijection.html#677" class="Bound"
+      >To</a
+      ><a name="728" class="Symbol"
+      >)</a
+      ><a name="729"
+      > </a
+      ><a name="730" class="Symbol"
+      >:</a
+      ><a name="731"
+      >
+                 </a
+      ><a name="749" class="PrimitiveType"
+      >Set</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >(</a
+      ><a name="754" href="Function.Bijection.html#624" class="Bound"
+      >f&#8321;</a
+      ><a name="756"
+      > </a
+      ><a name="757" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Function.Bijection.html#627" class="Bound"
+      >f&#8322;</a
+      ><a name="761"
+      > </a
+      ><a name="762" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Function.Bijection.html#630" class="Bound"
+      >t&#8321;</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Function.Bijection.html#633" class="Bound"
+      >t&#8322;</a
+      ><a name="771" class="Symbol"
+      >)</a
+      ><a name="772"
+      > </a
+      ><a name="773" class="Keyword"
+      >where</a
+      ><a name="778"
+      >
+  </a
+      ><a name="781" class="Keyword"
+      >field</a
+      ><a name="786"
+      >
+    </a
+      ><a name="791" href="Function.Bijection.html#791" class="Field"
+      >injective</a
+      ><a name="800"
+      >  </a
+      ><a name="802" class="Symbol"
+      >:</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Function.Injection.html#518" class="Function"
+      >Injective</a
+      ><a name="813"
+      >  </a
+      ><a name="815" href="Function.Bijection.html#714" class="Bound"
+      >to</a
+      ><a name="817"
+      >
+    </a
+      ><a name="822" href="Function.Bijection.html#822" class="Field"
+      >surjective</a
+      ><a name="832"
+      > </a
+      ><a name="833" class="Symbol"
+      >:</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="Function.Surjection.html#654" class="Record"
+      >Surjective</a
+      ><a name="845"
+      > </a
+      ><a name="846" href="Function.Bijection.html#714" class="Bound"
+      >to</a
+      ><a name="848"
+      >
+
+  </a
+      ><a name="852" class="Keyword"
+      >open</a
+      ><a name="856"
+      > </a
+      ><a name="857" href="Function.Surjection.html#654" class="Module"
+      >Surjective</a
+      ><a name="867"
+      > </a
+      ><a name="868" href="Function.Bijection.html#822" class="Field"
+      >surjective</a
+      ><a name="878"
+      > </a
+      ><a name="879" class="Keyword"
+      >public</a
+      ><a name="885"
+      >
+
+  </a
+      ><a name="889" href="Function.Bijection.html#889" class="Function"
+      >left-inverse-of</a
+      ><a name="904"
+      > </a
+      ><a name="905" class="Symbol"
+      >:</a
+      ><a name="906"
+      > </a
+      ><a name="907" href="Function.Surjection.html#836" class="Function"
+      >from</a
+      ><a name="911"
+      > </a
+      ><a name="912" href="Function.LeftInverse.html#655" class="Function Operator"
+      >LeftInverseOf</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Function.Bijection.html#714" class="Bound"
+      >to</a
+      ><a name="928"
+      >
+  </a
+      ><a name="931" href="Function.Bijection.html#889" class="Function"
+      >left-inverse-of</a
+      ><a name="946"
+      > </a
+      ><a name="947" href="Function.Bijection.html#947" class="Bound"
+      >x</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >=</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Function.Bijection.html#791" class="Field"
+      >injective</a
+      ><a name="960"
+      > </a
+      ><a name="961" class="Symbol"
+      >(</a
+      ><a name="962" href="Function.Surjection.html#869" class="Function"
+      >right-inverse-of</a
+      ><a name="978"
+      > </a
+      ><a name="979" class="Symbol"
+      >(</a
+      ><a name="980" href="Function.Bijection.html#714" class="Bound"
+      >to</a
+      ><a name="982"
+      > </a
+      ><a name="983" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="986"
+      > </a
+      ><a name="987" href="Function.Bijection.html#947" class="Bound"
+      >x</a
+      ><a name="988" class="Symbol"
+      >))</a
+      ><a name="990"
+      >
+
+</a
+      ><a name="992" class="Comment"
+      >-- The set of all bijections between two setoids.</a
+      ><a name="1041"
+      >
+
+</a
+      ><a name="1043" class="Keyword"
+      >record</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" href="Function.Bijection.html#1050" class="Record"
+      >Bijection</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" class="Symbol"
+      >{</a
+      ><a name="1061" href="Function.Bijection.html#1061" class="Bound"
+      >f&#8321;</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" href="Function.Bijection.html#1064" class="Bound"
+      >f&#8322;</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" href="Function.Bijection.html#1067" class="Bound"
+      >t&#8321;</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Function.Bijection.html#1070" class="Bound"
+      >t&#8322;</a
+      ><a name="1072" class="Symbol"
+      >}</a
+      ><a name="1073"
+      >
+                 </a
+      ><a name="1091" class="Symbol"
+      >(</a
+      ><a name="1092" href="Function.Bijection.html#1092" class="Bound"
+      >From</a
+      ><a name="1096"
+      > </a
+      ><a name="1097" class="Symbol"
+      >:</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" href="Function.Bijection.html#1061" class="Bound"
+      >f&#8321;</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Function.Bijection.html#1064" class="Bound"
+      >f&#8322;</a
+      ><a name="1111" class="Symbol"
+      >)</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" class="Symbol"
+      >(</a
+      ><a name="1114" href="Function.Bijection.html#1114" class="Bound"
+      >To</a
+      ><a name="1116"
+      > </a
+      ><a name="1117" class="Symbol"
+      >:</a
+      ><a name="1118"
+      > </a
+      ><a name="1119" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Function.Bijection.html#1067" class="Bound"
+      >t&#8321;</a
+      ><a name="1128"
+      > </a
+      ><a name="1129" href="Function.Bijection.html#1070" class="Bound"
+      >t&#8322;</a
+      ><a name="1131" class="Symbol"
+      >)</a
+      ><a name="1132"
+      > </a
+      ><a name="1133" class="Symbol"
+      >:</a
+      ><a name="1134"
+      >
+                 </a
+      ><a name="1152" class="PrimitiveType"
+      >Set</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" class="Symbol"
+      >(</a
+      ><a name="1157" href="Function.Bijection.html#1061" class="Bound"
+      >f&#8321;</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1161"
+      > </a
+      ><a name="1162" href="Function.Bijection.html#1064" class="Bound"
+      >f&#8322;</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1166"
+      > </a
+      ><a name="1167" href="Function.Bijection.html#1067" class="Bound"
+      >t&#8321;</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" href="Function.Bijection.html#1070" class="Bound"
+      >t&#8322;</a
+      ><a name="1174" class="Symbol"
+      >)</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" class="Keyword"
+      >where</a
+      ><a name="1181"
+      >
+  </a
+      ><a name="1184" class="Keyword"
+      >field</a
+      ><a name="1189"
+      >
+    </a
+      ><a name="1194" href="Function.Bijection.html#1194" class="Field"
+      >to</a
+      ><a name="1196"
+      >        </a
+      ><a name="1204" class="Symbol"
+      >:</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Function.Bijection.html#1092" class="Bound"
+      >From</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" href="Function.Equality.html#875" class="Function Operator"
+      >&#10230;</a
+      ><a name="1212"
+      > </a
+      ><a name="1213" href="Function.Bijection.html#1114" class="Bound"
+      >To</a
+      ><a name="1215"
+      >
+    </a
+      ><a name="1220" href="Function.Bijection.html#1220" class="Field"
+      >bijective</a
+      ><a name="1229"
+      > </a
+      ><a name="1230" class="Symbol"
+      >:</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Function.Bijection.html#613" class="Record"
+      >Bijective</a
+      ><a name="1241"
+      > </a
+      ><a name="1242" href="Function.Bijection.html#1194" class="Bound"
+      >to</a
+      ><a name="1244"
+      >
+
+  </a
+      ><a name="1248" class="Keyword"
+      >open</a
+      ><a name="1252"
+      > </a
+      ><a name="1253" href="Function.Bijection.html#613" class="Module"
+      >Bijective</a
+      ><a name="1262"
+      > </a
+      ><a name="1263" href="Function.Bijection.html#1220" class="Field"
+      >bijective</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" class="Keyword"
+      >public</a
+      ><a name="1279"
+      >
+
+  </a
+      ><a name="1283" href="Function.Bijection.html#1283" class="Function"
+      >injection</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" class="Symbol"
+      >:</a
+      ><a name="1294"
+      > </a
+      ><a name="1295" href="Function.Injection.html#821" class="Record"
+      >Injection</a
+      ><a name="1304"
+      > </a
+      ><a name="1305" href="Function.Bijection.html#1092" class="Bound"
+      >From</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" href="Function.Bijection.html#1114" class="Bound"
+      >To</a
+      ><a name="1312"
+      >
+  </a
+      ><a name="1315" href="Function.Bijection.html#1283" class="Function"
+      >injection</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" class="Symbol"
+      >=</a
+      ><a name="1326"
+      > </a
+      ><a name="1327" class="Keyword"
+      >record</a
+      ><a name="1333"
+      >
+    </a
+      ><a name="1338" class="Symbol"
+      >{</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" class="Field"
+      >to</a
+      ><a name="1342"
+      >        </a
+      ><a name="1350" class="Symbol"
+      >=</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" href="Function.Bijection.html#1194" class="Field"
+      >to</a
+      ><a name="1354"
+      >
+    </a
+      ><a name="1359" class="Symbol"
+      >;</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" class="Field"
+      >injective</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" class="Symbol"
+      >=</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" href="Function.Bijection.html#791" class="Function"
+      >injective</a
+      ><a name="1382"
+      >
+    </a
+      ><a name="1387" class="Symbol"
+      >}</a
+      ><a name="1388"
+      >
+
+  </a
+      ><a name="1392" href="Function.Bijection.html#1392" class="Function"
+      >surjection</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" class="Symbol"
+      >:</a
+      ><a name="1404"
+      > </a
+      ><a name="1405" href="Function.Surjection.html#978" class="Record"
+      >Surjection</a
+      ><a name="1415"
+      > </a
+      ><a name="1416" href="Function.Bijection.html#1092" class="Bound"
+      >From</a
+      ><a name="1420"
+      > </a
+      ><a name="1421" href="Function.Bijection.html#1114" class="Bound"
+      >To</a
+      ><a name="1423"
+      >
+  </a
+      ><a name="1426" href="Function.Bijection.html#1392" class="Function"
+      >surjection</a
+      ><a name="1436"
+      > </a
+      ><a name="1437" class="Symbol"
+      >=</a
+      ><a name="1438"
+      > </a
+      ><a name="1439" class="Keyword"
+      >record</a
+      ><a name="1445"
+      >
+    </a
+      ><a name="1450" class="Symbol"
+      >{</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" class="Field"
+      >to</a
+      ><a name="1454"
+      >         </a
+      ><a name="1463" class="Symbol"
+      >=</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Function.Bijection.html#1194" class="Field"
+      >to</a
+      ><a name="1467"
+      >
+    </a
+      ><a name="1472" class="Symbol"
+      >;</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" class="Field"
+      >surjective</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" class="Symbol"
+      >=</a
+      ><a name="1486"
+      > </a
+      ><a name="1487" href="Function.Bijection.html#822" class="Function"
+      >surjective</a
+      ><a name="1497"
+      >
+    </a
+      ><a name="1502" class="Symbol"
+      >}</a
+      ><a name="1503"
+      >
+
+  </a
+      ><a name="1507" class="Keyword"
+      >open</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Function.Surjection.html#978" class="Module"
+      >Surjection</a
+      ><a name="1522"
+      > </a
+      ><a name="1523" href="Function.Bijection.html#1392" class="Function"
+      >surjection</a
+      ><a name="1533"
+      > </a
+      ><a name="1534" class="Keyword"
+      >public</a
+      ><a name="1540"
+      >
+    </a
+      ><a name="1545" class="Keyword"
+      >using</a
+      ><a name="1550"
+      > </a
+      ><a name="1551" class="Symbol"
+      >(</a
+      ><a name="1552"
+      >equivalence</a
+      ><a name="1563" class="Symbol"
+      >;</a
+      ><a name="1564"
+      > right-inverse</a
+      ><a name="1578" class="Symbol"
+      >;</a
+      ><a name="1579"
+      > from-to</a
+      ><a name="1587" class="Symbol"
+      >)</a
+      ><a name="1588"
+      >
+
+  </a
+      ><a name="1592" href="Function.Bijection.html#1592" class="Function"
+      >left-inverse</a
+      ><a name="1604"
+      > </a
+      ><a name="1605" class="Symbol"
+      >:</a
+      ><a name="1606"
+      > </a
+      ><a name="1607" href="Function.LeftInverse.html#1069" class="Record"
+      >LeftInverse</a
+      ><a name="1618"
+      > </a
+      ><a name="1619" href="Function.Bijection.html#1092" class="Bound"
+      >From</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" href="Function.Bijection.html#1114" class="Bound"
+      >To</a
+      ><a name="1626"
+      >
+  </a
+      ><a name="1629" href="Function.Bijection.html#1592" class="Function"
+      >left-inverse</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" class="Symbol"
+      >=</a
+      ><a name="1643"
+      > </a
+      ><a name="1644" class="Keyword"
+      >record</a
+      ><a name="1650"
+      >
+    </a
+      ><a name="1655" class="Symbol"
+      >{</a
+      ><a name="1656"
+      > </a
+      ><a name="1657" class="Field"
+      >to</a
+      ><a name="1659"
+      >              </a
+      ><a name="1673" class="Symbol"
+      >=</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" href="Function.Bijection.html#1194" class="Field"
+      >to</a
+      ><a name="1677"
+      >
+    </a
+      ><a name="1682" class="Symbol"
+      >;</a
+      ><a name="1683"
+      > </a
+      ><a name="1684" class="Field"
+      >from</a
+      ><a name="1688"
+      >            </a
+      ><a name="1700" class="Symbol"
+      >=</a
+      ><a name="1701"
+      > </a
+      ><a name="1702" href="Function.Surjection.html#836" class="Function"
+      >from</a
+      ><a name="1706"
+      >
+    </a
+      ><a name="1711" class="Symbol"
+      >;</a
+      ><a name="1712"
+      > </a
+      ><a name="1713" class="Field"
+      >left-inverse-of</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" class="Symbol"
+      >=</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" href="Function.Bijection.html#889" class="Function"
+      >left-inverse-of</a
+      ><a name="1746"
+      >
+    </a
+      ><a name="1751" class="Symbol"
+      >}</a
+      ><a name="1752"
+      >
+
+  </a
+      ><a name="1756" class="Keyword"
+      >open</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" href="Function.LeftInverse.html#1069" class="Module"
+      >LeftInverse</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="Function.Bijection.html#1592" class="Function"
+      >left-inverse</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" class="Keyword"
+      >public</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" class="Keyword"
+      >using</a
+      ><a name="1798"
+      > </a
+      ><a name="1799" class="Symbol"
+      >(</a
+      ><a name="1800"
+      >to-from</a
+      ><a name="1807" class="Symbol"
+      >)</a
+      ><a name="1808"
+      >
+
+</a
+      ><a name="1810" class="Comment"
+      >-- Identity and composition. (Note that these proofs are superfluous,</a
+      ><a name="1879"
+      >
+</a
+      ><a name="1880" class="Comment"
+      >-- given that Bijection is equivalent to Function.Inverse.Inverse.)</a
+      ><a name="1947"
+      >
+
+</a
+      ><a name="1949" href="Function.Bijection.html#1949" class="Function"
+      >id</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" class="Symbol"
+      >:</a
+      ><a name="1953"
+      > </a
+      ><a name="1954" class="Symbol"
+      >&#8704;</a
+      ><a name="1955"
+      > </a
+      ><a name="1956" class="Symbol"
+      >{</a
+      ><a name="1957" href="Function.Bijection.html#1957" class="Bound"
+      >s&#8321;</a
+      ><a name="1959"
+      > </a
+      ><a name="1960" href="Function.Bijection.html#1960" class="Bound"
+      >s&#8322;</a
+      ><a name="1962" class="Symbol"
+      >}</a
+      ><a name="1963"
+      > </a
+      ><a name="1964" class="Symbol"
+      >{</a
+      ><a name="1965" href="Function.Bijection.html#1965" class="Bound"
+      >S</a
+      ><a name="1966"
+      > </a
+      ><a name="1967" class="Symbol"
+      >:</a
+      ><a name="1968"
+      > </a
+      ><a name="1969" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" href="Function.Bijection.html#1957" class="Bound"
+      >s&#8321;</a
+      ><a name="1978"
+      > </a
+      ><a name="1979" href="Function.Bijection.html#1960" class="Bound"
+      >s&#8322;</a
+      ><a name="1981" class="Symbol"
+      >}</a
+      ><a name="1982"
+      > </a
+      ><a name="1983" class="Symbol"
+      >&#8594;</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" href="Function.Bijection.html#1050" class="Record"
+      >Bijection</a
+      ><a name="1994"
+      > </a
+      ><a name="1995" href="Function.Bijection.html#1965" class="Bound"
+      >S</a
+      ><a name="1996"
+      > </a
+      ><a name="1997" href="Function.Bijection.html#1965" class="Bound"
+      >S</a
+      ><a name="1998"
+      >
+</a
+      ><a name="1999" href="Function.Bijection.html#1949" class="Function"
+      >id</a
+      ><a name="2001"
+      > </a
+      ><a name="2002" class="Symbol"
+      >{</a
+      ><a name="2003"
+      >S </a
+      ><a name="2005" class="Symbol"
+      >=</a
+      ><a name="2006"
+      > </a
+      ><a name="2007" href="Function.Bijection.html#2007" class="Bound"
+      >S</a
+      ><a name="2008" class="Symbol"
+      >}</a
+      ><a name="2009"
+      > </a
+      ><a name="2010" class="Symbol"
+      >=</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" class="Keyword"
+      >record</a
+      ><a name="2018"
+      >
+  </a
+      ><a name="2021" class="Symbol"
+      >{</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" class="Field"
+      >to</a
+      ><a name="2025"
+      >        </a
+      ><a name="2033" class="Symbol"
+      >=</a
+      ><a name="2034"
+      > </a
+      ><a name="2035" href="Function.Equality.html#1017" class="Function"
+      >F.id</a
+      ><a name="2039"
+      >
+  </a
+      ><a name="2042" class="Symbol"
+      >;</a
+      ><a name="2043"
+      > </a
+      ><a name="2044" class="Field"
+      >bijective</a
+      ><a name="2053"
+      > </a
+      ><a name="2054" class="Symbol"
+      >=</a
+      ><a name="2055"
+      > </a
+      ><a name="2056" class="Keyword"
+      >record</a
+      ><a name="2062"
+      >
+    </a
+      ><a name="2067" class="Symbol"
+      >{</a
+      ><a name="2068"
+      > </a
+      ><a name="2069" class="Field"
+      >injective</a
+      ><a name="2078"
+      >  </a
+      ><a name="2080" class="Symbol"
+      >=</a
+      ><a name="2081"
+      >  </a
+      ><a name="2083" href="Function.Injection.html#991" class="Field"
+      >Injection.injective</a
+      ><a name="2102"
+      >   </a
+      ><a name="2105" class="Symbol"
+      >(</a
+      ><a name="2106" href="Function.Injection.html#1220" class="Function"
+      >Inj.id</a
+      ><a name="2112"
+      > </a
+      ><a name="2113" class="Symbol"
+      >{</a
+      ><a name="2114"
+      >S </a
+      ><a name="2116" class="Symbol"
+      >=</a
+      ><a name="2117"
+      > </a
+      ><a name="2118" href="Function.Bijection.html#2007" class="Bound"
+      >S</a
+      ><a name="2119" class="Symbol"
+      >})</a
+      ><a name="2121"
+      >
+    </a
+      ><a name="2126" class="Symbol"
+      >;</a
+      ><a name="2127"
+      > </a
+      ><a name="2128" class="Field"
+      >surjective</a
+      ><a name="2138"
+      > </a
+      ><a name="2139" class="Symbol"
+      >=</a
+      ><a name="2140"
+      > </a
+      ><a name="2141" href="Function.Surjection.html#1152" class="Field"
+      >Surjection.surjective</a
+      ><a name="2162"
+      > </a
+      ><a name="2163" class="Symbol"
+      >(</a
+      ><a name="2164" href="Function.Surjection.html#2278" class="Function"
+      >Surj.id</a
+      ><a name="2171"
+      > </a
+      ><a name="2172" class="Symbol"
+      >{</a
+      ><a name="2173"
+      >S </a
+      ><a name="2175" class="Symbol"
+      >=</a
+      ><a name="2176"
+      > </a
+      ><a name="2177" href="Function.Bijection.html#2007" class="Bound"
+      >S</a
+      ><a name="2178" class="Symbol"
+      >})</a
+      ><a name="2180"
+      >
+    </a
+      ><a name="2185" class="Symbol"
+      >}</a
+      ><a name="2186"
+      >
+  </a
+      ><a name="2189" class="Symbol"
+      >}</a
+      ><a name="2190"
+      >
+
+</a
+      ><a name="2192" class="Keyword"
+      >infixr</a
+      ><a name="2198"
+      > </a
+      ><a name="2199" class="Number"
+      >9</a
+      ><a name="2200"
+      > _&#8728;_
+
+</a
+      ><a name="2206" href="Function.Bijection.html#2206" class="Function Operator"
+      >_&#8728;_</a
+      ><a name="2209"
+      > </a
+      ><a name="2210" class="Symbol"
+      >:</a
+      ><a name="2211"
+      > </a
+      ><a name="2212" class="Symbol"
+      >&#8704;</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" class="Symbol"
+      >{</a
+      ><a name="2215" href="Function.Bijection.html#2215" class="Bound"
+      >f&#8321;</a
+      ><a name="2217"
+      > </a
+      ><a name="2218" href="Function.Bijection.html#2218" class="Bound"
+      >f&#8322;</a
+      ><a name="2220"
+      > </a
+      ><a name="2221" href="Function.Bijection.html#2221" class="Bound"
+      >m&#8321;</a
+      ><a name="2223"
+      > </a
+      ><a name="2224" href="Function.Bijection.html#2224" class="Bound"
+      >m&#8322;</a
+      ><a name="2226"
+      > </a
+      ><a name="2227" href="Function.Bijection.html#2227" class="Bound"
+      >t&#8321;</a
+      ><a name="2229"
+      > </a
+      ><a name="2230" href="Function.Bijection.html#2230" class="Bound"
+      >t&#8322;</a
+      ><a name="2232" class="Symbol"
+      >}</a
+      ><a name="2233"
+      >
+        </a
+      ><a name="2242" class="Symbol"
+      >{</a
+      ><a name="2243" href="Function.Bijection.html#2243" class="Bound"
+      >F</a
+      ><a name="2244"
+      > </a
+      ><a name="2245" class="Symbol"
+      >:</a
+      ><a name="2246"
+      > </a
+      ><a name="2247" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="2253"
+      > </a
+      ><a name="2254" href="Function.Bijection.html#2215" class="Bound"
+      >f&#8321;</a
+      ><a name="2256"
+      > </a
+      ><a name="2257" href="Function.Bijection.html#2218" class="Bound"
+      >f&#8322;</a
+      ><a name="2259" class="Symbol"
+      >}</a
+      ><a name="2260"
+      > </a
+      ><a name="2261" class="Symbol"
+      >{</a
+      ><a name="2262" href="Function.Bijection.html#2262" class="Bound"
+      >M</a
+      ><a name="2263"
+      > </a
+      ><a name="2264" class="Symbol"
+      >:</a
+      ><a name="2265"
+      > </a
+      ><a name="2266" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="2272"
+      > </a
+      ><a name="2273" href="Function.Bijection.html#2221" class="Bound"
+      >m&#8321;</a
+      ><a name="2275"
+      > </a
+      ><a name="2276" href="Function.Bijection.html#2224" class="Bound"
+      >m&#8322;</a
+      ><a name="2278" class="Symbol"
+      >}</a
+      ><a name="2279"
+      > </a
+      ><a name="2280" class="Symbol"
+      >{</a
+      ><a name="2281" href="Function.Bijection.html#2281" class="Bound"
+      >T</a
+      ><a name="2282"
+      > </a
+      ><a name="2283" class="Symbol"
+      >:</a
+      ><a name="2284"
+      > </a
+      ><a name="2285" href="Relation.Binary.html#1880" class="Record"
+      >Setoid</a
+      ><a name="2291"
+      > </a
+      ><a name="2292" href="Function.Bijection.html#2227" class="Bound"
+      >t&#8321;</a
+      ><a name="2294"
+      > </a
+      ><a name="2295" href="Function.Bijection.html#2230" class="Bound"
+      >t&#8322;</a
+      ><a name="2297" class="Symbol"
+      >}</a
+      ><a name="2298"
+      > </a
+      ><a name="2299" class="Symbol"
+      >&#8594;</a
+      ><a name="2300"
+      >
+      </a
+      ><a name="2307" href="Function.Bijection.html#1050" class="Record"
+      >Bijection</a
+      ><a name="2316"
+      > </a
+      ><a name="2317" href="Function.Bijection.html#2262" class="Bound"
+      >M</a
+      ><a name="2318"
+      > </a
+      ><a name="2319" href="Function.Bijection.html#2281" class="Bound"
+      >T</a
+      ><a name="2320"
+      > </a
+      ><a name="2321" class="Symbol"
+      >&#8594;</a
+      ><a name="2322"
+      > </a
+      ><a name="2323" href="Function.Bijection.html#1050" class="Record"
+      >Bijection</a
+      ><a name="2332"
+      > </a
+      ><a name="2333" href="Function.Bijection.html#2243" class="Bound"
+      >F</a
+      ><a name="2334"
+      > </a
+      ><a name="2335" href="Function.Bijection.html#2262" class="Bound"
+      >M</a
+      ><a name="2336"
+      > </a
+      ><a name="2337" class="Symbol"
+      >&#8594;</a
+      ><a name="2338"
+      > </a
+      ><a name="2339" href="Function.Bijection.html#1050" class="Record"
+      >Bijection</a
+      ><a name="2348"
+      > </a
+      ><a name="2349" href="Function.Bijection.html#2243" class="Bound"
+      >F</a
+      ><a name="2350"
+      > </a
+      ><a name="2351" href="Function.Bijection.html#2281" class="Bound"
+      >T</a
+      ><a name="2352"
+      >
+</a
+      ><a name="2353" href="Function.Bijection.html#2353" class="Bound"
+      >f</a
+      ><a name="2354"
+      > </a
+      ><a name="2355" href="Function.Bijection.html#2206" class="Function Operator"
+      >&#8728;</a
+      ><a name="2356"
+      > </a
+      ><a name="2357" href="Function.Bijection.html#2357" class="Bound"
+      >g</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" class="Symbol"
+      >=</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" class="Keyword"
+      >record</a
+      ><a name="2367"
+      >
+  </a
+      ><a name="2370" class="Symbol"
+      >{</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" class="Field"
+      >to</a
+      ><a name="2374"
+      >        </a
+      ><a name="2382" class="Symbol"
+      >=</a
+      ><a name="2383"
+      > </a
+      ><a name="2384" href="Function.Bijection.html#1194" class="Field"
+      >to</a
+      ><a name="2386"
+      > </a
+      ><a name="2387" href="Function.Bijection.html#2353" class="Bound"
+      >f</a
+      ><a name="2388"
+      > </a
+      ><a name="2389" href="Function.Equality.html#1122" class="Function Operator"
+      >&#10218;&#8728;&#10219;</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" href="Function.Bijection.html#1194" class="Field"
+      >to</a
+      ><a name="2395"
+      > </a
+      ><a name="2396" href="Function.Bijection.html#2357" class="Bound"
+      >g</a
+      ><a name="2397"
+      >
+  </a
+      ><a name="2400" class="Symbol"
+      >;</a
+      ><a name="2401"
+      > </a
+      ><a name="2402" class="Field"
+      >bijective</a
+      ><a name="2411"
+      > </a
+      ><a name="2412" class="Symbol"
+      >=</a
+      ><a name="2413"
+      > </a
+      ><a name="2414" class="Keyword"
+      >record</a
+      ><a name="2420"
+      >
+    </a
+      ><a name="2425" class="Symbol"
+      >{</a
+      ><a name="2426"
+      > </a
+      ><a name="2427" class="Field"
+      >injective</a
+      ><a name="2436"
+      >  </a
+      ><a name="2438" class="Symbol"
+      >=</a
+      ><a name="2439"
+      >  </a
+      ><a name="2441" href="Function.Injection.html#991" class="Field"
+      >Injection.injective</a
+      ><a name="2460"
+      >   </a
+      ><a name="2463" class="Symbol"
+      >(</a
+      ><a name="2464" href="Function.Injection.html#1317" class="Function Operator"
+      >Inj._&#8728;_</a
+      ><a name="2471"
+      >  </a
+      ><a name="2473" class="Symbol"
+      >(</a
+      ><a name="2474" href="Function.Bijection.html#1283" class="Function"
+      >injection</a
+      ><a name="2483"
+      > </a
+      ><a name="2484" href="Function.Bijection.html#2353" class="Bound"
+      >f</a
+      ><a name="2485" class="Symbol"
+      >)</a
+      ><a name="2486"
+      >  </a
+      ><a name="2488" class="Symbol"
+      >(</a
+      ><a name="2489" href="Function.Bijection.html#1283" class="Function"
+      >injection</a
+      ><a name="2498"
+      > </a
+      ><a name="2499" href="Function.Bijection.html#2357" class="Bound"
+      >g</a
+      ><a name="2500" class="Symbol"
+      >))</a
+      ><a name="2502"
+      >
+    </a
+      ><a name="2507" class="Symbol"
+      >;</a
+      ><a name="2508"
+      > </a
+      ><a name="2509" class="Field"
+      >surjective</a
+      ><a name="2519"
+      > </a
+      ><a name="2520" class="Symbol"
+      >=</a
+      ><a name="2521"
+      > </a
+      ><a name="2522" href="Function.Surjection.html#1152" class="Field"
+      >Surjection.surjective</a
+      ><a name="2543"
+      > </a
+      ><a name="2544" class="Symbol"
+      >(</a
+      ><a name="2545" href="Function.Surjection.html#2562" class="Function Operator"
+      >Surj._&#8728;_</a
+      ><a name="2553"
+      > </a
+      ><a name="2554" class="Symbol"
+      >(</a
+      ><a name="2555" href="Function.Bijection.html#1392" class="Function"
+      >surjection</a
+      ><a name="2565"
+      > </a
+      ><a name="2566" href="Function.Bijection.html#2353" class="Bound"
+      >f</a
+      ><a name="2567" class="Symbol"
+      >)</a
+      ><a name="2568"
+      > </a
+      ><a name="2569" class="Symbol"
+      >(</a
+      ><a name="2570" href="Function.Bijection.html#1392" class="Function"
+      >surjection</a
+      ><a name="2580"
+      > </a
+      ><a name="2581" href="Function.Bijection.html#2357" class="Bound"
+      >g</a
+      ><a name="2582" class="Symbol"
+      >))</a
+      ><a name="2584"
+      >
+    </a
+      ><a name="2589" class="Symbol"
+      >}</a
+      ><a name="2590"
+      >
+  </a
+      ><a name="2593" class="Symbol"
+      >}</a
+      ><a name="2594"
+      > </a
+      ><a name="2595" class="Keyword"
+      >where</a
+      ><a name="2600"
+      > </a
+      ><a name="2601" class="Keyword"
+      >open</a
+      ><a name="2605"
+      > </a
+      ><a name="2606" href="Function.Bijection.html#1050" class="Module"
+      >Bijection</a
+      ><a name="2615"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

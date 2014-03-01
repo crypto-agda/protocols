@@ -1,0 +1,1103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Data.ShapePolymorphism</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Keyword"
+      >open</a
+      ><a name="33"
+      > </a
+      ><a name="34" class="Keyword"
+      >import</a
+      ><a name="40"
+      > </a
+      ><a name="41" href="Type.html#1" class="Module"
+      >Type</a
+      ><a name="45"
+      >
+</a
+      ><a name="46" class="Keyword"
+      >open</a
+      ><a name="50"
+      > </a
+      ><a name="51" class="Keyword"
+      >import</a
+      ><a name="57"
+      > </a
+      ><a name="58" href="Function.NP.html#1" class="Module"
+      >Function.NP</a
+      ><a name="69"
+      >
+</a
+      ><a name="70" class="Keyword"
+      >open</a
+      ><a name="74"
+      > </a
+      ><a name="75" class="Keyword"
+      >import</a
+      ><a name="81"
+      > </a
+      ><a name="82" href="Level.NP.html#1" class="Module"
+      >Level.NP</a
+      ><a name="90"
+      >
+
+</a
+      ><a name="92" class="Keyword"
+      >module</a
+      ><a name="98"
+      > </a
+      ><a name="99" href="Data.ShapePolymorphism.html#1" class="Module"
+      >Data.ShapePolymorphism</a
+      ><a name="121"
+      > </a
+      ><a name="122" class="Keyword"
+      >where</a
+      ><a name="127"
+      >
+
+</a
+      ><a name="129" class="Keyword"
+      >data</a
+      ><a name="133"
+      > </a
+      ><a name="134" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="135"
+      > </a
+      ><a name="136" class="Symbol"
+      >{</a
+      ><a name="137" href="Data.ShapePolymorphism.html#137" class="Bound"
+      >a</a
+      ><a name="138" class="Symbol"
+      >}(</a
+      ><a name="140" href="Data.ShapePolymorphism.html#140" class="Bound"
+      >A</a
+      ><a name="141"
+      > </a
+      ><a name="142" class="Symbol"
+      >:</a
+      ><a name="143"
+      > </a
+      ><a name="144" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="146"
+      > </a
+      ><a name="147" href="Data.ShapePolymorphism.html#137" class="Bound"
+      >a</a
+      ><a name="148" class="Symbol"
+      >)</a
+      ><a name="149"
+      > </a
+      ><a name="150" class="Symbol"
+      >:</a
+      ><a name="151"
+      > </a
+      ><a name="152" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="154"
+      > </a
+      ><a name="155" href="Data.ShapePolymorphism.html#137" class="Bound"
+      >a</a
+      ><a name="156"
+      > </a
+      ><a name="157" class="Keyword"
+      >where</a
+      ><a name="162"
+      >
+  </a
+      ><a name="165" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[_]</a
+      ><a name="168"
+      > </a
+      ><a name="169" class="Symbol"
+      >:</a
+      ><a name="170"
+      > </a
+      ><a name="171" class="Symbol"
+      >..(</a
+      ><a name="174" href="Data.ShapePolymorphism.html#174" class="Bound"
+      >x</a
+      ><a name="175"
+      > </a
+      ><a name="176" class="Symbol"
+      >:</a
+      ><a name="177"
+      > </a
+      ><a name="178" href="Data.ShapePolymorphism.html#140" class="Bound"
+      >A</a
+      ><a name="179" class="Symbol"
+      >)</a
+      ><a name="180"
+      > </a
+      ><a name="181" class="Symbol"
+      >&#8594;</a
+      ><a name="182"
+      > </a
+      ><a name="183" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="184"
+      > </a
+      ><a name="185" href="Data.ShapePolymorphism.html#140" class="Bound"
+      >A</a
+      ><a name="186"
+      >
+
+</a
+      ><a name="188" href="Data.ShapePolymorphism.html#188" class="Function"
+      >un&#9744;</a
+      ><a name="191"
+      > </a
+      ><a name="192" class="Symbol"
+      >:</a
+      ><a name="193"
+      > </a
+      ><a name="194" class="Symbol"
+      >&#8704;</a
+      ><a name="195"
+      > </a
+      ><a name="196" class="Symbol"
+      >{</a
+      ><a name="197" href="Data.ShapePolymorphism.html#197" class="Bound"
+      >a</a
+      ><a name="198"
+      > </a
+      ><a name="199" href="Data.ShapePolymorphism.html#199" class="Bound"
+      >b</a
+      ><a name="200" class="Symbol"
+      >}{</a
+      ><a name="202" href="Data.ShapePolymorphism.html#202" class="Bound"
+      >A</a
+      ><a name="203"
+      > </a
+      ><a name="204" class="Symbol"
+      >:</a
+      ><a name="205"
+      > </a
+      ><a name="206" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="208"
+      > </a
+      ><a name="209" href="Data.ShapePolymorphism.html#197" class="Bound"
+      >a</a
+      ><a name="210" class="Symbol"
+      >}{</a
+      ><a name="212" href="Data.ShapePolymorphism.html#212" class="Bound"
+      >B</a
+      ><a name="213"
+      > </a
+      ><a name="214" class="Symbol"
+      >:</a
+      ><a name="215"
+      > </a
+      ><a name="216" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Data.ShapePolymorphism.html#202" class="Bound"
+      >A</a
+      ><a name="219"
+      > </a
+      ><a name="220" class="Symbol"
+      >&#8594;</a
+      ><a name="221"
+      > </a
+      ><a name="222" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="224"
+      > </a
+      ><a name="225" href="Data.ShapePolymorphism.html#199" class="Bound"
+      >b</a
+      ><a name="226" class="Symbol"
+      >}</a
+      ><a name="227"
+      > </a
+      ><a name="228" class="Symbol"
+      >&#8594;</a
+      ><a name="229"
+      > </a
+      ><a name="230" class="Symbol"
+      >(..(</a
+      ><a name="234" href="Data.ShapePolymorphism.html#234" class="Bound"
+      >x</a
+      ><a name="235"
+      > </a
+      ><a name="236" class="Symbol"
+      >:</a
+      ><a name="237"
+      > </a
+      ><a name="238" href="Data.ShapePolymorphism.html#202" class="Bound"
+      >A</a
+      ><a name="239" class="Symbol"
+      >)</a
+      ><a name="240"
+      > </a
+      ><a name="241" class="Symbol"
+      >&#8594;</a
+      ><a name="242"
+      > </a
+      ><a name="243" href="Data.ShapePolymorphism.html#212" class="Bound"
+      >B</a
+      ><a name="244"
+      > </a
+      ><a name="245" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="246"
+      > </a
+      ><a name="247" href="Data.ShapePolymorphism.html#234" class="Bound"
+      >x</a
+      ><a name="248"
+      > </a
+      ><a name="249" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="250" class="Symbol"
+      >)</a
+      ><a name="251"
+      > </a
+      ><a name="252" class="Symbol"
+      >&#8594;</a
+      ><a name="253"
+      > </a
+      ><a name="254" href="Function.NP.html#957" class="Function"
+      >&#928;</a
+      ><a name="255"
+      > </a
+      ><a name="256" class="Symbol"
+      >(</a
+      ><a name="257" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="258"
+      > </a
+      ><a name="259" href="Data.ShapePolymorphism.html#202" class="Bound"
+      >A</a
+      ><a name="260" class="Symbol"
+      >)</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="Data.ShapePolymorphism.html#212" class="Bound"
+      >B</a
+      ><a name="263"
+      >
+</a
+      ><a name="264" href="Data.ShapePolymorphism.html#188" class="Function"
+      >un&#9744;</a
+      ><a name="267"
+      > </a
+      ><a name="268" href="Data.ShapePolymorphism.html#268" class="Bound"
+      >f</a
+      ><a name="269"
+      > </a
+      ><a name="270" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="271"
+      > </a
+      ><a name="272" href="Data.ShapePolymorphism.html#272" class="Bound"
+      >x</a
+      ><a name="273"
+      > </a
+      ><a name="274" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="275"
+      > </a
+      ><a name="276" class="Symbol"
+      >=</a
+      ><a name="277"
+      > </a
+      ><a name="278" href="Data.ShapePolymorphism.html#268" class="Bound"
+      >f</a
+      ><a name="279"
+      > </a
+      ><a name="280" href="Data.ShapePolymorphism.html#272" class="Bound"
+      >x</a
+      ><a name="281"
+      >
+
+</a
+      ><a name="283" href="Data.ShapePolymorphism.html#283" class="Function"
+      >&#928;&#9744;</a
+      ><a name="285"
+      > </a
+      ><a name="286" class="Symbol"
+      >:</a
+      ><a name="287"
+      > </a
+      ><a name="288" class="Symbol"
+      >&#8704;</a
+      ><a name="289"
+      > </a
+      ><a name="290" class="Symbol"
+      >{</a
+      ><a name="291" href="Data.ShapePolymorphism.html#291" class="Bound"
+      >a</a
+      ><a name="292"
+      > </a
+      ><a name="293" href="Data.ShapePolymorphism.html#293" class="Bound"
+      >b</a
+      ><a name="294" class="Symbol"
+      >}(</a
+      ><a name="296" href="Data.ShapePolymorphism.html#296" class="Bound"
+      >A</a
+      ><a name="297"
+      > </a
+      ><a name="298" class="Symbol"
+      >:</a
+      ><a name="299"
+      > </a
+      ><a name="300" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Data.ShapePolymorphism.html#291" class="Bound"
+      >a</a
+      ><a name="304" class="Symbol"
+      >)</a
+      ><a name="305"
+      > </a
+      ><a name="306" class="Symbol"
+      >&#8594;</a
+      ><a name="307"
+      > </a
+      ><a name="308" class="Symbol"
+      >(</a
+      ><a name="309" href="Data.ShapePolymorphism.html#309" class="Bound"
+      >B</a
+      ><a name="310"
+      > </a
+      ><a name="311" class="Symbol"
+      >:</a
+      ><a name="312"
+      > </a
+      ><a name="313" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="314"
+      > </a
+      ><a name="315" href="Data.ShapePolymorphism.html#296" class="Bound"
+      >A</a
+      ><a name="316"
+      > </a
+      ><a name="317" class="Symbol"
+      >&#8594;</a
+      ><a name="318"
+      > </a
+      ><a name="319" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="321"
+      > </a
+      ><a name="322" href="Data.ShapePolymorphism.html#293" class="Bound"
+      >b</a
+      ><a name="323" class="Symbol"
+      >)</a
+      ><a name="324"
+      > </a
+      ><a name="325" class="Symbol"
+      >&#8594;</a
+      ><a name="326"
+      > </a
+      ><a name="327" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="Symbol"
+      >(</a
+      ><a name="331" href="Data.ShapePolymorphism.html#291" class="Bound"
+      >a</a
+      ><a name="332"
+      > </a
+      ><a name="333" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="334"
+      > </a
+      ><a name="335" href="Data.ShapePolymorphism.html#293" class="Bound"
+      >b</a
+      ><a name="336" class="Symbol"
+      >)</a
+      ><a name="337"
+      >
+</a
+      ><a name="338" href="Data.ShapePolymorphism.html#283" class="Function"
+      >&#928;&#9744;</a
+      ><a name="340"
+      > </a
+      ><a name="341" href="Data.ShapePolymorphism.html#341" class="Bound"
+      >A</a
+      ><a name="342"
+      > </a
+      ><a name="343" href="Data.ShapePolymorphism.html#343" class="Bound"
+      >B</a
+      ><a name="344"
+      > </a
+      ><a name="345" class="Symbol"
+      >=</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Symbol"
+      >(</a
+      ><a name="348" href="Data.ShapePolymorphism.html#348" class="Bound"
+      >x</a
+      ><a name="349"
+      > </a
+      ><a name="350" class="Symbol"
+      >:</a
+      ><a name="351"
+      > </a
+      ><a name="352" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="353"
+      > </a
+      ><a name="354" href="Data.ShapePolymorphism.html#341" class="Bound"
+      >A</a
+      ><a name="355" class="Symbol"
+      >)</a
+      ><a name="356"
+      > </a
+      ><a name="357" class="Symbol"
+      >&#8594;</a
+      ><a name="358"
+      > </a
+      ><a name="359" href="Data.ShapePolymorphism.html#343" class="Bound"
+      >B</a
+      ><a name="360"
+      > </a
+      ><a name="361" href="Data.ShapePolymorphism.html#348" class="Bound"
+      >x</a
+      ><a name="362"
+      >
+
+</a
+      ><a name="364" href="Data.ShapePolymorphism.html#364" class="Function Operator"
+      >_&gt;&gt;&#9744;_</a
+      ><a name="369"
+      > </a
+      ><a name="370" class="Symbol"
+      >:</a
+      ><a name="371"
+      > </a
+      ><a name="372" class="Symbol"
+      >&#8704;</a
+      ><a name="373"
+      > </a
+      ><a name="374" class="Symbol"
+      >{</a
+      ><a name="375" href="Data.ShapePolymorphism.html#375" class="Bound"
+      >a</a
+      ><a name="376"
+      > </a
+      ><a name="377" href="Data.ShapePolymorphism.html#377" class="Bound"
+      >b</a
+      ><a name="378" class="Symbol"
+      >}{</a
+      ><a name="380" href="Data.ShapePolymorphism.html#380" class="Bound"
+      >A</a
+      ><a name="381"
+      > </a
+      ><a name="382" class="Symbol"
+      >:</a
+      ><a name="383"
+      > </a
+      ><a name="384" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="386"
+      > </a
+      ><a name="387" href="Data.ShapePolymorphism.html#375" class="Bound"
+      >a</a
+      ><a name="388" class="Symbol"
+      >}{</a
+      ><a name="390" href="Data.ShapePolymorphism.html#390" class="Bound"
+      >B</a
+      ><a name="391"
+      > </a
+      ><a name="392" class="Symbol"
+      >:</a
+      ><a name="393"
+      > </a
+      ><a name="394" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="395"
+      > </a
+      ><a name="396" href="Data.ShapePolymorphism.html#380" class="Bound"
+      >A</a
+      ><a name="397"
+      > </a
+      ><a name="398" class="Symbol"
+      >&#8594;</a
+      ><a name="399"
+      > </a
+      ><a name="400" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="402"
+      > </a
+      ><a name="403" href="Data.ShapePolymorphism.html#377" class="Bound"
+      >b</a
+      ><a name="404" class="Symbol"
+      >}</a
+      ><a name="405"
+      > </a
+      ><a name="406" class="Symbol"
+      >(</a
+      ><a name="407" href="Data.ShapePolymorphism.html#407" class="Bound"
+      >x</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Symbol"
+      >:</a
+      ><a name="410"
+      > </a
+      ><a name="411" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="412"
+      > </a
+      ><a name="413" href="Data.ShapePolymorphism.html#380" class="Bound"
+      >A</a
+      ><a name="414" class="Symbol"
+      >)</a
+      ><a name="415"
+      > </a
+      ><a name="416" class="Symbol"
+      >&#8594;</a
+      ><a name="417"
+      > </a
+      ><a name="418" class="Symbol"
+      >(..(</a
+      ><a name="422" href="Data.ShapePolymorphism.html#422" class="Bound"
+      >x</a
+      ><a name="423"
+      > </a
+      ><a name="424" class="Symbol"
+      >:</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Data.ShapePolymorphism.html#380" class="Bound"
+      >A</a
+      ><a name="427" class="Symbol"
+      >)</a
+      ><a name="428"
+      > </a
+      ><a name="429" class="Symbol"
+      >&#8594;</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="Data.ShapePolymorphism.html#390" class="Bound"
+      >B</a
+      ><a name="432"
+      > </a
+      ><a name="433" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="434"
+      > </a
+      ><a name="435" href="Data.ShapePolymorphism.html#422" class="Bound"
+      >x</a
+      ><a name="436"
+      > </a
+      ><a name="437" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="438" class="Symbol"
+      >)</a
+      ><a name="439"
+      > </a
+      ><a name="440" class="Symbol"
+      >&#8594;</a
+      ><a name="441"
+      > </a
+      ><a name="442" href="Data.ShapePolymorphism.html#390" class="Bound"
+      >B</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="Data.ShapePolymorphism.html#407" class="Bound"
+      >x</a
+      ><a name="445"
+      >
+</a
+      ><a name="446" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="447"
+      > </a
+      ><a name="448" href="Data.ShapePolymorphism.html#448" class="Bound"
+      >x</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="451"
+      > </a
+      ><a name="452" href="Data.ShapePolymorphism.html#364" class="Function Operator"
+      >&gt;&gt;&#9744;</a
+      ><a name="455"
+      > </a
+      ><a name="456" href="Data.ShapePolymorphism.html#456" class="Bound"
+      >f</a
+      ><a name="457"
+      > </a
+      ><a name="458" class="Symbol"
+      >=</a
+      ><a name="459"
+      > </a
+      ><a name="460" href="Data.ShapePolymorphism.html#456" class="Bound"
+      >f</a
+      ><a name="461"
+      > </a
+      ><a name="462" href="Data.ShapePolymorphism.html#448" class="Bound"
+      >x</a
+      ><a name="463"
+      >
+
+</a
+      ><a name="465" class="Comment"
+      >-- This is not a proper map since the function takes a ..A.</a
+      ><a name="524"
+      >
+</a
+      ><a name="525" href="Data.ShapePolymorphism.html#525" class="Function"
+      >map&#9744;</a
+      ><a name="529"
+      > </a
+      ><a name="530" class="Symbol"
+      >:</a
+      ><a name="531"
+      > </a
+      ><a name="532" class="Symbol"
+      >&#8704;</a
+      ><a name="533"
+      > </a
+      ><a name="534" class="Symbol"
+      >{</a
+      ><a name="535" href="Data.ShapePolymorphism.html#535" class="Bound"
+      >a</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Data.ShapePolymorphism.html#537" class="Bound"
+      >b</a
+      ><a name="538" class="Symbol"
+      >}{</a
+      ><a name="540" href="Data.ShapePolymorphism.html#540" class="Bound"
+      >A</a
+      ><a name="541"
+      > </a
+      ><a name="542" class="Symbol"
+      >:</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="546"
+      > </a
+      ><a name="547" href="Data.ShapePolymorphism.html#535" class="Bound"
+      >a</a
+      ><a name="548" class="Symbol"
+      >}{</a
+      ><a name="550" href="Data.ShapePolymorphism.html#550" class="Bound"
+      >B</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >:</a
+      ><a name="553"
+      > </a
+      ><a name="554" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="556"
+      > </a
+      ><a name="557" href="Data.ShapePolymorphism.html#537" class="Bound"
+      >b</a
+      ><a name="558" class="Symbol"
+      >}</a
+      ><a name="559"
+      > </a
+      ><a name="560" class="Symbol"
+      >&#8594;</a
+      ><a name="561"
+      > </a
+      ><a name="562" class="Symbol"
+      >(..(</a
+      ><a name="566" href="Data.ShapePolymorphism.html#566" class="Bound"
+      >x</a
+      ><a name="567"
+      > </a
+      ><a name="568" class="Symbol"
+      >:</a
+      ><a name="569"
+      > </a
+      ><a name="570" href="Data.ShapePolymorphism.html#540" class="Bound"
+      >A</a
+      ><a name="571" class="Symbol"
+      >)</a
+      ><a name="572"
+      > </a
+      ><a name="573" class="Symbol"
+      >&#8594;</a
+      ><a name="574"
+      > </a
+      ><a name="575" href="Data.ShapePolymorphism.html#550" class="Bound"
+      >B</a
+      ><a name="576" class="Symbol"
+      >)</a
+      ><a name="577"
+      > </a
+      ><a name="578" class="Symbol"
+      >&#8594;</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Data.ShapePolymorphism.html#540" class="Bound"
+      >A</a
+      ><a name="583"
+      > </a
+      ><a name="584" class="Symbol"
+      >&#8594;</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Data.ShapePolymorphism.html#134" class="Datatype"
+      >&#9744;</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Data.ShapePolymorphism.html#550" class="Bound"
+      >B</a
+      ><a name="589"
+      >
+</a
+      ><a name="590" href="Data.ShapePolymorphism.html#525" class="Function"
+      >map&#9744;</a
+      ><a name="594"
+      > </a
+      ><a name="595" href="Data.ShapePolymorphism.html#595" class="Bound"
+      >f</a
+      ><a name="596"
+      > </a
+      ><a name="597" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="598"
+      > </a
+      ><a name="599" href="Data.ShapePolymorphism.html#599" class="Bound"
+      >x</a
+      ><a name="600"
+      > </a
+      ><a name="601" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="602"
+      > </a
+      ><a name="603" class="Symbol"
+      >=</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >[</a
+      ><a name="606"
+      > </a
+      ><a name="607" href="Data.ShapePolymorphism.html#595" class="Bound"
+      >f</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Data.ShapePolymorphism.html#599" class="Bound"
+      >x</a
+      ><a name="610"
+      > </a
+      ><a name="611" href="Data.ShapePolymorphism.html#165" class="InductiveConstructor Operator"
+      >]</a
+      ><a name="612"
+      >
+
+</a
+      ><a name="614" class="Comment"
+      >-- This does not work since a &#9744; has to be relevant when eliminated.</a
+      ><a name="681"
+      >
+</a
+      ><a name="682" class="Comment"
+      >-- join&#9744; : &#8704; {a}{A : &#9733;_ a} &#8594; &#9744; (&#9744; A) &#8594; &#9744; A</a
+      ><a name="724"
+      >
+
+</a
+      ><a name="726" class="Comment"
+      >{- This is not a proper bind either.
+_&gt;&gt;=&#9744;_ : &#8704; {a b}{A : &#9733;_ a}{B : &#9733;_ b} (x : &#9744; A) &#8594; (..(x : A) &#8594; &#9744; B) &#8594; &#9744; B
+_&gt;&gt;=&#9744;_ = _&gt;&gt;&#9744;_
+-}</a
+      ><a name="853"
+      >
+
+</a
+      ><a name="855" class="Keyword"
+      >data</a
+      ><a name="859"
+      > </a
+      ><a name="860" href="Data.ShapePolymorphism.html#860" class="Datatype Operator"
+      >_&#8801;&#9744;_</a
+      ><a name="864"
+      > </a
+      ><a name="865" class="Symbol"
+      >{</a
+      ><a name="866" href="Data.ShapePolymorphism.html#866" class="Bound"
+      >a</a
+      ><a name="867" class="Symbol"
+      >}</a
+      ><a name="868"
+      > </a
+      ><a name="869" class="Symbol"
+      >{</a
+      ><a name="870" href="Data.ShapePolymorphism.html#870" class="Bound"
+      >A</a
+      ><a name="871"
+      > </a
+      ><a name="872" class="Symbol"
+      >:</a
+      ><a name="873"
+      > </a
+      ><a name="874" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="Data.ShapePolymorphism.html#866" class="Bound"
+      >a</a
+      ><a name="878" class="Symbol"
+      >}</a
+      ><a name="879"
+      > </a
+      ><a name="880" class="Symbol"
+      >(</a
+      ><a name="881" href="Data.ShapePolymorphism.html#881" class="Bound"
+      >x</a
+      ><a name="882"
+      > </a
+      ><a name="883" class="Symbol"
+      >:</a
+      ><a name="884"
+      > </a
+      ><a name="885" href="Data.ShapePolymorphism.html#870" class="Bound"
+      >A</a
+      ><a name="886" class="Symbol"
+      >)</a
+      ><a name="887"
+      > </a
+      ><a name="888" class="Symbol"
+      >:</a
+      ><a name="889"
+      > </a
+      ><a name="890" class="Symbol"
+      >..(</a
+      ><a name="893" href="Data.ShapePolymorphism.html#893" class="Bound"
+      >y</a
+      ><a name="894"
+      > </a
+      ><a name="895" class="Symbol"
+      >:</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Data.ShapePolymorphism.html#870" class="Bound"
+      >A</a
+      ><a name="898" class="Symbol"
+      >)</a
+      ><a name="899"
+      > </a
+      ><a name="900" class="Symbol"
+      >&#8594;</a
+      ><a name="901"
+      > </a
+      ><a name="902" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Data.ShapePolymorphism.html#866" class="Bound"
+      >a</a
+      ><a name="906"
+      > </a
+      ><a name="907" class="Keyword"
+      >where</a
+      ><a name="912"
+      >
+  </a
+      ><a name="915" href="Data.ShapePolymorphism.html#915" class="InductiveConstructor"
+      >refl</a
+      ><a name="919"
+      > </a
+      ><a name="920" class="Symbol"
+      >:</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Data.ShapePolymorphism.html#881" class="Bound"
+      >x</a
+      ><a name="923"
+      > </a
+      ><a name="924" href="Data.ShapePolymorphism.html#860" class="Datatype Operator"
+      >&#8801;&#9744;</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Data.ShapePolymorphism.html#881" class="Bound"
+      >x</a
+      ><a name="928"
+      >
+
+</a
+      ><a name="930" class="Keyword"
+      >record</a
+      ><a name="936"
+      > </a
+      ><a name="937" href="Data.ShapePolymorphism.html#937" class="Record Operator"
+      >S&#10216;_&#10217;</a
+      ><a name="941"
+      > </a
+      ><a name="942" class="Symbol"
+      >{</a
+      ><a name="943" href="Data.ShapePolymorphism.html#943" class="Bound"
+      >a</a
+      ><a name="944" class="Symbol"
+      >}</a
+      ><a name="945"
+      > </a
+      ><a name="946" class="Symbol"
+      >{</a
+      ><a name="947" href="Data.ShapePolymorphism.html#947" class="Bound"
+      >A</a
+      ><a name="948"
+      > </a
+      ><a name="949" class="Symbol"
+      >:</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Data.ShapePolymorphism.html#943" class="Bound"
+      >a</a
+      ><a name="955" class="Symbol"
+      >}</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="Symbol"
+      >..(</a
+      ><a name="960" href="Data.ShapePolymorphism.html#960" class="Bound"
+      >x</a
+      ><a name="961"
+      > </a
+      ><a name="962" class="Symbol"
+      >:</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="Data.ShapePolymorphism.html#947" class="Bound"
+      >A</a
+      ><a name="965" class="Symbol"
+      >)</a
+      ><a name="966"
+      > </a
+      ><a name="967" class="Symbol"
+      >:</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="Type.html#140" class="Function Operator"
+      >&#9733;_</a
+      ><a name="971"
+      > </a
+      ><a name="972" href="Data.ShapePolymorphism.html#943" class="Bound"
+      >a</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="Keyword"
+      >where</a
+      ><a name="979"
+      >
+  </a
+      ><a name="982" class="Keyword"
+      >constructor</a
+      ><a name="993"
+      > </a
+      ><a name="994" href="Data.ShapePolymorphism.html#994" class="InductiveConstructor Operator"
+      >S[_&#8741;_]</a
+      ><a name="1000"
+      >
+  </a
+      ><a name="1003" class="Keyword"
+      >field</a
+      ><a name="1008"
+      >
+    </a
+      ><a name="1013" href="Data.ShapePolymorphism.html#1013" class="Field"
+      >unS</a
+      ><a name="1016"
+      > </a
+      ><a name="1017" class="Symbol"
+      >:</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="Data.ShapePolymorphism.html#947" class="Bound"
+      >A</a
+      ><a name="1020"
+      >
+    </a
+      ><a name="1025" href="Data.ShapePolymorphism.html#1025" class="Field"
+      >isS</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" class="Symbol"
+      >:</a
+      ><a name="1030"
+      > </a
+      ><a name="1031" href="Data.ShapePolymorphism.html#1013" class="Bound"
+      >unS</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" href="Data.ShapePolymorphism.html#860" class="Datatype Operator"
+      >&#8801;&#9744;</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Data.ShapePolymorphism.html#960" class="Bound"
+      >x</a
+      ><a name="1039"
+      >
+</a
+      ><a name="1040" class="Keyword"
+      >open</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" href="Data.ShapePolymorphism.html#937" class="Module Operator"
+      >S&#10216;_&#10217;</a
+      ><a name="1049"
+      > </a
+      ><a name="1050" class="Keyword"
+      >public</a
+      ><a name="1056"
+      >
+
+</a
+      ><a name="1058" class="Keyword"
+      >pattern</a
+      ><a name="1065"
+      > S[_] x </a
+      ><a name="1073" class="Symbol"
+      >=</a
+      ><a name="1074"
+      > S[ x &#8741; refl ]
+</a
+      ><a name="1089" class="Comment"
+      >{-
+S[_] : &#8704; {a}{A : &#9733;_ a} (x : A) &#8594; S&#10216; x &#10217;
+S[ x ] = S[ x &#8741; refl ]
+-}</a
+      ><a name="1157"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

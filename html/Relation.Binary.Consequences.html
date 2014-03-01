@@ -1,0 +1,3164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Relation.Binary.Consequences</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Some properties imply others</a
+      ><a name="165"
+      >
+</a
+      ><a name="166" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="238"
+      >
+
+</a
+      ><a name="240" class="Keyword"
+      >module</a
+      ><a name="246"
+      > </a
+      ><a name="247" href="Relation.Binary.Consequences.html#1" class="Module"
+      >Relation.Binary.Consequences</a
+      ><a name="275"
+      > </a
+      ><a name="276" class="Keyword"
+      >where</a
+      ><a name="281"
+      >
+
+</a
+      ><a name="283" class="Keyword"
+      >open</a
+      ><a name="287"
+      > </a
+      ><a name="288" class="Keyword"
+      >import</a
+      ><a name="294"
+      > </a
+      ><a name="295" href="Relation.Binary.Core.html#1" class="Module"
+      >Relation.Binary.Core</a
+      ><a name="315"
+      > </a
+      ><a name="316" class="Keyword"
+      >hiding</a
+      ><a name="322"
+      > </a
+      ><a name="323" class="Symbol"
+      >(</a
+      ><a name="324"
+      >refl</a
+      ><a name="328" class="Symbol"
+      >)</a
+      ><a name="329"
+      >
+</a
+      ><a name="330" class="Keyword"
+      >open</a
+      ><a name="334"
+      > </a
+      ><a name="335" class="Keyword"
+      >import</a
+      ><a name="341"
+      > </a
+      ><a name="342" href="Relation.Nullary.html#1" class="Module"
+      >Relation.Nullary</a
+      ><a name="358"
+      >
+</a
+      ><a name="359" class="Keyword"
+      >open</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Keyword"
+      >import</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Relation.Binary.PropositionalEquality.Core.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality.Core</a
+      ><a name="413"
+      >
+</a
+      ><a name="414" class="Keyword"
+      >open</a
+      ><a name="418"
+      > </a
+      ><a name="419" class="Keyword"
+      >import</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="434"
+      >
+</a
+      ><a name="435" class="Keyword"
+      >open</a
+      ><a name="439"
+      > </a
+      ><a name="440" class="Keyword"
+      >import</a
+      ><a name="446"
+      > </a
+      ><a name="447" href="Data.Sum.html#1" class="Module"
+      >Data.Sum</a
+      ><a name="455"
+      >
+</a
+      ><a name="456" class="Keyword"
+      >open</a
+      ><a name="460"
+      > </a
+      ><a name="461" class="Keyword"
+      >import</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="480"
+      >
+</a
+      ><a name="481" class="Keyword"
+      >open</a
+      ><a name="485"
+      > </a
+      ><a name="486" class="Keyword"
+      >import</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Data.Empty.html#1" class="Module"
+      >Data.Empty</a
+      ><a name="503"
+      >
+
+</a
+      ><a name="505" class="Comment"
+      >-- Some of the definitions can be found in the following module:</a
+      ><a name="569"
+      >
+
+</a
+      ><a name="571" class="Keyword"
+      >open</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Keyword"
+      >import</a
+      ><a name="582"
+      > </a
+      ><a name="583" href="Relation.Binary.Consequences.Core.html#1" class="Module"
+      >Relation.Binary.Consequences.Core</a
+      ><a name="616"
+      > </a
+      ><a name="617" class="Keyword"
+      >public</a
+      ><a name="623"
+      >
+
+</a
+      ><a name="625" href="Relation.Binary.Consequences.html#625" class="Function"
+      >trans&#8743;irr&#10230;asym</a
+      ><a name="639"
+      > </a
+      ><a name="640" class="Symbol"
+      >:</a
+      ><a name="641"
+      >
+  </a
+      ><a name="644" class="Symbol"
+      >&#8704;</a
+      ><a name="645"
+      > </a
+      ><a name="646" class="Symbol"
+      >{</a
+      ><a name="647" href="Relation.Binary.Consequences.html#647" class="Bound"
+      >a</a
+      ><a name="648"
+      > </a
+      ><a name="649" href="Relation.Binary.Consequences.html#649" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="651"
+      > </a
+      ><a name="652" href="Relation.Binary.Consequences.html#652" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="654" class="Symbol"
+      >}</a
+      ><a name="655"
+      > </a
+      ><a name="656" class="Symbol"
+      >{</a
+      ><a name="657" href="Relation.Binary.Consequences.html#657" class="Bound"
+      >A</a
+      ><a name="658"
+      > </a
+      ><a name="659" class="Symbol"
+      >:</a
+      ><a name="660"
+      > </a
+      ><a name="661" class="PrimitiveType"
+      >Set</a
+      ><a name="664"
+      > </a
+      ><a name="665" href="Relation.Binary.Consequences.html#647" class="Bound"
+      >a</a
+      ><a name="666" class="Symbol"
+      >}</a
+      ><a name="667"
+      > </a
+      ><a name="668" class="Symbol"
+      >&#8594;</a
+      ><a name="669"
+      > </a
+      ><a name="670" class="Symbol"
+      >{</a
+      ><a name="671" href="Relation.Binary.Consequences.html#671" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="674"
+      > </a
+      ><a name="675" class="Symbol"
+      >:</a
+      ><a name="676"
+      > </a
+      ><a name="677" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="680"
+      > </a
+      ><a name="681" href="Relation.Binary.Consequences.html#657" class="Bound"
+      >A</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="Relation.Binary.Consequences.html#649" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="685" class="Symbol"
+      >}</a
+      ><a name="686"
+      > </a
+      ><a name="687" class="Symbol"
+      >{</a
+      ><a name="688" href="Relation.Binary.Consequences.html#688" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="691"
+      > </a
+      ><a name="692" class="Symbol"
+      >:</a
+      ><a name="693"
+      > </a
+      ><a name="694" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="697"
+      > </a
+      ><a name="698" href="Relation.Binary.Consequences.html#657" class="Bound"
+      >A</a
+      ><a name="699"
+      > </a
+      ><a name="700" href="Relation.Binary.Consequences.html#652" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="702" class="Symbol"
+      >}</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >&#8594;</a
+      ><a name="705"
+      >
+  </a
+      ><a name="708" href="Relation.Binary.Core.html#1919" class="Function"
+      >Reflexive</a
+      ><a name="717"
+      > </a
+      ><a name="718" href="Relation.Binary.Consequences.html#671" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="721"
+      > </a
+      ><a name="722" class="Symbol"
+      >&#8594;</a
+      ><a name="723"
+      >
+  </a
+      ><a name="726" href="Relation.Binary.Core.html#2821" class="Function"
+      >Transitive</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Relation.Binary.Consequences.html#688" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="740"
+      > </a
+      ><a name="741" class="Symbol"
+      >&#8594;</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="Relation.Binary.Core.html#2059" class="Function"
+      >Irreflexive</a
+      ><a name="754"
+      > </a
+      ><a name="755" href="Relation.Binary.Consequences.html#671" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Relation.Binary.Consequences.html#688" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >&#8594;</a
+      ><a name="764"
+      > </a
+      ><a name="765" href="Relation.Binary.Core.html#3035" class="Function"
+      >Asymmetric</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Relation.Binary.Consequences.html#688" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="779"
+      >
+</a
+      ><a name="780" href="Relation.Binary.Consequences.html#625" class="Function"
+      >trans&#8743;irr&#10230;asym</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="Relation.Binary.Consequences.html#795" class="Bound"
+      >refl</a
+      ><a name="799"
+      > </a
+      ><a name="800" href="Relation.Binary.Consequences.html#800" class="Bound"
+      >trans</a
+      ><a name="805"
+      > </a
+      ><a name="806" href="Relation.Binary.Consequences.html#806" class="Bound"
+      >irrefl</a
+      ><a name="812"
+      > </a
+      ><a name="813" class="Symbol"
+      >=</a
+      ><a name="814"
+      > </a
+      ><a name="815" class="Symbol"
+      >&#955;</a
+      ><a name="816"
+      > </a
+      ><a name="817" href="Relation.Binary.Consequences.html#817" class="Bound"
+      >x&lt;y</a
+      ><a name="820"
+      > </a
+      ><a name="821" href="Relation.Binary.Consequences.html#821" class="Bound"
+      >y&lt;x</a
+      ><a name="824"
+      > </a
+      ><a name="825" class="Symbol"
+      >&#8594;</a
+      ><a name="826"
+      >
+  </a
+      ><a name="829" href="Relation.Binary.Consequences.html#806" class="Bound"
+      >irrefl</a
+      ><a name="835"
+      > </a
+      ><a name="836" href="Relation.Binary.Consequences.html#795" class="Bound"
+      >refl</a
+      ><a name="840"
+      > </a
+      ><a name="841" class="Symbol"
+      >(</a
+      ><a name="842" href="Relation.Binary.Consequences.html#800" class="Bound"
+      >trans</a
+      ><a name="847"
+      > </a
+      ><a name="848" href="Relation.Binary.Consequences.html#817" class="Bound"
+      >x&lt;y</a
+      ><a name="851"
+      > </a
+      ><a name="852" href="Relation.Binary.Consequences.html#821" class="Bound"
+      >y&lt;x</a
+      ><a name="855" class="Symbol"
+      >)</a
+      ><a name="856"
+      >
+
+</a
+      ><a name="858" href="Relation.Binary.Consequences.html#858" class="Function"
+      >irr&#8743;antisym&#10230;asym</a
+      ><a name="874"
+      > </a
+      ><a name="875" class="Symbol"
+      >:</a
+      ><a name="876"
+      >
+  </a
+      ><a name="879" class="Symbol"
+      >&#8704;</a
+      ><a name="880"
+      > </a
+      ><a name="881" class="Symbol"
+      >{</a
+      ><a name="882" href="Relation.Binary.Consequences.html#882" class="Bound"
+      >a</a
+      ><a name="883"
+      > </a
+      ><a name="884" href="Relation.Binary.Consequences.html#884" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="886"
+      > </a
+      ><a name="887" href="Relation.Binary.Consequences.html#887" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="889" class="Symbol"
+      >}</a
+      ><a name="890"
+      > </a
+      ><a name="891" class="Symbol"
+      >{</a
+      ><a name="892" href="Relation.Binary.Consequences.html#892" class="Bound"
+      >A</a
+      ><a name="893"
+      > </a
+      ><a name="894" class="Symbol"
+      >:</a
+      ><a name="895"
+      > </a
+      ><a name="896" class="PrimitiveType"
+      >Set</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="Relation.Binary.Consequences.html#882" class="Bound"
+      >a</a
+      ><a name="901" class="Symbol"
+      >}</a
+      ><a name="902"
+      > </a
+      ><a name="903" class="Symbol"
+      >{</a
+      ><a name="904" href="Relation.Binary.Consequences.html#904" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="907"
+      > </a
+      ><a name="908" class="Symbol"
+      >:</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Relation.Binary.Consequences.html#892" class="Bound"
+      >A</a
+      ><a name="915"
+      > </a
+      ><a name="916" href="Relation.Binary.Consequences.html#884" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="918" class="Symbol"
+      >}</a
+      ><a name="919"
+      > </a
+      ><a name="920" class="Symbol"
+      >{</a
+      ><a name="921" href="Relation.Binary.Consequences.html#921" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="924"
+      > </a
+      ><a name="925" class="Symbol"
+      >:</a
+      ><a name="926"
+      > </a
+      ><a name="927" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="930"
+      > </a
+      ><a name="931" href="Relation.Binary.Consequences.html#892" class="Bound"
+      >A</a
+      ><a name="932"
+      > </a
+      ><a name="933" href="Relation.Binary.Consequences.html#887" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="935" class="Symbol"
+      >}</a
+      ><a name="936"
+      > </a
+      ><a name="937" class="Symbol"
+      >&#8594;</a
+      ><a name="938"
+      >
+  </a
+      ><a name="941" href="Relation.Binary.Core.html#2059" class="Function"
+      >Irreflexive</a
+      ><a name="952"
+      > </a
+      ><a name="953" href="Relation.Binary.Consequences.html#904" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="956"
+      > </a
+      ><a name="957" href="Relation.Binary.Consequences.html#921" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="960"
+      > </a
+      ><a name="961" class="Symbol"
+      >&#8594;</a
+      ><a name="962"
+      > </a
+      ><a name="963" href="Relation.Binary.Core.html#2908" class="Function"
+      >Antisymmetric</a
+      ><a name="976"
+      > </a
+      ><a name="977" href="Relation.Binary.Consequences.html#904" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="980"
+      > </a
+      ><a name="981" href="Relation.Binary.Consequences.html#921" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="984"
+      > </a
+      ><a name="985" class="Symbol"
+      >&#8594;</a
+      ><a name="986"
+      > </a
+      ><a name="987" href="Relation.Binary.Core.html#3035" class="Function"
+      >Asymmetric</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="Relation.Binary.Consequences.html#921" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1001"
+      >
+</a
+      ><a name="1002" href="Relation.Binary.Consequences.html#858" class="Function"
+      >irr&#8743;antisym&#10230;asym</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="Relation.Binary.Consequences.html#1019" class="Bound"
+      >irrefl</a
+      ><a name="1025"
+      > </a
+      ><a name="1026" href="Relation.Binary.Consequences.html#1026" class="Bound"
+      >antisym</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" class="Symbol"
+      >=</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" class="Symbol"
+      >&#955;</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Relation.Binary.Consequences.html#1038" class="Bound"
+      >x&lt;y</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" href="Relation.Binary.Consequences.html#1042" class="Bound"
+      >y&lt;x</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" class="Symbol"
+      >&#8594;</a
+      ><a name="1047"
+      >
+  </a
+      ><a name="1050" href="Relation.Binary.Consequences.html#1019" class="Bound"
+      >irrefl</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" class="Symbol"
+      >(</a
+      ><a name="1058" href="Relation.Binary.Consequences.html#1026" class="Bound"
+      >antisym</a
+      ><a name="1065"
+      > </a
+      ><a name="1066" href="Relation.Binary.Consequences.html#1038" class="Bound"
+      >x&lt;y</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" href="Relation.Binary.Consequences.html#1042" class="Bound"
+      >y&lt;x</a
+      ><a name="1073" class="Symbol"
+      >)</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Relation.Binary.Consequences.html#1038" class="Bound"
+      >x&lt;y</a
+      ><a name="1078"
+      >
+
+</a
+      ><a name="1080" href="Relation.Binary.Consequences.html#1080" class="Function"
+      >asym&#10230;antisym</a
+      ><a name="1092"
+      > </a
+      ><a name="1093" class="Symbol"
+      >:</a
+      ><a name="1094"
+      >
+  </a
+      ><a name="1097" class="Symbol"
+      >&#8704;</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" class="Symbol"
+      >{</a
+      ><a name="1100" href="Relation.Binary.Consequences.html#1100" class="Bound"
+      >a</a
+      ><a name="1101"
+      > </a
+      ><a name="1102" href="Relation.Binary.Consequences.html#1102" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="Relation.Binary.Consequences.html#1105" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1107" class="Symbol"
+      >}</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" class="Symbol"
+      >{</a
+      ><a name="1110" href="Relation.Binary.Consequences.html#1110" class="Bound"
+      >A</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" class="Symbol"
+      >:</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" class="PrimitiveType"
+      >Set</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" href="Relation.Binary.Consequences.html#1100" class="Bound"
+      >a</a
+      ><a name="1119" class="Symbol"
+      >}</a
+      ><a name="1120"
+      > </a
+      ><a name="1121" class="Symbol"
+      >{</a
+      ><a name="1122" href="Relation.Binary.Consequences.html#1122" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" class="Symbol"
+      >:</a
+      ><a name="1127"
+      > </a
+      ><a name="1128" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1131"
+      > </a
+      ><a name="1132" href="Relation.Binary.Consequences.html#1110" class="Bound"
+      >A</a
+      ><a name="1133"
+      > </a
+      ><a name="1134" href="Relation.Binary.Consequences.html#1102" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1136" class="Symbol"
+      >}</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" class="Symbol"
+      >{</a
+      ><a name="1139" href="Relation.Binary.Consequences.html#1139" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" class="Symbol"
+      >:</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1148"
+      > </a
+      ><a name="1149" href="Relation.Binary.Consequences.html#1110" class="Bound"
+      >A</a
+      ><a name="1150"
+      > </a
+      ><a name="1151" href="Relation.Binary.Consequences.html#1105" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1153" class="Symbol"
+      >}</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" class="Symbol"
+      >&#8594;</a
+      ><a name="1156"
+      >
+  </a
+      ><a name="1159" href="Relation.Binary.Core.html#3035" class="Function"
+      >Asymmetric</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" href="Relation.Binary.Consequences.html#1139" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" class="Symbol"
+      >&#8594;</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" href="Relation.Binary.Core.html#2908" class="Function"
+      >Antisymmetric</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" href="Relation.Binary.Consequences.html#1122" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="Relation.Binary.Consequences.html#1139" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1197"
+      >
+</a
+      ><a name="1198" href="Relation.Binary.Consequences.html#1080" class="Function"
+      >asym&#10230;antisym</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" href="Relation.Binary.Consequences.html#1211" class="Bound"
+      >asym</a
+      ><a name="1215"
+      > </a
+      ><a name="1216" href="Relation.Binary.Consequences.html#1216" class="Bound"
+      >x&lt;y</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Relation.Binary.Consequences.html#1220" class="Bound"
+      >y&lt;x</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" class="Symbol"
+      >=</a
+      ><a name="1225"
+      > </a
+      ><a name="1226" href="Data.Empty.html#354" class="Function"
+      >&#8869;-elim</a
+      ><a name="1232"
+      > </a
+      ><a name="1233" class="Symbol"
+      >(</a
+      ><a name="1234" href="Relation.Binary.Consequences.html#1211" class="Bound"
+      >asym</a
+      ><a name="1238"
+      > </a
+      ><a name="1239" href="Relation.Binary.Consequences.html#1216" class="Bound"
+      >x&lt;y</a
+      ><a name="1242"
+      > </a
+      ><a name="1243" href="Relation.Binary.Consequences.html#1220" class="Bound"
+      >y&lt;x</a
+      ><a name="1246" class="Symbol"
+      >)</a
+      ><a name="1247"
+      >
+
+</a
+      ><a name="1249" href="Relation.Binary.Consequences.html#1249" class="Function"
+      >asym&#10230;irr</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" class="Symbol"
+      >:</a
+      ><a name="1259"
+      >
+  </a
+      ><a name="1262" class="Symbol"
+      >&#8704;</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" class="Symbol"
+      >{</a
+      ><a name="1265" href="Relation.Binary.Consequences.html#1265" class="Bound"
+      >a</a
+      ><a name="1266"
+      > </a
+      ><a name="1267" href="Relation.Binary.Consequences.html#1267" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1269"
+      > </a
+      ><a name="1270" href="Relation.Binary.Consequences.html#1270" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1272" class="Symbol"
+      >}</a
+      ><a name="1273"
+      > </a
+      ><a name="1274" class="Symbol"
+      >{</a
+      ><a name="1275" href="Relation.Binary.Consequences.html#1275" class="Bound"
+      >A</a
+      ><a name="1276"
+      > </a
+      ><a name="1277" class="Symbol"
+      >:</a
+      ><a name="1278"
+      > </a
+      ><a name="1279" class="PrimitiveType"
+      >Set</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" href="Relation.Binary.Consequences.html#1265" class="Bound"
+      >a</a
+      ><a name="1284" class="Symbol"
+      >}</a
+      ><a name="1285"
+      > </a
+      ><a name="1286" class="Symbol"
+      >{</a
+      ><a name="1287" href="Relation.Binary.Consequences.html#1287" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" class="Symbol"
+      >:</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1296"
+      > </a
+      ><a name="1297" href="Relation.Binary.Consequences.html#1275" class="Bound"
+      >A</a
+      ><a name="1298"
+      > </a
+      ><a name="1299" href="Relation.Binary.Consequences.html#1267" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1301" class="Symbol"
+      >}</a
+      ><a name="1302"
+      > </a
+      ><a name="1303" class="Symbol"
+      >{</a
+      ><a name="1304" href="Relation.Binary.Consequences.html#1304" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1307"
+      > </a
+      ><a name="1308" class="Symbol"
+      >:</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" href="Relation.Binary.Consequences.html#1275" class="Bound"
+      >A</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" href="Relation.Binary.Consequences.html#1270" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1318" class="Symbol"
+      >}</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" class="Symbol"
+      >&#8594;</a
+      ><a name="1321"
+      >
+  </a
+      ><a name="1324" href="Relation.Binary.Consequences.html#1304" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1327"
+      > </a
+      ><a name="1328" href="Relation.Binary.Core.html#3249" class="Function Operator"
+      >Respects&#8322;</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Relation.Binary.Consequences.html#1287" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" class="Symbol"
+      >&#8594;</a
+      ><a name="1343"
+      > </a
+      ><a name="1344" href="Relation.Binary.Core.html#2342" class="Function"
+      >Symmetric</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="Relation.Binary.Consequences.html#1287" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" class="Symbol"
+      >&#8594;</a
+      ><a name="1359"
+      >
+  </a
+      ><a name="1362" href="Relation.Binary.Core.html#3035" class="Function"
+      >Asymmetric</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" href="Relation.Binary.Consequences.html#1304" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1376"
+      > </a
+      ><a name="1377" class="Symbol"
+      >&#8594;</a
+      ><a name="1378"
+      > </a
+      ><a name="1379" href="Relation.Binary.Core.html#2059" class="Function"
+      >Irreflexive</a
+      ><a name="1390"
+      > </a
+      ><a name="1391" href="Relation.Binary.Consequences.html#1287" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1394"
+      > </a
+      ><a name="1395" href="Relation.Binary.Consequences.html#1304" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1398"
+      >
+</a
+      ><a name="1399" href="Relation.Binary.Consequences.html#1249" class="Function"
+      >asym&#10230;irr</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" class="Symbol"
+      >{</a
+      ><a name="1409"
+      >_&lt;_ </a
+      ><a name="1413" class="Symbol"
+      >=</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" href="Relation.Binary.Consequences.html#1415" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="1418" class="Symbol"
+      >}</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" href="Relation.Binary.Consequences.html#1420" class="Bound"
+      >resp</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="Relation.Binary.Consequences.html#1425" class="Bound"
+      >sym</a
+      ><a name="1428"
+      > </a
+      ><a name="1429" href="Relation.Binary.Consequences.html#1429" class="Bound"
+      >asym</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" class="Symbol"
+      >{</a
+      ><a name="1435" href="Relation.Binary.Consequences.html#1435" class="Bound"
+      >x</a
+      ><a name="1436" class="Symbol"
+      >}</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" class="Symbol"
+      >{</a
+      ><a name="1439" href="Relation.Binary.Consequences.html#1439" class="Bound"
+      >y</a
+      ><a name="1440" class="Symbol"
+      >}</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" href="Relation.Binary.Consequences.html#1442" class="Bound"
+      >x&#8776;y</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" href="Relation.Binary.Consequences.html#1446" class="Bound"
+      >x&lt;y</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" class="Symbol"
+      >=</a
+      ><a name="1451"
+      > </a
+      ><a name="1452" href="Relation.Binary.Consequences.html#1429" class="Bound"
+      >asym</a
+      ><a name="1456"
+      > </a
+      ><a name="1457" href="Relation.Binary.Consequences.html#1446" class="Bound"
+      >x&lt;y</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" href="Relation.Binary.Consequences.html#1516" class="Function"
+      >y&lt;x</a
+      ><a name="1464"
+      >
+  </a
+      ><a name="1467" class="Keyword"
+      >where</a
+      ><a name="1472"
+      >
+  </a
+      ><a name="1475" href="Relation.Binary.Consequences.html#1475" class="Function"
+      >y&lt;y</a
+      ><a name="1478"
+      > </a
+      ><a name="1479" class="Symbol"
+      >:</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" href="Relation.Binary.Consequences.html#1439" class="Bound"
+      >y</a
+      ><a name="1482"
+      > </a
+      ><a name="1483" href="Relation.Binary.Consequences.html#1415" class="Bound Operator"
+      >&lt;</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" href="Relation.Binary.Consequences.html#1439" class="Bound"
+      >y</a
+      ><a name="1486"
+      >
+  </a
+      ><a name="1489" href="Relation.Binary.Consequences.html#1475" class="Function"
+      >y&lt;y</a
+      ><a name="1492"
+      > </a
+      ><a name="1493" class="Symbol"
+      >=</a
+      ><a name="1494"
+      > </a
+      ><a name="1495" href="Data.Product.html#567" class="Field"
+      >proj&#8322;</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Relation.Binary.Consequences.html#1420" class="Bound"
+      >resp</a
+      ><a name="1505"
+      > </a
+      ><a name="1506" href="Relation.Binary.Consequences.html#1442" class="Bound"
+      >x&#8776;y</a
+      ><a name="1509"
+      > </a
+      ><a name="1510" href="Relation.Binary.Consequences.html#1446" class="Bound"
+      >x&lt;y</a
+      ><a name="1513"
+      >
+  </a
+      ><a name="1516" href="Relation.Binary.Consequences.html#1516" class="Function"
+      >y&lt;x</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" class="Symbol"
+      >:</a
+      ><a name="1521"
+      > </a
+      ><a name="1522" href="Relation.Binary.Consequences.html#1439" class="Bound"
+      >y</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" href="Relation.Binary.Consequences.html#1415" class="Bound Operator"
+      >&lt;</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" href="Relation.Binary.Consequences.html#1435" class="Bound"
+      >x</a
+      ><a name="1527"
+      >
+  </a
+      ><a name="1530" href="Relation.Binary.Consequences.html#1516" class="Function"
+      >y&lt;x</a
+      ><a name="1533"
+      > </a
+      ><a name="1534" class="Symbol"
+      >=</a
+      ><a name="1535"
+      > </a
+      ><a name="1536" href="Data.Product.html#553" class="Field"
+      >proj&#8321;</a
+      ><a name="1541"
+      > </a
+      ><a name="1542" href="Relation.Binary.Consequences.html#1420" class="Bound"
+      >resp</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" class="Symbol"
+      >(</a
+      ><a name="1548" href="Relation.Binary.Consequences.html#1425" class="Bound"
+      >sym</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="Relation.Binary.Consequences.html#1442" class="Bound"
+      >x&#8776;y</a
+      ><a name="1555" class="Symbol"
+      >)</a
+      ><a name="1556"
+      > </a
+      ><a name="1557" href="Relation.Binary.Consequences.html#1475" class="Function"
+      >y&lt;y</a
+      ><a name="1560"
+      >
+
+</a
+      ><a name="1562" href="Relation.Binary.Consequences.html#1562" class="Function"
+      >total&#10230;refl</a
+      ><a name="1572"
+      > </a
+      ><a name="1573" class="Symbol"
+      >:</a
+      ><a name="1574"
+      >
+  </a
+      ><a name="1577" class="Symbol"
+      >&#8704;</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" class="Symbol"
+      >{</a
+      ><a name="1580" href="Relation.Binary.Consequences.html#1580" class="Bound"
+      >a</a
+      ><a name="1581"
+      > </a
+      ><a name="1582" href="Relation.Binary.Consequences.html#1582" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Relation.Binary.Consequences.html#1585" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1587" class="Symbol"
+      >}</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" class="Symbol"
+      >{</a
+      ><a name="1590" href="Relation.Binary.Consequences.html#1590" class="Bound"
+      >A</a
+      ><a name="1591"
+      > </a
+      ><a name="1592" class="Symbol"
+      >:</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" class="PrimitiveType"
+      >Set</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" href="Relation.Binary.Consequences.html#1580" class="Bound"
+      >a</a
+      ><a name="1599" class="Symbol"
+      >}</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" class="Symbol"
+      >{</a
+      ><a name="1602" href="Relation.Binary.Consequences.html#1602" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" class="Symbol"
+      >:</a
+      ><a name="1607"
+      > </a
+      ><a name="1608" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1611"
+      > </a
+      ><a name="1612" href="Relation.Binary.Consequences.html#1590" class="Bound"
+      >A</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Relation.Binary.Consequences.html#1582" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1616" class="Symbol"
+      >}</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" class="Symbol"
+      >{</a
+      ><a name="1619" href="Relation.Binary.Consequences.html#1619" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1622"
+      > </a
+      ><a name="1623" class="Symbol"
+      >:</a
+      ><a name="1624"
+      > </a
+      ><a name="1625" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" href="Relation.Binary.Consequences.html#1590" class="Bound"
+      >A</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" href="Relation.Binary.Consequences.html#1585" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1633" class="Symbol"
+      >}</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" class="Symbol"
+      >&#8594;</a
+      ><a name="1636"
+      >
+  </a
+      ><a name="1639" href="Relation.Binary.Consequences.html#1619" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" href="Relation.Binary.Core.html#3249" class="Function Operator"
+      >Respects&#8322;</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" href="Relation.Binary.Consequences.html#1602" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1656"
+      > </a
+      ><a name="1657" class="Symbol"
+      >&#8594;</a
+      ><a name="1658"
+      > </a
+      ><a name="1659" href="Relation.Binary.Core.html#2342" class="Function"
+      >Symmetric</a
+      ><a name="1668"
+      > </a
+      ><a name="1669" href="Relation.Binary.Consequences.html#1602" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1672"
+      > </a
+      ><a name="1673" class="Symbol"
+      >&#8594;</a
+      ><a name="1674"
+      >
+  </a
+      ><a name="1677" href="Relation.Binary.Core.html#3642" class="Function"
+      >Total</a
+      ><a name="1682"
+      > </a
+      ><a name="1683" href="Relation.Binary.Consequences.html#1619" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" class="Symbol"
+      >&#8594;</a
+      ><a name="1688"
+      > </a
+      ><a name="1689" href="Relation.Binary.Consequences.html#1602" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Relation.Binary.Core.html#1053" class="Function Operator"
+      >&#8658;</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" href="Relation.Binary.Consequences.html#1619" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1698"
+      >
+</a
+      ><a name="1699" href="Relation.Binary.Consequences.html#1562" class="Function"
+      >total&#10230;refl</a
+      ><a name="1709"
+      > </a
+      ><a name="1710" class="Symbol"
+      >{</a
+      ><a name="1711"
+      >_&#8776;_ </a
+      ><a name="1715" class="Symbol"
+      >=</a
+      ><a name="1716"
+      > </a
+      ><a name="1717" href="Relation.Binary.Consequences.html#1717" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1720" class="Symbol"
+      >}</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" class="Symbol"
+      >{</a
+      ><a name="1723"
+      >_&#8764;_ </a
+      ><a name="1727" class="Symbol"
+      >=</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" href="Relation.Binary.Consequences.html#1729" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1732" class="Symbol"
+      >}</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" href="Relation.Binary.Consequences.html#1734" class="Bound"
+      >resp</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Relation.Binary.Consequences.html#1739" class="Bound"
+      >sym</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" href="Relation.Binary.Consequences.html#1743" class="Bound"
+      >total</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" class="Symbol"
+      >=</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" href="Relation.Binary.Consequences.html#1766" class="Function"
+      >refl</a
+      ><a name="1755"
+      >
+  </a
+      ><a name="1758" class="Keyword"
+      >where</a
+      ><a name="1763"
+      >
+  </a
+      ><a name="1766" href="Relation.Binary.Consequences.html#1766" class="Function"
+      >refl</a
+      ><a name="1770"
+      > </a
+      ><a name="1771" class="Symbol"
+      >:</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="Relation.Binary.Consequences.html#1717" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1776"
+      > </a
+      ><a name="1777" href="Relation.Binary.Core.html#1053" class="Function Operator"
+      >&#8658;</a
+      ><a name="1778"
+      > </a
+      ><a name="1779" href="Relation.Binary.Consequences.html#1729" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1782"
+      >
+  </a
+      ><a name="1785" href="Relation.Binary.Consequences.html#1766" class="Function"
+      >refl</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" class="Symbol"
+      >{</a
+      ><a name="1791" href="Relation.Binary.Consequences.html#1791" class="Bound"
+      >x</a
+      ><a name="1792" class="Symbol"
+      >}</a
+      ><a name="1793"
+      > </a
+      ><a name="1794" class="Symbol"
+      >{</a
+      ><a name="1795" href="Relation.Binary.Consequences.html#1795" class="Bound"
+      >y</a
+      ><a name="1796" class="Symbol"
+      >}</a
+      ><a name="1797"
+      > </a
+      ><a name="1798" href="Relation.Binary.Consequences.html#1798" class="Bound"
+      >x&#8776;y</a
+      ><a name="1801"
+      > </a
+      ><a name="1802" class="Keyword"
+      >with</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" href="Relation.Binary.Consequences.html#1743" class="Bound"
+      >total</a
+      ><a name="1812"
+      > </a
+      ><a name="1813" href="Relation.Binary.Consequences.html#1791" class="Bound"
+      >x</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Relation.Binary.Consequences.html#1795" class="Bound"
+      >y</a
+      ><a name="1816"
+      >
+  </a
+      ><a name="1819" class="Symbol"
+      >...</a
+      ><a name="1822"
+      >              </a
+      ><a name="1836" class="Symbol"
+      >|</a
+      ><a name="1837"
+      > </a
+      ><a name="1838" href="Data.Sum.html#488" class="InductiveConstructor"
+      >inj&#8321;</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" href="Relation.Binary.Consequences.html#1843" class="Bound"
+      >x&#8764;y</a
+      ><a name="1846"
+      > </a
+      ><a name="1847" class="Symbol"
+      >=</a
+      ><a name="1848"
+      > </a
+      ><a name="1849" href="Relation.Binary.Consequences.html#1843" class="Bound"
+      >x&#8764;y</a
+      ><a name="1852"
+      >
+  </a
+      ><a name="1855" class="Symbol"
+      >...</a
+      ><a name="1858"
+      >              </a
+      ><a name="1872" class="Symbol"
+      >|</a
+      ><a name="1873"
+      > </a
+      ><a name="1874" href="Data.Sum.html#513" class="InductiveConstructor"
+      >inj&#8322;</a
+      ><a name="1878"
+      > </a
+      ><a name="1879" href="Relation.Binary.Consequences.html#1879" class="Bound"
+      >y&#8764;x</a
+      ><a name="1882"
+      > </a
+      ><a name="1883" class="Symbol"
+      >=</a
+      ><a name="1884"
+      >
+    </a
+      ><a name="1889" href="Data.Product.html#553" class="Field"
+      >proj&#8321;</a
+      ><a name="1894"
+      > </a
+      ><a name="1895" href="Relation.Binary.Consequences.html#1734" class="Bound"
+      >resp</a
+      ><a name="1899"
+      > </a
+      ><a name="1900" href="Relation.Binary.Consequences.html#1798" class="Bound"
+      >x&#8776;y</a
+      ><a name="1903"
+      > </a
+      ><a name="1904" class="Symbol"
+      >(</a
+      ><a name="1905" href="Data.Product.html#567" class="Field"
+      >proj&#8322;</a
+      ><a name="1910"
+      > </a
+      ><a name="1911" href="Relation.Binary.Consequences.html#1734" class="Bound"
+      >resp</a
+      ><a name="1915"
+      > </a
+      ><a name="1916" class="Symbol"
+      >(</a
+      ><a name="1917" href="Relation.Binary.Consequences.html#1739" class="Bound"
+      >sym</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" href="Relation.Binary.Consequences.html#1798" class="Bound"
+      >x&#8776;y</a
+      ><a name="1924" class="Symbol"
+      >)</a
+      ><a name="1925"
+      > </a
+      ><a name="1926" href="Relation.Binary.Consequences.html#1879" class="Bound"
+      >y&#8764;x</a
+      ><a name="1929" class="Symbol"
+      >)</a
+      ><a name="1930"
+      >
+
+</a
+      ><a name="1932" href="Relation.Binary.Consequences.html#1932" class="Function"
+      >total+dec&#10230;dec</a
+      ><a name="1945"
+      > </a
+      ><a name="1946" class="Symbol"
+      >:</a
+      ><a name="1947"
+      >
+  </a
+      ><a name="1950" class="Symbol"
+      >&#8704;</a
+      ><a name="1951"
+      > </a
+      ><a name="1952" class="Symbol"
+      >{</a
+      ><a name="1953" href="Relation.Binary.Consequences.html#1953" class="Bound"
+      >a</a
+      ><a name="1954"
+      > </a
+      ><a name="1955" href="Relation.Binary.Consequences.html#1955" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1957"
+      > </a
+      ><a name="1958" href="Relation.Binary.Consequences.html#1958" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="1960" class="Symbol"
+      >}</a
+      ><a name="1961"
+      > </a
+      ><a name="1962" class="Symbol"
+      >{</a
+      ><a name="1963" href="Relation.Binary.Consequences.html#1963" class="Bound"
+      >A</a
+      ><a name="1964"
+      > </a
+      ><a name="1965" class="Symbol"
+      >:</a
+      ><a name="1966"
+      > </a
+      ><a name="1967" class="PrimitiveType"
+      >Set</a
+      ><a name="1970"
+      > </a
+      ><a name="1971" href="Relation.Binary.Consequences.html#1953" class="Bound"
+      >a</a
+      ><a name="1972" class="Symbol"
+      >}</a
+      ><a name="1973"
+      > </a
+      ><a name="1974" class="Symbol"
+      >{</a
+      ><a name="1975" href="Relation.Binary.Consequences.html#1975" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1978"
+      > </a
+      ><a name="1979" class="Symbol"
+      >:</a
+      ><a name="1980"
+      > </a
+      ><a name="1981" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="1984"
+      > </a
+      ><a name="1985" href="Relation.Binary.Consequences.html#1963" class="Bound"
+      >A</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="Relation.Binary.Consequences.html#1955" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="1989" class="Symbol"
+      >}</a
+      ><a name="1990"
+      > </a
+      ><a name="1991" class="Symbol"
+      >{</a
+      ><a name="1992" href="Relation.Binary.Consequences.html#1992" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" class="Symbol"
+      >:</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2001"
+      > </a
+      ><a name="2002" href="Relation.Binary.Consequences.html#1963" class="Bound"
+      >A</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" href="Relation.Binary.Consequences.html#1958" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2006" class="Symbol"
+      >}</a
+      ><a name="2007"
+      > </a
+      ><a name="2008" class="Symbol"
+      >&#8594;</a
+      ><a name="2009"
+      >
+  </a
+      ><a name="2012" href="Relation.Binary.Consequences.html#1975" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2015"
+      > </a
+      ><a name="2016" href="Relation.Binary.Core.html#1053" class="Function Operator"
+      >&#8658;</a
+      ><a name="2017"
+      > </a
+      ><a name="2018" href="Relation.Binary.Consequences.html#1992" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" class="Symbol"
+      >&#8594;</a
+      ><a name="2023"
+      > </a
+      ><a name="2024" href="Relation.Binary.Core.html#2908" class="Function"
+      >Antisymmetric</a
+      ><a name="2037"
+      > </a
+      ><a name="2038" href="Relation.Binary.Consequences.html#1975" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2041"
+      > </a
+      ><a name="2042" href="Relation.Binary.Consequences.html#1992" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="2045"
+      > </a
+      ><a name="2046" class="Symbol"
+      >&#8594;</a
+      ><a name="2047"
+      >
+  </a
+      ><a name="2050" href="Relation.Binary.Core.html#3642" class="Function"
+      >Total</a
+      ><a name="2055"
+      > </a
+      ><a name="2056" href="Relation.Binary.Consequences.html#1992" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="2059"
+      > </a
+      ><a name="2060" class="Symbol"
+      >&#8594;</a
+      ><a name="2061"
+      > </a
+      ><a name="2062" href="Relation.Binary.Core.html#3539" class="Function"
+      >Decidable</a
+      ><a name="2071"
+      > </a
+      ><a name="2072" href="Relation.Binary.Consequences.html#1975" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2075"
+      > </a
+      ><a name="2076" class="Symbol"
+      >&#8594;</a
+      ><a name="2077"
+      > </a
+      ><a name="2078" href="Relation.Binary.Core.html#3539" class="Function"
+      >Decidable</a
+      ><a name="2087"
+      > </a
+      ><a name="2088" href="Relation.Binary.Consequences.html#1992" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="2091"
+      >
+</a
+      ><a name="2092" href="Relation.Binary.Consequences.html#1932" class="Function"
+      >total+dec&#10230;dec</a
+      ><a name="2105"
+      > </a
+      ><a name="2106" class="Symbol"
+      >{</a
+      ><a name="2107"
+      >_&#8776;_ </a
+      ><a name="2111" class="Symbol"
+      >=</a
+      ><a name="2112"
+      > </a
+      ><a name="2113" href="Relation.Binary.Consequences.html#2113" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2116" class="Symbol"
+      >}</a
+      ><a name="2117"
+      > </a
+      ><a name="2118" class="Symbol"
+      >{</a
+      ><a name="2119"
+      >_&#8804;_ </a
+      ><a name="2123" class="Symbol"
+      >=</a
+      ><a name="2124"
+      > </a
+      ><a name="2125" href="Relation.Binary.Consequences.html#2125" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="2128" class="Symbol"
+      >}</a
+      ><a name="2129"
+      > </a
+      ><a name="2130" href="Relation.Binary.Consequences.html#2130" class="Bound"
+      >refl</a
+      ><a name="2134"
+      > </a
+      ><a name="2135" href="Relation.Binary.Consequences.html#2135" class="Bound"
+      >antisym</a
+      ><a name="2142"
+      > </a
+      ><a name="2143" href="Relation.Binary.Consequences.html#2143" class="Bound"
+      >total</a
+      ><a name="2148"
+      > </a
+      ><a name="2149" href="Relation.Binary.Consequences.html#2149" class="Bound Operator"
+      >_&#8799;_</a
+      ><a name="2152"
+      > </a
+      ><a name="2153" class="Symbol"
+      >=</a
+      ><a name="2154"
+      > </a
+      ><a name="2155" href="Relation.Binary.Consequences.html#2169" class="Function"
+      >dec</a
+      ><a name="2158"
+      >
+  </a
+      ><a name="2161" class="Keyword"
+      >where</a
+      ><a name="2166"
+      >
+  </a
+      ><a name="2169" href="Relation.Binary.Consequences.html#2169" class="Function"
+      >dec</a
+      ><a name="2172"
+      > </a
+      ><a name="2173" class="Symbol"
+      >:</a
+      ><a name="2174"
+      > </a
+      ><a name="2175" href="Relation.Binary.Core.html#3539" class="Function"
+      >Decidable</a
+      ><a name="2184"
+      > </a
+      ><a name="2185" href="Relation.Binary.Consequences.html#2125" class="Bound Operator"
+      >_&#8804;_</a
+      ><a name="2188"
+      >
+  </a
+      ><a name="2191" href="Relation.Binary.Consequences.html#2169" class="Function"
+      >dec</a
+      ><a name="2194"
+      > </a
+      ><a name="2195" href="Relation.Binary.Consequences.html#2195" class="Bound"
+      >x</a
+      ><a name="2196"
+      > </a
+      ><a name="2197" href="Relation.Binary.Consequences.html#2197" class="Bound"
+      >y</a
+      ><a name="2198"
+      > </a
+      ><a name="2199" class="Keyword"
+      >with</a
+      ><a name="2203"
+      > </a
+      ><a name="2204" href="Relation.Binary.Consequences.html#2143" class="Bound"
+      >total</a
+      ><a name="2209"
+      > </a
+      ><a name="2210" href="Relation.Binary.Consequences.html#2195" class="Bound"
+      >x</a
+      ><a name="2211"
+      > </a
+      ><a name="2212" href="Relation.Binary.Consequences.html#2197" class="Bound"
+      >y</a
+      ><a name="2213"
+      >
+  </a
+      ><a name="2216" class="Symbol"
+      >...</a
+      ><a name="2219"
+      > </a
+      ><a name="2220" class="Symbol"
+      >|</a
+      ><a name="2221"
+      > </a
+      ><a name="2222" href="Data.Sum.html#488" class="InductiveConstructor"
+      >inj&#8321;</a
+      ><a name="2226"
+      > </a
+      ><a name="2227" href="Relation.Binary.Consequences.html#2227" class="Bound"
+      >x&#8804;y</a
+      ><a name="2230"
+      > </a
+      ><a name="2231" class="Symbol"
+      >=</a
+      ><a name="2232"
+      > </a
+      ><a name="2233" href="Relation.Nullary.Core.html#532" class="InductiveConstructor"
+      >yes</a
+      ><a name="2236"
+      > </a
+      ><a name="2237" href="Relation.Binary.Consequences.html#2227" class="Bound"
+      >x&#8804;y</a
+      ><a name="2240"
+      >
+  </a
+      ><a name="2243" class="Symbol"
+      >...</a
+      ><a name="2246"
+      > </a
+      ><a name="2247" class="Symbol"
+      >|</a
+      ><a name="2248"
+      > </a
+      ><a name="2249" href="Data.Sum.html#513" class="InductiveConstructor"
+      >inj&#8322;</a
+      ><a name="2253"
+      > </a
+      ><a name="2254" href="Relation.Binary.Consequences.html#2254" class="Bound"
+      >y&#8804;x</a
+      ><a name="2257"
+      > </a
+      ><a name="2258" class="Keyword"
+      >with</a
+      ><a name="2262"
+      > </a
+      ><a name="2263" href="Relation.Binary.Consequences.html#2195" class="Bound"
+      >x</a
+      ><a name="2264"
+      > </a
+      ><a name="2265" href="Relation.Binary.Consequences.html#2149" class="Bound Operator"
+      >&#8799;</a
+      ><a name="2266"
+      > </a
+      ><a name="2267" href="Relation.Binary.Consequences.html#2197" class="Bound"
+      >y</a
+      ><a name="2268"
+      >
+  </a
+      ><a name="2271" class="Symbol"
+      >...</a
+      ><a name="2274"
+      >   </a
+      ><a name="2277" class="Symbol"
+      >|</a
+      ><a name="2278"
+      > </a
+      ><a name="2279" href="Relation.Nullary.Core.html#532" class="InductiveConstructor"
+      >yes</a
+      ><a name="2282"
+      >  </a
+      ><a name="2284" href="Relation.Binary.Consequences.html#2284" class="Bound"
+      >x&#8776;y</a
+      ><a name="2287"
+      > </a
+      ><a name="2288" class="Symbol"
+      >=</a
+      ><a name="2289"
+      > </a
+      ><a name="2290" href="Relation.Nullary.Core.html#532" class="InductiveConstructor"
+      >yes</a
+      ><a name="2293"
+      > </a
+      ><a name="2294" class="Symbol"
+      >(</a
+      ><a name="2295" href="Relation.Binary.Consequences.html#2130" class="Bound"
+      >refl</a
+      ><a name="2299"
+      > </a
+      ><a name="2300" href="Relation.Binary.Consequences.html#2284" class="Bound"
+      >x&#8776;y</a
+      ><a name="2303" class="Symbol"
+      >)</a
+      ><a name="2304"
+      >
+  </a
+      ><a name="2307" class="Symbol"
+      >...</a
+      ><a name="2310"
+      >   </a
+      ><a name="2313" class="Symbol"
+      >|</a
+      ><a name="2314"
+      > </a
+      ><a name="2315" href="Relation.Nullary.Core.html#559" class="InductiveConstructor"
+      >no</a
+      ><a name="2317"
+      >  </a
+      ><a name="2319" href="Relation.Binary.Consequences.html#2319" class="Bound"
+      >&#172;x&#8776;y</a
+      ><a name="2323"
+      > </a
+      ><a name="2324" class="Symbol"
+      >=</a
+      ><a name="2325"
+      > </a
+      ><a name="2326" href="Relation.Nullary.Core.html#559" class="InductiveConstructor"
+      >no</a
+      ><a name="2328"
+      > </a
+      ><a name="2329" class="Symbol"
+      >(&#955;</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="Relation.Binary.Consequences.html#2332" class="Bound"
+      >x&#8804;y</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" class="Symbol"
+      >&#8594;</a
+      ><a name="2337"
+      > </a
+      ><a name="2338" href="Relation.Binary.Consequences.html#2319" class="Bound"
+      >&#172;x&#8776;y</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" class="Symbol"
+      >(</a
+      ><a name="2344" href="Relation.Binary.Consequences.html#2135" class="Bound"
+      >antisym</a
+      ><a name="2351"
+      > </a
+      ><a name="2352" href="Relation.Binary.Consequences.html#2332" class="Bound"
+      >x&#8804;y</a
+      ><a name="2355"
+      > </a
+      ><a name="2356" href="Relation.Binary.Consequences.html#2254" class="Bound"
+      >y&#8804;x</a
+      ><a name="2359" class="Symbol"
+      >))</a
+      ><a name="2361"
+      >
+
+</a
+      ><a name="2363" href="Relation.Binary.Consequences.html#2363" class="Function"
+      >tri&#10230;asym</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" class="Symbol"
+      >:</a
+      ><a name="2373"
+      >
+  </a
+      ><a name="2376" class="Symbol"
+      >&#8704;</a
+      ><a name="2377"
+      > </a
+      ><a name="2378" class="Symbol"
+      >{</a
+      ><a name="2379" href="Relation.Binary.Consequences.html#2379" class="Bound"
+      >a</a
+      ><a name="2380"
+      > </a
+      ><a name="2381" href="Relation.Binary.Consequences.html#2381" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="2383"
+      > </a
+      ><a name="2384" href="Relation.Binary.Consequences.html#2384" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2386" class="Symbol"
+      >}</a
+      ><a name="2387"
+      > </a
+      ><a name="2388" class="Symbol"
+      >{</a
+      ><a name="2389" href="Relation.Binary.Consequences.html#2389" class="Bound"
+      >A</a
+      ><a name="2390"
+      > </a
+      ><a name="2391" class="Symbol"
+      >:</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" class="PrimitiveType"
+      >Set</a
+      ><a name="2396"
+      > </a
+      ><a name="2397" href="Relation.Binary.Consequences.html#2379" class="Bound"
+      >a</a
+      ><a name="2398" class="Symbol"
+      >}</a
+      ><a name="2399"
+      > </a
+      ><a name="2400" class="Symbol"
+      >{</a
+      ><a name="2401" href="Relation.Binary.Consequences.html#2401" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" class="Symbol"
+      >:</a
+      ><a name="2406"
+      > </a
+      ><a name="2407" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2410"
+      > </a
+      ><a name="2411" href="Relation.Binary.Consequences.html#2389" class="Bound"
+      >A</a
+      ><a name="2412"
+      > </a
+      ><a name="2413" href="Relation.Binary.Consequences.html#2381" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="2415" class="Symbol"
+      >}</a
+      ><a name="2416"
+      > </a
+      ><a name="2417" class="Symbol"
+      >{</a
+      ><a name="2418" href="Relation.Binary.Consequences.html#2418" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2421"
+      > </a
+      ><a name="2422" class="Symbol"
+      >:</a
+      ><a name="2423"
+      > </a
+      ><a name="2424" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2427"
+      > </a
+      ><a name="2428" href="Relation.Binary.Consequences.html#2389" class="Bound"
+      >A</a
+      ><a name="2429"
+      > </a
+      ><a name="2430" href="Relation.Binary.Consequences.html#2384" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2432" class="Symbol"
+      >}</a
+      ><a name="2433"
+      > </a
+      ><a name="2434" class="Symbol"
+      >&#8594;</a
+      ><a name="2435"
+      >
+  </a
+      ><a name="2438" href="Relation.Binary.Core.html#3976" class="Function"
+      >Trichotomous</a
+      ><a name="2450"
+      > </a
+      ><a name="2451" href="Relation.Binary.Consequences.html#2401" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2454"
+      > </a
+      ><a name="2455" href="Relation.Binary.Consequences.html#2418" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2458"
+      > </a
+      ><a name="2459" class="Symbol"
+      >&#8594;</a
+      ><a name="2460"
+      > </a
+      ><a name="2461" href="Relation.Binary.Core.html#3035" class="Function"
+      >Asymmetric</a
+      ><a name="2471"
+      > </a
+      ><a name="2472" href="Relation.Binary.Consequences.html#2418" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2475"
+      >
+</a
+      ><a name="2476" href="Relation.Binary.Consequences.html#2363" class="Function"
+      >tri&#10230;asym</a
+      ><a name="2484"
+      > </a
+      ><a name="2485" href="Relation.Binary.Consequences.html#2485" class="Bound"
+      >tri</a
+      ><a name="2488"
+      > </a
+      ><a name="2489" class="Symbol"
+      >{</a
+      ><a name="2490" href="Relation.Binary.Consequences.html#2490" class="Bound"
+      >x</a
+      ><a name="2491" class="Symbol"
+      >}</a
+      ><a name="2492"
+      > </a
+      ><a name="2493" class="Symbol"
+      >{</a
+      ><a name="2494" href="Relation.Binary.Consequences.html#2494" class="Bound"
+      >y</a
+      ><a name="2495" class="Symbol"
+      >}</a
+      ><a name="2496"
+      > </a
+      ><a name="2497" href="Relation.Binary.Consequences.html#2497" class="Bound"
+      >x&lt;y</a
+      ><a name="2500"
+      > </a
+      ><a name="2501" href="Relation.Binary.Consequences.html#2501" class="Bound"
+      >x&gt;y</a
+      ><a name="2504"
+      > </a
+      ><a name="2505" class="Keyword"
+      >with</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" href="Relation.Binary.Consequences.html#2485" class="Bound"
+      >tri</a
+      ><a name="2513"
+      > </a
+      ><a name="2514" href="Relation.Binary.Consequences.html#2490" class="Bound"
+      >x</a
+      ><a name="2515"
+      > </a
+      ><a name="2516" href="Relation.Binary.Consequences.html#2494" class="Bound"
+      >y</a
+      ><a name="2517"
+      >
+</a
+      ><a name="2518" class="Symbol"
+      >...</a
+      ><a name="2521"
+      > </a
+      ><a name="2522" class="Symbol"
+      >|</a
+      ><a name="2523"
+      > </a
+      ><a name="2524" href="Relation.Binary.Core.html#3815" class="InductiveConstructor"
+      >tri&lt;</a
+      ><a name="2528"
+      > </a
+      ><a name="2529" class="Symbol"
+      >_</a
+      ><a name="2530"
+      >   </a
+      ><a name="2533" class="Symbol"
+      >_</a
+      ><a name="2534"
+      > </a
+      ><a name="2535" href="Relation.Binary.Consequences.html#2535" class="Bound"
+      >x&#8815;y</a
+      ><a name="2538"
+      > </a
+      ><a name="2539" class="Symbol"
+      >=</a
+      ><a name="2540"
+      > </a
+      ><a name="2541" href="Relation.Binary.Consequences.html#2535" class="Bound"
+      >x&#8815;y</a
+      ><a name="2544"
+      > </a
+      ><a name="2545" href="Relation.Binary.Consequences.html#2501" class="Bound"
+      >x&gt;y</a
+      ><a name="2548"
+      >
+</a
+      ><a name="2549" class="Symbol"
+      >...</a
+      ><a name="2552"
+      > </a
+      ><a name="2553" class="Symbol"
+      >|</a
+      ><a name="2554"
+      > </a
+      ><a name="2555" href="Relation.Binary.Core.html#3869" class="InductiveConstructor"
+      >tri&#8776;</a
+      ><a name="2559"
+      > </a
+      ><a name="2560" class="Symbol"
+      >_</a
+      ><a name="2561"
+      >   </a
+      ><a name="2564" class="Symbol"
+      >_</a
+      ><a name="2565"
+      > </a
+      ><a name="2566" href="Relation.Binary.Consequences.html#2566" class="Bound"
+      >x&#8815;y</a
+      ><a name="2569"
+      > </a
+      ><a name="2570" class="Symbol"
+      >=</a
+      ><a name="2571"
+      > </a
+      ><a name="2572" href="Relation.Binary.Consequences.html#2566" class="Bound"
+      >x&#8815;y</a
+      ><a name="2575"
+      > </a
+      ><a name="2576" href="Relation.Binary.Consequences.html#2501" class="Bound"
+      >x&gt;y</a
+      ><a name="2579"
+      >
+</a
+      ><a name="2580" class="Symbol"
+      >...</a
+      ><a name="2583"
+      > </a
+      ><a name="2584" class="Symbol"
+      >|</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" href="Relation.Binary.Core.html#3923" class="InductiveConstructor"
+      >tri&gt;</a
+      ><a name="2590"
+      > </a
+      ><a name="2591" href="Relation.Binary.Consequences.html#2591" class="Bound"
+      >x&#8814;y</a
+      ><a name="2594"
+      > </a
+      ><a name="2595" class="Symbol"
+      >_</a
+      ><a name="2596"
+      > </a
+      ><a name="2597" class="Symbol"
+      >_</a
+      ><a name="2598"
+      >   </a
+      ><a name="2601" class="Symbol"
+      >=</a
+      ><a name="2602"
+      > </a
+      ><a name="2603" href="Relation.Binary.Consequences.html#2591" class="Bound"
+      >x&#8814;y</a
+      ><a name="2606"
+      > </a
+      ><a name="2607" href="Relation.Binary.Consequences.html#2497" class="Bound"
+      >x&lt;y</a
+      ><a name="2610"
+      >
+
+</a
+      ><a name="2612" href="Relation.Binary.Consequences.html#2612" class="Function"
+      >tri&#10230;irr</a
+      ><a name="2619"
+      > </a
+      ><a name="2620" class="Symbol"
+      >:</a
+      ><a name="2621"
+      >
+  </a
+      ><a name="2624" class="Symbol"
+      >&#8704;</a
+      ><a name="2625"
+      > </a
+      ><a name="2626" class="Symbol"
+      >{</a
+      ><a name="2627" href="Relation.Binary.Consequences.html#2627" class="Bound"
+      >a</a
+      ><a name="2628"
+      > </a
+      ><a name="2629" href="Relation.Binary.Consequences.html#2629" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" href="Relation.Binary.Consequences.html#2632" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2634" class="Symbol"
+      >}</a
+      ><a name="2635"
+      > </a
+      ><a name="2636" class="Symbol"
+      >{</a
+      ><a name="2637" href="Relation.Binary.Consequences.html#2637" class="Bound"
+      >A</a
+      ><a name="2638"
+      > </a
+      ><a name="2639" class="Symbol"
+      >:</a
+      ><a name="2640"
+      > </a
+      ><a name="2641" class="PrimitiveType"
+      >Set</a
+      ><a name="2644"
+      > </a
+      ><a name="2645" href="Relation.Binary.Consequences.html#2627" class="Bound"
+      >a</a
+      ><a name="2646" class="Symbol"
+      >}</a
+      ><a name="2647"
+      > </a
+      ><a name="2648" class="Symbol"
+      >{</a
+      ><a name="2649" href="Relation.Binary.Consequences.html#2649" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2652"
+      > </a
+      ><a name="2653" class="Symbol"
+      >:</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2658"
+      > </a
+      ><a name="2659" href="Relation.Binary.Consequences.html#2637" class="Bound"
+      >A</a
+      ><a name="2660"
+      > </a
+      ><a name="2661" href="Relation.Binary.Consequences.html#2629" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="2663" class="Symbol"
+      >}</a
+      ><a name="2664"
+      > </a
+      ><a name="2665" class="Symbol"
+      >{</a
+      ><a name="2666" href="Relation.Binary.Consequences.html#2666" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2669"
+      > </a
+      ><a name="2670" class="Symbol"
+      >:</a
+      ><a name="2671"
+      > </a
+      ><a name="2672" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2675"
+      > </a
+      ><a name="2676" href="Relation.Binary.Consequences.html#2637" class="Bound"
+      >A</a
+      ><a name="2677"
+      > </a
+      ><a name="2678" href="Relation.Binary.Consequences.html#2632" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2680" class="Symbol"
+      >}</a
+      ><a name="2681"
+      > </a
+      ><a name="2682" class="Symbol"
+      >&#8594;</a
+      ><a name="2683"
+      >
+  </a
+      ><a name="2686" href="Relation.Binary.Consequences.html#2666" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2689"
+      > </a
+      ><a name="2690" href="Relation.Binary.Core.html#3249" class="Function Operator"
+      >Respects&#8322;</a
+      ><a name="2699"
+      > </a
+      ><a name="2700" href="Relation.Binary.Consequences.html#2649" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2703"
+      > </a
+      ><a name="2704" class="Symbol"
+      >&#8594;</a
+      ><a name="2705"
+      > </a
+      ><a name="2706" href="Relation.Binary.Core.html#2342" class="Function"
+      >Symmetric</a
+      ><a name="2715"
+      > </a
+      ><a name="2716" href="Relation.Binary.Consequences.html#2649" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2719"
+      > </a
+      ><a name="2720" class="Symbol"
+      >&#8594;</a
+      ><a name="2721"
+      >
+  </a
+      ><a name="2724" href="Relation.Binary.Core.html#3976" class="Function"
+      >Trichotomous</a
+      ><a name="2736"
+      > </a
+      ><a name="2737" href="Relation.Binary.Consequences.html#2649" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2740"
+      > </a
+      ><a name="2741" href="Relation.Binary.Consequences.html#2666" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2744"
+      > </a
+      ><a name="2745" class="Symbol"
+      >&#8594;</a
+      ><a name="2746"
+      > </a
+      ><a name="2747" href="Relation.Binary.Core.html#2059" class="Function"
+      >Irreflexive</a
+      ><a name="2758"
+      > </a
+      ><a name="2759" href="Relation.Binary.Consequences.html#2649" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2762"
+      > </a
+      ><a name="2763" href="Relation.Binary.Consequences.html#2666" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2766"
+      >
+</a
+      ><a name="2767" href="Relation.Binary.Consequences.html#2612" class="Function"
+      >tri&#10230;irr</a
+      ><a name="2774"
+      > </a
+      ><a name="2775" href="Relation.Binary.Consequences.html#2775" class="Bound"
+      >resp</a
+      ><a name="2779"
+      > </a
+      ><a name="2780" href="Relation.Binary.Consequences.html#2780" class="Bound"
+      >sym</a
+      ><a name="2783"
+      > </a
+      ><a name="2784" href="Relation.Binary.Consequences.html#2784" class="Bound"
+      >tri</a
+      ><a name="2787"
+      > </a
+      ><a name="2788" class="Symbol"
+      >=</a
+      ><a name="2789"
+      > </a
+      ><a name="2790" href="Relation.Binary.Consequences.html#1249" class="Function"
+      >asym&#10230;irr</a
+      ><a name="2798"
+      > </a
+      ><a name="2799" href="Relation.Binary.Consequences.html#2775" class="Bound"
+      >resp</a
+      ><a name="2803"
+      > </a
+      ><a name="2804" href="Relation.Binary.Consequences.html#2780" class="Bound"
+      >sym</a
+      ><a name="2807"
+      > </a
+      ><a name="2808" class="Symbol"
+      >(</a
+      ><a name="2809" href="Relation.Binary.Consequences.html#2363" class="Function"
+      >tri&#10230;asym</a
+      ><a name="2817"
+      > </a
+      ><a name="2818" href="Relation.Binary.Consequences.html#2784" class="Bound"
+      >tri</a
+      ><a name="2821" class="Symbol"
+      >)</a
+      ><a name="2822"
+      >
+
+</a
+      ><a name="2824" href="Relation.Binary.Consequences.html#2824" class="Function"
+      >tri&#10230;dec&#8776;</a
+      ><a name="2832"
+      > </a
+      ><a name="2833" class="Symbol"
+      >:</a
+      ><a name="2834"
+      >
+  </a
+      ><a name="2837" class="Symbol"
+      >&#8704;</a
+      ><a name="2838"
+      > </a
+      ><a name="2839" class="Symbol"
+      >{</a
+      ><a name="2840" href="Relation.Binary.Consequences.html#2840" class="Bound"
+      >a</a
+      ><a name="2841"
+      > </a
+      ><a name="2842" href="Relation.Binary.Consequences.html#2842" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="2844"
+      > </a
+      ><a name="2845" href="Relation.Binary.Consequences.html#2845" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2847" class="Symbol"
+      >}</a
+      ><a name="2848"
+      > </a
+      ><a name="2849" class="Symbol"
+      >{</a
+      ><a name="2850" href="Relation.Binary.Consequences.html#2850" class="Bound"
+      >A</a
+      ><a name="2851"
+      > </a
+      ><a name="2852" class="Symbol"
+      >:</a
+      ><a name="2853"
+      > </a
+      ><a name="2854" class="PrimitiveType"
+      >Set</a
+      ><a name="2857"
+      > </a
+      ><a name="2858" href="Relation.Binary.Consequences.html#2840" class="Bound"
+      >a</a
+      ><a name="2859" class="Symbol"
+      >}</a
+      ><a name="2860"
+      > </a
+      ><a name="2861" class="Symbol"
+      >{</a
+      ><a name="2862" href="Relation.Binary.Consequences.html#2862" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2865"
+      > </a
+      ><a name="2866" class="Symbol"
+      >:</a
+      ><a name="2867"
+      > </a
+      ><a name="2868" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2871"
+      > </a
+      ><a name="2872" href="Relation.Binary.Consequences.html#2850" class="Bound"
+      >A</a
+      ><a name="2873"
+      > </a
+      ><a name="2874" href="Relation.Binary.Consequences.html#2842" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="2876" class="Symbol"
+      >}</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" class="Symbol"
+      >{</a
+      ><a name="2879" href="Relation.Binary.Consequences.html#2879" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2882"
+      > </a
+      ><a name="2883" class="Symbol"
+      >:</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" href="Relation.Binary.Consequences.html#2850" class="Bound"
+      >A</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" href="Relation.Binary.Consequences.html#2845" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="2893" class="Symbol"
+      >}</a
+      ><a name="2894"
+      > </a
+      ><a name="2895" class="Symbol"
+      >&#8594;</a
+      ><a name="2896"
+      >
+  </a
+      ><a name="2899" href="Relation.Binary.Core.html#3976" class="Function"
+      >Trichotomous</a
+      ><a name="2911"
+      > </a
+      ><a name="2912" href="Relation.Binary.Consequences.html#2862" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2915"
+      > </a
+      ><a name="2916" href="Relation.Binary.Consequences.html#2879" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="2919"
+      > </a
+      ><a name="2920" class="Symbol"
+      >&#8594;</a
+      ><a name="2921"
+      > </a
+      ><a name="2922" href="Relation.Binary.Core.html#3539" class="Function"
+      >Decidable</a
+      ><a name="2931"
+      > </a
+      ><a name="2932" href="Relation.Binary.Consequences.html#2862" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="2935"
+      >
+</a
+      ><a name="2936" href="Relation.Binary.Consequences.html#2824" class="Function"
+      >tri&#10230;dec&#8776;</a
+      ><a name="2944"
+      > </a
+      ><a name="2945" href="Relation.Binary.Consequences.html#2945" class="Bound"
+      >compare</a
+      ><a name="2952"
+      > </a
+      ><a name="2953" href="Relation.Binary.Consequences.html#2953" class="Bound"
+      >x</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" href="Relation.Binary.Consequences.html#2955" class="Bound"
+      >y</a
+      ><a name="2956"
+      > </a
+      ><a name="2957" class="Keyword"
+      >with</a
+      ><a name="2961"
+      > </a
+      ><a name="2962" href="Relation.Binary.Consequences.html#2945" class="Bound"
+      >compare</a
+      ><a name="2969"
+      > </a
+      ><a name="2970" href="Relation.Binary.Consequences.html#2953" class="Bound"
+      >x</a
+      ><a name="2971"
+      > </a
+      ><a name="2972" href="Relation.Binary.Consequences.html#2955" class="Bound"
+      >y</a
+      ><a name="2973"
+      >
+</a
+      ><a name="2974" class="Symbol"
+      >...</a
+      ><a name="2977"
+      > </a
+      ><a name="2978" class="Symbol"
+      >|</a
+      ><a name="2979"
+      > </a
+      ><a name="2980" href="Relation.Binary.Core.html#3815" class="InductiveConstructor"
+      >tri&lt;</a
+      ><a name="2984"
+      > </a
+      ><a name="2985" class="Symbol"
+      >_</a
+      ><a name="2986"
+      > </a
+      ><a name="2987" href="Relation.Binary.Consequences.html#2987" class="Bound"
+      >x&#8777;y</a
+      ><a name="2990"
+      > </a
+      ><a name="2991" class="Symbol"
+      >_</a
+      ><a name="2992"
+      > </a
+      ><a name="2993" class="Symbol"
+      >=</a
+      ><a name="2994"
+      > </a
+      ><a name="2995" href="Relation.Nullary.Core.html#559" class="InductiveConstructor"
+      >no</a
+      ><a name="2997"
+      >  </a
+      ><a name="2999" href="Relation.Binary.Consequences.html#2987" class="Bound"
+      >x&#8777;y</a
+      ><a name="3002"
+      >
+</a
+      ><a name="3003" class="Symbol"
+      >...</a
+      ><a name="3006"
+      > </a
+      ><a name="3007" class="Symbol"
+      >|</a
+      ><a name="3008"
+      > </a
+      ><a name="3009" href="Relation.Binary.Core.html#3869" class="InductiveConstructor"
+      >tri&#8776;</a
+      ><a name="3013"
+      > </a
+      ><a name="3014" class="Symbol"
+      >_</a
+      ><a name="3015"
+      > </a
+      ><a name="3016" href="Relation.Binary.Consequences.html#3016" class="Bound"
+      >x&#8776;y</a
+      ><a name="3019"
+      > </a
+      ><a name="3020" class="Symbol"
+      >_</a
+      ><a name="3021"
+      > </a
+      ><a name="3022" class="Symbol"
+      >=</a
+      ><a name="3023"
+      > </a
+      ><a name="3024" href="Relation.Nullary.Core.html#532" class="InductiveConstructor"
+      >yes</a
+      ><a name="3027"
+      > </a
+      ><a name="3028" href="Relation.Binary.Consequences.html#3016" class="Bound"
+      >x&#8776;y</a
+      ><a name="3031"
+      >
+</a
+      ><a name="3032" class="Symbol"
+      >...</a
+      ><a name="3035"
+      > </a
+      ><a name="3036" class="Symbol"
+      >|</a
+      ><a name="3037"
+      > </a
+      ><a name="3038" href="Relation.Binary.Core.html#3923" class="InductiveConstructor"
+      >tri&gt;</a
+      ><a name="3042"
+      > </a
+      ><a name="3043" class="Symbol"
+      >_</a
+      ><a name="3044"
+      > </a
+      ><a name="3045" href="Relation.Binary.Consequences.html#3045" class="Bound"
+      >x&#8777;y</a
+      ><a name="3048"
+      > </a
+      ><a name="3049" class="Symbol"
+      >_</a
+      ><a name="3050"
+      > </a
+      ><a name="3051" class="Symbol"
+      >=</a
+      ><a name="3052"
+      > </a
+      ><a name="3053" href="Relation.Nullary.Core.html#559" class="InductiveConstructor"
+      >no</a
+      ><a name="3055"
+      >  </a
+      ><a name="3057" href="Relation.Binary.Consequences.html#3045" class="Bound"
+      >x&#8777;y</a
+      ><a name="3060"
+      >
+
+</a
+      ><a name="3062" href="Relation.Binary.Consequences.html#3062" class="Function"
+      >tri&#10230;dec&lt;</a
+      ><a name="3070"
+      > </a
+      ><a name="3071" class="Symbol"
+      >:</a
+      ><a name="3072"
+      >
+  </a
+      ><a name="3075" class="Symbol"
+      >&#8704;</a
+      ><a name="3076"
+      > </a
+      ><a name="3077" class="Symbol"
+      >{</a
+      ><a name="3078" href="Relation.Binary.Consequences.html#3078" class="Bound"
+      >a</a
+      ><a name="3079"
+      > </a
+      ><a name="3080" href="Relation.Binary.Consequences.html#3080" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="3082"
+      > </a
+      ><a name="3083" href="Relation.Binary.Consequences.html#3083" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="3085" class="Symbol"
+      >}</a
+      ><a name="3086"
+      > </a
+      ><a name="3087" class="Symbol"
+      >{</a
+      ><a name="3088" href="Relation.Binary.Consequences.html#3088" class="Bound"
+      >A</a
+      ><a name="3089"
+      > </a
+      ><a name="3090" class="Symbol"
+      >:</a
+      ><a name="3091"
+      > </a
+      ><a name="3092" class="PrimitiveType"
+      >Set</a
+      ><a name="3095"
+      > </a
+      ><a name="3096" href="Relation.Binary.Consequences.html#3078" class="Bound"
+      >a</a
+      ><a name="3097" class="Symbol"
+      >}</a
+      ><a name="3098"
+      > </a
+      ><a name="3099" class="Symbol"
+      >{</a
+      ><a name="3100" href="Relation.Binary.Consequences.html#3100" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="3103"
+      > </a
+      ><a name="3104" class="Symbol"
+      >:</a
+      ><a name="3105"
+      > </a
+      ><a name="3106" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="3109"
+      > </a
+      ><a name="3110" href="Relation.Binary.Consequences.html#3088" class="Bound"
+      >A</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" href="Relation.Binary.Consequences.html#3080" class="Bound"
+      >&#8467;&#8321;</a
+      ><a name="3114" class="Symbol"
+      >}</a
+      ><a name="3115"
+      > </a
+      ><a name="3116" class="Symbol"
+      >{</a
+      ><a name="3117" href="Relation.Binary.Consequences.html#3117" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="3120"
+      > </a
+      ><a name="3121" class="Symbol"
+      >:</a
+      ><a name="3122"
+      > </a
+      ><a name="3123" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="3126"
+      > </a
+      ><a name="3127" href="Relation.Binary.Consequences.html#3088" class="Bound"
+      >A</a
+      ><a name="3128"
+      > </a
+      ><a name="3129" href="Relation.Binary.Consequences.html#3083" class="Bound"
+      >&#8467;&#8322;</a
+      ><a name="3131" class="Symbol"
+      >}</a
+      ><a name="3132"
+      > </a
+      ><a name="3133" class="Symbol"
+      >&#8594;</a
+      ><a name="3134"
+      >
+  </a
+      ><a name="3137" href="Relation.Binary.Core.html#3976" class="Function"
+      >Trichotomous</a
+      ><a name="3149"
+      > </a
+      ><a name="3150" href="Relation.Binary.Consequences.html#3100" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="3153"
+      > </a
+      ><a name="3154" href="Relation.Binary.Consequences.html#3117" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="3157"
+      > </a
+      ><a name="3158" class="Symbol"
+      >&#8594;</a
+      ><a name="3159"
+      > </a
+      ><a name="3160" href="Relation.Binary.Core.html#3539" class="Function"
+      >Decidable</a
+      ><a name="3169"
+      > </a
+      ><a name="3170" href="Relation.Binary.Consequences.html#3117" class="Bound Operator"
+      >_&lt;_</a
+      ><a name="3173"
+      >
+</a
+      ><a name="3174" href="Relation.Binary.Consequences.html#3062" class="Function"
+      >tri&#10230;dec&lt;</a
+      ><a name="3182"
+      > </a
+      ><a name="3183" href="Relation.Binary.Consequences.html#3183" class="Bound"
+      >compare</a
+      ><a name="3190"
+      > </a
+      ><a name="3191" href="Relation.Binary.Consequences.html#3191" class="Bound"
+      >x</a
+      ><a name="3192"
+      > </a
+      ><a name="3193" href="Relation.Binary.Consequences.html#3193" class="Bound"
+      >y</a
+      ><a name="3194"
+      > </a
+      ><a name="3195" class="Keyword"
+      >with</a
+      ><a name="3199"
+      > </a
+      ><a name="3200" href="Relation.Binary.Consequences.html#3183" class="Bound"
+      >compare</a
+      ><a name="3207"
+      > </a
+      ><a name="3208" href="Relation.Binary.Consequences.html#3191" class="Bound"
+      >x</a
+      ><a name="3209"
+      > </a
+      ><a name="3210" href="Relation.Binary.Consequences.html#3193" class="Bound"
+      >y</a
+      ><a name="3211"
+      >
+</a
+      ><a name="3212" class="Symbol"
+      >...</a
+      ><a name="3215"
+      > </a
+      ><a name="3216" class="Symbol"
+      >|</a
+      ><a name="3217"
+      > </a
+      ><a name="3218" href="Relation.Binary.Core.html#3815" class="InductiveConstructor"
+      >tri&lt;</a
+      ><a name="3222"
+      > </a
+      ><a name="3223" href="Relation.Binary.Consequences.html#3223" class="Bound"
+      >x&lt;y</a
+      ><a name="3226"
+      > </a
+      ><a name="3227" class="Symbol"
+      >_</a
+      ><a name="3228"
+      > </a
+      ><a name="3229" class="Symbol"
+      >_</a
+      ><a name="3230"
+      > </a
+      ><a name="3231" class="Symbol"
+      >=</a
+      ><a name="3232"
+      > </a
+      ><a name="3233" href="Relation.Nullary.Core.html#532" class="InductiveConstructor"
+      >yes</a
+      ><a name="3236"
+      > </a
+      ><a name="3237" href="Relation.Binary.Consequences.html#3223" class="Bound"
+      >x&lt;y</a
+      ><a name="3240"
+      >
+</a
+      ><a name="3241" class="Symbol"
+      >...</a
+      ><a name="3244"
+      > </a
+      ><a name="3245" class="Symbol"
+      >|</a
+      ><a name="3246"
+      > </a
+      ><a name="3247" href="Relation.Binary.Core.html#3869" class="InductiveConstructor"
+      >tri&#8776;</a
+      ><a name="3251"
+      > </a
+      ><a name="3252" href="Relation.Binary.Consequences.html#3252" class="Bound"
+      >x&#8814;y</a
+      ><a name="3255"
+      > </a
+      ><a name="3256" class="Symbol"
+      >_</a
+      ><a name="3257"
+      > </a
+      ><a name="3258" class="Symbol"
+      >_</a
+      ><a name="3259"
+      > </a
+      ><a name="3260" class="Symbol"
+      >=</a
+      ><a name="3261"
+      > </a
+      ><a name="3262" href="Relation.Nullary.Core.html#559" class="InductiveConstructor"
+      >no</a
+      ><a name="3264"
+      >  </a
+      ><a name="3266" href="Relation.Binary.Consequences.html#3252" class="Bound"
+      >x&#8814;y</a
+      ><a name="3269"
+      >
+</a
+      ><a name="3270" class="Symbol"
+      >...</a
+      ><a name="3273"
+      > </a
+      ><a name="3274" class="Symbol"
+      >|</a
+      ><a name="3275"
+      > </a
+      ><a name="3276" href="Relation.Binary.Core.html#3923" class="InductiveConstructor"
+      >tri&gt;</a
+      ><a name="3280"
+      > </a
+      ><a name="3281" href="Relation.Binary.Consequences.html#3281" class="Bound"
+      >x&#8814;y</a
+      ><a name="3284"
+      > </a
+      ><a name="3285" class="Symbol"
+      >_</a
+      ><a name="3286"
+      > </a
+      ><a name="3287" class="Symbol"
+      >_</a
+      ><a name="3288"
+      > </a
+      ><a name="3289" class="Symbol"
+      >=</a
+      ><a name="3290"
+      > </a
+      ><a name="3291" href="Relation.Nullary.Core.html#559" class="InductiveConstructor"
+      >no</a
+      ><a name="3293"
+      >  </a
+      ><a name="3295" href="Relation.Binary.Consequences.html#3281" class="Bound"
+      >x&#8814;y</a
+      ><a name="3298"
+      >
+
+</a
+      ><a name="3300" href="Relation.Binary.Consequences.html#3300" class="Function"
+      >map-NonEmpty</a
+      ><a name="3312"
+      > </a
+      ><a name="3313" class="Symbol"
+      >:</a
+      ><a name="3314"
+      > </a
+      ><a name="3315" class="Symbol"
+      >&#8704;</a
+      ><a name="3316"
+      > </a
+      ><a name="3317" class="Symbol"
+      >{</a
+      ><a name="3318" href="Relation.Binary.Consequences.html#3318" class="Bound"
+      >a</a
+      ><a name="3319"
+      > </a
+      ><a name="3320" href="Relation.Binary.Consequences.html#3320" class="Bound"
+      >b</a
+      ><a name="3321"
+      > </a
+      ><a name="3322" href="Relation.Binary.Consequences.html#3322" class="Bound"
+      >p</a
+      ><a name="3323"
+      > </a
+      ><a name="3324" href="Relation.Binary.Consequences.html#3324" class="Bound"
+      >q</a
+      ><a name="3325" class="Symbol"
+      >}</a
+      ><a name="3326"
+      > </a
+      ><a name="3327" class="Symbol"
+      >{</a
+      ><a name="3328" href="Relation.Binary.Consequences.html#3328" class="Bound"
+      >A</a
+      ><a name="3329"
+      > </a
+      ><a name="3330" class="Symbol"
+      >:</a
+      ><a name="3331"
+      > </a
+      ><a name="3332" class="PrimitiveType"
+      >Set</a
+      ><a name="3335"
+      > </a
+      ><a name="3336" href="Relation.Binary.Consequences.html#3318" class="Bound"
+      >a</a
+      ><a name="3337" class="Symbol"
+      >}</a
+      ><a name="3338"
+      > </a
+      ><a name="3339" class="Symbol"
+      >{</a
+      ><a name="3340" href="Relation.Binary.Consequences.html#3340" class="Bound"
+      >B</a
+      ><a name="3341"
+      > </a
+      ><a name="3342" class="Symbol"
+      >:</a
+      ><a name="3343"
+      > </a
+      ><a name="3344" class="PrimitiveType"
+      >Set</a
+      ><a name="3347"
+      > </a
+      ><a name="3348" href="Relation.Binary.Consequences.html#3320" class="Bound"
+      >b</a
+      ><a name="3349" class="Symbol"
+      >}</a
+      ><a name="3350"
+      >
+                 </a
+      ><a name="3368" class="Symbol"
+      >{</a
+      ><a name="3369" href="Relation.Binary.Consequences.html#3369" class="Bound"
+      >P</a
+      ><a name="3370"
+      > </a
+      ><a name="3371" class="Symbol"
+      >:</a
+      ><a name="3372"
+      > </a
+      ><a name="3373" href="Relation.Binary.Core.html#663" class="Function"
+      >REL</a
+      ><a name="3376"
+      > </a
+      ><a name="3377" href="Relation.Binary.Consequences.html#3328" class="Bound"
+      >A</a
+      ><a name="3378"
+      > </a
+      ><a name="3379" href="Relation.Binary.Consequences.html#3340" class="Bound"
+      >B</a
+      ><a name="3380"
+      > </a
+      ><a name="3381" href="Relation.Binary.Consequences.html#3322" class="Bound"
+      >p</a
+      ><a name="3382" class="Symbol"
+      >}</a
+      ><a name="3383"
+      > </a
+      ><a name="3384" class="Symbol"
+      >{</a
+      ><a name="3385" href="Relation.Binary.Consequences.html#3385" class="Bound"
+      >Q</a
+      ><a name="3386"
+      > </a
+      ><a name="3387" class="Symbol"
+      >:</a
+      ><a name="3388"
+      > </a
+      ><a name="3389" href="Relation.Binary.Core.html#663" class="Function"
+      >REL</a
+      ><a name="3392"
+      > </a
+      ><a name="3393" href="Relation.Binary.Consequences.html#3328" class="Bound"
+      >A</a
+      ><a name="3394"
+      > </a
+      ><a name="3395" href="Relation.Binary.Consequences.html#3340" class="Bound"
+      >B</a
+      ><a name="3396"
+      > </a
+      ><a name="3397" href="Relation.Binary.Consequences.html#3324" class="Bound"
+      >q</a
+      ><a name="3398" class="Symbol"
+      >}</a
+      ><a name="3399"
+      > </a
+      ><a name="3400" class="Symbol"
+      >&#8594;</a
+      ><a name="3401"
+      >
+               </a
+      ><a name="3417" href="Relation.Binary.Consequences.html#3369" class="Bound"
+      >P</a
+      ><a name="3418"
+      > </a
+      ><a name="3419" href="Relation.Binary.Core.html#1053" class="Function Operator"
+      >&#8658;</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="Relation.Binary.Consequences.html#3385" class="Bound"
+      >Q</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" class="Symbol"
+      >&#8594;</a
+      ><a name="3424"
+      > </a
+      ><a name="3425" href="Relation.Binary.Core.html#4135" class="Record"
+      >NonEmpty</a
+      ><a name="3433"
+      > </a
+      ><a name="3434" href="Relation.Binary.Consequences.html#3369" class="Bound"
+      >P</a
+      ><a name="3435"
+      > </a
+      ><a name="3436" class="Symbol"
+      >&#8594;</a
+      ><a name="3437"
+      > </a
+      ><a name="3438" href="Relation.Binary.Core.html#4135" class="Record"
+      >NonEmpty</a
+      ><a name="3446"
+      > </a
+      ><a name="3447" href="Relation.Binary.Consequences.html#3385" class="Bound"
+      >Q</a
+      ><a name="3448"
+      >
+</a
+      ><a name="3449" href="Relation.Binary.Consequences.html#3300" class="Function"
+      >map-NonEmpty</a
+      ><a name="3461"
+      > </a
+      ><a name="3462" href="Relation.Binary.Consequences.html#3462" class="Bound"
+      >f</a
+      ><a name="3463"
+      > </a
+      ><a name="3464" href="Relation.Binary.Consequences.html#3464" class="Bound"
+      >x</a
+      ><a name="3465"
+      > </a
+      ><a name="3466" class="Symbol"
+      >=</a
+      ><a name="3467"
+      > </a
+      ><a name="3468" href="Relation.Binary.Core.html#4246" class="InductiveConstructor"
+      >nonEmpty</a
+      ><a name="3476"
+      > </a
+      ><a name="3477" class="Symbol"
+      >(</a
+      ><a name="3478" href="Relation.Binary.Consequences.html#3462" class="Bound"
+      >f</a
+      ><a name="3479"
+      > </a
+      ><a name="3480" class="Symbol"
+      >(</a
+      ><a name="3481" href="Relation.Binary.Core.html#4295" class="Field"
+      >NonEmpty.proof</a
+      ><a name="3495"
+      > </a
+      ><a name="3496" href="Relation.Binary.Consequences.html#3464" class="Bound"
+      >x</a
+      ><a name="3497" class="Symbol"
+      >))</a
+      ><a name="3499"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

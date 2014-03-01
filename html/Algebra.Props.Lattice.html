@@ -1,0 +1,2476 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Algebra.Props.Lattice</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Some derivable properties</a
+      ><a name="162"
+      >
+</a
+      ><a name="163" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="235"
+      >
+
+</a
+      ><a name="237" class="Keyword"
+      >open</a
+      ><a name="241"
+      > </a
+      ><a name="242" class="Keyword"
+      >import</a
+      ><a name="248"
+      > </a
+      ><a name="249" href="Algebra.html#1" class="Module"
+      >Algebra</a
+      ><a name="256"
+      >
+
+</a
+      ><a name="258" class="Keyword"
+      >module</a
+      ><a name="264"
+      > </a
+      ><a name="265" href="Algebra.Props.Lattice.html#1" class="Module"
+      >Algebra.Props.Lattice</a
+      ><a name="286"
+      > </a
+      ><a name="287" class="Symbol"
+      >{</a
+      ><a name="288" href="Algebra.Props.Lattice.html#288" class="Bound"
+      >l&#8321;</a
+      ><a name="290"
+      > </a
+      ><a name="291" href="Algebra.Props.Lattice.html#291" class="Bound"
+      >l&#8322;</a
+      ><a name="293" class="Symbol"
+      >}</a
+      ><a name="294"
+      > </a
+      ><a name="295" class="Symbol"
+      >(</a
+      ><a name="296" href="Algebra.Props.Lattice.html#296" class="Bound"
+      >L</a
+      ><a name="297"
+      > </a
+      ><a name="298" class="Symbol"
+      >:</a
+      ><a name="299"
+      > </a
+      ><a name="300" href="Algebra.html#11739" class="Record"
+      >Lattice</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="Algebra.Props.Lattice.html#288" class="Bound"
+      >l&#8321;</a
+      ><a name="310"
+      > </a
+      ><a name="311" href="Algebra.Props.Lattice.html#291" class="Bound"
+      >l&#8322;</a
+      ><a name="313" class="Symbol"
+      >)</a
+      ><a name="314"
+      > </a
+      ><a name="315" class="Keyword"
+      >where</a
+      ><a name="320"
+      >
+
+</a
+      ><a name="322" class="Keyword"
+      >open</a
+      ><a name="326"
+      > </a
+      ><a name="327" href="Algebra.html#11739" class="Module"
+      >Lattice</a
+      ><a name="334"
+      > </a
+      ><a name="335" href="Algebra.Props.Lattice.html#296" class="Bound"
+      >L</a
+      ><a name="336"
+      >
+</a
+      ><a name="337" class="Keyword"
+      >open</a
+      ><a name="341"
+      > </a
+      ><a name="342" class="Keyword"
+      >import</a
+      ><a name="348"
+      > </a
+      ><a name="349" href="Algebra.Structures.html#1" class="Module"
+      >Algebra.Structures</a
+      ><a name="367"
+      >
+</a
+      ><a name="368" class="Keyword"
+      >import</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Algebra.FunctionProperties.html#1" class="Module"
+      >Algebra.FunctionProperties</a
+      ><a name="401"
+      > </a
+      ><a name="402" class="Symbol"
+      >as</a
+      ><a name="404"
+      > </a
+      ><a name="405" class="Module"
+      >P</a
+      ><a name="406" class="Symbol"
+      >;</a
+      ><a name="407"
+      > </a
+      ><a name="408" class="Keyword"
+      >open</a
+      ><a name="412"
+      > </a
+      ><a name="413" href="Algebra.FunctionProperties.html#1" class="Module"
+      >P</a
+      ><a name="414"
+      > </a
+      ><a name="415" href="Algebra.html#11856" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="418"
+      >
+</a
+      ><a name="419" class="Keyword"
+      >open</a
+      ><a name="423"
+      > </a
+      ><a name="424" class="Keyword"
+      >import</a
+      ><a name="430"
+      > </a
+      ><a name="431" href="Relation.Binary.html#1" class="Module"
+      >Relation.Binary</a
+      ><a name="446"
+      >
+</a
+      ><a name="447" class="Keyword"
+      >import</a
+      ><a name="453"
+      > </a
+      ><a name="454" href="Relation.Binary.EqReasoning.html#1" class="Module"
+      >Relation.Binary.EqReasoning</a
+      ><a name="481"
+      > </a
+      ><a name="482" class="Symbol"
+      >as</a
+      ><a name="484"
+      > </a
+      ><a name="485" class="Module"
+      >EqR</a
+      ><a name="488" class="Symbol"
+      >;</a
+      ><a name="489"
+      > </a
+      ><a name="490" class="Keyword"
+      >open</a
+      ><a name="494"
+      > </a
+      ><a name="495" href="Relation.Binary.EqReasoning.html#1" class="Module"
+      >EqR</a
+      ><a name="498"
+      > </a
+      ><a name="499" href="Algebra.html#12014" class="Function"
+      >setoid</a
+      ><a name="505"
+      >
+</a
+      ><a name="506" class="Keyword"
+      >open</a
+      ><a name="510"
+      > </a
+      ><a name="511" class="Keyword"
+      >import</a
+      ><a name="517"
+      > </a
+      ><a name="518" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="526"
+      >
+</a
+      ><a name="527" class="Keyword"
+      >open</a
+      ><a name="531"
+      > </a
+      ><a name="532" class="Keyword"
+      >import</a
+      ><a name="538"
+      > </a
+      ><a name="539" href="Function.Equality.html#1" class="Module"
+      >Function.Equality</a
+      ><a name="556"
+      > </a
+      ><a name="557" class="Keyword"
+      >using</a
+      ><a name="562"
+      > </a
+      ><a name="563" class="Symbol"
+      >(</a
+      ><a name="564"
+      >_&#10216;$&#10217;_</a
+      ><a name="569" class="Symbol"
+      >)</a
+      ><a name="570"
+      >
+</a
+      ><a name="571" class="Keyword"
+      >open</a
+      ><a name="575"
+      > </a
+      ><a name="576" class="Keyword"
+      >import</a
+      ><a name="582"
+      > </a
+      ><a name="583" href="Function.Equivalence.html#1" class="Module"
+      >Function.Equivalence</a
+      ><a name="603"
+      > </a
+      ><a name="604" class="Keyword"
+      >using</a
+      ><a name="609"
+      > </a
+      ><a name="610" class="Symbol"
+      >(</a
+      ><a name="611"
+      >_&#8660;_</a
+      ><a name="614" class="Symbol"
+      >;</a
+      ><a name="615"
+      > </a
+      ><a name="616" class="Keyword"
+      >module</a
+      ><a name="622"
+      > Equivalence</a
+      ><a name="634" class="Symbol"
+      >)</a
+      ><a name="635"
+      >
+</a
+      ><a name="636" class="Keyword"
+      >open</a
+      ><a name="640"
+      > </a
+      ><a name="641" class="Keyword"
+      >import</a
+      ><a name="647"
+      > </a
+      ><a name="648" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="660"
+      >
+
+</a
+      ><a name="662" href="Algebra.Props.Lattice.html#662" class="Function"
+      >&#8743;-idempotent</a
+      ><a name="674"
+      > </a
+      ><a name="675" class="Symbol"
+      >:</a
+      ><a name="676"
+      > </a
+      ><a name="677" href="Algebra.FunctionProperties.html#2134" class="Function"
+      >Idempotent</a
+      ><a name="687"
+      > </a
+      ><a name="688" href="Algebra.html#11914" class="Function Operator"
+      >_&#8743;_</a
+      ><a name="691"
+      >
+</a
+      ><a name="692" href="Algebra.Props.Lattice.html#662" class="Function"
+      >&#8743;-idempotent</a
+      ><a name="704"
+      > </a
+      ><a name="705" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="706"
+      > </a
+      ><a name="707" class="Symbol"
+      >=</a
+      ><a name="708"
+      > </a
+      ><a name="709" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="714"
+      >
+  </a
+      ><a name="717" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="718"
+      > </a
+      ><a name="719" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="720"
+      > </a
+      ><a name="721" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="722"
+      >            </a
+      ><a name="734" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="736"
+      > </a
+      ><a name="737" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Function.html#1960" class="Function Operator"
+      >&#10216;</a
+      ><a name="743"
+      > </a
+      ><a name="744" href="Algebra.Structures.html#12796" class="Function"
+      >&#8743;-cong</a
+      ><a name="750"
+      > </a
+      ><a name="751" href="Function.html#1960" class="Function Operator"
+      >&#10217;</a
+      ><a name="752"
+      > </a
+      ><a name="753" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="756"
+      > </a
+      ><a name="757" class="Symbol"
+      >(</a
+      ><a name="758" href="Data.Product.html#553" class="Field"
+      >proj&#8321;</a
+      ><a name="763"
+      > </a
+      ><a name="764" href="Algebra.Structures.html#12839" class="Function"
+      >absorptive</a
+      ><a name="774"
+      > </a
+      ><a name="775" class="Symbol"
+      >_</a
+      ><a name="776"
+      > </a
+      ><a name="777" class="Symbol"
+      >_)</a
+      ><a name="779"
+      > </a
+      ><a name="780" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="781"
+      >
+  </a
+      ><a name="784" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="787"
+      > </a
+      ><a name="788" class="Symbol"
+      >(</a
+      ><a name="789" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="790"
+      > </a
+      ><a name="791" href="Algebra.html#11886" class="Function Operator"
+      >&#8744;</a
+      ><a name="792"
+      > </a
+      ><a name="793" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="798" class="Symbol"
+      >)</a
+      ><a name="799"
+      >  </a
+      ><a name="801" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="803"
+      > </a
+      ><a name="804" href="Data.Product.html#567" class="Field"
+      >proj&#8322;</a
+      ><a name="809"
+      > </a
+      ><a name="810" href="Algebra.Structures.html#12839" class="Function"
+      >absorptive</a
+      ><a name="820"
+      > </a
+      ><a name="821" class="Symbol"
+      >_</a
+      ><a name="822"
+      > </a
+      ><a name="823" class="Symbol"
+      >_</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="826"
+      >
+  </a
+      ><a name="829" href="Algebra.Props.Lattice.html#705" class="Bound"
+      >x</a
+      ><a name="830"
+      >                </a
+      ><a name="846" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="847"
+      >
+
+</a
+      ><a name="849" href="Algebra.Props.Lattice.html#849" class="Function"
+      >&#8744;-idempotent</a
+      ><a name="861"
+      > </a
+      ><a name="862" class="Symbol"
+      >:</a
+      ><a name="863"
+      > </a
+      ><a name="864" href="Algebra.FunctionProperties.html#2134" class="Function"
+      >Idempotent</a
+      ><a name="874"
+      > </a
+      ><a name="875" href="Algebra.html#11886" class="Function Operator"
+      >_&#8744;_</a
+      ><a name="878"
+      >
+</a
+      ><a name="879" href="Algebra.Props.Lattice.html#849" class="Function"
+      >&#8744;-idempotent</a
+      ><a name="891"
+      > </a
+      ><a name="892" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="893"
+      > </a
+      ><a name="894" class="Symbol"
+      >=</a
+      ><a name="895"
+      > </a
+      ><a name="896" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="901"
+      >
+  </a
+      ><a name="904" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="Algebra.html#11886" class="Function Operator"
+      >&#8744;</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="909"
+      >      </a
+      ><a name="915" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="922"
+      > </a
+      ><a name="923" href="Function.html#1960" class="Function Operator"
+      >&#10216;</a
+      ><a name="924"
+      > </a
+      ><a name="925" href="Algebra.Structures.html#12685" class="Function"
+      >&#8744;-cong</a
+      ><a name="931"
+      > </a
+      ><a name="932" href="Function.html#1960" class="Function Operator"
+      >&#10217;</a
+      ><a name="933"
+      > </a
+      ><a name="934" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="937"
+      > </a
+      ><a name="938" class="Symbol"
+      >(</a
+      ><a name="939" href="Algebra.Props.Lattice.html#662" class="Function"
+      >&#8743;-idempotent</a
+      ><a name="951"
+      > </a
+      ><a name="952" class="Symbol"
+      >_)</a
+      ><a name="954"
+      > </a
+      ><a name="955" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="956"
+      >
+  </a
+      ><a name="959" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="960"
+      > </a
+      ><a name="961" href="Algebra.html#11886" class="Function Operator"
+      >&#8744;</a
+      ><a name="962"
+      > </a
+      ><a name="963" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="964"
+      > </a
+      ><a name="965" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="966"
+      > </a
+      ><a name="967" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="968"
+      >  </a
+      ><a name="970" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="972"
+      > </a
+      ><a name="973" href="Data.Product.html#553" class="Field"
+      >proj&#8321;</a
+      ><a name="978"
+      > </a
+      ><a name="979" href="Algebra.Structures.html#12839" class="Function"
+      >absorptive</a
+      ><a name="989"
+      > </a
+      ><a name="990" class="Symbol"
+      >_</a
+      ><a name="991"
+      > </a
+      ><a name="992" class="Symbol"
+      >_</a
+      ><a name="993"
+      > </a
+      ><a name="994" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="995"
+      >
+  </a
+      ><a name="998" href="Algebra.Props.Lattice.html#892" class="Bound"
+      >x</a
+      ><a name="999"
+      >          </a
+      ><a name="1009" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1010"
+      >
+
+</a
+      ><a name="1012" class="Comment"
+      >-- The dual construction is also a lattice.</a
+      ><a name="1055"
+      >
+
+</a
+      ><a name="1057" href="Algebra.Props.Lattice.html#1057" class="Function"
+      >&#8743;-&#8744;-isLattice</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" class="Symbol"
+      >:</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" href="Algebra.Structures.html#12448" class="Record"
+      >IsLattice</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="Algebra.html#11856" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Algebra.html#11914" class="Function Operator"
+      >_&#8743;_</a
+      ><a name="1090"
+      > </a
+      ><a name="1091" href="Algebra.html#11886" class="Function Operator"
+      >_&#8744;_</a
+      ><a name="1094"
+      >
+</a
+      ><a name="1095" href="Algebra.Props.Lattice.html#1057" class="Function"
+      >&#8743;-&#8744;-isLattice</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" class="Symbol"
+      >=</a
+      ><a name="1110"
+      > </a
+      ><a name="1111" class="Keyword"
+      >record</a
+      ><a name="1117"
+      >
+  </a
+      ><a name="1120" class="Symbol"
+      >{</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" class="Field"
+      >isEquivalence</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" class="Symbol"
+      >=</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Algebra.Structures.html#12581" class="Function"
+      >isEquivalence</a
+      ><a name="1151"
+      >
+  </a
+      ><a name="1154" class="Symbol"
+      >;</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" class="Field"
+      >&#8744;-comm</a
+      ><a name="1162"
+      >        </a
+      ><a name="1170" class="Symbol"
+      >=</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" href="Algebra.Structures.html#12728" class="Function"
+      >&#8743;-comm</a
+      ><a name="1178"
+      >
+  </a
+      ><a name="1181" class="Symbol"
+      >;</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" class="Field"
+      >&#8744;-assoc</a
+      ><a name="1190"
+      >       </a
+      ><a name="1197" class="Symbol"
+      >=</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" href="Algebra.Structures.html#12762" class="Function"
+      >&#8743;-assoc</a
+      ><a name="1206"
+      >
+  </a
+      ><a name="1209" class="Symbol"
+      >;</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" class="Field"
+      >&#8744;-cong</a
+      ><a name="1217"
+      >        </a
+      ><a name="1225" class="Symbol"
+      >=</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" href="Algebra.Structures.html#12796" class="Function"
+      >&#8743;-cong</a
+      ><a name="1233"
+      >
+  </a
+      ><a name="1236" class="Symbol"
+      >;</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" class="Field"
+      >&#8743;-comm</a
+      ><a name="1244"
+      >        </a
+      ><a name="1252" class="Symbol"
+      >=</a
+      ><a name="1253"
+      > </a
+      ><a name="1254" href="Algebra.Structures.html#12617" class="Function"
+      >&#8744;-comm</a
+      ><a name="1260"
+      >
+  </a
+      ><a name="1263" class="Symbol"
+      >;</a
+      ><a name="1264"
+      > </a
+      ><a name="1265" class="Field"
+      >&#8743;-assoc</a
+      ><a name="1272"
+      >       </a
+      ><a name="1279" class="Symbol"
+      >=</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="Algebra.Structures.html#12651" class="Function"
+      >&#8744;-assoc</a
+      ><a name="1288"
+      >
+  </a
+      ><a name="1291" class="Symbol"
+      >;</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" class="Field"
+      >&#8743;-cong</a
+      ><a name="1299"
+      >        </a
+      ><a name="1307" class="Symbol"
+      >=</a
+      ><a name="1308"
+      > </a
+      ><a name="1309" href="Algebra.Structures.html#12685" class="Function"
+      >&#8744;-cong</a
+      ><a name="1315"
+      >
+  </a
+      ><a name="1318" class="Symbol"
+      >;</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" class="Field"
+      >absorptive</a
+      ><a name="1330"
+      >    </a
+      ><a name="1334" class="Symbol"
+      >=</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" href="Data.Product.html#2330" class="Function"
+      >swap</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" href="Algebra.Structures.html#12839" class="Function"
+      >absorptive</a
+      ><a name="1351"
+      >
+  </a
+      ><a name="1354" class="Symbol"
+      >}</a
+      ><a name="1355"
+      >
+
+</a
+      ><a name="1357" href="Algebra.Props.Lattice.html#1357" class="Function"
+      >&#8743;-&#8744;-lattice</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" class="Symbol"
+      >:</a
+      ><a name="1370"
+      > </a
+      ><a name="1371" href="Algebra.html#11739" class="Record"
+      >Lattice</a
+      ><a name="1378"
+      > </a
+      ><a name="1379" class="Symbol"
+      >_</a
+      ><a name="1380"
+      > </a
+      ><a name="1381" class="Symbol"
+      >_</a
+      ><a name="1382"
+      >
+</a
+      ><a name="1383" href="Algebra.Props.Lattice.html#1357" class="Function"
+      >&#8743;-&#8744;-lattice</a
+      ><a name="1394"
+      > </a
+      ><a name="1395" class="Symbol"
+      >=</a
+      ><a name="1396"
+      > </a
+      ><a name="1397" class="Keyword"
+      >record</a
+      ><a name="1403"
+      >
+  </a
+      ><a name="1406" class="Symbol"
+      >{</a
+      ><a name="1407"
+      > </a
+      ><a name="1408" class="Field Operator"
+      >_&#8743;_</a
+      ><a name="1411"
+      >       </a
+      ><a name="1418" class="Symbol"
+      >=</a
+      ><a name="1419"
+      > </a
+      ><a name="1420" href="Algebra.html#11886" class="Function Operator"
+      >_&#8744;_</a
+      ><a name="1423"
+      >
+  </a
+      ><a name="1426" class="Symbol"
+      >;</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" class="Field Operator"
+      >_&#8744;_</a
+      ><a name="1431"
+      >       </a
+      ><a name="1438" class="Symbol"
+      >=</a
+      ><a name="1439"
+      > </a
+      ><a name="1440" href="Algebra.html#11914" class="Function Operator"
+      >_&#8743;_</a
+      ><a name="1443"
+      >
+  </a
+      ><a name="1446" class="Symbol"
+      >;</a
+      ><a name="1447"
+      > </a
+      ><a name="1448" class="Field"
+      >isLattice</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" class="Symbol"
+      >=</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" href="Algebra.Props.Lattice.html#1057" class="Function"
+      >&#8743;-&#8744;-isLattice</a
+      ><a name="1473"
+      >
+  </a
+      ><a name="1476" class="Symbol"
+      >}</a
+      ><a name="1477"
+      >
+
+</a
+      ><a name="1479" class="Comment"
+      >-- Every lattice can be turned into a poset.</a
+      ><a name="1523"
+      >
+
+</a
+      ><a name="1525" href="Algebra.Props.Lattice.html#1525" class="Function"
+      >poset</a
+      ><a name="1530"
+      > </a
+      ><a name="1531" class="Symbol"
+      >:</a
+      ><a name="1532"
+      > </a
+      ><a name="1533" href="Relation.Binary.html#3701" class="Record"
+      >Poset</a
+      ><a name="1538"
+      > </a
+      ><a name="1539" class="Symbol"
+      >_</a
+      ><a name="1540"
+      > </a
+      ><a name="1541" class="Symbol"
+      >_</a
+      ><a name="1542"
+      > </a
+      ><a name="1543" class="Symbol"
+      >_</a
+      ><a name="1544"
+      >
+</a
+      ><a name="1545" href="Algebra.Props.Lattice.html#1525" class="Function"
+      >poset</a
+      ><a name="1550"
+      > </a
+      ><a name="1551" class="Symbol"
+      >=</a
+      ><a name="1552"
+      > </a
+      ><a name="1553" class="Keyword"
+      >record</a
+      ><a name="1559"
+      >
+  </a
+      ><a name="1562" class="Symbol"
+      >{</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" class="Field"
+      >Carrier</a
+      ><a name="1571"
+      >        </a
+      ><a name="1579" class="Symbol"
+      >=</a
+      ><a name="1580"
+      > </a
+      ><a name="1581" href="Algebra.html#11834" class="Function"
+      >Carrier</a
+      ><a name="1588"
+      >
+  </a
+      ><a name="1591" class="Symbol"
+      >;</a
+      ><a name="1592"
+      > </a
+      ><a name="1593" class="Field Operator"
+      >_&#8776;_</a
+      ><a name="1596"
+      >            </a
+      ><a name="1608" class="Symbol"
+      >=</a
+      ><a name="1609"
+      > </a
+      ><a name="1610" href="Algebra.html#11856" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="1613"
+      >
+  </a
+      ><a name="1616" class="Symbol"
+      >;</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" class="Field Operator"
+      >_&#8804;_</a
+      ><a name="1621"
+      >            </a
+      ><a name="1633" class="Symbol"
+      >=</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" class="Symbol"
+      >&#955;</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Algebra.Props.Lattice.html#1637" class="Bound"
+      >x</a
+      ><a name="1638"
+      > </a
+      ><a name="1639" href="Algebra.Props.Lattice.html#1639" class="Bound"
+      >y</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" class="Symbol"
+      >&#8594;</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" href="Algebra.Props.Lattice.html#1637" class="Bound"
+      >x</a
+      ><a name="1644"
+      > </a
+      ><a name="1645" href="Algebra.html#11856" class="Function Operator"
+      >&#8776;</a
+      ><a name="1646"
+      > </a
+      ><a name="1647" href="Algebra.Props.Lattice.html#1637" class="Bound"
+      >x</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="1650"
+      > </a
+      ><a name="1651" href="Algebra.Props.Lattice.html#1639" class="Bound"
+      >y</a
+      ><a name="1652"
+      >
+  </a
+      ><a name="1655" class="Symbol"
+      >;</a
+      ><a name="1656"
+      > </a
+      ><a name="1657" class="Field"
+      >isPartialOrder</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" class="Symbol"
+      >=</a
+      ><a name="1673"
+      > </a
+      ><a name="1674" class="Keyword"
+      >record</a
+      ><a name="1680"
+      >
+    </a
+      ><a name="1685" class="Symbol"
+      >{</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" class="Field"
+      >isPreorder</a
+      ><a name="1697"
+      > </a
+      ><a name="1698" class="Symbol"
+      >=</a
+      ><a name="1699"
+      > </a
+      ><a name="1700" class="Keyword"
+      >record</a
+      ><a name="1706"
+      >
+      </a
+      ><a name="1713" class="Symbol"
+      >{</a
+      ><a name="1714"
+      > </a
+      ><a name="1715" class="Field"
+      >isEquivalence</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" class="Symbol"
+      >=</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" href="Algebra.Structures.html#12581" class="Function"
+      >isEquivalence</a
+      ><a name="1744"
+      >
+      </a
+      ><a name="1751" class="Symbol"
+      >;</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" class="Field"
+      >reflexive</a
+      ><a name="1762"
+      >     </a
+      ><a name="1767" class="Symbol"
+      >=</a
+      ><a name="1768"
+      > </a
+      ><a name="1769" class="Symbol"
+      >&#955;</a
+      ><a name="1770"
+      > </a
+      ><a name="1771" class="Symbol"
+      >{</a
+      ><a name="1772" href="Algebra.Props.Lattice.html#1772" class="Bound"
+      >i</a
+      ><a name="1773" class="Symbol"
+      >}</a
+      ><a name="1774"
+      > </a
+      ><a name="1775" class="Symbol"
+      >{</a
+      ><a name="1776" href="Algebra.Props.Lattice.html#1776" class="Bound"
+      >j</a
+      ><a name="1777" class="Symbol"
+      >}</a
+      ><a name="1778"
+      > </a
+      ><a name="1779" href="Algebra.Props.Lattice.html#1779" class="Bound"
+      >i&#8776;j</a
+      ><a name="1782"
+      > </a
+      ><a name="1783" class="Symbol"
+      >&#8594;</a
+      ><a name="1784"
+      > </a
+      ><a name="1785" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1790"
+      >
+                          </a
+      ><a name="1817" href="Algebra.Props.Lattice.html#1772" class="Bound"
+      >i</a
+      ><a name="1818"
+      >      </a
+      ><a name="1824" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1826"
+      > </a
+      ><a name="1827" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="1830"
+      > </a
+      ><a name="1831" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="1832"
+      > </a
+      ><a name="1833" href="Algebra.Props.Lattice.html#662" class="Function"
+      >&#8743;-idempotent</a
+      ><a name="1845"
+      > </a
+      ><a name="1846" class="Symbol"
+      >_</a
+      ><a name="1847"
+      > </a
+      ><a name="1848" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1849"
+      >
+                          </a
+      ><a name="1876" href="Algebra.Props.Lattice.html#1772" class="Bound"
+      >i</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" href="Algebra.Props.Lattice.html#1772" class="Bound"
+      >i</a
+      ><a name="1881"
+      >  </a
+      ><a name="1883" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1885"
+      > </a
+      ><a name="1886" href="Algebra.Structures.html#12796" class="Function"
+      >&#8743;-cong</a
+      ><a name="1892"
+      > </a
+      ><a name="1893" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="1897"
+      > </a
+      ><a name="1898" href="Algebra.Props.Lattice.html#1779" class="Bound"
+      >i&#8776;j</a
+      ><a name="1901"
+      > </a
+      ><a name="1902" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1903"
+      >
+                          </a
+      ><a name="1930" href="Algebra.Props.Lattice.html#1772" class="Bound"
+      >i</a
+      ><a name="1931"
+      > </a
+      ><a name="1932" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="1933"
+      > </a
+      ><a name="1934" href="Algebra.Props.Lattice.html#1776" class="Bound"
+      >j</a
+      ><a name="1935"
+      >  </a
+      ><a name="1937" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1938"
+      >
+      </a
+      ><a name="1945" class="Symbol"
+      >;</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" class="Field"
+      >trans</a
+      ><a name="1952"
+      >         </a
+      ><a name="1961" class="Symbol"
+      >=</a
+      ><a name="1962"
+      > </a
+      ><a name="1963" class="Symbol"
+      >&#955;</a
+      ><a name="1964"
+      > </a
+      ><a name="1965" class="Symbol"
+      >{</a
+      ><a name="1966" href="Algebra.Props.Lattice.html#1966" class="Bound"
+      >i</a
+      ><a name="1967" class="Symbol"
+      >}</a
+      ><a name="1968"
+      > </a
+      ><a name="1969" class="Symbol"
+      >{</a
+      ><a name="1970" href="Algebra.Props.Lattice.html#1970" class="Bound"
+      >j</a
+      ><a name="1971" class="Symbol"
+      >}</a
+      ><a name="1972"
+      > </a
+      ><a name="1973" class="Symbol"
+      >{</a
+      ><a name="1974" href="Algebra.Props.Lattice.html#1974" class="Bound"
+      >k</a
+      ><a name="1975" class="Symbol"
+      >}</a
+      ><a name="1976"
+      > </a
+      ><a name="1977" href="Algebra.Props.Lattice.html#1977" class="Bound"
+      >i&#8776;i&#8743;j</a
+      ><a name="1982"
+      > </a
+      ><a name="1983" href="Algebra.Props.Lattice.html#1983" class="Bound"
+      >j&#8776;j&#8743;k</a
+      ><a name="1988"
+      > </a
+      ><a name="1989" class="Symbol"
+      >&#8594;</a
+      ><a name="1990"
+      > </a
+      ><a name="1991" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1996"
+      >
+                          </a
+      ><a name="2023" href="Algebra.Props.Lattice.html#1966" class="Bound"
+      >i</a
+      ><a name="2024"
+      >            </a
+      ><a name="2036" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" href="Algebra.Props.Lattice.html#1977" class="Bound"
+      >i&#8776;i&#8743;j</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2046"
+      >
+                          </a
+      ><a name="2073" href="Algebra.Props.Lattice.html#1966" class="Bound"
+      >i</a
+      ><a name="2074"
+      > </a
+      ><a name="2075" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2076"
+      > </a
+      ><a name="2077" href="Algebra.Props.Lattice.html#1970" class="Bound"
+      >j</a
+      ><a name="2078"
+      >        </a
+      ><a name="2086" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2088"
+      > </a
+      ><a name="2089" href="Algebra.Structures.html#12796" class="Function"
+      >&#8743;-cong</a
+      ><a name="2095"
+      > </a
+      ><a name="2096" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="2100"
+      > </a
+      ><a name="2101" href="Algebra.Props.Lattice.html#1983" class="Bound"
+      >j&#8776;j&#8743;k</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2108"
+      >
+                          </a
+      ><a name="2135" href="Algebra.Props.Lattice.html#1966" class="Bound"
+      >i</a
+      ><a name="2136"
+      > </a
+      ><a name="2137" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2138"
+      > </a
+      ><a name="2139" class="Symbol"
+      >(</a
+      ><a name="2140" href="Algebra.Props.Lattice.html#1970" class="Bound"
+      >j</a
+      ><a name="2141"
+      > </a
+      ><a name="2142" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2143"
+      > </a
+      ><a name="2144" href="Algebra.Props.Lattice.html#1974" class="Bound"
+      >k</a
+      ><a name="2145" class="Symbol"
+      >)</a
+      ><a name="2146"
+      >  </a
+      ><a name="2148" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2154"
+      > </a
+      ><a name="2155" class="Symbol"
+      >(</a
+      ><a name="2156" href="Algebra.Structures.html#12762" class="Function"
+      >&#8743;-assoc</a
+      ><a name="2163"
+      > </a
+      ><a name="2164" class="Symbol"
+      >_</a
+      ><a name="2165"
+      > </a
+      ><a name="2166" class="Symbol"
+      >_</a
+      ><a name="2167"
+      > </a
+      ><a name="2168" class="Symbol"
+      >_)</a
+      ><a name="2170"
+      > </a
+      ><a name="2171" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2172"
+      >
+                          </a
+      ><a name="2199" class="Symbol"
+      >(</a
+      ><a name="2200" href="Algebra.Props.Lattice.html#1966" class="Bound"
+      >i</a
+      ><a name="2201"
+      > </a
+      ><a name="2202" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2203"
+      > </a
+      ><a name="2204" href="Algebra.Props.Lattice.html#1970" class="Bound"
+      >j</a
+      ><a name="2205" class="Symbol"
+      >)</a
+      ><a name="2206"
+      > </a
+      ><a name="2207" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2208"
+      > </a
+      ><a name="2209" href="Algebra.Props.Lattice.html#1974" class="Bound"
+      >k</a
+      ><a name="2210"
+      >  </a
+      ><a name="2212" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2214"
+      > </a
+      ><a name="2215" href="Algebra.Structures.html#12796" class="Function"
+      >&#8743;-cong</a
+      ><a name="2221"
+      > </a
+      ><a name="2222" class="Symbol"
+      >(</a
+      ><a name="2223" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2226"
+      > </a
+      ><a name="2227" href="Algebra.Props.Lattice.html#1977" class="Bound"
+      >i&#8776;i&#8743;j</a
+      ><a name="2232" class="Symbol"
+      >)</a
+      ><a name="2233"
+      > </a
+      ><a name="2234" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="2238"
+      > </a
+      ><a name="2239" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2240"
+      >
+                          </a
+      ><a name="2267" href="Algebra.Props.Lattice.html#1966" class="Bound"
+      >i</a
+      ><a name="2268"
+      > </a
+      ><a name="2269" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2270"
+      > </a
+      ><a name="2271" href="Algebra.Props.Lattice.html#1974" class="Bound"
+      >k</a
+      ><a name="2272"
+      >        </a
+      ><a name="2280" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="2281"
+      >
+      </a
+      ><a name="2288" class="Symbol"
+      >}</a
+      ><a name="2289"
+      >
+    </a
+      ><a name="2294" class="Symbol"
+      >;</a
+      ><a name="2295"
+      > </a
+      ><a name="2296" class="Field"
+      >antisym</a
+      ><a name="2303"
+      > </a
+      ><a name="2304" class="Symbol"
+      >=</a
+      ><a name="2305"
+      > </a
+      ><a name="2306" class="Symbol"
+      >&#955;</a
+      ><a name="2307"
+      > </a
+      ><a name="2308" class="Symbol"
+      >{</a
+      ><a name="2309" href="Algebra.Props.Lattice.html#2309" class="Bound"
+      >x</a
+      ><a name="2310" class="Symbol"
+      >}</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" class="Symbol"
+      >{</a
+      ><a name="2313" href="Algebra.Props.Lattice.html#2313" class="Bound"
+      >y</a
+      ><a name="2314" class="Symbol"
+      >}</a
+      ><a name="2315"
+      > </a
+      ><a name="2316" href="Algebra.Props.Lattice.html#2316" class="Bound"
+      >x&#8776;x&#8743;y</a
+      ><a name="2321"
+      > </a
+      ><a name="2322" href="Algebra.Props.Lattice.html#2322" class="Bound"
+      >y&#8776;y&#8743;x</a
+      ><a name="2327"
+      > </a
+      ><a name="2328" class="Symbol"
+      >&#8594;</a
+      ><a name="2329"
+      > </a
+      ><a name="2330" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="2335"
+      >
+                  </a
+      ><a name="2354" href="Algebra.Props.Lattice.html#2309" class="Bound"
+      >x</a
+      ><a name="2355"
+      >      </a
+      ><a name="2361" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2363"
+      > </a
+      ><a name="2364" href="Algebra.Props.Lattice.html#2316" class="Bound"
+      >x&#8776;x&#8743;y</a
+      ><a name="2369"
+      > </a
+      ><a name="2370" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2371"
+      >
+                  </a
+      ><a name="2390" href="Algebra.Props.Lattice.html#2309" class="Bound"
+      >x</a
+      ><a name="2391"
+      > </a
+      ><a name="2392" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2393"
+      > </a
+      ><a name="2394" href="Algebra.Props.Lattice.html#2313" class="Bound"
+      >y</a
+      ><a name="2395"
+      >  </a
+      ><a name="2397" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2399"
+      > </a
+      ><a name="2400" href="Algebra.Structures.html#12728" class="Function"
+      >&#8743;-comm</a
+      ><a name="2406"
+      > </a
+      ><a name="2407" class="Symbol"
+      >_</a
+      ><a name="2408"
+      > </a
+      ><a name="2409" class="Symbol"
+      >_</a
+      ><a name="2410"
+      > </a
+      ><a name="2411" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2412"
+      >
+                  </a
+      ><a name="2431" href="Algebra.Props.Lattice.html#2313" class="Bound"
+      >y</a
+      ><a name="2432"
+      > </a
+      ><a name="2433" href="Algebra.html#11914" class="Function Operator"
+      >&#8743;</a
+      ><a name="2434"
+      > </a
+      ><a name="2435" href="Algebra.Props.Lattice.html#2309" class="Bound"
+      >x</a
+      ><a name="2436"
+      >  </a
+      ><a name="2438" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2440"
+      > </a
+      ><a name="2441" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2444"
+      > </a
+      ><a name="2445" href="Algebra.Props.Lattice.html#2322" class="Bound"
+      >y&#8776;y&#8743;x</a
+      ><a name="2450"
+      > </a
+      ><a name="2451" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2452"
+      >
+                  </a
+      ><a name="2471" href="Algebra.Props.Lattice.html#2313" class="Bound"
+      >y</a
+      ><a name="2472"
+      >      </a
+      ><a name="2478" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="2479"
+      >
+    </a
+      ><a name="2484" class="Symbol"
+      >}</a
+      ><a name="2485"
+      >
+  </a
+      ><a name="2488" class="Symbol"
+      >}</a
+      ><a name="2489"
+      >
+
+</a
+      ><a name="2491" class="Comment"
+      >-- One can replace the underlying equality with an equivalent one.</a
+      ><a name="2557"
+      >
+
+</a
+      ><a name="2559" href="Algebra.Props.Lattice.html#2559" class="Function"
+      >replace-equality</a
+      ><a name="2575"
+      > </a
+      ><a name="2576" class="Symbol"
+      >:</a
+      ><a name="2577"
+      > </a
+      ><a name="2578" class="Symbol"
+      >{</a
+      ><a name="2579" href="Algebra.Props.Lattice.html#2579" class="Bound Operator"
+      >_&#8776;&#8242;_</a
+      ><a name="2583"
+      > </a
+      ><a name="2584" class="Symbol"
+      >:</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="2589"
+      > </a
+      ><a name="2590" href="Algebra.html#11834" class="Function"
+      >Carrier</a
+      ><a name="2597"
+      > </a
+      ><a name="2598" href="Algebra.Props.Lattice.html#291" class="Bound"
+      >l&#8322;</a
+      ><a name="2600" class="Symbol"
+      >}</a
+      ><a name="2601"
+      > </a
+      ><a name="2602" class="Symbol"
+      >&#8594;</a
+      ><a name="2603"
+      >
+                   </a
+      ><a name="2623" class="Symbol"
+      >(&#8704;</a
+      ><a name="2625"
+      > </a
+      ><a name="2626" class="Symbol"
+      >{</a
+      ><a name="2627" href="Algebra.Props.Lattice.html#2627" class="Bound"
+      >x</a
+      ><a name="2628"
+      > </a
+      ><a name="2629" href="Algebra.Props.Lattice.html#2629" class="Bound"
+      >y</a
+      ><a name="2630" class="Symbol"
+      >}</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" class="Symbol"
+      >&#8594;</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" href="Algebra.Props.Lattice.html#2627" class="Bound"
+      >x</a
+      ><a name="2635"
+      > </a
+      ><a name="2636" href="Algebra.html#11856" class="Function Operator"
+      >&#8776;</a
+      ><a name="2637"
+      > </a
+      ><a name="2638" href="Algebra.Props.Lattice.html#2629" class="Bound"
+      >y</a
+      ><a name="2639"
+      > </a
+      ><a name="2640" href="Function.Equivalence.html#739" class="Function Operator"
+      >&#8660;</a
+      ><a name="2641"
+      > </a
+      ><a name="2642" href="Algebra.Props.Lattice.html#2627" class="Bound"
+      >x</a
+      ><a name="2643"
+      > </a
+      ><a name="2644" href="Algebra.Props.Lattice.html#2579" class="Bound Operator"
+      >&#8776;&#8242;</a
+      ><a name="2646"
+      > </a
+      ><a name="2647" href="Algebra.Props.Lattice.html#2629" class="Bound"
+      >y</a
+      ><a name="2648" class="Symbol"
+      >)</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" class="Symbol"
+      >&#8594;</a
+      ><a name="2651"
+      > </a
+      ><a name="2652" href="Algebra.html#11739" class="Record"
+      >Lattice</a
+      ><a name="2659"
+      > </a
+      ><a name="2660" class="Symbol"
+      >_</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" class="Symbol"
+      >_</a
+      ><a name="2663"
+      >
+</a
+      ><a name="2664" href="Algebra.Props.Lattice.html#2559" class="Function"
+      >replace-equality</a
+      ><a name="2680"
+      > </a
+      ><a name="2681" class="Symbol"
+      >{</a
+      ><a name="2682" href="Algebra.Props.Lattice.html#2682" class="Bound Operator"
+      >_&#8776;&#8242;_</a
+      ><a name="2686" class="Symbol"
+      >}</a
+      ><a name="2687"
+      > </a
+      ><a name="2688" href="Algebra.Props.Lattice.html#2688" class="Bound"
+      >&#8776;&#8660;&#8776;&#8242;</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" class="Symbol"
+      >=</a
+      ><a name="2694"
+      > </a
+      ><a name="2695" class="Keyword"
+      >record</a
+      ><a name="2701"
+      >
+  </a
+      ><a name="2704" class="Symbol"
+      >{</a
+      ><a name="2705"
+      > </a
+      ><a name="2706" class="Field Operator"
+      >_&#8776;_</a
+      ><a name="2709"
+      >       </a
+      ><a name="2716" class="Symbol"
+      >=</a
+      ><a name="2717"
+      > </a
+      ><a name="2718" href="Algebra.Props.Lattice.html#2682" class="Bound Operator"
+      >_&#8776;&#8242;_</a
+      ><a name="2722"
+      >
+  </a
+      ><a name="2725" class="Symbol"
+      >;</a
+      ><a name="2726"
+      > </a
+      ><a name="2727" class="Field Operator"
+      >_&#8743;_</a
+      ><a name="2730"
+      >       </a
+      ><a name="2737" class="Symbol"
+      >=</a
+      ><a name="2738"
+      > </a
+      ><a name="2739" href="Algebra.html#11914" class="Function Operator"
+      >_&#8743;_</a
+      ><a name="2742"
+      >
+  </a
+      ><a name="2745" class="Symbol"
+      >;</a
+      ><a name="2746"
+      > </a
+      ><a name="2747" class="Field Operator"
+      >_&#8744;_</a
+      ><a name="2750"
+      >       </a
+      ><a name="2757" class="Symbol"
+      >=</a
+      ><a name="2758"
+      > </a
+      ><a name="2759" href="Algebra.html#11886" class="Function Operator"
+      >_&#8744;_</a
+      ><a name="2762"
+      >
+  </a
+      ><a name="2765" class="Symbol"
+      >;</a
+      ><a name="2766"
+      > </a
+      ><a name="2767" class="Field"
+      >isLattice</a
+      ><a name="2776"
+      > </a
+      ><a name="2777" class="Symbol"
+      >=</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" class="Keyword"
+      >record</a
+      ><a name="2785"
+      >
+    </a
+      ><a name="2790" class="Symbol"
+      >{</a
+      ><a name="2791"
+      > </a
+      ><a name="2792" class="Field"
+      >isEquivalence</a
+      ><a name="2805"
+      > </a
+      ><a name="2806" class="Symbol"
+      >=</a
+      ><a name="2807"
+      > </a
+      ><a name="2808" class="Keyword"
+      >record</a
+      ><a name="2814"
+      >
+      </a
+      ><a name="2821" class="Symbol"
+      >{</a
+      ><a name="2822"
+      > </a
+      ><a name="2823" class="Field"
+      >refl</a
+      ><a name="2827"
+      >  </a
+      ><a name="2829" class="Symbol"
+      >=</a
+      ><a name="2830"
+      > </a
+      ><a name="2831" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="2833"
+      > </a
+      ><a name="2834" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="2837"
+      > </a
+      ><a name="2838" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="2842"
+      >
+      </a
+      ><a name="2849" class="Symbol"
+      >;</a
+      ><a name="2850"
+      > </a
+      ><a name="2851" class="Field"
+      >sym</a
+      ><a name="2854"
+      >   </a
+      ><a name="2857" class="Symbol"
+      >=</a
+      ><a name="2858"
+      > </a
+      ><a name="2859" class="Symbol"
+      >&#955;</a
+      ><a name="2860"
+      > </a
+      ><a name="2861" href="Algebra.Props.Lattice.html#2861" class="Bound"
+      >x&#8776;y</a
+      ><a name="2864"
+      > </a
+      ><a name="2865" class="Symbol"
+      >&#8594;</a
+      ><a name="2866"
+      > </a
+      ><a name="2867" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="2869"
+      > </a
+      ><a name="2870" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="2873"
+      > </a
+      ><a name="2874" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" class="Symbol"
+      >(</a
+      ><a name="2879" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="2883"
+      > </a
+      ><a name="2884" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="2887"
+      > </a
+      ><a name="2888" href="Algebra.Props.Lattice.html#2861" class="Bound"
+      >x&#8776;y</a
+      ><a name="2891" class="Symbol"
+      >)</a
+      ><a name="2892"
+      >
+      </a
+      ><a name="2899" class="Symbol"
+      >;</a
+      ><a name="2900"
+      > </a
+      ><a name="2901" class="Field"
+      >trans</a
+      ><a name="2906"
+      > </a
+      ><a name="2907" class="Symbol"
+      >=</a
+      ><a name="2908"
+      > </a
+      ><a name="2909" class="Symbol"
+      >&#955;</a
+      ><a name="2910"
+      > </a
+      ><a name="2911" href="Algebra.Props.Lattice.html#2911" class="Bound"
+      >x&#8776;y</a
+      ><a name="2914"
+      > </a
+      ><a name="2915" href="Algebra.Props.Lattice.html#2915" class="Bound"
+      >y&#8776;z</a
+      ><a name="2918"
+      > </a
+      ><a name="2919" class="Symbol"
+      >&#8594;</a
+      ><a name="2920"
+      > </a
+      ><a name="2921" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="2927"
+      > </a
+      ><a name="2928" href="Relation.Binary.Core.html#5265" class="Function"
+      >trans</a
+      ><a name="2933"
+      > </a
+      ><a name="2934" class="Symbol"
+      >(</a
+      ><a name="2935" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="2939"
+      > </a
+      ><a name="2940" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="2943"
+      > </a
+      ><a name="2944" href="Algebra.Props.Lattice.html#2911" class="Bound"
+      >x&#8776;y</a
+      ><a name="2947" class="Symbol"
+      >)</a
+      ><a name="2948"
+      > </a
+      ><a name="2949" class="Symbol"
+      >(</a
+      ><a name="2950" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="2954"
+      > </a
+      ><a name="2955" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="2958"
+      > </a
+      ><a name="2959" href="Algebra.Props.Lattice.html#2915" class="Bound"
+      >y&#8776;z</a
+      ><a name="2962" class="Symbol"
+      >)</a
+      ><a name="2963"
+      >
+      </a
+      ><a name="2970" class="Symbol"
+      >}</a
+      ><a name="2971"
+      >
+    </a
+      ><a name="2976" class="Symbol"
+      >;</a
+      ><a name="2977"
+      > </a
+      ><a name="2978" class="Field"
+      >&#8744;-comm</a
+      ><a name="2984"
+      >     </a
+      ><a name="2989" class="Symbol"
+      >=</a
+      ><a name="2990"
+      > </a
+      ><a name="2991" class="Symbol"
+      >&#955;</a
+      ><a name="2992"
+      > </a
+      ><a name="2993" href="Algebra.Props.Lattice.html#2993" class="Bound"
+      >x</a
+      ><a name="2994"
+      > </a
+      ><a name="2995" href="Algebra.Props.Lattice.html#2995" class="Bound"
+      >y</a
+      ><a name="2996"
+      > </a
+      ><a name="2997" class="Symbol"
+      >&#8594;</a
+      ><a name="2998"
+      > </a
+      ><a name="2999" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3001"
+      > </a
+      ><a name="3002" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3005"
+      > </a
+      ><a name="3006" href="Algebra.Structures.html#12617" class="Function"
+      >&#8744;-comm</a
+      ><a name="3012"
+      > </a
+      ><a name="3013" href="Algebra.Props.Lattice.html#2993" class="Bound"
+      >x</a
+      ><a name="3014"
+      > </a
+      ><a name="3015" href="Algebra.Props.Lattice.html#2995" class="Bound"
+      >y</a
+      ><a name="3016"
+      >
+    </a
+      ><a name="3021" class="Symbol"
+      >;</a
+      ><a name="3022"
+      > </a
+      ><a name="3023" class="Field"
+      >&#8744;-assoc</a
+      ><a name="3030"
+      >    </a
+      ><a name="3034" class="Symbol"
+      >=</a
+      ><a name="3035"
+      > </a
+      ><a name="3036" class="Symbol"
+      >&#955;</a
+      ><a name="3037"
+      > </a
+      ><a name="3038" href="Algebra.Props.Lattice.html#3038" class="Bound"
+      >x</a
+      ><a name="3039"
+      > </a
+      ><a name="3040" href="Algebra.Props.Lattice.html#3040" class="Bound"
+      >y</a
+      ><a name="3041"
+      > </a
+      ><a name="3042" href="Algebra.Props.Lattice.html#3042" class="Bound"
+      >z</a
+      ><a name="3043"
+      > </a
+      ><a name="3044" class="Symbol"
+      >&#8594;</a
+      ><a name="3045"
+      > </a
+      ><a name="3046" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3048"
+      > </a
+      ><a name="3049" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3052"
+      > </a
+      ><a name="3053" href="Algebra.Structures.html#12651" class="Function"
+      >&#8744;-assoc</a
+      ><a name="3060"
+      > </a
+      ><a name="3061" href="Algebra.Props.Lattice.html#3038" class="Bound"
+      >x</a
+      ><a name="3062"
+      > </a
+      ><a name="3063" href="Algebra.Props.Lattice.html#3040" class="Bound"
+      >y</a
+      ><a name="3064"
+      > </a
+      ><a name="3065" href="Algebra.Props.Lattice.html#3042" class="Bound"
+      >z</a
+      ><a name="3066"
+      >
+    </a
+      ><a name="3071" class="Symbol"
+      >;</a
+      ><a name="3072"
+      > </a
+      ><a name="3073" class="Field"
+      >&#8744;-cong</a
+      ><a name="3079"
+      >     </a
+      ><a name="3084" class="Symbol"
+      >=</a
+      ><a name="3085"
+      > </a
+      ><a name="3086" class="Symbol"
+      >&#955;</a
+      ><a name="3087"
+      > </a
+      ><a name="3088" href="Algebra.Props.Lattice.html#3088" class="Bound"
+      >x&#8776;y</a
+      ><a name="3091"
+      > </a
+      ><a name="3092" href="Algebra.Props.Lattice.html#3092" class="Bound"
+      >u&#8776;v</a
+      ><a name="3095"
+      > </a
+      ><a name="3096" class="Symbol"
+      >&#8594;</a
+      ><a name="3097"
+      > </a
+      ><a name="3098" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3100"
+      > </a
+      ><a name="3101" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3104"
+      > </a
+      ><a name="3105" href="Algebra.Structures.html#12685" class="Function"
+      >&#8744;-cong</a
+      ><a name="3111"
+      > </a
+      ><a name="3112" class="Symbol"
+      >(</a
+      ><a name="3113" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="3117"
+      > </a
+      ><a name="3118" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3121"
+      > </a
+      ><a name="3122" href="Algebra.Props.Lattice.html#3088" class="Bound"
+      >x&#8776;y</a
+      ><a name="3125" class="Symbol"
+      >)</a
+      ><a name="3126"
+      > </a
+      ><a name="3127" class="Symbol"
+      >(</a
+      ><a name="3128" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="3132"
+      > </a
+      ><a name="3133" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3136"
+      > </a
+      ><a name="3137" href="Algebra.Props.Lattice.html#3092" class="Bound"
+      >u&#8776;v</a
+      ><a name="3140" class="Symbol"
+      >)</a
+      ><a name="3141"
+      >
+    </a
+      ><a name="3146" class="Symbol"
+      >;</a
+      ><a name="3147"
+      > </a
+      ><a name="3148" class="Field"
+      >&#8743;-comm</a
+      ><a name="3154"
+      >     </a
+      ><a name="3159" class="Symbol"
+      >=</a
+      ><a name="3160"
+      > </a
+      ><a name="3161" class="Symbol"
+      >&#955;</a
+      ><a name="3162"
+      > </a
+      ><a name="3163" href="Algebra.Props.Lattice.html#3163" class="Bound"
+      >x</a
+      ><a name="3164"
+      > </a
+      ><a name="3165" href="Algebra.Props.Lattice.html#3165" class="Bound"
+      >y</a
+      ><a name="3166"
+      > </a
+      ><a name="3167" class="Symbol"
+      >&#8594;</a
+      ><a name="3168"
+      > </a
+      ><a name="3169" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3171"
+      > </a
+      ><a name="3172" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3175"
+      > </a
+      ><a name="3176" href="Algebra.Structures.html#12728" class="Function"
+      >&#8743;-comm</a
+      ><a name="3182"
+      > </a
+      ><a name="3183" href="Algebra.Props.Lattice.html#3163" class="Bound"
+      >x</a
+      ><a name="3184"
+      > </a
+      ><a name="3185" href="Algebra.Props.Lattice.html#3165" class="Bound"
+      >y</a
+      ><a name="3186"
+      >
+    </a
+      ><a name="3191" class="Symbol"
+      >;</a
+      ><a name="3192"
+      > </a
+      ><a name="3193" class="Field"
+      >&#8743;-assoc</a
+      ><a name="3200"
+      >    </a
+      ><a name="3204" class="Symbol"
+      >=</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" class="Symbol"
+      >&#955;</a
+      ><a name="3207"
+      > </a
+      ><a name="3208" href="Algebra.Props.Lattice.html#3208" class="Bound"
+      >x</a
+      ><a name="3209"
+      > </a
+      ><a name="3210" href="Algebra.Props.Lattice.html#3210" class="Bound"
+      >y</a
+      ><a name="3211"
+      > </a
+      ><a name="3212" href="Algebra.Props.Lattice.html#3212" class="Bound"
+      >z</a
+      ><a name="3213"
+      > </a
+      ><a name="3214" class="Symbol"
+      >&#8594;</a
+      ><a name="3215"
+      > </a
+      ><a name="3216" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3218"
+      > </a
+      ><a name="3219" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3222"
+      > </a
+      ><a name="3223" href="Algebra.Structures.html#12762" class="Function"
+      >&#8743;-assoc</a
+      ><a name="3230"
+      > </a
+      ><a name="3231" href="Algebra.Props.Lattice.html#3208" class="Bound"
+      >x</a
+      ><a name="3232"
+      > </a
+      ><a name="3233" href="Algebra.Props.Lattice.html#3210" class="Bound"
+      >y</a
+      ><a name="3234"
+      > </a
+      ><a name="3235" href="Algebra.Props.Lattice.html#3212" class="Bound"
+      >z</a
+      ><a name="3236"
+      >
+    </a
+      ><a name="3241" class="Symbol"
+      >;</a
+      ><a name="3242"
+      > </a
+      ><a name="3243" class="Field"
+      >&#8743;-cong</a
+      ><a name="3249"
+      >     </a
+      ><a name="3254" class="Symbol"
+      >=</a
+      ><a name="3255"
+      > </a
+      ><a name="3256" class="Symbol"
+      >&#955;</a
+      ><a name="3257"
+      > </a
+      ><a name="3258" href="Algebra.Props.Lattice.html#3258" class="Bound"
+      >x&#8776;y</a
+      ><a name="3261"
+      > </a
+      ><a name="3262" href="Algebra.Props.Lattice.html#3262" class="Bound"
+      >u&#8776;v</a
+      ><a name="3265"
+      > </a
+      ><a name="3266" class="Symbol"
+      >&#8594;</a
+      ><a name="3267"
+      > </a
+      ><a name="3268" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3270"
+      > </a
+      ><a name="3271" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3274"
+      > </a
+      ><a name="3275" href="Algebra.Structures.html#12796" class="Function"
+      >&#8743;-cong</a
+      ><a name="3281"
+      > </a
+      ><a name="3282" class="Symbol"
+      >(</a
+      ><a name="3283" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="3287"
+      > </a
+      ><a name="3288" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3291"
+      > </a
+      ><a name="3292" href="Algebra.Props.Lattice.html#3258" class="Bound"
+      >x&#8776;y</a
+      ><a name="3295" class="Symbol"
+      >)</a
+      ><a name="3296"
+      > </a
+      ><a name="3297" class="Symbol"
+      >(</a
+      ><a name="3298" href="Function.Equivalence.html#687" class="Function"
+      >from</a
+      ><a name="3302"
+      > </a
+      ><a name="3303" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3306"
+      > </a
+      ><a name="3307" href="Algebra.Props.Lattice.html#3262" class="Bound"
+      >u&#8776;v</a
+      ><a name="3310" class="Symbol"
+      >)</a
+      ><a name="3311"
+      >
+    </a
+      ><a name="3316" class="Symbol"
+      >;</a
+      ><a name="3317"
+      > </a
+      ><a name="3318" class="Field"
+      >absorptive</a
+      ><a name="3328"
+      > </a
+      ><a name="3329" class="Symbol"
+      >=</a
+      ><a name="3330"
+      > </a
+      ><a name="3331" class="Symbol"
+      >(&#955;</a
+      ><a name="3333"
+      > </a
+      ><a name="3334" href="Algebra.Props.Lattice.html#3334" class="Bound"
+      >x</a
+      ><a name="3335"
+      > </a
+      ><a name="3336" href="Algebra.Props.Lattice.html#3336" class="Bound"
+      >y</a
+      ><a name="3337"
+      > </a
+      ><a name="3338" class="Symbol"
+      >&#8594;</a
+      ><a name="3339"
+      > </a
+      ><a name="3340" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3342"
+      > </a
+      ><a name="3343" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3346"
+      > </a
+      ><a name="3347" href="Data.Product.html#553" class="Field"
+      >proj&#8321;</a
+      ><a name="3352"
+      > </a
+      ><a name="3353" href="Algebra.Structures.html#12839" class="Function"
+      >absorptive</a
+      ><a name="3363"
+      > </a
+      ><a name="3364" href="Algebra.Props.Lattice.html#3334" class="Bound"
+      >x</a
+      ><a name="3365"
+      > </a
+      ><a name="3366" href="Algebra.Props.Lattice.html#3336" class="Bound"
+      >y</a
+      ><a name="3367" class="Symbol"
+      >)</a
+      ><a name="3368"
+      >
+                 </a
+      ><a name="3386" href="Data.Product.html#537" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="3387"
+      > </a
+      ><a name="3388" class="Symbol"
+      >(&#955;</a
+      ><a name="3390"
+      > </a
+      ><a name="3391" href="Algebra.Props.Lattice.html#3391" class="Bound"
+      >x</a
+      ><a name="3392"
+      > </a
+      ><a name="3393" href="Algebra.Props.Lattice.html#3393" class="Bound"
+      >y</a
+      ><a name="3394"
+      > </a
+      ><a name="3395" class="Symbol"
+      >&#8594;</a
+      ><a name="3396"
+      > </a
+      ><a name="3397" href="Function.Equivalence.html#666" class="Function"
+      >to</a
+      ><a name="3399"
+      > </a
+      ><a name="3400" href="Function.Equality.html#727" class="Field Operator"
+      >&#10216;$&#10217;</a
+      ><a name="3403"
+      > </a
+      ><a name="3404" href="Data.Product.html#567" class="Field"
+      >proj&#8322;</a
+      ><a name="3409"
+      > </a
+      ><a name="3410" href="Algebra.Structures.html#12839" class="Function"
+      >absorptive</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="Algebra.Props.Lattice.html#3391" class="Bound"
+      >x</a
+      ><a name="3422"
+      > </a
+      ><a name="3423" href="Algebra.Props.Lattice.html#3393" class="Bound"
+      >y</a
+      ><a name="3424" class="Symbol"
+      >)</a
+      ><a name="3425"
+      >
+    </a
+      ><a name="3430" class="Symbol"
+      >}</a
+      ><a name="3431"
+      >
+  </a
+      ><a name="3434" class="Symbol"
+      >}</a
+      ><a name="3435"
+      > </a
+      ><a name="3436" class="Keyword"
+      >where</a
+      ><a name="3441"
+      > </a
+      ><a name="3442" class="Keyword"
+      >open</a
+      ><a name="3446"
+      > </a
+      ><a name="3447" class="Keyword"
+      >module</a
+      ><a name="3453"
+      > </a
+      ><a name="3454" href="Algebra.Props.Lattice.html#3454" class="Module"
+      >E</a
+      ><a name="3455"
+      > </a
+      ><a name="3456" class="Symbol"
+      >{</a
+      ><a name="3457" href="Algebra.Props.Lattice.html#3457" class="Bound"
+      >x</a
+      ><a name="3458"
+      > </a
+      ><a name="3459" href="Algebra.Props.Lattice.html#3459" class="Bound"
+      >y</a
+      ><a name="3460" class="Symbol"
+      >}</a
+      ><a name="3461"
+      > </a
+      ><a name="3462" class="Symbol"
+      >=</a
+      ><a name="3463"
+      > </a
+      ><a name="3464" href="Function.Equivalence.html#516" class="Module"
+      >Equivalence</a
+      ><a name="3475"
+      > </a
+      ><a name="3476" class="Symbol"
+      >(</a
+      ><a name="3477" href="Algebra.Props.Lattice.html#2688" class="Bound"
+      >&#8776;&#8660;&#8776;&#8242;</a
+      ><a name="3481"
+      > </a
+      ><a name="3482" class="Symbol"
+      >{</a
+      ><a name="3483" href="Algebra.Props.Lattice.html#3457" class="Bound"
+      >x</a
+      ><a name="3484" class="Symbol"
+      >}</a
+      ><a name="3485"
+      > </a
+      ><a name="3486" class="Symbol"
+      >{</a
+      ><a name="3487" href="Algebra.Props.Lattice.html#3459" class="Bound"
+      >y</a
+      ><a name="3488" class="Symbol"
+      >})</a
+      ><a name="3490"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

@@ -1,0 +1,1756 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Category.Monad.Indexed</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Indexed monads</a
+      ><a name="151"
+      >
+</a
+      ><a name="152" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="224"
+      >
+
+</a
+      ><a name="226" class="Comment"
+      >-- Note that currently the monad laws are not included here.</a
+      ><a name="286"
+      >
+
+</a
+      ><a name="288" class="Keyword"
+      >module</a
+      ><a name="294"
+      > </a
+      ><a name="295" href="Category.Monad.Indexed.html#1" class="Module"
+      >Category.Monad.Indexed</a
+      ><a name="317"
+      > </a
+      ><a name="318" class="Keyword"
+      >where</a
+      ><a name="323"
+      >
+
+</a
+      ><a name="325" class="Keyword"
+      >open</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="Keyword"
+      >import</a
+      ><a name="336"
+      > </a
+      ><a name="337" href="Category.Applicative.Indexed.html#1" class="Module"
+      >Category.Applicative.Indexed</a
+      ><a name="365"
+      >
+</a
+      ><a name="366" class="Keyword"
+      >open</a
+      ><a name="370"
+      > </a
+      ><a name="371" class="Keyword"
+      >import</a
+      ><a name="377"
+      > </a
+      ><a name="378" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="386"
+      >
+</a
+      ><a name="387" class="Keyword"
+      >open</a
+      ><a name="391"
+      > </a
+      ><a name="392" class="Keyword"
+      >import</a
+      ><a name="398"
+      > </a
+      ><a name="399" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="404"
+      >
+
+</a
+      ><a name="406" class="Keyword"
+      >record</a
+      ><a name="412"
+      > </a
+      ><a name="413" href="Category.Monad.Indexed.html#413" class="Record"
+      >RawIMonad</a
+      ><a name="422"
+      > </a
+      ><a name="423" class="Symbol"
+      >{</a
+      ><a name="424" href="Category.Monad.Indexed.html#424" class="Bound"
+      >i</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Category.Monad.Indexed.html#426" class="Bound"
+      >f</a
+      ><a name="427" class="Symbol"
+      >}</a
+      ><a name="428"
+      > </a
+      ><a name="429" class="Symbol"
+      >{</a
+      ><a name="430" href="Category.Monad.Indexed.html#430" class="Bound"
+      >I</a
+      ><a name="431"
+      > </a
+      ><a name="432" class="Symbol"
+      >:</a
+      ><a name="433"
+      > </a
+      ><a name="434" class="PrimitiveType"
+      >Set</a
+      ><a name="437"
+      > </a
+      ><a name="438" href="Category.Monad.Indexed.html#424" class="Bound"
+      >i</a
+      ><a name="439" class="Symbol"
+      >}</a
+      ><a name="440"
+      > </a
+      ><a name="441" class="Symbol"
+      >(</a
+      ><a name="442" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="443"
+      > </a
+      ><a name="444" class="Symbol"
+      >:</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="Category.Applicative.Indexed.html#523" class="Function"
+      >IFun</a
+      ><a name="450"
+      > </a
+      ><a name="451" href="Category.Monad.Indexed.html#430" class="Bound"
+      >I</a
+      ><a name="452"
+      > </a
+      ><a name="453" href="Category.Monad.Indexed.html#426" class="Bound"
+      >f</a
+      ><a name="454" class="Symbol"
+      >)</a
+      ><a name="455"
+      > </a
+      ><a name="456" class="Symbol"
+      >:</a
+      ><a name="457"
+      >
+                 </a
+      ><a name="475" class="PrimitiveType"
+      >Set</a
+      ><a name="478"
+      > </a
+      ><a name="479" class="Symbol"
+      >(</a
+      ><a name="480" href="Category.Monad.Indexed.html#424" class="Bound"
+      >i</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="483"
+      > </a
+      ><a name="484" href="Agda.Primitive.html#596" class="Primitive"
+      >suc</a
+      ><a name="487"
+      > </a
+      ><a name="488" href="Category.Monad.Indexed.html#426" class="Bound"
+      >f</a
+      ><a name="489" class="Symbol"
+      >)</a
+      ><a name="490"
+      > </a
+      ><a name="491" class="Keyword"
+      >where</a
+      ><a name="496"
+      >
+  </a
+      ><a name="499" class="Keyword"
+      >infixl</a
+      ><a name="505"
+      > </a
+      ><a name="506" class="Number"
+      >1</a
+      ><a name="507"
+      > _&gt;&gt;=_ _&gt;&gt;_ _&gt;=&gt;_
+  </a
+      ><a name="527" class="Keyword"
+      >infixr</a
+      ><a name="533"
+      > </a
+      ><a name="534" class="Number"
+      >1</a
+      ><a name="535"
+      > _=&lt;&lt;_ _&lt;=&lt;_
+
+  </a
+      ><a name="551" class="Keyword"
+      >field</a
+      ><a name="556"
+      >
+    </a
+      ><a name="561" href="Category.Monad.Indexed.html#561" class="Field"
+      >return</a
+      ><a name="567"
+      > </a
+      ><a name="568" class="Symbol"
+      >:</a
+      ><a name="569"
+      > </a
+      ><a name="570" class="Symbol"
+      >&#8704;</a
+      ><a name="571"
+      > </a
+      ><a name="572" class="Symbol"
+      >{</a
+      ><a name="573" href="Category.Monad.Indexed.html#573" class="Bound"
+      >i</a
+      ><a name="574"
+      > </a
+      ><a name="575" href="Category.Monad.Indexed.html#575" class="Bound"
+      >A</a
+      ><a name="576" class="Symbol"
+      >}</a
+      ><a name="577"
+      > </a
+      ><a name="578" class="Symbol"
+      >&#8594;</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Category.Monad.Indexed.html#575" class="Bound"
+      >A</a
+      ><a name="581"
+      > </a
+      ><a name="582" class="Symbol"
+      >&#8594;</a
+      ><a name="583"
+      > </a
+      ><a name="584" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="585"
+      > </a
+      ><a name="586" href="Category.Monad.Indexed.html#573" class="Bound"
+      >i</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Category.Monad.Indexed.html#573" class="Bound"
+      >i</a
+      ><a name="589"
+      > </a
+      ><a name="590" href="Category.Monad.Indexed.html#575" class="Bound"
+      >A</a
+      ><a name="591"
+      >
+    </a
+      ><a name="596" href="Category.Monad.Indexed.html#596" class="Field Operator"
+      >_&gt;&gt;=_</a
+      ><a name="601"
+      >  </a
+      ><a name="603" class="Symbol"
+      >:</a
+      ><a name="604"
+      > </a
+      ><a name="605" class="Symbol"
+      >&#8704;</a
+      ><a name="606"
+      > </a
+      ><a name="607" class="Symbol"
+      >{</a
+      ><a name="608" href="Category.Monad.Indexed.html#608" class="Bound"
+      >i</a
+      ><a name="609"
+      > </a
+      ><a name="610" href="Category.Monad.Indexed.html#610" class="Bound"
+      >j</a
+      ><a name="611"
+      > </a
+      ><a name="612" href="Category.Monad.Indexed.html#612" class="Bound"
+      >k</a
+      ><a name="613"
+      > </a
+      ><a name="614" href="Category.Monad.Indexed.html#614" class="Bound"
+      >A</a
+      ><a name="615"
+      > </a
+      ><a name="616" href="Category.Monad.Indexed.html#616" class="Bound"
+      >B</a
+      ><a name="617" class="Symbol"
+      >}</a
+      ><a name="618"
+      > </a
+      ><a name="619" class="Symbol"
+      >&#8594;</a
+      ><a name="620"
+      > </a
+      ><a name="621" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="622"
+      > </a
+      ><a name="623" href="Category.Monad.Indexed.html#608" class="Bound"
+      >i</a
+      ><a name="624"
+      > </a
+      ><a name="625" href="Category.Monad.Indexed.html#610" class="Bound"
+      >j</a
+      ><a name="626"
+      > </a
+      ><a name="627" href="Category.Monad.Indexed.html#614" class="Bound"
+      >A</a
+      ><a name="628"
+      > </a
+      ><a name="629" class="Symbol"
+      >&#8594;</a
+      ><a name="630"
+      > </a
+      ><a name="631" class="Symbol"
+      >(</a
+      ><a name="632" href="Category.Monad.Indexed.html#614" class="Bound"
+      >A</a
+      ><a name="633"
+      > </a
+      ><a name="634" class="Symbol"
+      >&#8594;</a
+      ><a name="635"
+      > </a
+      ><a name="636" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="637"
+      > </a
+      ><a name="638" href="Category.Monad.Indexed.html#610" class="Bound"
+      >j</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Category.Monad.Indexed.html#612" class="Bound"
+      >k</a
+      ><a name="641"
+      > </a
+      ><a name="642" href="Category.Monad.Indexed.html#616" class="Bound"
+      >B</a
+      ><a name="643" class="Symbol"
+      >)</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="Symbol"
+      >&#8594;</a
+      ><a name="646"
+      > </a
+      ><a name="647" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="648"
+      > </a
+      ><a name="649" href="Category.Monad.Indexed.html#608" class="Bound"
+      >i</a
+      ><a name="650"
+      > </a
+      ><a name="651" href="Category.Monad.Indexed.html#612" class="Bound"
+      >k</a
+      ><a name="652"
+      > </a
+      ><a name="653" href="Category.Monad.Indexed.html#616" class="Bound"
+      >B</a
+      ><a name="654"
+      >
+
+  </a
+      ><a name="658" href="Category.Monad.Indexed.html#658" class="Function Operator"
+      >_&gt;&gt;_</a
+      ><a name="662"
+      > </a
+      ><a name="663" class="Symbol"
+      >:</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Symbol"
+      >&#8704;</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="Symbol"
+      >{</a
+      ><a name="668" href="Category.Monad.Indexed.html#668" class="Bound"
+      >i</a
+      ><a name="669"
+      > </a
+      ><a name="670" href="Category.Monad.Indexed.html#670" class="Bound"
+      >j</a
+      ><a name="671"
+      > </a
+      ><a name="672" href="Category.Monad.Indexed.html#672" class="Bound"
+      >k</a
+      ><a name="673"
+      > </a
+      ><a name="674" href="Category.Monad.Indexed.html#674" class="Bound"
+      >A</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Category.Monad.Indexed.html#676" class="Bound"
+      >B</a
+      ><a name="677" class="Symbol"
+      >}</a
+      ><a name="678"
+      > </a
+      ><a name="679" class="Symbol"
+      >&#8594;</a
+      ><a name="680"
+      > </a
+      ><a name="681" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="682"
+      > </a
+      ><a name="683" href="Category.Monad.Indexed.html#668" class="Bound"
+      >i</a
+      ><a name="684"
+      > </a
+      ><a name="685" href="Category.Monad.Indexed.html#670" class="Bound"
+      >j</a
+      ><a name="686"
+      > </a
+      ><a name="687" href="Category.Monad.Indexed.html#674" class="Bound"
+      >A</a
+      ><a name="688"
+      > </a
+      ><a name="689" class="Symbol"
+      >&#8594;</a
+      ><a name="690"
+      > </a
+      ><a name="691" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="692"
+      > </a
+      ><a name="693" href="Category.Monad.Indexed.html#670" class="Bound"
+      >j</a
+      ><a name="694"
+      > </a
+      ><a name="695" href="Category.Monad.Indexed.html#672" class="Bound"
+      >k</a
+      ><a name="696"
+      > </a
+      ><a name="697" href="Category.Monad.Indexed.html#676" class="Bound"
+      >B</a
+      ><a name="698"
+      > </a
+      ><a name="699" class="Symbol"
+      >&#8594;</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="702"
+      > </a
+      ><a name="703" href="Category.Monad.Indexed.html#668" class="Bound"
+      >i</a
+      ><a name="704"
+      > </a
+      ><a name="705" href="Category.Monad.Indexed.html#672" class="Bound"
+      >k</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Category.Monad.Indexed.html#676" class="Bound"
+      >B</a
+      ><a name="708"
+      >
+  </a
+      ><a name="711" href="Category.Monad.Indexed.html#711" class="Bound"
+      >m&#8321;</a
+      ><a name="713"
+      > </a
+      ><a name="714" href="Category.Monad.Indexed.html#658" class="Function Operator"
+      >&gt;&gt;</a
+      ><a name="716"
+      > </a
+      ><a name="717" href="Category.Monad.Indexed.html#717" class="Bound"
+      >m&#8322;</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >=</a
+      ><a name="721"
+      > </a
+      ><a name="722" href="Category.Monad.Indexed.html#711" class="Bound"
+      >m&#8321;</a
+      ><a name="724"
+      > </a
+      ><a name="725" href="Category.Monad.Indexed.html#596" class="Field Operator"
+      >&gt;&gt;=</a
+      ><a name="728"
+      > </a
+      ><a name="729" class="Symbol"
+      >&#955;</a
+      ><a name="730"
+      > </a
+      ><a name="731" href="Category.Monad.Indexed.html#731" class="Bound"
+      >_</a
+      ><a name="732"
+      > </a
+      ><a name="733" class="Symbol"
+      >&#8594;</a
+      ><a name="734"
+      > </a
+      ><a name="735" href="Category.Monad.Indexed.html#717" class="Bound"
+      >m&#8322;</a
+      ><a name="737"
+      >
+
+  </a
+      ><a name="741" href="Category.Monad.Indexed.html#741" class="Function Operator"
+      >_=&lt;&lt;_</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="Symbol"
+      >:</a
+      ><a name="748"
+      > </a
+      ><a name="749" class="Symbol"
+      >&#8704;</a
+      ><a name="750"
+      > </a
+      ><a name="751" class="Symbol"
+      >{</a
+      ><a name="752" href="Category.Monad.Indexed.html#752" class="Bound"
+      >i</a
+      ><a name="753"
+      > </a
+      ><a name="754" href="Category.Monad.Indexed.html#754" class="Bound"
+      >j</a
+      ><a name="755"
+      > </a
+      ><a name="756" href="Category.Monad.Indexed.html#756" class="Bound"
+      >k</a
+      ><a name="757"
+      > </a
+      ><a name="758" href="Category.Monad.Indexed.html#758" class="Bound"
+      >A</a
+      ><a name="759"
+      > </a
+      ><a name="760" href="Category.Monad.Indexed.html#760" class="Bound"
+      >B</a
+      ><a name="761" class="Symbol"
+      >}</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >&#8594;</a
+      ><a name="764"
+      > </a
+      ><a name="765" class="Symbol"
+      >(</a
+      ><a name="766" href="Category.Monad.Indexed.html#758" class="Bound"
+      >A</a
+      ><a name="767"
+      > </a
+      ><a name="768" class="Symbol"
+      >&#8594;</a
+      ><a name="769"
+      > </a
+      ><a name="770" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="771"
+      > </a
+      ><a name="772" href="Category.Monad.Indexed.html#754" class="Bound"
+      >j</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Category.Monad.Indexed.html#756" class="Bound"
+      >k</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Category.Monad.Indexed.html#760" class="Bound"
+      >B</a
+      ><a name="777" class="Symbol"
+      >)</a
+      ><a name="778"
+      > </a
+      ><a name="779" class="Symbol"
+      >&#8594;</a
+      ><a name="780"
+      > </a
+      ><a name="781" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="782"
+      > </a
+      ><a name="783" href="Category.Monad.Indexed.html#752" class="Bound"
+      >i</a
+      ><a name="784"
+      > </a
+      ><a name="785" href="Category.Monad.Indexed.html#754" class="Bound"
+      >j</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Category.Monad.Indexed.html#758" class="Bound"
+      >A</a
+      ><a name="788"
+      > </a
+      ><a name="789" class="Symbol"
+      >&#8594;</a
+      ><a name="790"
+      > </a
+      ><a name="791" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="792"
+      > </a
+      ><a name="793" href="Category.Monad.Indexed.html#752" class="Bound"
+      >i</a
+      ><a name="794"
+      > </a
+      ><a name="795" href="Category.Monad.Indexed.html#756" class="Bound"
+      >k</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Category.Monad.Indexed.html#760" class="Bound"
+      >B</a
+      ><a name="798"
+      >
+  </a
+      ><a name="801" href="Category.Monad.Indexed.html#801" class="Bound"
+      >f</a
+      ><a name="802"
+      > </a
+      ><a name="803" href="Category.Monad.Indexed.html#741" class="Function Operator"
+      >=&lt;&lt;</a
+      ><a name="806"
+      > </a
+      ><a name="807" href="Category.Monad.Indexed.html#807" class="Bound"
+      >c</a
+      ><a name="808"
+      > </a
+      ><a name="809" class="Symbol"
+      >=</a
+      ><a name="810"
+      > </a
+      ><a name="811" href="Category.Monad.Indexed.html#807" class="Bound"
+      >c</a
+      ><a name="812"
+      > </a
+      ><a name="813" href="Category.Monad.Indexed.html#596" class="Field Operator"
+      >&gt;&gt;=</a
+      ><a name="816"
+      > </a
+      ><a name="817" href="Category.Monad.Indexed.html#801" class="Bound"
+      >f</a
+      ><a name="818"
+      >
+
+  </a
+      ><a name="822" href="Category.Monad.Indexed.html#822" class="Function Operator"
+      >_&gt;=&gt;_</a
+      ><a name="827"
+      > </a
+      ><a name="828" class="Symbol"
+      >:</a
+      ><a name="829"
+      > </a
+      ><a name="830" class="Symbol"
+      >&#8704;</a
+      ><a name="831"
+      > </a
+      ><a name="832" class="Symbol"
+      >{</a
+      ><a name="833" href="Category.Monad.Indexed.html#833" class="Bound"
+      >i</a
+      ><a name="834"
+      > </a
+      ><a name="835" href="Category.Monad.Indexed.html#835" class="Bound"
+      >j</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="Category.Monad.Indexed.html#837" class="Bound"
+      >k</a
+      ><a name="838"
+      > </a
+      ><a name="839" href="Category.Monad.Indexed.html#839" class="Bound"
+      >a</a
+      ><a name="840" class="Symbol"
+      >}</a
+      ><a name="841"
+      > </a
+      ><a name="842" class="Symbol"
+      >{</a
+      ><a name="843" href="Category.Monad.Indexed.html#843" class="Bound"
+      >A</a
+      ><a name="844"
+      > </a
+      ><a name="845" class="Symbol"
+      >:</a
+      ><a name="846"
+      > </a
+      ><a name="847" class="PrimitiveType"
+      >Set</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Category.Monad.Indexed.html#839" class="Bound"
+      >a</a
+      ><a name="852" class="Symbol"
+      >}</a
+      ><a name="853"
+      > </a
+      ><a name="854" class="Symbol"
+      >{</a
+      ><a name="855" href="Category.Monad.Indexed.html#855" class="Bound"
+      >B</a
+      ><a name="856"
+      > </a
+      ><a name="857" href="Category.Monad.Indexed.html#857" class="Bound"
+      >C</a
+      ><a name="858" class="Symbol"
+      >}</a
+      ><a name="859"
+      > </a
+      ><a name="860" class="Symbol"
+      >&#8594;</a
+      ><a name="861"
+      >
+          </a
+      ><a name="872" class="Symbol"
+      >(</a
+      ><a name="873" href="Category.Monad.Indexed.html#843" class="Bound"
+      >A</a
+      ><a name="874"
+      > </a
+      ><a name="875" class="Symbol"
+      >&#8594;</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="Category.Monad.Indexed.html#833" class="Bound"
+      >i</a
+      ><a name="880"
+      > </a
+      ><a name="881" href="Category.Monad.Indexed.html#835" class="Bound"
+      >j</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Category.Monad.Indexed.html#855" class="Bound"
+      >B</a
+      ><a name="884" class="Symbol"
+      >)</a
+      ><a name="885"
+      > </a
+      ><a name="886" class="Symbol"
+      >&#8594;</a
+      ><a name="887"
+      > </a
+      ><a name="888" class="Symbol"
+      >(</a
+      ><a name="889" href="Category.Monad.Indexed.html#855" class="Bound"
+      >B</a
+      ><a name="890"
+      > </a
+      ><a name="891" class="Symbol"
+      >&#8594;</a
+      ><a name="892"
+      > </a
+      ><a name="893" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="Category.Monad.Indexed.html#835" class="Bound"
+      >j</a
+      ><a name="896"
+      > </a
+      ><a name="897" href="Category.Monad.Indexed.html#837" class="Bound"
+      >k</a
+      ><a name="898"
+      > </a
+      ><a name="899" href="Category.Monad.Indexed.html#857" class="Bound"
+      >C</a
+      ><a name="900" class="Symbol"
+      >)</a
+      ><a name="901"
+      > </a
+      ><a name="902" class="Symbol"
+      >&#8594;</a
+      ><a name="903"
+      > </a
+      ><a name="904" class="Symbol"
+      >(</a
+      ><a name="905" href="Category.Monad.Indexed.html#843" class="Bound"
+      >A</a
+      ><a name="906"
+      > </a
+      ><a name="907" class="Symbol"
+      >&#8594;</a
+      ><a name="908"
+      > </a
+      ><a name="909" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="910"
+      > </a
+      ><a name="911" href="Category.Monad.Indexed.html#833" class="Bound"
+      >i</a
+      ><a name="912"
+      > </a
+      ><a name="913" href="Category.Monad.Indexed.html#837" class="Bound"
+      >k</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Category.Monad.Indexed.html#857" class="Bound"
+      >C</a
+      ><a name="916" class="Symbol"
+      >)</a
+      ><a name="917"
+      >
+  </a
+      ><a name="920" href="Category.Monad.Indexed.html#920" class="Bound"
+      >f</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Category.Monad.Indexed.html#822" class="Function Operator"
+      >&gt;=&gt;</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Category.Monad.Indexed.html#926" class="Bound"
+      >g</a
+      ><a name="927"
+      > </a
+      ><a name="928" class="Symbol"
+      >=</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Category.Monad.Indexed.html#741" class="Function Operator"
+      >_=&lt;&lt;_</a
+      ><a name="935"
+      > </a
+      ><a name="936" href="Category.Monad.Indexed.html#926" class="Bound"
+      >g</a
+      ><a name="937"
+      > </a
+      ><a name="938" href="Function.html#741" class="Function Operator"
+      >&#8728;</a
+      ><a name="939"
+      > </a
+      ><a name="940" href="Category.Monad.Indexed.html#920" class="Bound"
+      >f</a
+      ><a name="941"
+      >
+
+  </a
+      ><a name="945" href="Category.Monad.Indexed.html#945" class="Function Operator"
+      >_&lt;=&lt;_</a
+      ><a name="950"
+      > </a
+      ><a name="951" class="Symbol"
+      >:</a
+      ><a name="952"
+      > </a
+      ><a name="953" class="Symbol"
+      >&#8704;</a
+      ><a name="954"
+      > </a
+      ><a name="955" class="Symbol"
+      >{</a
+      ><a name="956" href="Category.Monad.Indexed.html#956" class="Bound"
+      >i</a
+      ><a name="957"
+      > </a
+      ><a name="958" href="Category.Monad.Indexed.html#958" class="Bound"
+      >j</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Category.Monad.Indexed.html#960" class="Bound"
+      >k</a
+      ><a name="961"
+      > </a
+      ><a name="962" href="Category.Monad.Indexed.html#962" class="Bound"
+      >B</a
+      ><a name="963"
+      > </a
+      ><a name="964" href="Category.Monad.Indexed.html#964" class="Bound"
+      >C</a
+      ><a name="965"
+      > </a
+      ><a name="966" href="Category.Monad.Indexed.html#966" class="Bound"
+      >a</a
+      ><a name="967" class="Symbol"
+      >}</a
+      ><a name="968"
+      > </a
+      ><a name="969" class="Symbol"
+      >{</a
+      ><a name="970" href="Category.Monad.Indexed.html#970" class="Bound"
+      >A</a
+      ><a name="971"
+      > </a
+      ><a name="972" class="Symbol"
+      >:</a
+      ><a name="973"
+      > </a
+      ><a name="974" class="PrimitiveType"
+      >Set</a
+      ><a name="977"
+      > </a
+      ><a name="978" href="Category.Monad.Indexed.html#966" class="Bound"
+      >a</a
+      ><a name="979" class="Symbol"
+      >}</a
+      ><a name="980"
+      > </a
+      ><a name="981" class="Symbol"
+      >&#8594;</a
+      ><a name="982"
+      >
+          </a
+      ><a name="993" class="Symbol"
+      >(</a
+      ><a name="994" href="Category.Monad.Indexed.html#962" class="Bound"
+      >B</a
+      ><a name="995"
+      > </a
+      ><a name="996" class="Symbol"
+      >&#8594;</a
+      ><a name="997"
+      > </a
+      ><a name="998" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="999"
+      > </a
+      ><a name="1000" href="Category.Monad.Indexed.html#958" class="Bound"
+      >j</a
+      ><a name="1001"
+      > </a
+      ><a name="1002" href="Category.Monad.Indexed.html#960" class="Bound"
+      >k</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Category.Monad.Indexed.html#964" class="Bound"
+      >C</a
+      ><a name="1005" class="Symbol"
+      >)</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" class="Symbol"
+      >&#8594;</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" class="Symbol"
+      >(</a
+      ><a name="1010" href="Category.Monad.Indexed.html#970" class="Bound"
+      >A</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" class="Symbol"
+      >&#8594;</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" href="Category.Monad.Indexed.html#956" class="Bound"
+      >i</a
+      ><a name="1017"
+      > </a
+      ><a name="1018" href="Category.Monad.Indexed.html#958" class="Bound"
+      >j</a
+      ><a name="1019"
+      > </a
+      ><a name="1020" href="Category.Monad.Indexed.html#962" class="Bound"
+      >B</a
+      ><a name="1021" class="Symbol"
+      >)</a
+      ><a name="1022"
+      > </a
+      ><a name="1023" class="Symbol"
+      >&#8594;</a
+      ><a name="1024"
+      > </a
+      ><a name="1025" class="Symbol"
+      >(</a
+      ><a name="1026" href="Category.Monad.Indexed.html#970" class="Bound"
+      >A</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" class="Symbol"
+      >&#8594;</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" href="Category.Monad.Indexed.html#956" class="Bound"
+      >i</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Category.Monad.Indexed.html#960" class="Bound"
+      >k</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" href="Category.Monad.Indexed.html#964" class="Bound"
+      >C</a
+      ><a name="1037" class="Symbol"
+      >)</a
+      ><a name="1038"
+      >
+  </a
+      ><a name="1041" href="Category.Monad.Indexed.html#1041" class="Bound"
+      >g</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" href="Category.Monad.Indexed.html#945" class="Function Operator"
+      >&lt;=&lt;</a
+      ><a name="1046"
+      > </a
+      ><a name="1047" href="Category.Monad.Indexed.html#1047" class="Bound"
+      >f</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" class="Symbol"
+      >=</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Category.Monad.Indexed.html#1047" class="Bound"
+      >f</a
+      ><a name="1052"
+      > </a
+      ><a name="1053" href="Category.Monad.Indexed.html#822" class="Function Operator"
+      >&gt;=&gt;</a
+      ><a name="1056"
+      > </a
+      ><a name="1057" href="Category.Monad.Indexed.html#1041" class="Bound"
+      >g</a
+      ><a name="1058"
+      >
+
+  </a
+      ><a name="1062" href="Category.Monad.Indexed.html#1062" class="Function"
+      >join</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" class="Symbol"
+      >:</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" class="Symbol"
+      >&#8704;</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" class="Symbol"
+      >{</a
+      ><a name="1072" href="Category.Monad.Indexed.html#1072" class="Bound"
+      >i</a
+      ><a name="1073"
+      > </a
+      ><a name="1074" href="Category.Monad.Indexed.html#1074" class="Bound"
+      >j</a
+      ><a name="1075"
+      > </a
+      ><a name="1076" href="Category.Monad.Indexed.html#1076" class="Bound"
+      >k</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="Category.Monad.Indexed.html#1078" class="Bound"
+      >A</a
+      ><a name="1079" class="Symbol"
+      >}</a
+      ><a name="1080"
+      > </a
+      ><a name="1081" class="Symbol"
+      >&#8594;</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" href="Category.Monad.Indexed.html#1072" class="Bound"
+      >i</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Category.Monad.Indexed.html#1074" class="Bound"
+      >j</a
+      ><a name="1088"
+      > </a
+      ><a name="1089" class="Symbol"
+      >(</a
+      ><a name="1090" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" href="Category.Monad.Indexed.html#1074" class="Bound"
+      >j</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Category.Monad.Indexed.html#1076" class="Bound"
+      >k</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" href="Category.Monad.Indexed.html#1078" class="Bound"
+      >A</a
+      ><a name="1097" class="Symbol"
+      >)</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" class="Symbol"
+      >&#8594;</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" href="Category.Monad.Indexed.html#1072" class="Bound"
+      >i</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="Category.Monad.Indexed.html#1076" class="Bound"
+      >k</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" href="Category.Monad.Indexed.html#1078" class="Bound"
+      >A</a
+      ><a name="1108"
+      >
+  </a
+      ><a name="1111" href="Category.Monad.Indexed.html#1062" class="Function"
+      >join</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" href="Category.Monad.Indexed.html#1116" class="Bound"
+      >m</a
+      ><a name="1117"
+      > </a
+      ><a name="1118" class="Symbol"
+      >=</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" href="Category.Monad.Indexed.html#1116" class="Bound"
+      >m</a
+      ><a name="1121"
+      > </a
+      ><a name="1122" href="Category.Monad.Indexed.html#596" class="Field Operator"
+      >&gt;&gt;=</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="Function.html#1040" class="Function"
+      >id</a
+      ><a name="1128"
+      >
+
+  </a
+      ><a name="1132" href="Category.Monad.Indexed.html#1132" class="Function"
+      >rawIApplicative</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" class="Symbol"
+      >:</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" href="Category.Applicative.Indexed.html#607" class="Record"
+      >RawIApplicative</a
+      ><a name="1165"
+      > </a
+      ><a name="1166" href="Category.Monad.Indexed.html#442" class="Bound"
+      >M</a
+      ><a name="1167"
+      >
+  </a
+      ><a name="1170" href="Category.Monad.Indexed.html#1132" class="Function"
+      >rawIApplicative</a
+      ><a name="1185"
+      > </a
+      ><a name="1186" class="Symbol"
+      >=</a
+      ><a name="1187"
+      > </a
+      ><a name="1188" class="Keyword"
+      >record</a
+      ><a name="1194"
+      >
+    </a
+      ><a name="1199" class="Symbol"
+      >{</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" class="Field"
+      >pure</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" class="Symbol"
+      >=</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" href="Category.Monad.Indexed.html#561" class="Field"
+      >return</a
+      ><a name="1214"
+      >
+    </a
+      ><a name="1219" class="Symbol"
+      >;</a
+      ><a name="1220"
+      > </a
+      ><a name="1221" class="Field Operator"
+      >_&#8859;_</a
+      ><a name="1224"
+      >  </a
+      ><a name="1226" class="Symbol"
+      >=</a
+      ><a name="1227"
+      > </a
+      ><a name="1228" class="Symbol"
+      >&#955;</a
+      ><a name="1229"
+      > </a
+      ><a name="1230" href="Category.Monad.Indexed.html#1230" class="Bound"
+      >f</a
+      ><a name="1231"
+      > </a
+      ><a name="1232" href="Category.Monad.Indexed.html#1232" class="Bound"
+      >x</a
+      ><a name="1233"
+      > </a
+      ><a name="1234" class="Symbol"
+      >&#8594;</a
+      ><a name="1235"
+      > </a
+      ><a name="1236" href="Category.Monad.Indexed.html#1230" class="Bound"
+      >f</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" href="Category.Monad.Indexed.html#596" class="Field Operator"
+      >&gt;&gt;=</a
+      ><a name="1241"
+      > </a
+      ><a name="1242" class="Symbol"
+      >&#955;</a
+      ><a name="1243"
+      > </a
+      ><a name="1244" href="Category.Monad.Indexed.html#1244" class="Bound"
+      >f'</a
+      ><a name="1246"
+      > </a
+      ><a name="1247" class="Symbol"
+      >&#8594;</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="Category.Monad.Indexed.html#1232" class="Bound"
+      >x</a
+      ><a name="1250"
+      > </a
+      ><a name="1251" href="Category.Monad.Indexed.html#596" class="Field Operator"
+      >&gt;&gt;=</a
+      ><a name="1254"
+      > </a
+      ><a name="1255" class="Symbol"
+      >&#955;</a
+      ><a name="1256"
+      > </a
+      ><a name="1257" href="Category.Monad.Indexed.html#1257" class="Bound"
+      >x'</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" class="Symbol"
+      >&#8594;</a
+      ><a name="1261"
+      > </a
+      ><a name="1262" href="Category.Monad.Indexed.html#561" class="Field"
+      >return</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" class="Symbol"
+      >(</a
+      ><a name="1270" href="Category.Monad.Indexed.html#1244" class="Bound"
+      >f'</a
+      ><a name="1272"
+      > </a
+      ><a name="1273" href="Category.Monad.Indexed.html#1257" class="Bound"
+      >x'</a
+      ><a name="1275" class="Symbol"
+      >)</a
+      ><a name="1276"
+      >
+    </a
+      ><a name="1281" class="Symbol"
+      >}</a
+      ><a name="1282"
+      >
+
+  </a
+      ><a name="1286" class="Keyword"
+      >open</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" href="Category.Applicative.Indexed.html#607" class="Module"
+      >RawIApplicative</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" href="Category.Monad.Indexed.html#1132" class="Function"
+      >rawIApplicative</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" class="Keyword"
+      >public</a
+      ><a name="1329"
+      >
+
+</a
+      ><a name="1331" class="Keyword"
+      >record</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" href="Category.Monad.Indexed.html#1338" class="Record"
+      >RawIMonadZero</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" class="Symbol"
+      >{</a
+      ><a name="1353" href="Category.Monad.Indexed.html#1353" class="Bound"
+      >i</a
+      ><a name="1354"
+      > </a
+      ><a name="1355" href="Category.Monad.Indexed.html#1355" class="Bound"
+      >f</a
+      ><a name="1356" class="Symbol"
+      >}</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" class="Symbol"
+      >{</a
+      ><a name="1359" href="Category.Monad.Indexed.html#1359" class="Bound"
+      >I</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" class="Symbol"
+      >:</a
+      ><a name="1362"
+      > </a
+      ><a name="1363" class="PrimitiveType"
+      >Set</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Category.Monad.Indexed.html#1353" class="Bound"
+      >i</a
+      ><a name="1368" class="Symbol"
+      >}</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" class="Symbol"
+      >(</a
+      ><a name="1371" href="Category.Monad.Indexed.html#1371" class="Bound"
+      >M</a
+      ><a name="1372"
+      > </a
+      ><a name="1373" class="Symbol"
+      >:</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" href="Category.Applicative.Indexed.html#523" class="Function"
+      >IFun</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Category.Monad.Indexed.html#1359" class="Bound"
+      >I</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Category.Monad.Indexed.html#1355" class="Bound"
+      >f</a
+      ><a name="1383" class="Symbol"
+      >)</a
+      ><a name="1384"
+      > </a
+      ><a name="1385" class="Symbol"
+      >:</a
+      ><a name="1386"
+      >
+                     </a
+      ><a name="1408" class="PrimitiveType"
+      >Set</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" class="Symbol"
+      >(</a
+      ><a name="1413" href="Category.Monad.Indexed.html#1353" class="Bound"
+      >i</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1416"
+      > </a
+      ><a name="1417" href="Agda.Primitive.html#596" class="Primitive"
+      >suc</a
+      ><a name="1420"
+      > </a
+      ><a name="1421" href="Category.Monad.Indexed.html#1355" class="Bound"
+      >f</a
+      ><a name="1422" class="Symbol"
+      >)</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" class="Keyword"
+      >where</a
+      ><a name="1429"
+      >
+  </a
+      ><a name="1432" class="Keyword"
+      >field</a
+      ><a name="1437"
+      >
+    </a
+      ><a name="1442" href="Category.Monad.Indexed.html#1442" class="Field"
+      >monad</a
+      ><a name="1447"
+      > </a
+      ><a name="1448" class="Symbol"
+      >:</a
+      ><a name="1449"
+      > </a
+      ><a name="1450" href="Category.Monad.Indexed.html#413" class="Record"
+      >RawIMonad</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" href="Category.Monad.Indexed.html#1371" class="Bound"
+      >M</a
+      ><a name="1461"
+      >
+    </a
+      ><a name="1466" href="Category.Monad.Indexed.html#1466" class="Field"
+      >&#8709;</a
+      ><a name="1467"
+      >     </a
+      ><a name="1472" class="Symbol"
+      >:</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" class="Symbol"
+      >&#8704;</a
+      ><a name="1475"
+      > </a
+      ><a name="1476" class="Symbol"
+      >{</a
+      ><a name="1477" href="Category.Monad.Indexed.html#1477" class="Bound"
+      >i</a
+      ><a name="1478"
+      > </a
+      ><a name="1479" href="Category.Monad.Indexed.html#1479" class="Bound"
+      >j</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" href="Category.Monad.Indexed.html#1481" class="Bound"
+      >A</a
+      ><a name="1482" class="Symbol"
+      >}</a
+      ><a name="1483"
+      > </a
+      ><a name="1484" class="Symbol"
+      >&#8594;</a
+      ><a name="1485"
+      > </a
+      ><a name="1486" href="Category.Monad.Indexed.html#1371" class="Bound"
+      >M</a
+      ><a name="1487"
+      > </a
+      ><a name="1488" href="Category.Monad.Indexed.html#1477" class="Bound"
+      >i</a
+      ><a name="1489"
+      > </a
+      ><a name="1490" href="Category.Monad.Indexed.html#1479" class="Bound"
+      >j</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" href="Category.Monad.Indexed.html#1481" class="Bound"
+      >A</a
+      ><a name="1493"
+      >
+
+  </a
+      ><a name="1497" class="Keyword"
+      >open</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Category.Monad.Indexed.html#413" class="Module"
+      >RawIMonad</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Category.Monad.Indexed.html#1442" class="Field"
+      >monad</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" class="Keyword"
+      >public</a
+      ><a name="1524"
+      >
+
+</a
+      ><a name="1526" class="Keyword"
+      >record</a
+      ><a name="1532"
+      > </a
+      ><a name="1533" href="Category.Monad.Indexed.html#1533" class="Record"
+      >RawIMonadPlus</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" class="Symbol"
+      >{</a
+      ><a name="1548" href="Category.Monad.Indexed.html#1548" class="Bound"
+      >i</a
+      ><a name="1549"
+      > </a
+      ><a name="1550" href="Category.Monad.Indexed.html#1550" class="Bound"
+      >f</a
+      ><a name="1551" class="Symbol"
+      >}</a
+      ><a name="1552"
+      > </a
+      ><a name="1553" class="Symbol"
+      >{</a
+      ><a name="1554" href="Category.Monad.Indexed.html#1554" class="Bound"
+      >I</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" class="Symbol"
+      >:</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" class="PrimitiveType"
+      >Set</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" href="Category.Monad.Indexed.html#1548" class="Bound"
+      >i</a
+      ><a name="1563" class="Symbol"
+      >}</a
+      ><a name="1564"
+      > </a
+      ><a name="1565" class="Symbol"
+      >(</a
+      ><a name="1566" href="Category.Monad.Indexed.html#1566" class="Bound"
+      >M</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" class="Symbol"
+      >:</a
+      ><a name="1569"
+      > </a
+      ><a name="1570" href="Category.Applicative.Indexed.html#523" class="Function"
+      >IFun</a
+      ><a name="1574"
+      > </a
+      ><a name="1575" href="Category.Monad.Indexed.html#1554" class="Bound"
+      >I</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" href="Category.Monad.Indexed.html#1550" class="Bound"
+      >f</a
+      ><a name="1578" class="Symbol"
+      >)</a
+      ><a name="1579"
+      > </a
+      ><a name="1580" class="Symbol"
+      >:</a
+      ><a name="1581"
+      >
+                     </a
+      ><a name="1603" class="PrimitiveType"
+      >Set</a
+      ><a name="1606"
+      > </a
+      ><a name="1607" class="Symbol"
+      >(</a
+      ><a name="1608" href="Category.Monad.Indexed.html#1548" class="Bound"
+      >i</a
+      ><a name="1609"
+      > </a
+      ><a name="1610" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1611"
+      > </a
+      ><a name="1612" href="Agda.Primitive.html#596" class="Primitive"
+      >suc</a
+      ><a name="1615"
+      > </a
+      ><a name="1616" href="Category.Monad.Indexed.html#1550" class="Bound"
+      >f</a
+      ><a name="1617" class="Symbol"
+      >)</a
+      ><a name="1618"
+      > </a
+      ><a name="1619" class="Keyword"
+      >where</a
+      ><a name="1624"
+      >
+  </a
+      ><a name="1627" class="Keyword"
+      >infixr</a
+      ><a name="1633"
+      > </a
+      ><a name="1634" class="Number"
+      >3</a
+      ><a name="1635"
+      > _&#8739;_
+  </a
+      ><a name="1642" class="Keyword"
+      >field</a
+      ><a name="1647"
+      >
+    </a
+      ><a name="1652" href="Category.Monad.Indexed.html#1652" class="Field"
+      >monadZero</a
+      ><a name="1661"
+      > </a
+      ><a name="1662" class="Symbol"
+      >:</a
+      ><a name="1663"
+      > </a
+      ><a name="1664" href="Category.Monad.Indexed.html#1338" class="Record"
+      >RawIMonadZero</a
+      ><a name="1677"
+      > </a
+      ><a name="1678" href="Category.Monad.Indexed.html#1566" class="Bound"
+      >M</a
+      ><a name="1679"
+      >
+    </a
+      ><a name="1684" href="Category.Monad.Indexed.html#1684" class="Field Operator"
+      >_&#8739;_</a
+      ><a name="1687"
+      >       </a
+      ><a name="1694" class="Symbol"
+      >:</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" class="Symbol"
+      >&#8704;</a
+      ><a name="1697"
+      > </a
+      ><a name="1698" class="Symbol"
+      >{</a
+      ><a name="1699" href="Category.Monad.Indexed.html#1699" class="Bound"
+      >i</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Category.Monad.Indexed.html#1701" class="Bound"
+      >j</a
+      ><a name="1702"
+      > </a
+      ><a name="1703" href="Category.Monad.Indexed.html#1703" class="Bound"
+      >A</a
+      ><a name="1704" class="Symbol"
+      >}</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" class="Symbol"
+      >&#8594;</a
+      ><a name="1707"
+      > </a
+      ><a name="1708" href="Category.Monad.Indexed.html#1566" class="Bound"
+      >M</a
+      ><a name="1709"
+      > </a
+      ><a name="1710" href="Category.Monad.Indexed.html#1699" class="Bound"
+      >i</a
+      ><a name="1711"
+      > </a
+      ><a name="1712" href="Category.Monad.Indexed.html#1701" class="Bound"
+      >j</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Category.Monad.Indexed.html#1703" class="Bound"
+      >A</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" class="Symbol"
+      >&#8594;</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" href="Category.Monad.Indexed.html#1566" class="Bound"
+      >M</a
+      ><a name="1719"
+      > </a
+      ><a name="1720" href="Category.Monad.Indexed.html#1699" class="Bound"
+      >i</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" href="Category.Monad.Indexed.html#1701" class="Bound"
+      >j</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="Category.Monad.Indexed.html#1703" class="Bound"
+      >A</a
+      ><a name="1725"
+      > </a
+      ><a name="1726" class="Symbol"
+      >&#8594;</a
+      ><a name="1727"
+      > </a
+      ><a name="1728" href="Category.Monad.Indexed.html#1566" class="Bound"
+      >M</a
+      ><a name="1729"
+      > </a
+      ><a name="1730" href="Category.Monad.Indexed.html#1699" class="Bound"
+      >i</a
+      ><a name="1731"
+      > </a
+      ><a name="1732" href="Category.Monad.Indexed.html#1701" class="Bound"
+      >j</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" href="Category.Monad.Indexed.html#1703" class="Bound"
+      >A</a
+      ><a name="1735"
+      >
+
+  </a
+      ><a name="1739" class="Keyword"
+      >open</a
+      ><a name="1743"
+      > </a
+      ><a name="1744" href="Category.Monad.Indexed.html#1338" class="Module"
+      >RawIMonadZero</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Category.Monad.Indexed.html#1652" class="Field"
+      >monadZero</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" class="Keyword"
+      >public</a
+      ><a name="1774"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

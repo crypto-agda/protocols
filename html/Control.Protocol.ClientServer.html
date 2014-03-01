@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Control.Protocol.ClientServer</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >open</a
+      ><a name="5"
+      > </a
+      ><a name="6" class="Keyword"
+      >import</a
+      ><a name="12"
+      > </a
+      ><a name="13" href="Type.html#1" class="Module"
+      >Type</a
+      ><a name="17"
+      >
+</a
+      ><a name="18" class="Keyword"
+      >open</a
+      ><a name="22"
+      > </a
+      ><a name="23" class="Keyword"
+      >import</a
+      ><a name="29"
+      > </a
+      ><a name="30" href="Function.NP.html#1" class="Module"
+      >Function.NP</a
+      ><a name="41"
+      >
+</a
+      ><a name="42" class="Keyword"
+      >open</a
+      ><a name="46"
+      > </a
+      ><a name="47" class="Keyword"
+      >import</a
+      ><a name="53"
+      > </a
+      ><a name="54" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="62"
+      >
+</a
+      ><a name="63" class="Keyword"
+      >open</a
+      ><a name="67"
+      > </a
+      ><a name="68" class="Keyword"
+      >import</a
+      ><a name="74"
+      > </a
+      ><a name="75" href="Data.Product.NP.html#1" class="Module"
+      >Data.Product.NP</a
+      ><a name="90"
+      > </a
+      ><a name="91" class="Keyword"
+      >using</a
+      ><a name="96"
+      > </a
+      ><a name="97" class="Symbol"
+      >(</a
+      ><a name="98"
+      >_,_</a
+      ><a name="101" class="Symbol"
+      >)</a
+      ><a name="102"
+      >
+
+</a
+      ><a name="104" class="Keyword"
+      >open</a
+      ><a name="108"
+      > </a
+      ><a name="109" class="Keyword"
+      >import</a
+      ><a name="115"
+      > </a
+      ><a name="116" href="Control.Protocol.html#1" class="Module"
+      >Control.Protocol</a
+      ><a name="132"
+      >
+</a
+      ><a name="133" class="Keyword"
+      >open</a
+      ><a name="137"
+      > </a
+      ><a name="138" class="Keyword"
+      >import</a
+      ><a name="144"
+      > </a
+      ><a name="145" href="Control.Protocol.Sequence.html#1" class="Module"
+      >Control.Protocol.Sequence</a
+      ><a name="170"
+      >
+
+</a
+      ><a name="172" class="Keyword"
+      >module</a
+      ><a name="178"
+      > </a
+      ><a name="179" href="Control.Protocol.ClientServer.html#1" class="Module"
+      >Control.Protocol.ClientServer</a
+      ><a name="208"
+      > </a
+      ><a name="209" class="Symbol"
+      >(</a
+      ><a name="210" href="Control.Protocol.ClientServer.html#210" class="Bound"
+      >Query</a
+      ><a name="215"
+      > </a
+      ><a name="216" class="Symbol"
+      >:</a
+      ><a name="217"
+      > </a
+      ><a name="218" href="Type.html#107" class="Function"
+      >&#9733;&#8320;</a
+      ><a name="220" class="Symbol"
+      >)</a
+      ><a name="221"
+      > </a
+      ><a name="222" class="Symbol"
+      >(</a
+      ><a name="223" href="Control.Protocol.ClientServer.html#223" class="Bound"
+      >Resp</a
+      ><a name="227"
+      > </a
+      ><a name="228" class="Symbol"
+      >:</a
+      ><a name="229"
+      > </a
+      ><a name="230" href="Control.Protocol.ClientServer.html#210" class="Bound"
+      >Query</a
+      ><a name="235"
+      > </a
+      ><a name="236" class="Symbol"
+      >&#8594;</a
+      ><a name="237"
+      > </a
+      ><a name="238" href="Type.html#107" class="Function"
+      >&#9733;&#8320;</a
+      ><a name="240" class="Symbol"
+      >)</a
+      ><a name="241"
+      > </a
+      ><a name="242" class="Keyword"
+      >where</a
+      ><a name="247"
+      >
+    </a
+      ><a name="252" href="Control.Protocol.ClientServer.html#252" class="Function"
+      >ClientRound</a
+      ><a name="263"
+      > </a
+      ><a name="264" href="Control.Protocol.ClientServer.html#264" class="Function"
+      >ServerRound</a
+      ><a name="275"
+      > </a
+      ><a name="276" class="Symbol"
+      >:</a
+      ><a name="277"
+      > </a
+      ><a name="278" href="Control.Protocol.html#1090" class="Function"
+      >Proto</a
+      ><a name="283"
+      >
+    </a
+      ><a name="288" href="Control.Protocol.ClientServer.html#252" class="Function"
+      >ClientRound</a
+      ><a name="299"
+      > </a
+      ><a name="300" class="Symbol"
+      >=</a
+      ><a name="301"
+      > </a
+      ><a name="302" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >send</a
+      ><a name="306"
+      > </a
+      ><a name="307" class="Symbol"
+      >&#955;</a
+      ><a name="308"
+      > </a
+      ><a name="309" class="Symbol"
+      >(</a
+      ><a name="310" href="Control.Protocol.ClientServer.html#310" class="Bound"
+      >q</a
+      ><a name="311"
+      > </a
+      ><a name="312" class="Symbol"
+      >:</a
+      ><a name="313"
+      > </a
+      ><a name="314" href="Control.Protocol.ClientServer.html#210" class="Bound"
+      >Query</a
+      ><a name="319" class="Symbol"
+      >)</a
+      ><a name="320"
+      > </a
+      ><a name="321" class="Symbol"
+      >&#8594;</a
+      ><a name="322"
+      > </a
+      ><a name="323" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >recv</a
+      ><a name="327"
+      > </a
+      ><a name="328" class="Symbol"
+      >&#955;</a
+      ><a name="329"
+      > </a
+      ><a name="330" class="Symbol"
+      >(</a
+      ><a name="331" href="Control.Protocol.ClientServer.html#331" class="Bound"
+      >r</a
+      ><a name="332"
+      > </a
+      ><a name="333" class="Symbol"
+      >:</a
+      ><a name="334"
+      > </a
+      ><a name="335" href="Control.Protocol.ClientServer.html#223" class="Bound"
+      >Resp</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="Control.Protocol.ClientServer.html#310" class="Bound"
+      >q</a
+      ><a name="341" class="Symbol"
+      >)</a
+      ><a name="342"
+      > </a
+      ><a name="343" class="Symbol"
+      >&#8594;</a
+      ><a name="344"
+      > </a
+      ><a name="345" href="Control.Protocol.html#957" class="InductiveConstructor"
+      >end</a
+      ><a name="348"
+      >
+    </a
+      ><a name="353" href="Control.Protocol.ClientServer.html#264" class="Function"
+      >ServerRound</a
+      ><a name="364"
+      > </a
+      ><a name="365" class="Symbol"
+      >=</a
+      ><a name="366"
+      > </a
+      ><a name="367" href="Control.Protocol.html#3070" class="Function"
+      >dual</a
+      ><a name="371"
+      > </a
+      ><a name="372" href="Control.Protocol.ClientServer.html#252" class="Function"
+      >ClientRound</a
+      ><a name="383"
+      >
+
+    </a
+      ><a name="389" href="Control.Protocol.ClientServer.html#389" class="Function"
+      >Client</a
+      ><a name="395"
+      > </a
+      ><a name="396" href="Control.Protocol.ClientServer.html#396" class="Function"
+      >Server</a
+      ><a name="402"
+      > </a
+      ><a name="403" class="Symbol"
+      >:</a
+      ><a name="404"
+      > </a
+      ><a name="405" href="Data.Nat.html#726" class="Datatype"
+      >&#8469;</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Symbol"
+      >&#8594;</a
+      ><a name="408"
+      > </a
+      ><a name="409" href="Control.Protocol.html#1090" class="Function"
+      >Proto</a
+      ><a name="414"
+      >
+    </a
+      ><a name="419" href="Control.Protocol.ClientServer.html#389" class="Function"
+      >Client</a
+      ><a name="425"
+      > </a
+      ><a name="426" href="Control.Protocol.ClientServer.html#426" class="Bound"
+      >n</a
+      ><a name="427"
+      > </a
+      ><a name="428" class="Symbol"
+      >=</a
+      ><a name="429"
+      > </a
+      ><a name="430" href="Control.Protocol.Sequence.html#572" class="Function"
+      >replicate&#7486;</a
+      ><a name="440"
+      > </a
+      ><a name="441" href="Control.Protocol.ClientServer.html#426" class="Bound"
+      >n</a
+      ><a name="442"
+      > </a
+      ><a name="443" href="Control.Protocol.ClientServer.html#252" class="Function"
+      >ClientRound</a
+      ><a name="454"
+      >
+    </a
+      ><a name="459" href="Control.Protocol.ClientServer.html#396" class="Function"
+      >Server</a
+      ><a name="465"
+      > </a
+      ><a name="466" class="Symbol"
+      >=</a
+      ><a name="467"
+      > </a
+      ><a name="468" href="Control.Protocol.html#3070" class="Function"
+      >dual</a
+      ><a name="472"
+      > </a
+      ><a name="473" href="Function.html#741" class="Function Operator"
+      >&#8728;</a
+      ><a name="474"
+      > </a
+      ><a name="475" href="Control.Protocol.ClientServer.html#389" class="Function"
+      >Client</a
+      ><a name="481"
+      >
+
+    </a
+      ><a name="487" href="Control.Protocol.ClientServer.html#487" class="Function"
+      >DynamicServer</a
+      ><a name="500"
+      > </a
+      ><a name="501" href="Control.Protocol.ClientServer.html#501" class="Function"
+      >StaticServer</a
+      ><a name="513"
+      > </a
+      ><a name="514" class="Symbol"
+      >:</a
+      ><a name="515"
+      > </a
+      ><a name="516" href="Control.Protocol.html#1090" class="Function"
+      >Proto</a
+      ><a name="521"
+      >
+    </a
+      ><a name="526" href="Control.Protocol.ClientServer.html#487" class="Function"
+      >DynamicServer</a
+      ><a name="539"
+      > </a
+      ><a name="540" class="Symbol"
+      >=</a
+      ><a name="541"
+      > </a
+      ><a name="542" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >recv</a
+      ><a name="546"
+      > </a
+      ><a name="547" class="Symbol"
+      >&#955;</a
+      ><a name="548"
+      > </a
+      ><a name="549" href="Control.Protocol.ClientServer.html#549" class="Bound"
+      >n</a
+      ><a name="550"
+      > </a
+      ><a name="551" class="Symbol"
+      >&#8594;</a
+      ><a name="552"
+      >
+                    </a
+      ><a name="573" href="Control.Protocol.ClientServer.html#396" class="Function"
+      >Server</a
+      ><a name="579"
+      > </a
+      ><a name="580" href="Control.Protocol.ClientServer.html#549" class="Bound"
+      >n</a
+      ><a name="581"
+      >
+    </a
+      ><a name="586" href="Control.Protocol.ClientServer.html#501" class="Function"
+      >StaticServer</a
+      ><a name="598"
+      >  </a
+      ><a name="600" class="Symbol"
+      >=</a
+      ><a name="601"
+      > </a
+      ><a name="602" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >send</a
+      ><a name="606"
+      > </a
+      ><a name="607" class="Symbol"
+      >&#955;</a
+      ><a name="608"
+      > </a
+      ><a name="609" href="Control.Protocol.ClientServer.html#609" class="Bound"
+      >n</a
+      ><a name="610"
+      > </a
+      ><a name="611" class="Symbol"
+      >&#8594;</a
+      ><a name="612"
+      >
+                    </a
+      ><a name="633" href="Control.Protocol.ClientServer.html#396" class="Function"
+      >Server</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Control.Protocol.ClientServer.html#609" class="Bound"
+      >n</a
+      ><a name="641"
+      >
+
+    </a
+      ><a name="647" class="Keyword"
+      >module</a
+      ><a name="653"
+      > </a
+      ><a name="654" href="Control.Protocol.ClientServer.html#654" class="Module"
+      >PureServer</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Symbol"
+      >(</a
+      ><a name="666" href="Control.Protocol.ClientServer.html#666" class="Bound"
+      >serve</a
+      ><a name="671"
+      > </a
+      ><a name="672" class="Symbol"
+      >:</a
+      ><a name="673"
+      > </a
+      ><a name="674" href="Function.NP.html#957" class="Function"
+      >&#928;</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Control.Protocol.ClientServer.html#210" class="Bound"
+      >Query</a
+      ><a name="681"
+      > </a
+      ><a name="682" href="Control.Protocol.ClientServer.html#223" class="Bound"
+      >Resp</a
+      ><a name="686" class="Symbol"
+      >)</a
+      ><a name="687"
+      > </a
+      ><a name="688" class="Keyword"
+      >where</a
+      ><a name="693"
+      >
+      </a
+      ><a name="700" href="Control.Protocol.ClientServer.html#700" class="Function"
+      >server</a
+      ><a name="706"
+      > </a
+      ><a name="707" class="Symbol"
+      >:</a
+      ><a name="708"
+      > </a
+      ><a name="709" class="Symbol"
+      >&#8704;</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Control.Protocol.ClientServer.html#711" class="Bound"
+      >n</a
+      ><a name="712"
+      > </a
+      ><a name="713" class="Symbol"
+      >&#8594;</a
+      ><a name="714"
+      > </a
+      ><a name="715" href="Control.Protocol.html#3979" class="Function Operator"
+      >&#10214;</a
+      ><a name="716"
+      > </a
+      ><a name="717" href="Control.Protocol.ClientServer.html#396" class="Function"
+      >Server</a
+      ><a name="723"
+      > </a
+      ><a name="724" href="Control.Protocol.ClientServer.html#711" class="Bound"
+      >n</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Control.Protocol.html#3979" class="Function Operator"
+      >&#10215;</a
+      ><a name="727"
+      >
+      </a
+      ><a name="734" href="Control.Protocol.ClientServer.html#700" class="Function"
+      >server</a
+      ><a name="740"
+      > </a
+      ><a name="741" href="Data.Nat.html#742" class="InductiveConstructor"
+      >zero</a
+      ><a name="745"
+      >      </a
+      ><a name="751" class="Symbol"
+      >=</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >_</a
+      ><a name="754"
+      >
+      </a
+      ><a name="761" href="Control.Protocol.ClientServer.html#700" class="Function"
+      >server</a
+      ><a name="767"
+      > </a
+      ><a name="768" class="Symbol"
+      >(</a
+      ><a name="769" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="772"
+      > </a
+      ><a name="773" href="Control.Protocol.ClientServer.html#773" class="Bound"
+      >n</a
+      ><a name="774" class="Symbol"
+      >)</a
+      ><a name="775"
+      > </a
+      ><a name="776" href="Control.Protocol.ClientServer.html#776" class="Bound"
+      >q</a
+      ><a name="777"
+      > </a
+      ><a name="778" class="Symbol"
+      >=</a
+      ><a name="779"
+      > </a
+      ><a name="780" href="Control.Protocol.ClientServer.html#666" class="Bound"
+      >serve</a
+      ><a name="785"
+      > </a
+      ><a name="786" href="Control.Protocol.ClientServer.html#776" class="Bound"
+      >q</a
+      ><a name="787"
+      > </a
+      ><a name="788" href="Data.Product.html#537" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="789"
+      > </a
+      ><a name="790" href="Control.Protocol.ClientServer.html#700" class="Function"
+      >server</a
+      ><a name="796"
+      > </a
+      ><a name="797" href="Control.Protocol.ClientServer.html#773" class="Bound"
+      >n</a
+      ><a name="798"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

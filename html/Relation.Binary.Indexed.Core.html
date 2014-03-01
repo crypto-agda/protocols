@@ -1,0 +1,1547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Relation.Binary.Indexed.Core</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Indexed binary relations</a
+      ><a name="161"
+      >
+</a
+      ><a name="162" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="234"
+      >
+
+</a
+      ><a name="236" class="Comment"
+      >-- This file contains some core definitions which are reexported by</a
+      ><a name="303"
+      >
+</a
+      ><a name="304" class="Comment"
+      >-- Relation.Binary.Indexed.</a
+      ><a name="331"
+      >
+
+</a
+      ><a name="333" class="Keyword"
+      >module</a
+      ><a name="339"
+      > </a
+      ><a name="340" href="Relation.Binary.Indexed.Core.html#1" class="Module"
+      >Relation.Binary.Indexed.Core</a
+      ><a name="368"
+      > </a
+      ><a name="369" class="Keyword"
+      >where</a
+      ><a name="374"
+      >
+
+</a
+      ><a name="376" class="Keyword"
+      >open</a
+      ><a name="380"
+      > </a
+      ><a name="381" class="Keyword"
+      >import</a
+      ><a name="387"
+      > </a
+      ><a name="388" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="396"
+      >
+</a
+      ><a name="397" class="Keyword"
+      >open</a
+      ><a name="401"
+      > </a
+      ><a name="402" class="Keyword"
+      >import</a
+      ><a name="408"
+      > </a
+      ><a name="409" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="414"
+      >
+</a
+      ><a name="415" class="Keyword"
+      >import</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Relation.Binary.Core.html#1" class="Module"
+      >Relation.Binary.Core</a
+      ><a name="442"
+      > </a
+      ><a name="443" class="Symbol"
+      >as</a
+      ><a name="445"
+      > </a
+      ><a name="446" class="Module"
+      >B</a
+      ><a name="447"
+      >
+</a
+      ><a name="448" class="Keyword"
+      >import</a
+      ><a name="454"
+      > </a
+      ><a name="455" href="Relation.Binary.Core.html#1" class="Module"
+      >Relation.Binary.Core</a
+      ><a name="475"
+      > </a
+      ><a name="476" class="Symbol"
+      >as</a
+      ><a name="478"
+      > </a
+      ><a name="479" class="Module"
+      >P</a
+      ><a name="480"
+      >
+
+</a
+      ><a name="482" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="554"
+      >
+</a
+      ><a name="555" class="Comment"
+      >-- Indexed binary relations</a
+      ><a name="582"
+      >
+
+</a
+      ><a name="584" class="Comment"
+      >-- Heterogeneous.</a
+      ><a name="601"
+      >
+
+</a
+      ><a name="603" href="Relation.Binary.Indexed.Core.html#603" class="Function"
+      >REL</a
+      ><a name="606"
+      > </a
+      ><a name="607" class="Symbol"
+      >:</a
+      ><a name="608"
+      > </a
+      ><a name="609" class="Symbol"
+      >&#8704;</a
+      ><a name="610"
+      > </a
+      ><a name="611" class="Symbol"
+      >{</a
+      ><a name="612" href="Relation.Binary.Indexed.Core.html#612" class="Bound"
+      >i&#8321;</a
+      ><a name="614"
+      > </a
+      ><a name="615" href="Relation.Binary.Indexed.Core.html#615" class="Bound"
+      >i&#8322;</a
+      ><a name="617"
+      > </a
+      ><a name="618" href="Relation.Binary.Indexed.Core.html#618" class="Bound"
+      >a&#8321;</a
+      ><a name="620"
+      > </a
+      ><a name="621" href="Relation.Binary.Indexed.Core.html#621" class="Bound"
+      >a&#8322;</a
+      ><a name="623" class="Symbol"
+      >}</a
+      ><a name="624"
+      > </a
+      ><a name="625" class="Symbol"
+      >{</a
+      ><a name="626" href="Relation.Binary.Indexed.Core.html#626" class="Bound"
+      >I&#8321;</a
+      ><a name="628"
+      > </a
+      ><a name="629" class="Symbol"
+      >:</a
+      ><a name="630"
+      > </a
+      ><a name="631" class="PrimitiveType"
+      >Set</a
+      ><a name="634"
+      > </a
+      ><a name="635" href="Relation.Binary.Indexed.Core.html#612" class="Bound"
+      >i&#8321;</a
+      ><a name="637" class="Symbol"
+      >}</a
+      ><a name="638"
+      > </a
+      ><a name="639" class="Symbol"
+      >{</a
+      ><a name="640" href="Relation.Binary.Indexed.Core.html#640" class="Bound"
+      >I&#8322;</a
+      ><a name="642"
+      > </a
+      ><a name="643" class="Symbol"
+      >:</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="PrimitiveType"
+      >Set</a
+      ><a name="648"
+      > </a
+      ><a name="649" href="Relation.Binary.Indexed.Core.html#615" class="Bound"
+      >i&#8322;</a
+      ><a name="651" class="Symbol"
+      >}</a
+      ><a name="652"
+      > </a
+      ><a name="653" class="Symbol"
+      >&#8594;</a
+      ><a name="654"
+      >
+      </a
+      ><a name="661" class="Symbol"
+      >(</a
+      ><a name="662" href="Relation.Binary.Indexed.Core.html#626" class="Bound"
+      >I&#8321;</a
+      ><a name="664"
+      > </a
+      ><a name="665" class="Symbol"
+      >&#8594;</a
+      ><a name="666"
+      > </a
+      ><a name="667" class="PrimitiveType"
+      >Set</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Relation.Binary.Indexed.Core.html#618" class="Bound"
+      >a&#8321;</a
+      ><a name="673" class="Symbol"
+      >)</a
+      ><a name="674"
+      > </a
+      ><a name="675" class="Symbol"
+      >&#8594;</a
+      ><a name="676"
+      > </a
+      ><a name="677" class="Symbol"
+      >(</a
+      ><a name="678" href="Relation.Binary.Indexed.Core.html#640" class="Bound"
+      >I&#8322;</a
+      ><a name="680"
+      > </a
+      ><a name="681" class="Symbol"
+      >&#8594;</a
+      ><a name="682"
+      > </a
+      ><a name="683" class="PrimitiveType"
+      >Set</a
+      ><a name="686"
+      > </a
+      ><a name="687" href="Relation.Binary.Indexed.Core.html#621" class="Bound"
+      >a&#8322;</a
+      ><a name="689" class="Symbol"
+      >)</a
+      ><a name="690"
+      > </a
+      ><a name="691" class="Symbol"
+      >&#8594;</a
+      ><a name="692"
+      > </a
+      ><a name="693" class="Symbol"
+      >(</a
+      ><a name="694" href="Relation.Binary.Indexed.Core.html#694" class="Bound"
+      >&#8467;</a
+      ><a name="695"
+      > </a
+      ><a name="696" class="Symbol"
+      >:</a
+      ><a name="697"
+      > </a
+      ><a name="698" href="Agda.Primitive.html#379" class="Postulate"
+      >Level</a
+      ><a name="703" class="Symbol"
+      >)</a
+      ><a name="704"
+      > </a
+      ><a name="705" class="Symbol"
+      >&#8594;</a
+      ><a name="706"
+      > </a
+      ><a name="707" class="PrimitiveType"
+      >Set</a
+      ><a name="710"
+      > </a
+      ><a name="711" class="Symbol"
+      >_</a
+      ><a name="712"
+      >
+</a
+      ><a name="713" href="Relation.Binary.Indexed.Core.html#603" class="Function"
+      >REL</a
+      ><a name="716"
+      > </a
+      ><a name="717" href="Relation.Binary.Indexed.Core.html#717" class="Bound"
+      >A&#8321;</a
+      ><a name="719"
+      > </a
+      ><a name="720" href="Relation.Binary.Indexed.Core.html#720" class="Bound"
+      >A&#8322;</a
+      ><a name="722"
+      > </a
+      ><a name="723" href="Relation.Binary.Indexed.Core.html#723" class="Bound"
+      >&#8467;</a
+      ><a name="724"
+      > </a
+      ><a name="725" class="Symbol"
+      >=</a
+      ><a name="726"
+      > </a
+      ><a name="727" class="Symbol"
+      >&#8704;</a
+      ><a name="728"
+      > </a
+      ><a name="729" class="Symbol"
+      >{</a
+      ><a name="730" href="Relation.Binary.Indexed.Core.html#730" class="Bound"
+      >i&#8321;</a
+      ><a name="732"
+      > </a
+      ><a name="733" href="Relation.Binary.Indexed.Core.html#733" class="Bound"
+      >i&#8322;</a
+      ><a name="735" class="Symbol"
+      >}</a
+      ><a name="736"
+      > </a
+      ><a name="737" class="Symbol"
+      >&#8594;</a
+      ><a name="738"
+      > </a
+      ><a name="739" href="Relation.Binary.Indexed.Core.html#717" class="Bound"
+      >A&#8321;</a
+      ><a name="741"
+      > </a
+      ><a name="742" href="Relation.Binary.Indexed.Core.html#730" class="Bound"
+      >i&#8321;</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Symbol"
+      >&#8594;</a
+      ><a name="746"
+      > </a
+      ><a name="747" href="Relation.Binary.Indexed.Core.html#720" class="Bound"
+      >A&#8322;</a
+      ><a name="749"
+      > </a
+      ><a name="750" href="Relation.Binary.Indexed.Core.html#733" class="Bound"
+      >i&#8322;</a
+      ><a name="752"
+      > </a
+      ><a name="753" class="Symbol"
+      >&#8594;</a
+      ><a name="754"
+      > </a
+      ><a name="755" class="PrimitiveType"
+      >Set</a
+      ><a name="758"
+      > </a
+      ><a name="759" href="Relation.Binary.Indexed.Core.html#723" class="Bound"
+      >&#8467;</a
+      ><a name="760"
+      >
+
+</a
+      ><a name="762" class="Comment"
+      >-- Homogeneous.</a
+      ><a name="777"
+      >
+
+</a
+      ><a name="779" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="782"
+      > </a
+      ><a name="783" class="Symbol"
+      >:</a
+      ><a name="784"
+      > </a
+      ><a name="785" class="Symbol"
+      >&#8704;</a
+      ><a name="786"
+      > </a
+      ><a name="787" class="Symbol"
+      >{</a
+      ><a name="788" href="Relation.Binary.Indexed.Core.html#788" class="Bound"
+      >i</a
+      ><a name="789"
+      > </a
+      ><a name="790" href="Relation.Binary.Indexed.Core.html#790" class="Bound"
+      >a</a
+      ><a name="791" class="Symbol"
+      >}</a
+      ><a name="792"
+      > </a
+      ><a name="793" class="Symbol"
+      >{</a
+      ><a name="794" href="Relation.Binary.Indexed.Core.html#794" class="Bound"
+      >I</a
+      ><a name="795"
+      > </a
+      ><a name="796" class="Symbol"
+      >:</a
+      ><a name="797"
+      > </a
+      ><a name="798" class="PrimitiveType"
+      >Set</a
+      ><a name="801"
+      > </a
+      ><a name="802" href="Relation.Binary.Indexed.Core.html#788" class="Bound"
+      >i</a
+      ><a name="803" class="Symbol"
+      >}</a
+      ><a name="804"
+      > </a
+      ><a name="805" class="Symbol"
+      >&#8594;</a
+      ><a name="806"
+      > </a
+      ><a name="807" class="Symbol"
+      >(</a
+      ><a name="808" href="Relation.Binary.Indexed.Core.html#794" class="Bound"
+      >I</a
+      ><a name="809"
+      > </a
+      ><a name="810" class="Symbol"
+      >&#8594;</a
+      ><a name="811"
+      > </a
+      ><a name="812" class="PrimitiveType"
+      >Set</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Relation.Binary.Indexed.Core.html#790" class="Bound"
+      >a</a
+      ><a name="817" class="Symbol"
+      >)</a
+      ><a name="818"
+      > </a
+      ><a name="819" class="Symbol"
+      >&#8594;</a
+      ><a name="820"
+      > </a
+      ><a name="821" class="Symbol"
+      >(</a
+      ><a name="822" href="Relation.Binary.Indexed.Core.html#822" class="Bound"
+      >&#8467;</a
+      ><a name="823"
+      > </a
+      ><a name="824" class="Symbol"
+      >:</a
+      ><a name="825"
+      > </a
+      ><a name="826" href="Agda.Primitive.html#379" class="Postulate"
+      >Level</a
+      ><a name="831" class="Symbol"
+      >)</a
+      ><a name="832"
+      > </a
+      ><a name="833" class="Symbol"
+      >&#8594;</a
+      ><a name="834"
+      > </a
+      ><a name="835" class="PrimitiveType"
+      >Set</a
+      ><a name="838"
+      > </a
+      ><a name="839" class="Symbol"
+      >_</a
+      ><a name="840"
+      >
+</a
+      ><a name="841" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="844"
+      > </a
+      ><a name="845" href="Relation.Binary.Indexed.Core.html#845" class="Bound"
+      >A</a
+      ><a name="846"
+      > </a
+      ><a name="847" href="Relation.Binary.Indexed.Core.html#847" class="Bound"
+      >&#8467;</a
+      ><a name="848"
+      > </a
+      ><a name="849" class="Symbol"
+      >=</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Relation.Binary.Indexed.Core.html#603" class="Function"
+      >REL</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="Relation.Binary.Indexed.Core.html#845" class="Bound"
+      >A</a
+      ><a name="856"
+      > </a
+      ><a name="857" href="Relation.Binary.Indexed.Core.html#845" class="Bound"
+      >A</a
+      ><a name="858"
+      > </a
+      ><a name="859" href="Relation.Binary.Indexed.Core.html#847" class="Bound"
+      >&#8467;</a
+      ><a name="860"
+      >
+
+</a
+      ><a name="862" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="934"
+      >
+</a
+      ><a name="935" class="Comment"
+      >-- Simple properties of indexed binary relations</a
+      ><a name="983"
+      >
+
+</a
+      ><a name="985" class="Comment"
+      >-- Reflexivity.</a
+      ><a name="1000"
+      >
+
+</a
+      ><a name="1002" href="Relation.Binary.Indexed.Core.html#1002" class="Function"
+      >Reflexive</a
+      ><a name="1011"
+      > </a
+      ><a name="1012" class="Symbol"
+      >:</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" class="Symbol"
+      >&#8704;</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" class="Symbol"
+      >{</a
+      ><a name="1017" href="Relation.Binary.Indexed.Core.html#1017" class="Bound"
+      >i</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="Relation.Binary.Indexed.Core.html#1019" class="Bound"
+      >a</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Relation.Binary.Indexed.Core.html#1021" class="Bound"
+      >&#8467;</a
+      ><a name="1022" class="Symbol"
+      >}</a
+      ><a name="1023"
+      > </a
+      ><a name="1024" class="Symbol"
+      >{</a
+      ><a name="1025" href="Relation.Binary.Indexed.Core.html#1025" class="Bound"
+      >I</a
+      ><a name="1026"
+      > </a
+      ><a name="1027" class="Symbol"
+      >:</a
+      ><a name="1028"
+      > </a
+      ><a name="1029" class="PrimitiveType"
+      >Set</a
+      ><a name="1032"
+      > </a
+      ><a name="1033" href="Relation.Binary.Indexed.Core.html#1017" class="Bound"
+      >i</a
+      ><a name="1034" class="Symbol"
+      >}</a
+      ><a name="1035"
+      > </a
+      ><a name="1036" class="Symbol"
+      >(</a
+      ><a name="1037" href="Relation.Binary.Indexed.Core.html#1037" class="Bound"
+      >A</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" class="Symbol"
+      >:</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Relation.Binary.Indexed.Core.html#1025" class="Bound"
+      >I</a
+      ><a name="1042"
+      > </a
+      ><a name="1043" class="Symbol"
+      >&#8594;</a
+      ><a name="1044"
+      > </a
+      ><a name="1045" class="PrimitiveType"
+      >Set</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" href="Relation.Binary.Indexed.Core.html#1019" class="Bound"
+      >a</a
+      ><a name="1050" class="Symbol"
+      >)</a
+      ><a name="1051"
+      > </a
+      ><a name="1052" class="Symbol"
+      >&#8594;</a
+      ><a name="1053"
+      > </a
+      ><a name="1054" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="1057"
+      > </a
+      ><a name="1058" href="Relation.Binary.Indexed.Core.html#1037" class="Bound"
+      >A</a
+      ><a name="1059"
+      > </a
+      ><a name="1060" href="Relation.Binary.Indexed.Core.html#1021" class="Bound"
+      >&#8467;</a
+      ><a name="1061"
+      > </a
+      ><a name="1062" class="Symbol"
+      >&#8594;</a
+      ><a name="1063"
+      > </a
+      ><a name="1064" class="PrimitiveType"
+      >Set</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" class="Symbol"
+      >_</a
+      ><a name="1069"
+      >
+</a
+      ><a name="1070" href="Relation.Binary.Indexed.Core.html#1002" class="Function"
+      >Reflexive</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" class="Symbol"
+      >_</a
+      ><a name="1081"
+      > </a
+      ><a name="1082" href="Relation.Binary.Indexed.Core.html#1082" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" class="Symbol"
+      >=</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" class="Symbol"
+      >&#8704;</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" class="Symbol"
+      >{</a
+      ><a name="1091" href="Relation.Binary.Indexed.Core.html#1091" class="Bound"
+      >i</a
+      ><a name="1092" class="Symbol"
+      >}</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" class="Symbol"
+      >&#8594;</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" href="Relation.Binary.Core.html#1919" class="Function"
+      >B.Reflexive</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" class="Symbol"
+      >(</a
+      ><a name="1109" href="Relation.Binary.Indexed.Core.html#1082" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1112"
+      > </a
+      ><a name="1113" class="Symbol"
+      >{</a
+      ><a name="1114" href="Relation.Binary.Indexed.Core.html#1091" class="Bound"
+      >i</a
+      ><a name="1115" class="Symbol"
+      >})</a
+      ><a name="1117"
+      >
+
+</a
+      ><a name="1119" class="Comment"
+      >-- Symmetry.</a
+      ><a name="1131"
+      >
+
+</a
+      ><a name="1133" href="Relation.Binary.Indexed.Core.html#1133" class="Function"
+      >Symmetric</a
+      ><a name="1142"
+      > </a
+      ><a name="1143" class="Symbol"
+      >:</a
+      ><a name="1144"
+      > </a
+      ><a name="1145" class="Symbol"
+      >&#8704;</a
+      ><a name="1146"
+      > </a
+      ><a name="1147" class="Symbol"
+      >{</a
+      ><a name="1148" href="Relation.Binary.Indexed.Core.html#1148" class="Bound"
+      >i</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" href="Relation.Binary.Indexed.Core.html#1150" class="Bound"
+      >a</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" href="Relation.Binary.Indexed.Core.html#1152" class="Bound"
+      >&#8467;</a
+      ><a name="1153" class="Symbol"
+      >}</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" class="Symbol"
+      >{</a
+      ><a name="1156" href="Relation.Binary.Indexed.Core.html#1156" class="Bound"
+      >I</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" class="Symbol"
+      >:</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" class="PrimitiveType"
+      >Set</a
+      ><a name="1163"
+      > </a
+      ><a name="1164" href="Relation.Binary.Indexed.Core.html#1148" class="Bound"
+      >i</a
+      ><a name="1165" class="Symbol"
+      >}</a
+      ><a name="1166"
+      > </a
+      ><a name="1167" class="Symbol"
+      >(</a
+      ><a name="1168" href="Relation.Binary.Indexed.Core.html#1168" class="Bound"
+      >A</a
+      ><a name="1169"
+      > </a
+      ><a name="1170" class="Symbol"
+      >:</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" href="Relation.Binary.Indexed.Core.html#1156" class="Bound"
+      >I</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" class="Symbol"
+      >&#8594;</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" class="PrimitiveType"
+      >Set</a
+      ><a name="1179"
+      > </a
+      ><a name="1180" href="Relation.Binary.Indexed.Core.html#1150" class="Bound"
+      >a</a
+      ><a name="1181" class="Symbol"
+      >)</a
+      ><a name="1182"
+      > </a
+      ><a name="1183" class="Symbol"
+      >&#8594;</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Relation.Binary.Indexed.Core.html#1168" class="Bound"
+      >A</a
+      ><a name="1190"
+      > </a
+      ><a name="1191" href="Relation.Binary.Indexed.Core.html#1152" class="Bound"
+      >&#8467;</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" class="Symbol"
+      >&#8594;</a
+      ><a name="1194"
+      > </a
+      ><a name="1195" class="PrimitiveType"
+      >Set</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" class="Symbol"
+      >_</a
+      ><a name="1200"
+      >
+</a
+      ><a name="1201" href="Relation.Binary.Indexed.Core.html#1133" class="Function"
+      >Symmetric</a
+      ><a name="1210"
+      > </a
+      ><a name="1211" class="Symbol"
+      >_</a
+      ><a name="1212"
+      > </a
+      ><a name="1213" href="Relation.Binary.Indexed.Core.html#1213" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1216"
+      > </a
+      ><a name="1217" class="Symbol"
+      >=</a
+      ><a name="1218"
+      > </a
+      ><a name="1219" class="Symbol"
+      >&#8704;</a
+      ><a name="1220"
+      > </a
+      ><a name="1221" class="Symbol"
+      >{</a
+      ><a name="1222" href="Relation.Binary.Indexed.Core.html#1222" class="Bound"
+      >i</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="Relation.Binary.Indexed.Core.html#1224" class="Bound"
+      >j</a
+      ><a name="1225" class="Symbol"
+      >}</a
+      ><a name="1226"
+      > </a
+      ><a name="1227" class="Symbol"
+      >&#8594;</a
+      ><a name="1228"
+      > </a
+      ><a name="1229" href="Relation.Binary.Core.html#2236" class="Function"
+      >B.Sym</a
+      ><a name="1234"
+      > </a
+      ><a name="1235" class="Symbol"
+      >(</a
+      ><a name="1236" href="Relation.Binary.Indexed.Core.html#1213" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" class="Symbol"
+      >{</a
+      ><a name="1241" href="Relation.Binary.Indexed.Core.html#1222" class="Bound"
+      >i</a
+      ><a name="1242" class="Symbol"
+      >}</a
+      ><a name="1243"
+      > </a
+      ><a name="1244" class="Symbol"
+      >{</a
+      ><a name="1245" href="Relation.Binary.Indexed.Core.html#1224" class="Bound"
+      >j</a
+      ><a name="1246" class="Symbol"
+      >})</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="Relation.Binary.Indexed.Core.html#1213" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1252"
+      >
+
+</a
+      ><a name="1254" class="Comment"
+      >-- Transitivity.</a
+      ><a name="1270"
+      >
+
+</a
+      ><a name="1272" href="Relation.Binary.Indexed.Core.html#1272" class="Function"
+      >Transitive</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" class="Symbol"
+      >:</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" class="Symbol"
+      >&#8704;</a
+      ><a name="1286"
+      > </a
+      ><a name="1287" class="Symbol"
+      >{</a
+      ><a name="1288" href="Relation.Binary.Indexed.Core.html#1288" class="Bound"
+      >i</a
+      ><a name="1289"
+      > </a
+      ><a name="1290" href="Relation.Binary.Indexed.Core.html#1290" class="Bound"
+      >a</a
+      ><a name="1291"
+      > </a
+      ><a name="1292" href="Relation.Binary.Indexed.Core.html#1292" class="Bound"
+      >&#8467;</a
+      ><a name="1293" class="Symbol"
+      >}</a
+      ><a name="1294"
+      > </a
+      ><a name="1295" class="Symbol"
+      >{</a
+      ><a name="1296" href="Relation.Binary.Indexed.Core.html#1296" class="Bound"
+      >I</a
+      ><a name="1297"
+      > </a
+      ><a name="1298" class="Symbol"
+      >:</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" class="PrimitiveType"
+      >Set</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" href="Relation.Binary.Indexed.Core.html#1288" class="Bound"
+      >i</a
+      ><a name="1305" class="Symbol"
+      >}</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" class="Symbol"
+      >(</a
+      ><a name="1308" href="Relation.Binary.Indexed.Core.html#1308" class="Bound"
+      >A</a
+      ><a name="1309"
+      > </a
+      ><a name="1310" class="Symbol"
+      >:</a
+      ><a name="1311"
+      > </a
+      ><a name="1312" href="Relation.Binary.Indexed.Core.html#1296" class="Bound"
+      >I</a
+      ><a name="1313"
+      > </a
+      ><a name="1314" class="Symbol"
+      >&#8594;</a
+      ><a name="1315"
+      > </a
+      ><a name="1316" class="PrimitiveType"
+      >Set</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" href="Relation.Binary.Indexed.Core.html#1290" class="Bound"
+      >a</a
+      ><a name="1321" class="Symbol"
+      >)</a
+      ><a name="1322"
+      > </a
+      ><a name="1323" class="Symbol"
+      >&#8594;</a
+      ><a name="1324"
+      > </a
+      ><a name="1325" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" href="Relation.Binary.Indexed.Core.html#1308" class="Bound"
+      >A</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="Relation.Binary.Indexed.Core.html#1292" class="Bound"
+      >&#8467;</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" class="Symbol"
+      >&#8594;</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" class="PrimitiveType"
+      >Set</a
+      ><a name="1338"
+      > </a
+      ><a name="1339" class="Symbol"
+      >_</a
+      ><a name="1340"
+      >
+</a
+      ><a name="1341" href="Relation.Binary.Indexed.Core.html#1272" class="Function"
+      >Transitive</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" class="Symbol"
+      >_</a
+      ><a name="1353"
+      > </a
+      ><a name="1354" href="Relation.Binary.Indexed.Core.html#1354" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" class="Symbol"
+      >=</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" class="Symbol"
+      >&#8704;</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" class="Symbol"
+      >{</a
+      ><a name="1363" href="Relation.Binary.Indexed.Core.html#1363" class="Bound"
+      >i</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" href="Relation.Binary.Indexed.Core.html#1365" class="Bound"
+      >j</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Relation.Binary.Indexed.Core.html#1367" class="Bound"
+      >k</a
+      ><a name="1368" class="Symbol"
+      >}</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" class="Symbol"
+      >&#8594;</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" href="Relation.Binary.Core.html#2451" class="Function"
+      >B.Trans</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" href="Relation.Binary.Indexed.Core.html#1354" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" class="Symbol"
+      >(</a
+      ><a name="1385" href="Relation.Binary.Indexed.Core.html#1354" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1388"
+      > </a
+      ><a name="1389" class="Symbol"
+      >{</a
+      ><a name="1390" href="Relation.Binary.Indexed.Core.html#1365" class="Bound"
+      >j</a
+      ><a name="1391" class="Symbol"
+      >})</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" class="Symbol"
+      >(</a
+      ><a name="1395" href="Relation.Binary.Indexed.Core.html#1354" class="Bound Operator"
+      >_&#8764;_</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" class="Symbol"
+      >{</a
+      ><a name="1400" href="Relation.Binary.Indexed.Core.html#1363" class="Bound"
+      >i</a
+      ><a name="1401" class="Symbol"
+      >}</a
+      ><a name="1402"
+      > </a
+      ><a name="1403" class="Symbol"
+      >{</a
+      ><a name="1404" href="Relation.Binary.Indexed.Core.html#1367" class="Bound"
+      >k</a
+      ><a name="1405" class="Symbol"
+      >})</a
+      ><a name="1407"
+      >
+
+</a
+      ><a name="1409" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="1481"
+      >
+</a
+      ><a name="1482" class="Comment"
+      >-- Setoids</a
+      ><a name="1492"
+      >
+
+</a
+      ><a name="1494" class="Keyword"
+      >record</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Relation.Binary.Indexed.Core.html#1501" class="Record"
+      >IsEquivalence</a
+      ><a name="1514"
+      > </a
+      ><a name="1515" class="Symbol"
+      >{</a
+      ><a name="1516" href="Relation.Binary.Indexed.Core.html#1516" class="Bound"
+      >i</a
+      ><a name="1517"
+      > </a
+      ><a name="1518" href="Relation.Binary.Indexed.Core.html#1518" class="Bound"
+      >a</a
+      ><a name="1519"
+      > </a
+      ><a name="1520" href="Relation.Binary.Indexed.Core.html#1520" class="Bound"
+      >&#8467;</a
+      ><a name="1521" class="Symbol"
+      >}</a
+      ><a name="1522"
+      > </a
+      ><a name="1523" class="Symbol"
+      >{</a
+      ><a name="1524" href="Relation.Binary.Indexed.Core.html#1524" class="Bound"
+      >I</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" class="Symbol"
+      >:</a
+      ><a name="1527"
+      > </a
+      ><a name="1528" class="PrimitiveType"
+      >Set</a
+      ><a name="1531"
+      > </a
+      ><a name="1532" href="Relation.Binary.Indexed.Core.html#1516" class="Bound"
+      >i</a
+      ><a name="1533" class="Symbol"
+      >}</a
+      ><a name="1534"
+      > </a
+      ><a name="1535" class="Symbol"
+      >(</a
+      ><a name="1536" href="Relation.Binary.Indexed.Core.html#1536" class="Bound"
+      >A</a
+      ><a name="1537"
+      > </a
+      ><a name="1538" class="Symbol"
+      >:</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" href="Relation.Binary.Indexed.Core.html#1524" class="Bound"
+      >I</a
+      ><a name="1541"
+      > </a
+      ><a name="1542" class="Symbol"
+      >&#8594;</a
+      ><a name="1543"
+      > </a
+      ><a name="1544" class="PrimitiveType"
+      >Set</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Relation.Binary.Indexed.Core.html#1518" class="Bound"
+      >a</a
+      ><a name="1549" class="Symbol"
+      >)</a
+      ><a name="1550"
+      >
+                     </a
+      ><a name="1572" class="Symbol"
+      >(</a
+      ><a name="1573" href="Relation.Binary.Indexed.Core.html#1573" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" class="Symbol"
+      >:</a
+      ><a name="1578"
+      > </a
+      ><a name="1579" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="1582"
+      > </a
+      ><a name="1583" href="Relation.Binary.Indexed.Core.html#1536" class="Bound"
+      >A</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Relation.Binary.Indexed.Core.html#1520" class="Bound"
+      >&#8467;</a
+      ><a name="1586" class="Symbol"
+      >)</a
+      ><a name="1587"
+      > </a
+      ><a name="1588" class="Symbol"
+      >:</a
+      ><a name="1589"
+      > </a
+      ><a name="1590" class="PrimitiveType"
+      >Set</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" class="Symbol"
+      >(</a
+      ><a name="1595" href="Relation.Binary.Indexed.Core.html#1516" class="Bound"
+      >i</a
+      ><a name="1596"
+      > </a
+      ><a name="1597" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1598"
+      > </a
+      ><a name="1599" href="Relation.Binary.Indexed.Core.html#1518" class="Bound"
+      >a</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1602"
+      > </a
+      ><a name="1603" href="Relation.Binary.Indexed.Core.html#1520" class="Bound"
+      >&#8467;</a
+      ><a name="1604" class="Symbol"
+      >)</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" class="Keyword"
+      >where</a
+      ><a name="1611"
+      >
+  </a
+      ><a name="1614" class="Keyword"
+      >field</a
+      ><a name="1619"
+      >
+    </a
+      ><a name="1624" href="Relation.Binary.Indexed.Core.html#1624" class="Field"
+      >refl</a
+      ><a name="1628"
+      >  </a
+      ><a name="1630" class="Symbol"
+      >:</a
+      ><a name="1631"
+      > </a
+      ><a name="1632" href="Relation.Binary.Indexed.Core.html#1002" class="Function"
+      >Reflexive</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" href="Relation.Binary.Indexed.Core.html#1536" class="Bound"
+      >A</a
+      ><a name="1643"
+      > </a
+      ><a name="1644" href="Relation.Binary.Indexed.Core.html#1573" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1647"
+      >
+    </a
+      ><a name="1652" href="Relation.Binary.Indexed.Core.html#1652" class="Field"
+      >sym</a
+      ><a name="1655"
+      >   </a
+      ><a name="1658" class="Symbol"
+      >:</a
+      ><a name="1659"
+      > </a
+      ><a name="1660" href="Relation.Binary.Indexed.Core.html#1133" class="Function"
+      >Symmetric</a
+      ><a name="1669"
+      > </a
+      ><a name="1670" href="Relation.Binary.Indexed.Core.html#1536" class="Bound"
+      >A</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" href="Relation.Binary.Indexed.Core.html#1573" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1675"
+      >
+    </a
+      ><a name="1680" href="Relation.Binary.Indexed.Core.html#1680" class="Field"
+      >trans</a
+      ><a name="1685"
+      > </a
+      ><a name="1686" class="Symbol"
+      >:</a
+      ><a name="1687"
+      > </a
+      ><a name="1688" href="Relation.Binary.Indexed.Core.html#1272" class="Function"
+      >Transitive</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" href="Relation.Binary.Indexed.Core.html#1536" class="Bound"
+      >A</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" href="Relation.Binary.Indexed.Core.html#1573" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1704"
+      >
+
+  </a
+      ><a name="1708" href="Relation.Binary.Indexed.Core.html#1708" class="Function"
+      >reflexive</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" class="Symbol"
+      >:</a
+      ><a name="1719"
+      > </a
+      ><a name="1720" class="Symbol"
+      >&#8704;</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" class="Symbol"
+      >{</a
+      ><a name="1723" href="Relation.Binary.Indexed.Core.html#1723" class="Bound"
+      >i</a
+      ><a name="1724" class="Symbol"
+      >}</a
+      ><a name="1725"
+      > </a
+      ><a name="1726" class="Symbol"
+      >&#8594;</a
+      ><a name="1727"
+      > </a
+      ><a name="1728" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >P._&#8801;_</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" href="Function.html#1960" class="Function Operator"
+      >&#10216;</a
+      ><a name="1735"
+      > </a
+      ><a name="1736" href="Relation.Binary.Core.html#1053" class="Function Operator"
+      >B._&#8658;_</a
+      ><a name="1741"
+      > </a
+      ><a name="1742" href="Function.html#1960" class="Function Operator"
+      >&#10217;</a
+      ><a name="1743"
+      > </a
+      ><a name="1744" href="Relation.Binary.Indexed.Core.html#1573" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1747"
+      > </a
+      ><a name="1748" class="Symbol"
+      >{</a
+      ><a name="1749" href="Relation.Binary.Indexed.Core.html#1723" class="Bound"
+      >i</a
+      ><a name="1750" class="Symbol"
+      >}</a
+      ><a name="1751"
+      >
+  </a
+      ><a name="1754" href="Relation.Binary.Indexed.Core.html#1708" class="Function"
+      >reflexive</a
+      ><a name="1763"
+      > </a
+      ><a name="1764" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >P.refl</a
+      ><a name="1770"
+      > </a
+      ><a name="1771" class="Symbol"
+      >=</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="Relation.Binary.Indexed.Core.html#1624" class="Field"
+      >refl</a
+      ><a name="1777"
+      >
+
+</a
+      ><a name="1779" class="Keyword"
+      >record</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" href="Relation.Binary.Indexed.Core.html#1786" class="Record"
+      >Setoid</a
+      ><a name="1792"
+      > </a
+      ><a name="1793" class="Symbol"
+      >{</a
+      ><a name="1794" href="Relation.Binary.Indexed.Core.html#1794" class="Bound"
+      >i</a
+      ><a name="1795" class="Symbol"
+      >}</a
+      ><a name="1796"
+      > </a
+      ><a name="1797" class="Symbol"
+      >(</a
+      ><a name="1798" href="Relation.Binary.Indexed.Core.html#1798" class="Bound"
+      >I</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" class="Symbol"
+      >:</a
+      ><a name="1801"
+      > </a
+      ><a name="1802" class="PrimitiveType"
+      >Set</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Relation.Binary.Indexed.Core.html#1794" class="Bound"
+      >i</a
+      ><a name="1807" class="Symbol"
+      >)</a
+      ><a name="1808"
+      > </a
+      ><a name="1809" href="Relation.Binary.Indexed.Core.html#1809" class="Bound"
+      >c</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" href="Relation.Binary.Indexed.Core.html#1811" class="Bound"
+      >&#8467;</a
+      ><a name="1812"
+      > </a
+      ><a name="1813" class="Symbol"
+      >:</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" class="PrimitiveType"
+      >Set</a
+      ><a name="1818"
+      > </a
+      ><a name="1819" class="Symbol"
+      >(</a
+      ><a name="1820" href="Agda.Primitive.html#596" class="Primitive"
+      >suc</a
+      ><a name="1823"
+      > </a
+      ><a name="1824" class="Symbol"
+      >(</a
+      ><a name="1825" href="Relation.Binary.Indexed.Core.html#1794" class="Bound"
+      >i</a
+      ><a name="1826"
+      > </a
+      ><a name="1827" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1828"
+      > </a
+      ><a name="1829" href="Relation.Binary.Indexed.Core.html#1809" class="Bound"
+      >c</a
+      ><a name="1830"
+      > </a
+      ><a name="1831" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="1832"
+      > </a
+      ><a name="1833" href="Relation.Binary.Indexed.Core.html#1811" class="Bound"
+      >&#8467;</a
+      ><a name="1834" class="Symbol"
+      >))</a
+      ><a name="1836"
+      > </a
+      ><a name="1837" class="Keyword"
+      >where</a
+      ><a name="1842"
+      >
+  </a
+      ><a name="1845" class="Keyword"
+      >infix</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" class="Number"
+      >4</a
+      ><a name="1852"
+      > _&#8776;_
+  </a
+      ><a name="1859" class="Keyword"
+      >field</a
+      ><a name="1864"
+      >
+    </a
+      ><a name="1869" href="Relation.Binary.Indexed.Core.html#1869" class="Field"
+      >Carrier</a
+      ><a name="1876"
+      >       </a
+      ><a name="1883" class="Symbol"
+      >:</a
+      ><a name="1884"
+      > </a
+      ><a name="1885" href="Relation.Binary.Indexed.Core.html#1798" class="Bound"
+      >I</a
+      ><a name="1886"
+      > </a
+      ><a name="1887" class="Symbol"
+      >&#8594;</a
+      ><a name="1888"
+      > </a
+      ><a name="1889" class="PrimitiveType"
+      >Set</a
+      ><a name="1892"
+      > </a
+      ><a name="1893" href="Relation.Binary.Indexed.Core.html#1809" class="Bound"
+      >c</a
+      ><a name="1894"
+      >
+    </a
+      ><a name="1899" href="Relation.Binary.Indexed.Core.html#1899" class="Field Operator"
+      >_&#8776;_</a
+      ><a name="1902"
+      >           </a
+      ><a name="1913" class="Symbol"
+      >:</a
+      ><a name="1914"
+      > </a
+      ><a name="1915" href="Relation.Binary.Indexed.Core.html#779" class="Function"
+      >Rel</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" href="Relation.Binary.Indexed.Core.html#1869" class="Bound"
+      >Carrier</a
+      ><a name="1926"
+      > </a
+      ><a name="1927" href="Relation.Binary.Indexed.Core.html#1811" class="Bound"
+      >&#8467;</a
+      ><a name="1928"
+      >
+    </a
+      ><a name="1933" href="Relation.Binary.Indexed.Core.html#1933" class="Field"
+      >isEquivalence</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" class="Symbol"
+      >:</a
+      ><a name="1948"
+      > </a
+      ><a name="1949" href="Relation.Binary.Indexed.Core.html#1501" class="Record"
+      >IsEquivalence</a
+      ><a name="1962"
+      > </a
+      ><a name="1963" href="Relation.Binary.Indexed.Core.html#1869" class="Bound"
+      >Carrier</a
+      ><a name="1970"
+      > </a
+      ><a name="1971" href="Relation.Binary.Indexed.Core.html#1899" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="1974"
+      >
+
+  </a
+      ><a name="1978" class="Keyword"
+      >open</a
+      ><a name="1982"
+      > </a
+      ><a name="1983" href="Relation.Binary.Indexed.Core.html#1501" class="Module"
+      >IsEquivalence</a
+      ><a name="1996"
+      > </a
+      ><a name="1997" href="Relation.Binary.Indexed.Core.html#1933" class="Field"
+      >isEquivalence</a
+      ><a name="2010"
+      > </a
+      ><a name="2011" class="Keyword"
+      >public</a
+      ><a name="2017"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

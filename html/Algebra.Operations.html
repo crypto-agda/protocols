@@ -1,0 +1,3821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Algebra.Operations</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Some defined operations (multiplication by natural number and</a
+      ><a name="198"
+      >
+</a
+      ><a name="199" class="Comment"
+      >-- exponentiation)</a
+      ><a name="217"
+      >
+</a
+      ><a name="218" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="290"
+      >
+
+</a
+      ><a name="292" class="Keyword"
+      >open</a
+      ><a name="296"
+      > </a
+      ><a name="297" class="Keyword"
+      >import</a
+      ><a name="303"
+      > </a
+      ><a name="304" href="Algebra.html#1" class="Module"
+      >Algebra</a
+      ><a name="311"
+      >
+
+</a
+      ><a name="313" class="Keyword"
+      >module</a
+      ><a name="319"
+      > </a
+      ><a name="320" href="Algebra.Operations.html#1" class="Module"
+      >Algebra.Operations</a
+      ><a name="338"
+      > </a
+      ><a name="339" class="Symbol"
+      >{</a
+      ><a name="340" href="Algebra.Operations.html#340" class="Bound"
+      >s&#8321;</a
+      ><a name="342"
+      > </a
+      ><a name="343" href="Algebra.Operations.html#343" class="Bound"
+      >s&#8322;</a
+      ><a name="345" class="Symbol"
+      >}</a
+      ><a name="346"
+      > </a
+      ><a name="347" class="Symbol"
+      >(</a
+      ><a name="348" href="Algebra.Operations.html#348" class="Bound"
+      >S</a
+      ><a name="349"
+      > </a
+      ><a name="350" class="Symbol"
+      >:</a
+      ><a name="351"
+      > </a
+      ><a name="352" href="Algebra.html#5944" class="Record"
+      >Semiring</a
+      ><a name="360"
+      > </a
+      ><a name="361" href="Algebra.Operations.html#340" class="Bound"
+      >s&#8321;</a
+      ><a name="363"
+      > </a
+      ><a name="364" href="Algebra.Operations.html#343" class="Bound"
+      >s&#8322;</a
+      ><a name="366" class="Symbol"
+      >)</a
+      ><a name="367"
+      > </a
+      ><a name="368" class="Keyword"
+      >where</a
+      ><a name="373"
+      >
+
+</a
+      ><a name="375" class="Keyword"
+      >open</a
+      ><a name="379"
+      > </a
+      ><a name="380" href="Algebra.html#5944" class="Module"
+      >Semiring</a
+      ><a name="388"
+      > </a
+      ><a name="389" href="Algebra.Operations.html#348" class="Bound"
+      >S</a
+      ><a name="390"
+      > </a
+      ><a name="391" class="Keyword"
+      >renaming</a
+      ><a name="399"
+      > </a
+      ><a name="400" class="Symbol"
+      >(</a
+      ><a name="401"
+      >zero </a
+      ><a name="406" class="Symbol"
+      >to</a
+      ><a name="408"
+      > *-zero</a
+      ><a name="415" class="Symbol"
+      >)</a
+      ><a name="416"
+      >
+</a
+      ><a name="417" class="Keyword"
+      >open</a
+      ><a name="421"
+      > </a
+      ><a name="422" class="Keyword"
+      >import</a
+      ><a name="428"
+      > </a
+      ><a name="429" href="Data.Nat.html#1" class="Module"
+      >Data.Nat</a
+      ><a name="437"
+      >
+  </a
+      ><a name="440" class="Keyword"
+      >using</a
+      ><a name="445"
+      > </a
+      ><a name="446" class="Symbol"
+      >(</a
+      ><a name="447"
+      >zero</a
+      ><a name="451" class="Symbol"
+      >;</a
+      ><a name="452"
+      > suc</a
+      ><a name="456" class="Symbol"
+      >;</a
+      ><a name="457"
+      > &#8469;</a
+      ><a name="459" class="Symbol"
+      >)</a
+      ><a name="460"
+      > </a
+      ><a name="461" class="Keyword"
+      >renaming</a
+      ><a name="469"
+      > </a
+      ><a name="470" class="Symbol"
+      >(</a
+      ><a name="471"
+      >_+_ </a
+      ><a name="475" class="Symbol"
+      >to</a
+      ><a name="477"
+      > _&#8469;+_</a
+      ><a name="482" class="Symbol"
+      >;</a
+      ><a name="483"
+      > _*_ </a
+      ><a name="488" class="Symbol"
+      >to</a
+      ><a name="490"
+      > _&#8469;*_</a
+      ><a name="495" class="Symbol"
+      >)</a
+      ><a name="496"
+      >
+</a
+      ><a name="497" class="Keyword"
+      >open</a
+      ><a name="501"
+      > </a
+      ><a name="502" class="Keyword"
+      >import</a
+      ><a name="508"
+      > </a
+      ><a name="509" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="521"
+      > </a
+      ><a name="522" class="Keyword"
+      >using</a
+      ><a name="527"
+      > </a
+      ><a name="528" class="Symbol"
+      >(</a
+      ><a name="529" class="Keyword"
+      >module</a
+      ><a name="535"
+      > &#931;</a
+      ><a name="537" class="Symbol"
+      >)</a
+      ><a name="538"
+      >
+</a
+      ><a name="539" class="Keyword"
+      >open</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Keyword"
+      >import</a
+      ><a name="550"
+      > </a
+      ><a name="551" href="Function.html#1" class="Module"
+      >Function</a
+      ><a name="559"
+      >
+</a
+      ><a name="560" class="Keyword"
+      >open</a
+      ><a name="564"
+      > </a
+      ><a name="565" class="Keyword"
+      >import</a
+      ><a name="571"
+      > </a
+      ><a name="572" href="Relation.Binary.html#1" class="Module"
+      >Relation.Binary</a
+      ><a name="587"
+      >
+</a
+      ><a name="588" class="Keyword"
+      >open</a
+      ><a name="592"
+      > </a
+      ><a name="593" class="Keyword"
+      >import</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Relation.Binary.PropositionalEquality.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality</a
+      ><a name="637"
+      > </a
+      ><a name="638" class="Symbol"
+      >as</a
+      ><a name="640"
+      > </a
+      ><a name="641" class="Module"
+      >PropEq</a
+      ><a name="647"
+      > </a
+      ><a name="648" class="Keyword"
+      >using</a
+      ><a name="653"
+      > </a
+      ><a name="654" class="Symbol"
+      >(</a
+      ><a name="655"
+      >_&#8801;_</a
+      ><a name="658" class="Symbol"
+      >)</a
+      ><a name="659"
+      >
+</a
+      ><a name="660" class="Keyword"
+      >import</a
+      ><a name="666"
+      > </a
+      ><a name="667" href="Relation.Binary.EqReasoning.html#1" class="Module"
+      >Relation.Binary.EqReasoning</a
+      ><a name="694"
+      > </a
+      ><a name="695" class="Symbol"
+      >as</a
+      ><a name="697"
+      > </a
+      ><a name="698" class="Module"
+      >EqR</a
+      ><a name="701"
+      >
+</a
+      ><a name="702" class="Keyword"
+      >open</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Relation.Binary.EqReasoning.html#1" class="Module"
+      >EqR</a
+      ><a name="710"
+      > </a
+      ><a name="711" href="Algebra.html#873" class="Function"
+      >setoid</a
+      ><a name="717"
+      >
+
+</a
+      ><a name="719" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="791"
+      >
+</a
+      ><a name="792" class="Comment"
+      >-- Operations</a
+      ><a name="805"
+      >
+
+</a
+      ><a name="807" class="Comment"
+      >-- Multiplication by natural number.</a
+      ><a name="843"
+      >
+
+</a
+      ><a name="845" class="Keyword"
+      >infixr</a
+      ><a name="851"
+      > </a
+      ><a name="852" class="Number"
+      >7</a
+      ><a name="853"
+      > _&#215;_
+
+</a
+      ><a name="859" href="Algebra.Operations.html#859" class="Function Operator"
+      >_&#215;_</a
+      ><a name="862"
+      > </a
+      ><a name="863" class="Symbol"
+      >:</a
+      ><a name="864"
+      > </a
+      ><a name="865" href="Data.Nat.html#726" class="Datatype"
+      >&#8469;</a
+      ><a name="866"
+      > </a
+      ><a name="867" class="Symbol"
+      >&#8594;</a
+      ><a name="868"
+      > </a
+      ><a name="869" href="Algebra.html#6040" class="Function"
+      >Carrier</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="Symbol"
+      >&#8594;</a
+      ><a name="878"
+      > </a
+      ><a name="879" href="Algebra.html#6040" class="Function"
+      >Carrier</a
+      ><a name="886"
+      >
+</a
+      ><a name="887" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="888"
+      >     </a
+      ><a name="893" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="Algebra.Operations.html#895" class="Bound"
+      >x</a
+      ><a name="896"
+      > </a
+      ><a name="897" class="Symbol"
+      >=</a
+      ><a name="898"
+      > </a
+      ><a name="899" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="901"
+      >
+</a
+      ><a name="902" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="905"
+      > </a
+      ><a name="906" href="Algebra.Operations.html#906" class="Bound"
+      >n</a
+      ><a name="907"
+      > </a
+      ><a name="908" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="909"
+      > </a
+      ><a name="910" href="Algebra.Operations.html#910" class="Bound"
+      >x</a
+      ><a name="911"
+      > </a
+      ><a name="912" class="Symbol"
+      >=</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Algebra.Operations.html#910" class="Bound"
+      >x</a
+      ><a name="915"
+      > </a
+      ><a name="916" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="917"
+      > </a
+      ><a name="918" href="Algebra.Operations.html#906" class="Bound"
+      >n</a
+      ><a name="919"
+      > </a
+      ><a name="920" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Algebra.Operations.html#910" class="Bound"
+      >x</a
+      ><a name="923"
+      >
+
+</a
+      ><a name="925" class="Comment"
+      >-- A variant that includes a &quot;redundant&quot; case which ensures that 1&#160;&#215;&#160;y</a
+      ><a name="995"
+      >
+</a
+      ><a name="996" class="Comment"
+      >-- is definitionally equal to y.</a
+      ><a name="1028"
+      >
+
+</a
+      ><a name="1030" href="Algebra.Operations.html#1030" class="Function Operator"
+      >_&#215;&#8242;_</a
+      ><a name="1034"
+      > </a
+      ><a name="1035" class="Symbol"
+      >:</a
+      ><a name="1036"
+      > </a
+      ><a name="1037" href="Data.Nat.html#726" class="Datatype"
+      >&#8469;</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" class="Symbol"
+      >&#8594;</a
+      ><a name="1040"
+      > </a
+      ><a name="1041" href="Algebra.html#6040" class="Function"
+      >Carrier</a
+      ><a name="1048"
+      > </a
+      ><a name="1049" class="Symbol"
+      >&#8594;</a
+      ><a name="1050"
+      > </a
+      ><a name="1051" href="Algebra.html#6040" class="Function"
+      >Carrier</a
+      ><a name="1058"
+      >
+</a
+      ><a name="1059" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="1060"
+      >     </a
+      ><a name="1065" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1067"
+      > </a
+      ><a name="1068" href="Algebra.Operations.html#1068" class="Bound"
+      >x</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" class="Symbol"
+      >=</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="1074"
+      >
+</a
+      ><a name="1075" href="Data.Nat.html#753" class="InductiveConstructor"
+      >1</a
+      ><a name="1076"
+      >     </a
+      ><a name="1081" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1083"
+      > </a
+      ><a name="1084" href="Algebra.Operations.html#1084" class="Bound"
+      >x</a
+      ><a name="1085"
+      > </a
+      ><a name="1086" class="Symbol"
+      >=</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" href="Algebra.Operations.html#1084" class="Bound"
+      >x</a
+      ><a name="1089"
+      >
+</a
+      ><a name="1090" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Algebra.Operations.html#1094" class="Bound"
+      >n</a
+      ><a name="1095"
+      > </a
+      ><a name="1096" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1098"
+      > </a
+      ><a name="1099" href="Algebra.Operations.html#1099" class="Bound"
+      >x</a
+      ><a name="1100"
+      > </a
+      ><a name="1101" class="Symbol"
+      >=</a
+      ><a name="1102"
+      > </a
+      ><a name="1103" href="Algebra.Operations.html#1099" class="Bound"
+      >x</a
+      ><a name="1104"
+      > </a
+      ><a name="1105" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" href="Algebra.Operations.html#1094" class="Bound"
+      >n</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="Algebra.Operations.html#1099" class="Bound"
+      >x</a
+      ><a name="1113"
+      >
+
+</a
+      ><a name="1115" class="Comment"
+      >-- Exponentiation.</a
+      ><a name="1133"
+      >
+
+</a
+      ><a name="1135" class="Keyword"
+      >infixr</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" class="Number"
+      >8</a
+      ><a name="1143"
+      > _^_
+
+</a
+      ><a name="1149" href="Algebra.Operations.html#1149" class="Function Operator"
+      >_^_</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" class="Symbol"
+      >:</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" href="Algebra.html#6040" class="Function"
+      >Carrier</a
+      ><a name="1162"
+      > </a
+      ><a name="1163" class="Symbol"
+      >&#8594;</a
+      ><a name="1164"
+      > </a
+      ><a name="1165" href="Data.Nat.html#726" class="Datatype"
+      >&#8469;</a
+      ><a name="1166"
+      > </a
+      ><a name="1167" class="Symbol"
+      >&#8594;</a
+      ><a name="1168"
+      > </a
+      ><a name="1169" href="Algebra.html#6040" class="Function"
+      >Carrier</a
+      ><a name="1176"
+      >
+</a
+      ><a name="1177" href="Algebra.Operations.html#1177" class="Bound"
+      >x</a
+      ><a name="1178"
+      > </a
+      ><a name="1179" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="1180"
+      > </a
+      ><a name="1181" href="Data.Nat.html#742" class="InductiveConstructor"
+      >zero</a
+      ><a name="1185"
+      >  </a
+      ><a name="1187" class="Symbol"
+      >=</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="1191"
+      >
+</a
+      ><a name="1192" href="Algebra.Operations.html#1192" class="Bound"
+      >x</a
+      ><a name="1193"
+      > </a
+      ><a name="1194" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="1195"
+      > </a
+      ><a name="1196" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1199"
+      > </a
+      ><a name="1200" href="Algebra.Operations.html#1200" class="Bound"
+      >n</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" class="Symbol"
+      >=</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" href="Algebra.Operations.html#1192" class="Bound"
+      >x</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="1207"
+      > </a
+      ><a name="1208" href="Algebra.Operations.html#1192" class="Bound"
+      >x</a
+      ><a name="1209"
+      > </a
+      ><a name="1210" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" href="Algebra.Operations.html#1200" class="Bound"
+      >n</a
+      ><a name="1213"
+      >
+
+</a
+      ><a name="1215" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="1287"
+      >
+</a
+      ><a name="1288" class="Comment"
+      >-- Some properties</a
+      ><a name="1306"
+      >
+
+</a
+      ><a name="1308" class="Comment"
+      >-- Unfolding lemma for _&#215;&#8242;_.</a
+      ><a name="1336"
+      >
+
+</a
+      ><a name="1338" href="Algebra.Operations.html#1338" class="Function"
+      >1+&#215;&#8242;</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" class="Symbol"
+      >:</a
+      ><a name="1344"
+      > </a
+      ><a name="1345" class="Symbol"
+      >&#8704;</a
+      ><a name="1346"
+      > </a
+      ><a name="1347" href="Algebra.Operations.html#1347" class="Bound"
+      >n</a
+      ><a name="1348"
+      > </a
+      ><a name="1349" href="Algebra.Operations.html#1349" class="Bound"
+      >x</a
+      ><a name="1350"
+      > </a
+      ><a name="1351" class="Symbol"
+      >&#8594;</a
+      ><a name="1352"
+      > </a
+      ><a name="1353" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1356"
+      > </a
+      ><a name="1357" href="Algebra.Operations.html#1347" class="Bound"
+      >n</a
+      ><a name="1358"
+      > </a
+      ><a name="1359" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" href="Algebra.Operations.html#1349" class="Bound"
+      >x</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" href="Algebra.html#6063" class="Function Operator"
+      >&#8776;</a
+      ><a name="1365"
+      > </a
+      ><a name="1366" href="Algebra.Operations.html#1349" class="Bound"
+      >x</a
+      ><a name="1367"
+      > </a
+      ><a name="1368" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" href="Algebra.Operations.html#1347" class="Bound"
+      >n</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" href="Algebra.Operations.html#1349" class="Bound"
+      >x</a
+      ><a name="1376"
+      >
+</a
+      ><a name="1377" href="Algebra.Operations.html#1338" class="Function"
+      >1+&#215;&#8242;</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" href="Algebra.Operations.html#1384" class="Bound"
+      >x</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" class="Symbol"
+      >=</a
+      ><a name="1387"
+      > </a
+      ><a name="1388" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1393"
+      >
+  </a
+      ><a name="1396" href="Algebra.Operations.html#1384" class="Bound"
+      >x</a
+      ><a name="1397"
+      >       </a
+      ><a name="1404" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="1410"
+      > </a
+      ><a name="1411" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="1412"
+      > </a
+      ><a name="1413" href="Data.Product.html#567" class="Field"
+      >&#931;.proj&#8322;</a
+      ><a name="1420"
+      > </a
+      ><a name="1421" href="Algebra.Structures.html#1514" class="Function"
+      >+-identity</a
+      ><a name="1431"
+      > </a
+      ><a name="1432" href="Algebra.Operations.html#1384" class="Bound"
+      >x</a
+      ><a name="1433"
+      > </a
+      ><a name="1434" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1435"
+      >
+  </a
+      ><a name="1438" href="Algebra.Operations.html#1384" class="Bound"
+      >x</a
+      ><a name="1439"
+      > </a
+      ><a name="1440" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="1444"
+      >  </a
+      ><a name="1446" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1447"
+      >
+</a
+      ><a name="1448" href="Algebra.Operations.html#1338" class="Function"
+      >1+&#215;&#8242;</a
+      ><a name="1452"
+      > </a
+      ><a name="1453" class="Symbol"
+      >(</a
+      ><a name="1454" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="Algebra.Operations.html#1458" class="Bound"
+      >n</a
+      ><a name="1459" class="Symbol"
+      >)</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" href="Algebra.Operations.html#1461" class="Bound"
+      >x</a
+      ><a name="1462"
+      > </a
+      ><a name="1463" class="Symbol"
+      >=</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1470"
+      >
+  </a
+      ><a name="1473" href="Algebra.Operations.html#1461" class="Bound"
+      >x</a
+      ><a name="1474"
+      > </a
+      ><a name="1475" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" href="Algebra.Operations.html#1458" class="Bound"
+      >n</a
+      ><a name="1482"
+      > </a
+      ><a name="1483" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1485"
+      > </a
+      ><a name="1486" href="Algebra.Operations.html#1461" class="Bound"
+      >x</a
+      ><a name="1487"
+      >  </a
+      ><a name="1489" href="Relation.Binary.PreorderReasoning.html#1478" class="Function Operator"
+      >&#8801;&#10216;&#10217;</a
+      ><a name="1492"
+      >
+  </a
+      ><a name="1495" href="Algebra.Operations.html#1461" class="Bound"
+      >x</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1502"
+      > </a
+      ><a name="1503" href="Algebra.Operations.html#1458" class="Bound"
+      >n</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1507"
+      > </a
+      ><a name="1508" href="Algebra.Operations.html#1461" class="Bound"
+      >x</a
+      ><a name="1509"
+      >  </a
+      ><a name="1511" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1512"
+      >
+
+</a
+      ><a name="1514" class="Comment"
+      >-- _&#215;_ and _&#215;&#8242;_ are extensionally equal (up to the setoid</a
+      ><a name="1571"
+      >
+</a
+      ><a name="1572" class="Comment"
+      >-- equivalence).</a
+      ><a name="1588"
+      >
+
+</a
+      ><a name="1590" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="1594"
+      > </a
+      ><a name="1595" class="Symbol"
+      >:</a
+      ><a name="1596"
+      > </a
+      ><a name="1597" class="Symbol"
+      >&#8704;</a
+      ><a name="1598"
+      > </a
+      ><a name="1599" href="Algebra.Operations.html#1599" class="Bound"
+      >n</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" href="Algebra.Operations.html#1601" class="Bound"
+      >x</a
+      ><a name="1602"
+      > </a
+      ><a name="1603" class="Symbol"
+      >&#8594;</a
+      ><a name="1604"
+      > </a
+      ><a name="1605" href="Algebra.Operations.html#1599" class="Bound"
+      >n</a
+      ><a name="1606"
+      > </a
+      ><a name="1607" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1608"
+      > </a
+      ><a name="1609" href="Algebra.Operations.html#1601" class="Bound"
+      >x</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" href="Algebra.html#6063" class="Function Operator"
+      >&#8776;</a
+      ><a name="1612"
+      > </a
+      ><a name="1613" href="Algebra.Operations.html#1599" class="Bound"
+      >n</a
+      ><a name="1614"
+      > </a
+      ><a name="1615" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" href="Algebra.Operations.html#1601" class="Bound"
+      >x</a
+      ><a name="1619"
+      >
+</a
+      ><a name="1620" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="1624"
+      > </a
+      ><a name="1625" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="1626"
+      >       </a
+      ><a name="1633" href="Algebra.Operations.html#1633" class="Bound"
+      >x</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" class="Symbol"
+      >=</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="1645"
+      > </a
+      ><a name="1646" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1647"
+      >
+</a
+      ><a name="1648" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" class="Symbol"
+      >(</a
+      ><a name="1654" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1657"
+      > </a
+      ><a name="1658" href="Algebra.Operations.html#1658" class="Bound"
+      >n</a
+      ><a name="1659" class="Symbol"
+      >)</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" class="Symbol"
+      >=</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1670"
+      >
+  </a
+      ><a name="1673" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1674"
+      > </a
+      ><a name="1675" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" href="Algebra.Operations.html#1658" class="Bound"
+      >n</a
+      ><a name="1678"
+      > </a
+      ><a name="1679" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1680"
+      > </a
+      ><a name="1681" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1682"
+      >   </a
+      ><a name="1685" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1687"
+      > </a
+      ><a name="1688" href="Algebra.Structures.html#873" class="Function"
+      >+-cong</a
+      ><a name="1694"
+      > </a
+      ><a name="1695" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="1699"
+      > </a
+      ><a name="1700" class="Symbol"
+      >(</a
+      ><a name="1701" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" href="Algebra.Operations.html#1658" class="Bound"
+      >n</a
+      ><a name="1707"
+      > </a
+      ><a name="1708" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1709" class="Symbol"
+      >)</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1712"
+      >
+  </a
+      ><a name="1715" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1716"
+      > </a
+      ><a name="1717" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1718"
+      > </a
+      ><a name="1719" href="Algebra.Operations.html#1658" class="Bound"
+      >n</a
+      ><a name="1720"
+      > </a
+      ><a name="1721" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1725"
+      >  </a
+      ><a name="1727" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1729"
+      > </a
+      ><a name="1730" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="1733"
+      > </a
+      ><a name="1734" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="1735"
+      > </a
+      ><a name="1736" href="Algebra.Operations.html#1338" class="Function"
+      >1+&#215;&#8242;</a
+      ><a name="1740"
+      > </a
+      ><a name="1741" href="Algebra.Operations.html#1658" class="Bound"
+      >n</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1744"
+      > </a
+      ><a name="1745" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1746"
+      >
+  </a
+      ><a name="1749" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" href="Algebra.Operations.html#1658" class="Bound"
+      >n</a
+      ><a name="1754"
+      > </a
+      ><a name="1755" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Algebra.Operations.html#1661" class="Bound"
+      >x</a
+      ><a name="1759"
+      >  </a
+      ><a name="1761" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1762"
+      >
+
+</a
+      ><a name="1764" class="Comment"
+      >-- _&#215;_ is homomorphic with respect to _&#8469;+_/_+_.</a
+      ><a name="1811"
+      >
+
+</a
+      ><a name="1813" href="Algebra.Operations.html#1813" class="Function"
+      >&#215;-homo-+</a
+      ><a name="1821"
+      > </a
+      ><a name="1822" class="Symbol"
+      >:</a
+      ><a name="1823"
+      > </a
+      ><a name="1824" class="Symbol"
+      >&#8704;</a
+      ><a name="1825"
+      > </a
+      ><a name="1826" href="Algebra.Operations.html#1826" class="Bound"
+      >c</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" href="Algebra.Operations.html#1828" class="Bound"
+      >m</a
+      ><a name="1829"
+      > </a
+      ><a name="1830" href="Algebra.Operations.html#1830" class="Bound"
+      >n</a
+      ><a name="1831"
+      > </a
+      ><a name="1832" class="Symbol"
+      >&#8594;</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" class="Symbol"
+      >(</a
+      ><a name="1835" href="Algebra.Operations.html#1828" class="Bound"
+      >m</a
+      ><a name="1836"
+      > </a
+      ><a name="1837" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="1839"
+      > </a
+      ><a name="1840" href="Algebra.Operations.html#1830" class="Bound"
+      >n</a
+      ><a name="1841" class="Symbol"
+      >)</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1844"
+      > </a
+      ><a name="1845" href="Algebra.Operations.html#1826" class="Bound"
+      >c</a
+      ><a name="1846"
+      > </a
+      ><a name="1847" href="Algebra.html#6063" class="Function Operator"
+      >&#8776;</a
+      ><a name="1848"
+      > </a
+      ><a name="1849" href="Algebra.Operations.html#1828" class="Bound"
+      >m</a
+      ><a name="1850"
+      > </a
+      ><a name="1851" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1852"
+      > </a
+      ><a name="1853" href="Algebra.Operations.html#1826" class="Bound"
+      >c</a
+      ><a name="1854"
+      > </a
+      ><a name="1855" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1856"
+      > </a
+      ><a name="1857" href="Algebra.Operations.html#1830" class="Bound"
+      >n</a
+      ><a name="1858"
+      > </a
+      ><a name="1859" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1860"
+      > </a
+      ><a name="1861" href="Algebra.Operations.html#1826" class="Bound"
+      >c</a
+      ><a name="1862"
+      >
+</a
+      ><a name="1863" href="Algebra.Operations.html#1813" class="Function"
+      >&#215;-homo-+</a
+      ><a name="1871"
+      > </a
+      ><a name="1872" href="Algebra.Operations.html#1872" class="Bound"
+      >c</a
+      ><a name="1873"
+      > </a
+      ><a name="1874" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="1875"
+      > </a
+      ><a name="1876" href="Algebra.Operations.html#1876" class="Bound"
+      >n</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" class="Symbol"
+      >=</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1885"
+      >
+  </a
+      ><a name="1888" href="Algebra.Operations.html#1876" class="Bound"
+      >n</a
+      ><a name="1889"
+      > </a
+      ><a name="1890" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1891"
+      > </a
+      ><a name="1892" href="Algebra.Operations.html#1872" class="Bound"
+      >c</a
+      ><a name="1893"
+      >       </a
+      ><a name="1900" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="1902"
+      > </a
+      ><a name="1903" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="1906"
+      > </a
+      ><a name="1907" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" href="Data.Product.html#553" class="Field"
+      >&#931;.proj&#8321;</a
+      ><a name="1916"
+      > </a
+      ><a name="1917" href="Algebra.Structures.html#1514" class="Function"
+      >+-identity</a
+      ><a name="1927"
+      > </a
+      ><a name="1928" class="Symbol"
+      >(</a
+      ><a name="1929" href="Algebra.Operations.html#1876" class="Bound"
+      >n</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1932"
+      > </a
+      ><a name="1933" href="Algebra.Operations.html#1872" class="Bound"
+      >c</a
+      ><a name="1934" class="Symbol"
+      >)</a
+      ><a name="1935"
+      > </a
+      ><a name="1936" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="1937"
+      >
+  </a
+      ><a name="1940" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="1942"
+      > </a
+      ><a name="1943" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1944"
+      > </a
+      ><a name="1945" href="Algebra.Operations.html#1876" class="Bound"
+      >n</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1948"
+      > </a
+      ><a name="1949" href="Algebra.Operations.html#1872" class="Bound"
+      >c</a
+      ><a name="1950"
+      >  </a
+      ><a name="1952" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="1953"
+      >
+</a
+      ><a name="1954" href="Algebra.Operations.html#1813" class="Function"
+      >&#215;-homo-+</a
+      ><a name="1962"
+      > </a
+      ><a name="1963" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="1964"
+      > </a
+      ><a name="1965" class="Symbol"
+      >(</a
+      ><a name="1966" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" href="Algebra.Operations.html#1970" class="Bound"
+      >m</a
+      ><a name="1971" class="Symbol"
+      >)</a
+      ><a name="1972"
+      > </a
+      ><a name="1973" href="Algebra.Operations.html#1973" class="Bound"
+      >n</a
+      ><a name="1974"
+      > </a
+      ><a name="1975" class="Symbol"
+      >=</a
+      ><a name="1976"
+      > </a
+      ><a name="1977" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="1982"
+      >
+  </a
+      ><a name="1985" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="1986"
+      > </a
+      ><a name="1987" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="1988"
+      > </a
+      ><a name="1989" class="Symbol"
+      >(</a
+      ><a name="1990" href="Algebra.Operations.html#1970" class="Bound"
+      >m</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="1994"
+      > </a
+      ><a name="1995" href="Algebra.Operations.html#1973" class="Bound"
+      >n</a
+      ><a name="1996" class="Symbol"
+      >)</a
+      ><a name="1997"
+      > </a
+      ><a name="1998" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="1999"
+      > </a
+      ><a name="2000" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2001"
+      >     </a
+      ><a name="2006" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2008"
+      > </a
+      ><a name="2009" href="Algebra.Structures.html#873" class="Function"
+      >+-cong</a
+      ><a name="2015"
+      > </a
+      ><a name="2016" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="2020"
+      > </a
+      ><a name="2021" class="Symbol"
+      >(</a
+      ><a name="2022" href="Algebra.Operations.html#1813" class="Function"
+      >&#215;-homo-+</a
+      ><a name="2030"
+      > </a
+      ><a name="2031" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2032"
+      > </a
+      ><a name="2033" href="Algebra.Operations.html#1970" class="Bound"
+      >m</a
+      ><a name="2034"
+      > </a
+      ><a name="2035" href="Algebra.Operations.html#1973" class="Bound"
+      >n</a
+      ><a name="2036" class="Symbol"
+      >)</a
+      ><a name="2037"
+      > </a
+      ><a name="2038" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2039"
+      >
+  </a
+      ><a name="2042" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2043"
+      > </a
+      ><a name="2044" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2045"
+      > </a
+      ><a name="2046" class="Symbol"
+      >(</a
+      ><a name="2047" href="Algebra.Operations.html#1970" class="Bound"
+      >m</a
+      ><a name="2048"
+      > </a
+      ><a name="2049" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2050"
+      > </a
+      ><a name="2051" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2052"
+      > </a
+      ><a name="2053" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2054"
+      > </a
+      ><a name="2055" href="Algebra.Operations.html#1973" class="Bound"
+      >n</a
+      ><a name="2056"
+      > </a
+      ><a name="2057" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2058"
+      > </a
+      ><a name="2059" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2060" class="Symbol"
+      >)</a
+      ><a name="2061"
+      >  </a
+      ><a name="2063" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2065"
+      > </a
+      ><a name="2066" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="2071"
+      > </a
+      ><a name="2072" href="Algebra.Structures.html#839" class="Function"
+      >+-assoc</a
+      ><a name="2079"
+      > </a
+      ><a name="2080" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2081"
+      > </a
+      ><a name="2082" class="Symbol"
+      >(</a
+      ><a name="2083" href="Algebra.Operations.html#1970" class="Bound"
+      >m</a
+      ><a name="2084"
+      > </a
+      ><a name="2085" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2086"
+      > </a
+      ><a name="2087" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2088" class="Symbol"
+      >)</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" class="Symbol"
+      >(</a
+      ><a name="2091" href="Algebra.Operations.html#1973" class="Bound"
+      >n</a
+      ><a name="2092"
+      > </a
+      ><a name="2093" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2094"
+      > </a
+      ><a name="2095" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2096" class="Symbol"
+      >)</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2099"
+      >
+  </a
+      ><a name="2102" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2103"
+      > </a
+      ><a name="2104" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2105"
+      > </a
+      ><a name="2106" href="Algebra.Operations.html#1970" class="Bound"
+      >m</a
+      ><a name="2107"
+      > </a
+      ><a name="2108" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2109"
+      > </a
+      ><a name="2110" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2111"
+      > </a
+      ><a name="2112" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2113"
+      > </a
+      ><a name="2114" href="Algebra.Operations.html#1973" class="Bound"
+      >n</a
+      ><a name="2115"
+      > </a
+      ><a name="2116" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2117"
+      > </a
+      ><a name="2118" href="Algebra.Operations.html#1963" class="Bound"
+      >c</a
+      ><a name="2119"
+      >    </a
+      ><a name="2123" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="2124"
+      >
+
+</a
+      ><a name="2126" class="Comment"
+      >-- _&#215;&#8242;_ is homomorphic with respect to _&#8469;+_/_+_.</a
+      ><a name="2174"
+      >
+
+</a
+      ><a name="2176" href="Algebra.Operations.html#2176" class="Function"
+      >&#215;&#8242;-homo-+</a
+      ><a name="2185"
+      > </a
+      ><a name="2186" class="Symbol"
+      >:</a
+      ><a name="2187"
+      > </a
+      ><a name="2188" class="Symbol"
+      >&#8704;</a
+      ><a name="2189"
+      > </a
+      ><a name="2190" href="Algebra.Operations.html#2190" class="Bound"
+      >c</a
+      ><a name="2191"
+      > </a
+      ><a name="2192" href="Algebra.Operations.html#2192" class="Bound"
+      >m</a
+      ><a name="2193"
+      > </a
+      ><a name="2194" href="Algebra.Operations.html#2194" class="Bound"
+      >n</a
+      ><a name="2195"
+      > </a
+      ><a name="2196" class="Symbol"
+      >&#8594;</a
+      ><a name="2197"
+      > </a
+      ><a name="2198" class="Symbol"
+      >(</a
+      ><a name="2199" href="Algebra.Operations.html#2192" class="Bound"
+      >m</a
+      ><a name="2200"
+      > </a
+      ><a name="2201" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="2203"
+      > </a
+      ><a name="2204" href="Algebra.Operations.html#2194" class="Bound"
+      >n</a
+      ><a name="2205" class="Symbol"
+      >)</a
+      ><a name="2206"
+      > </a
+      ><a name="2207" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2209"
+      > </a
+      ><a name="2210" href="Algebra.Operations.html#2190" class="Bound"
+      >c</a
+      ><a name="2211"
+      > </a
+      ><a name="2212" href="Algebra.html#6063" class="Function Operator"
+      >&#8776;</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" href="Algebra.Operations.html#2192" class="Bound"
+      >m</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2218"
+      > </a
+      ><a name="2219" href="Algebra.Operations.html#2190" class="Bound"
+      >c</a
+      ><a name="2220"
+      > </a
+      ><a name="2221" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2222"
+      > </a
+      ><a name="2223" href="Algebra.Operations.html#2194" class="Bound"
+      >n</a
+      ><a name="2224"
+      > </a
+      ><a name="2225" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2227"
+      > </a
+      ><a name="2228" href="Algebra.Operations.html#2190" class="Bound"
+      >c</a
+      ><a name="2229"
+      >
+</a
+      ><a name="2230" href="Algebra.Operations.html#2176" class="Function"
+      >&#215;&#8242;-homo-+</a
+      ><a name="2239"
+      > </a
+      ><a name="2240" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2241"
+      > </a
+      ><a name="2242" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2243"
+      > </a
+      ><a name="2244" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2245"
+      > </a
+      ><a name="2246" class="Symbol"
+      >=</a
+      ><a name="2247"
+      > </a
+      ><a name="2248" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="2253"
+      >
+  </a
+      ><a name="2256" class="Symbol"
+      >(</a
+      ><a name="2257" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="2261"
+      > </a
+      ><a name="2262" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2263" class="Symbol"
+      >)</a
+      ><a name="2264"
+      > </a
+      ><a name="2265" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2267"
+      > </a
+      ><a name="2268" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2269"
+      >    </a
+      ><a name="2273" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2275"
+      > </a
+      ><a name="2276" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2279"
+      > </a
+      ><a name="2280" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="2281"
+      > </a
+      ><a name="2282" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="2286"
+      > </a
+      ><a name="2287" class="Symbol"
+      >(</a
+      ><a name="2288" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2289"
+      > </a
+      ><a name="2290" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="2292"
+      > </a
+      ><a name="2293" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2294" class="Symbol"
+      >)</a
+      ><a name="2295"
+      > </a
+      ><a name="2296" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2297"
+      > </a
+      ><a name="2298" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2299"
+      >
+  </a
+      ><a name="2302" class="Symbol"
+      >(</a
+      ><a name="2303" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2304"
+      > </a
+      ><a name="2305" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="2307"
+      > </a
+      ><a name="2308" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2309" class="Symbol"
+      >)</a
+      ><a name="2310"
+      > </a
+      ><a name="2311" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2312"
+      >  </a
+      ><a name="2314" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2315"
+      >    </a
+      ><a name="2319" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2321"
+      > </a
+      ><a name="2322" href="Algebra.Operations.html#1813" class="Function"
+      >&#215;-homo-+</a
+      ><a name="2330"
+      > </a
+      ><a name="2331" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2332"
+      > </a
+      ><a name="2333" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2334"
+      > </a
+      ><a name="2335" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2336"
+      > </a
+      ><a name="2337" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2338"
+      >
+  </a
+      ><a name="2341" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2344"
+      >  </a
+      ><a name="2346" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2347"
+      > </a
+      ><a name="2348" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2349"
+      > </a
+      ><a name="2350" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2351"
+      > </a
+      ><a name="2352" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2353"
+      >  </a
+      ><a name="2355" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2356"
+      >  </a
+      ><a name="2358" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" href="Algebra.Structures.html#873" class="Function"
+      >+-cong</a
+      ><a name="2367"
+      > </a
+      ><a name="2368" class="Symbol"
+      >(</a
+      ><a name="2369" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="2373"
+      > </a
+      ><a name="2374" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2375"
+      > </a
+      ><a name="2376" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2377" class="Symbol"
+      >)</a
+      ><a name="2378"
+      > </a
+      ><a name="2379" class="Symbol"
+      >(</a
+      ><a name="2380" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="2384"
+      > </a
+      ><a name="2385" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2386"
+      > </a
+      ><a name="2387" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2388" class="Symbol"
+      >)</a
+      ><a name="2389"
+      > </a
+      ><a name="2390" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2391"
+      >
+  </a
+      ><a name="2394" href="Algebra.Operations.html#2242" class="Bound"
+      >m</a
+      ><a name="2395"
+      > </a
+      ><a name="2396" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2398"
+      > </a
+      ><a name="2399" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2400"
+      > </a
+      ><a name="2401" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2402"
+      > </a
+      ><a name="2403" href="Algebra.Operations.html#2244" class="Bound"
+      >n</a
+      ><a name="2404"
+      > </a
+      ><a name="2405" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="2407"
+      > </a
+      ><a name="2408" href="Algebra.Operations.html#2240" class="Bound"
+      >c</a
+      ><a name="2409"
+      >  </a
+      ><a name="2411" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="2412"
+      >
+
+</a
+      ><a name="2414" class="Comment"
+      >-- _&#215;&#160;1# is homomorphic with respect to _&#8469;*_/_*_.</a
+      ><a name="2463"
+      >
+
+</a
+      ><a name="2465" href="Algebra.Operations.html#2465" class="Function"
+      >&#215;1-homo-*</a
+      ><a name="2474"
+      > </a
+      ><a name="2475" class="Symbol"
+      >:</a
+      ><a name="2476"
+      > </a
+      ><a name="2477" class="Symbol"
+      >&#8704;</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" href="Algebra.Operations.html#2479" class="Bound"
+      >m</a
+      ><a name="2480"
+      > </a
+      ><a name="2481" href="Algebra.Operations.html#2481" class="Bound"
+      >n</a
+      ><a name="2482"
+      > </a
+      ><a name="2483" class="Symbol"
+      >&#8594;</a
+      ><a name="2484"
+      > </a
+      ><a name="2485" class="Symbol"
+      >(</a
+      ><a name="2486" href="Algebra.Operations.html#2479" class="Bound"
+      >m</a
+      ><a name="2487"
+      > </a
+      ><a name="2488" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="2490"
+      > </a
+      ><a name="2491" href="Algebra.Operations.html#2481" class="Bound"
+      >n</a
+      ><a name="2492" class="Symbol"
+      >)</a
+      ><a name="2493"
+      > </a
+      ><a name="2494" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2495"
+      > </a
+      ><a name="2496" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2498"
+      > </a
+      ><a name="2499" href="Algebra.html#6063" class="Function Operator"
+      >&#8776;</a
+      ><a name="2500"
+      > </a
+      ><a name="2501" class="Symbol"
+      >(</a
+      ><a name="2502" href="Algebra.Operations.html#2479" class="Bound"
+      >m</a
+      ><a name="2503"
+      > </a
+      ><a name="2504" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2505"
+      > </a
+      ><a name="2506" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2508" class="Symbol"
+      >)</a
+      ><a name="2509"
+      > </a
+      ><a name="2510" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="2511"
+      > </a
+      ><a name="2512" class="Symbol"
+      >(</a
+      ><a name="2513" href="Algebra.Operations.html#2481" class="Bound"
+      >n</a
+      ><a name="2514"
+      > </a
+      ><a name="2515" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2516"
+      > </a
+      ><a name="2517" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2519" class="Symbol"
+      >)</a
+      ><a name="2520"
+      >
+</a
+      ><a name="2521" href="Algebra.Operations.html#2465" class="Function"
+      >&#215;1-homo-*</a
+      ><a name="2530"
+      > </a
+      ><a name="2531" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="2532"
+      > </a
+      ><a name="2533" href="Algebra.Operations.html#2533" class="Bound"
+      >n</a
+      ><a name="2534"
+      > </a
+      ><a name="2535" class="Symbol"
+      >=</a
+      ><a name="2536"
+      > </a
+      ><a name="2537" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="2542"
+      >
+  </a
+      ><a name="2545" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="2547"
+      >             </a
+      ><a name="2560" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2562"
+      > </a
+      ><a name="2563" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2566"
+      > </a
+      ><a name="2567" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="2568"
+      > </a
+      ><a name="2569" href="Data.Product.html#553" class="Field"
+      >&#931;.proj&#8321;</a
+      ><a name="2576"
+      > </a
+      ><a name="2577" href="Algebra.Structures.html#5900" class="Function"
+      >*-zero</a
+      ><a name="2583"
+      > </a
+      ><a name="2584" class="Symbol"
+      >(</a
+      ><a name="2585" href="Algebra.Operations.html#2533" class="Bound"
+      >n</a
+      ><a name="2586"
+      > </a
+      ><a name="2587" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2588"
+      > </a
+      ><a name="2589" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2591" class="Symbol"
+      >)</a
+      ><a name="2592"
+      > </a
+      ><a name="2593" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2594"
+      >
+  </a
+      ><a name="2597" href="Algebra.html#6152" class="Function"
+      >0#</a
+      ><a name="2599"
+      > </a
+      ><a name="2600" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="2601"
+      > </a
+      ><a name="2602" class="Symbol"
+      >(</a
+      ><a name="2603" href="Algebra.Operations.html#2533" class="Bound"
+      >n</a
+      ><a name="2604"
+      > </a
+      ><a name="2605" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2606"
+      > </a
+      ><a name="2607" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2609" class="Symbol"
+      >)</a
+      ><a name="2610"
+      >  </a
+      ><a name="2612" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="2613"
+      >
+</a
+      ><a name="2614" href="Algebra.Operations.html#2465" class="Function"
+      >&#215;1-homo-*</a
+      ><a name="2623"
+      > </a
+      ><a name="2624" class="Symbol"
+      >(</a
+      ><a name="2625" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="2628"
+      > </a
+      ><a name="2629" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2630" class="Symbol"
+      >)</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2633"
+      > </a
+      ><a name="2634" class="Symbol"
+      >=</a
+      ><a name="2635"
+      > </a
+      ><a name="2636" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="2641"
+      >
+  </a
+      ><a name="2644" class="Symbol"
+      >(</a
+      ><a name="2645" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2646"
+      > </a
+      ><a name="2647" href="Data.Nat.html#2206" class="Primitive Operator"
+      >&#8469;+</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2651"
+      > </a
+      ><a name="2652" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="2654"
+      > </a
+      ><a name="2655" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2656" class="Symbol"
+      >)</a
+      ><a name="2657"
+      > </a
+      ><a name="2658" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2659"
+      > </a
+      ><a name="2660" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2662"
+      >                   </a
+      ><a name="2681" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2683"
+      > </a
+      ><a name="2684" href="Algebra.Operations.html#1813" class="Function"
+      >&#215;-homo-+</a
+      ><a name="2692"
+      > </a
+      ><a name="2693" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2695"
+      > </a
+      ><a name="2696" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" class="Symbol"
+      >(</a
+      ><a name="2699" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2700"
+      > </a
+      ><a name="2701" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="2703"
+      > </a
+      ><a name="2704" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2705" class="Symbol"
+      >)</a
+      ><a name="2706"
+      > </a
+      ><a name="2707" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2708"
+      >
+  </a
+      ><a name="2711" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2712"
+      > </a
+      ><a name="2713" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2714"
+      > </a
+      ><a name="2715" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2717"
+      > </a
+      ><a name="2718" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2719"
+      > </a
+      ><a name="2720" class="Symbol"
+      >(</a
+      ><a name="2721" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2722"
+      > </a
+      ><a name="2723" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="2725"
+      > </a
+      ><a name="2726" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2727" class="Symbol"
+      >)</a
+      ><a name="2728"
+      > </a
+      ><a name="2729" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2730"
+      > </a
+      ><a name="2731" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2733"
+      >               </a
+      ><a name="2748" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2750"
+      > </a
+      ><a name="2751" href="Algebra.Structures.html#873" class="Function"
+      >+-cong</a
+      ><a name="2757"
+      > </a
+      ><a name="2758" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="2762"
+      > </a
+      ><a name="2763" class="Symbol"
+      >(</a
+      ><a name="2764" href="Algebra.Operations.html#2465" class="Function"
+      >&#215;1-homo-*</a
+      ><a name="2773"
+      > </a
+      ><a name="2774" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2775"
+      > </a
+      ><a name="2776" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2777" class="Symbol"
+      >)</a
+      ><a name="2778"
+      > </a
+      ><a name="2779" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2780"
+      >
+  </a
+      ><a name="2783" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2784"
+      > </a
+      ><a name="2785" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2786"
+      > </a
+      ><a name="2787" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2789"
+      > </a
+      ><a name="2790" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2791"
+      > </a
+      ><a name="2792" class="Symbol"
+      >(</a
+      ><a name="2793" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2794"
+      > </a
+      ><a name="2795" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2796"
+      > </a
+      ><a name="2797" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2799" class="Symbol"
+      >)</a
+      ><a name="2800"
+      > </a
+      ><a name="2801" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="2802"
+      > </a
+      ><a name="2803" class="Symbol"
+      >(</a
+      ><a name="2804" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2805"
+      > </a
+      ><a name="2806" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2807"
+      > </a
+      ><a name="2808" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2810" class="Symbol"
+      >)</a
+      ><a name="2811"
+      >         </a
+      ><a name="2820" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2822"
+      > </a
+      ><a name="2823" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2826"
+      > </a
+      ><a name="2827" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="2828"
+      > </a
+      ><a name="2829" href="Algebra.Structures.html#873" class="Function"
+      >+-cong</a
+      ><a name="2835"
+      > </a
+      ><a name="2836" class="Symbol"
+      >(</a
+      ><a name="2837" href="Data.Product.html#553" class="Field"
+      >&#931;.proj&#8321;</a
+      ><a name="2844"
+      > </a
+      ><a name="2845" href="Algebra.Structures.html#1134" class="Function"
+      >*-identity</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" class="Symbol"
+      >(</a
+      ><a name="2857" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2858"
+      > </a
+      ><a name="2859" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2860"
+      > </a
+      ><a name="2861" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2863" class="Symbol"
+      >))</a
+      ><a name="2865"
+      > </a
+      ><a name="2866" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="2870"
+      > </a
+      ><a name="2871" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2872"
+      >
+  </a
+      ><a name="2875" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2877"
+      > </a
+      ><a name="2878" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="2879"
+      > </a
+      ><a name="2880" class="Symbol"
+      >(</a
+      ><a name="2881" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2882"
+      > </a
+      ><a name="2883" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2887" class="Symbol"
+      >)</a
+      ><a name="2888"
+      > </a
+      ><a name="2889" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2890"
+      > </a
+      ><a name="2891" class="Symbol"
+      >(</a
+      ><a name="2892" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2893"
+      > </a
+      ><a name="2894" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2895"
+      > </a
+      ><a name="2896" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2898" class="Symbol"
+      >)</a
+      ><a name="2899"
+      > </a
+      ><a name="2900" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="2901"
+      > </a
+      ><a name="2902" class="Symbol"
+      >(</a
+      ><a name="2903" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2904"
+      > </a
+      ><a name="2905" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2906"
+      > </a
+      ><a name="2907" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2909" class="Symbol"
+      >)</a
+      ><a name="2910"
+      >  </a
+      ><a name="2912" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="2914"
+      > </a
+      ><a name="2915" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="2918"
+      > </a
+      ><a name="2919" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="2920"
+      > </a
+      ><a name="2921" href="Data.Product.html#567" class="Field"
+      >&#931;.proj&#8322;</a
+      ><a name="2928"
+      > </a
+      ><a name="2929" href="Algebra.Structures.html#4983" class="Function"
+      >distrib</a
+      ><a name="2936"
+      > </a
+      ><a name="2937" class="Symbol"
+      >(</a
+      ><a name="2938" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2939"
+      > </a
+      ><a name="2940" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2941"
+      > </a
+      ><a name="2942" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2944" class="Symbol"
+      >)</a
+      ><a name="2945"
+      > </a
+      ><a name="2946" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2948"
+      > </a
+      ><a name="2949" class="Symbol"
+      >(</a
+      ><a name="2950" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2951"
+      > </a
+      ><a name="2952" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2953"
+      > </a
+      ><a name="2954" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2956" class="Symbol"
+      >)</a
+      ><a name="2957"
+      > </a
+      ><a name="2958" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="2959"
+      >
+  </a
+      ><a name="2962" class="Symbol"
+      >(</a
+      ><a name="2963" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2965"
+      > </a
+      ><a name="2966" href="Algebra.html#6094" class="Function Operator"
+      >+</a
+      ><a name="2967"
+      > </a
+      ><a name="2968" href="Algebra.Operations.html#2629" class="Bound"
+      >m</a
+      ><a name="2969"
+      > </a
+      ><a name="2970" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2971"
+      > </a
+      ><a name="2972" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2974" class="Symbol"
+      >)</a
+      ><a name="2975"
+      > </a
+      ><a name="2976" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="2977"
+      > </a
+      ><a name="2978" class="Symbol"
+      >(</a
+      ><a name="2979" href="Algebra.Operations.html#2632" class="Bound"
+      >n</a
+      ><a name="2980"
+      > </a
+      ><a name="2981" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="2982"
+      > </a
+      ><a name="2983" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="2985" class="Symbol"
+      >)</a
+      ><a name="2986"
+      >             </a
+      ><a name="2999" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="3000"
+      >
+
+</a
+      ><a name="3002" class="Comment"
+      >-- _&#215;&#8242;&#160;1# is homomorphic with respect to _&#8469;*_/_*_.</a
+      ><a name="3052"
+      >
+
+</a
+      ><a name="3054" href="Algebra.Operations.html#3054" class="Function"
+      >&#215;&#8242;1-homo-*</a
+      ><a name="3064"
+      > </a
+      ><a name="3065" class="Symbol"
+      >:</a
+      ><a name="3066"
+      > </a
+      ><a name="3067" class="Symbol"
+      >&#8704;</a
+      ><a name="3068"
+      > </a
+      ><a name="3069" href="Algebra.Operations.html#3069" class="Bound"
+      >m</a
+      ><a name="3070"
+      > </a
+      ><a name="3071" href="Algebra.Operations.html#3071" class="Bound"
+      >n</a
+      ><a name="3072"
+      > </a
+      ><a name="3073" class="Symbol"
+      >&#8594;</a
+      ><a name="3074"
+      > </a
+      ><a name="3075" class="Symbol"
+      >(</a
+      ><a name="3076" href="Algebra.Operations.html#3069" class="Bound"
+      >m</a
+      ><a name="3077"
+      > </a
+      ><a name="3078" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="3080"
+      > </a
+      ><a name="3081" href="Algebra.Operations.html#3071" class="Bound"
+      >n</a
+      ><a name="3082" class="Symbol"
+      >)</a
+      ><a name="3083"
+      > </a
+      ><a name="3084" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3086"
+      > </a
+      ><a name="3087" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3089"
+      > </a
+      ><a name="3090" href="Algebra.html#6063" class="Function Operator"
+      >&#8776;</a
+      ><a name="3091"
+      > </a
+      ><a name="3092" class="Symbol"
+      >(</a
+      ><a name="3093" href="Algebra.Operations.html#3069" class="Bound"
+      >m</a
+      ><a name="3094"
+      > </a
+      ><a name="3095" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3097"
+      > </a
+      ><a name="3098" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3100" class="Symbol"
+      >)</a
+      ><a name="3101"
+      > </a
+      ><a name="3102" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="3103"
+      > </a
+      ><a name="3104" class="Symbol"
+      >(</a
+      ><a name="3105" href="Algebra.Operations.html#3071" class="Bound"
+      >n</a
+      ><a name="3106"
+      > </a
+      ><a name="3107" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3109"
+      > </a
+      ><a name="3110" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3112" class="Symbol"
+      >)</a
+      ><a name="3113"
+      >
+</a
+      ><a name="3114" href="Algebra.Operations.html#3054" class="Function"
+      >&#215;&#8242;1-homo-*</a
+      ><a name="3124"
+      > </a
+      ><a name="3125" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3126"
+      > </a
+      ><a name="3127" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3128"
+      > </a
+      ><a name="3129" class="Symbol"
+      >=</a
+      ><a name="3130"
+      > </a
+      ><a name="3131" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="3136"
+      >
+  </a
+      ><a name="3139" class="Symbol"
+      >(</a
+      ><a name="3140" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3141"
+      > </a
+      ><a name="3142" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="3144"
+      > </a
+      ><a name="3145" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3146" class="Symbol"
+      >)</a
+      ><a name="3147"
+      > </a
+      ><a name="3148" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3150"
+      > </a
+      ><a name="3151" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3153"
+      >         </a
+      ><a name="3162" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3164"
+      > </a
+      ><a name="3165" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="3168"
+      > </a
+      ><a name="3169" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="3170"
+      > </a
+      ><a name="3171" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="3175"
+      > </a
+      ><a name="3176" class="Symbol"
+      >(</a
+      ><a name="3177" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3178"
+      > </a
+      ><a name="3179" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="3181"
+      > </a
+      ><a name="3182" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3183" class="Symbol"
+      >)</a
+      ><a name="3184"
+      > </a
+      ><a name="3185" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3187"
+      > </a
+      ><a name="3188" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3189"
+      >
+  </a
+      ><a name="3192" class="Symbol"
+      >(</a
+      ><a name="3193" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3194"
+      > </a
+      ><a name="3195" href="Data.Nat.html#2511" class="Primitive Operator"
+      >&#8469;*</a
+      ><a name="3197"
+      > </a
+      ><a name="3198" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3199" class="Symbol"
+      >)</a
+      ><a name="3200"
+      > </a
+      ><a name="3201" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3202"
+      >  </a
+      ><a name="3204" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3206"
+      >         </a
+      ><a name="3215" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3217"
+      > </a
+      ><a name="3218" href="Algebra.Operations.html#2465" class="Function"
+      >&#215;1-homo-*</a
+      ><a name="3227"
+      > </a
+      ><a name="3228" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3229"
+      > </a
+      ><a name="3230" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3231"
+      > </a
+      ><a name="3232" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3233"
+      >
+  </a
+      ><a name="3236" class="Symbol"
+      >(</a
+      ><a name="3237" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3238"
+      > </a
+      ><a name="3239" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3240"
+      >  </a
+      ><a name="3242" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3244" class="Symbol"
+      >)</a
+      ><a name="3245"
+      > </a
+      ><a name="3246" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="3247"
+      > </a
+      ><a name="3248" class="Symbol"
+      >(</a
+      ><a name="3249" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3250"
+      > </a
+      ><a name="3251" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3252"
+      >  </a
+      ><a name="3254" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3256" class="Symbol"
+      >)</a
+      ><a name="3257"
+      >  </a
+      ><a name="3259" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3261"
+      > </a
+      ><a name="3262" href="Algebra.Structures.html#873" class="Function"
+      >*-cong</a
+      ><a name="3268"
+      > </a
+      ><a name="3269" class="Symbol"
+      >(</a
+      ><a name="3270" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="3274"
+      > </a
+      ><a name="3275" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3276"
+      > </a
+      ><a name="3277" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3279" class="Symbol"
+      >)</a
+      ><a name="3280"
+      > </a
+      ><a name="3281" class="Symbol"
+      >(</a
+      ><a name="3282" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="3286"
+      > </a
+      ><a name="3287" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3288"
+      > </a
+      ><a name="3289" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3291" class="Symbol"
+      >)</a
+      ><a name="3292"
+      > </a
+      ><a name="3293" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3294"
+      >
+  </a
+      ><a name="3297" class="Symbol"
+      >(</a
+      ><a name="3298" href="Algebra.Operations.html#3125" class="Bound"
+      >m</a
+      ><a name="3299"
+      > </a
+      ><a name="3300" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3302"
+      > </a
+      ><a name="3303" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3305" class="Symbol"
+      >)</a
+      ><a name="3306"
+      > </a
+      ><a name="3307" href="Algebra.html#6123" class="Function Operator"
+      >*</a
+      ><a name="3308"
+      > </a
+      ><a name="3309" class="Symbol"
+      >(</a
+      ><a name="3310" href="Algebra.Operations.html#3127" class="Bound"
+      >n</a
+      ><a name="3311"
+      > </a
+      ><a name="3312" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3314"
+      > </a
+      ><a name="3315" href="Algebra.html#6177" class="Function"
+      >1#</a
+      ><a name="3317" class="Symbol"
+      >)</a
+      ><a name="3318"
+      >  </a
+      ><a name="3320" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="3321"
+      >
+
+</a
+      ><a name="3323" class="Comment"
+      >-- _&#215;_ preserves equality.</a
+      ><a name="3349"
+      >
+
+</a
+      ><a name="3351" href="Algebra.Operations.html#3351" class="Function"
+      >&#215;-cong</a
+      ><a name="3357"
+      > </a
+      ><a name="3358" class="Symbol"
+      >:</a
+      ><a name="3359"
+      > </a
+      ><a name="3360" href="Algebra.Operations.html#859" class="Function Operator"
+      >_&#215;_</a
+      ><a name="3363"
+      > </a
+      ><a name="3364" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >Preserves&#8322;</a
+      ><a name="3374"
+      > </a
+      ><a name="3375" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="3378"
+      > </a
+      ><a name="3379" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >&#10230;</a
+      ><a name="3380"
+      > </a
+      ><a name="3381" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3384"
+      > </a
+      ><a name="3385" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >&#10230;</a
+      ><a name="3386"
+      > </a
+      ><a name="3387" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3390"
+      >
+</a
+      ><a name="3391" href="Algebra.Operations.html#3351" class="Function"
+      >&#215;-cong</a
+      ><a name="3397"
+      > </a
+      ><a name="3398" class="Symbol"
+      >{</a
+      ><a name="3399" href="Algebra.Operations.html#3399" class="Bound"
+      >n</a
+      ><a name="3400" class="Symbol"
+      >}</a
+      ><a name="3401"
+      > </a
+      ><a name="3402" class="Symbol"
+      >{</a
+      ><a name="3403" href="Algebra.Operations.html#3403" class="Bound"
+      >n&#8242;</a
+      ><a name="3405" class="Symbol"
+      >}</a
+      ><a name="3406"
+      > </a
+      ><a name="3407" class="Symbol"
+      >{</a
+      ><a name="3408" href="Algebra.Operations.html#3408" class="Bound"
+      >x</a
+      ><a name="3409" class="Symbol"
+      >}</a
+      ><a name="3410"
+      > </a
+      ><a name="3411" class="Symbol"
+      >{</a
+      ><a name="3412" href="Algebra.Operations.html#3412" class="Bound"
+      >x&#8242;</a
+      ><a name="3414" class="Symbol"
+      >}</a
+      ><a name="3415"
+      > </a
+      ><a name="3416" href="Algebra.Operations.html#3416" class="Bound"
+      >n&#8801;n&#8242;</a
+      ><a name="3420"
+      > </a
+      ><a name="3421" href="Algebra.Operations.html#3421" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3425"
+      > </a
+      ><a name="3426" class="Symbol"
+      >=</a
+      ><a name="3427"
+      > </a
+      ><a name="3428" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="3433"
+      >
+  </a
+      ><a name="3436" href="Algebra.Operations.html#3399" class="Bound"
+      >n</a
+      ><a name="3437"
+      >  </a
+      ><a name="3439" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3440"
+      > </a
+      ><a name="3441" href="Algebra.Operations.html#3408" class="Bound"
+      >x</a
+      ><a name="3442"
+      >   </a
+      ><a name="3445" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3447"
+      > </a
+      ><a name="3448" href="Relation.Binary.Core.html#5291" class="Function"
+      >reflexive</a
+      ><a name="3457"
+      > </a
+      ><a name="3458" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="3459"
+      > </a
+      ><a name="3460" href="Relation.Binary.PropositionalEquality.html#1062" class="Function"
+      >PropEq.cong</a
+      ><a name="3471"
+      > </a
+      ><a name="3472" class="Symbol"
+      >(&#955;</a
+      ><a name="3474"
+      > </a
+      ><a name="3475" href="Algebra.Operations.html#3475" class="Bound"
+      >n</a
+      ><a name="3476"
+      > </a
+      ><a name="3477" class="Symbol"
+      >&#8594;</a
+      ><a name="3478"
+      > </a
+      ><a name="3479" href="Algebra.Operations.html#3475" class="Bound"
+      >n</a
+      ><a name="3480"
+      > </a
+      ><a name="3481" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3482"
+      > </a
+      ><a name="3483" href="Algebra.Operations.html#3408" class="Bound"
+      >x</a
+      ><a name="3484" class="Symbol"
+      >)</a
+      ><a name="3485"
+      > </a
+      ><a name="3486" href="Algebra.Operations.html#3416" class="Bound"
+      >n&#8801;n&#8242;</a
+      ><a name="3490"
+      > </a
+      ><a name="3491" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3492"
+      >
+  </a
+      ><a name="3495" href="Algebra.Operations.html#3403" class="Bound"
+      >n&#8242;</a
+      ><a name="3497"
+      > </a
+      ><a name="3498" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3499"
+      > </a
+      ><a name="3500" href="Algebra.Operations.html#3408" class="Bound"
+      >x</a
+      ><a name="3501"
+      >   </a
+      ><a name="3504" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3506"
+      > </a
+      ><a name="3507" href="Algebra.Operations.html#3548" class="Function"
+      >&#215;-cong&#691;</a
+      ><a name="3514"
+      > </a
+      ><a name="3515" href="Algebra.Operations.html#3403" class="Bound"
+      >n&#8242;</a
+      ><a name="3517"
+      > </a
+      ><a name="3518" href="Algebra.Operations.html#3421" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3522"
+      > </a
+      ><a name="3523" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3524"
+      >
+  </a
+      ><a name="3527" href="Algebra.Operations.html#3403" class="Bound"
+      >n&#8242;</a
+      ><a name="3529"
+      > </a
+      ><a name="3530" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3531"
+      > </a
+      ><a name="3532" href="Algebra.Operations.html#3412" class="Bound"
+      >x&#8242;</a
+      ><a name="3534"
+      >  </a
+      ><a name="3536" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="3537"
+      >
+  </a
+      ><a name="3540" class="Keyword"
+      >where</a
+      ><a name="3545"
+      >
+  </a
+      ><a name="3548" href="Algebra.Operations.html#3548" class="Function"
+      >&#215;-cong&#691;</a
+      ><a name="3555"
+      > </a
+      ><a name="3556" class="Symbol"
+      >:</a
+      ><a name="3557"
+      > </a
+      ><a name="3558" class="Symbol"
+      >&#8704;</a
+      ><a name="3559"
+      > </a
+      ><a name="3560" href="Algebra.Operations.html#3560" class="Bound"
+      >n</a
+      ><a name="3561"
+      > </a
+      ><a name="3562" class="Symbol"
+      >&#8594;</a
+      ><a name="3563"
+      > </a
+      ><a name="3564" class="Symbol"
+      >(</a
+      ><a name="3565" href="Algebra.Operations.html#859" class="Function Operator"
+      >_&#215;_</a
+      ><a name="3568"
+      > </a
+      ><a name="3569" href="Algebra.Operations.html#3560" class="Bound"
+      >n</a
+      ><a name="3570" class="Symbol"
+      >)</a
+      ><a name="3571"
+      > </a
+      ><a name="3572" href="Relation.Binary.Core.html#1416" class="Function Operator"
+      >Preserves</a
+      ><a name="3581"
+      > </a
+      ><a name="3582" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3585"
+      > </a
+      ><a name="3586" href="Relation.Binary.Core.html#1416" class="Function Operator"
+      >&#10230;</a
+      ><a name="3587"
+      > </a
+      ><a name="3588" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3591"
+      >
+  </a
+      ><a name="3594" href="Algebra.Operations.html#3548" class="Function"
+      >&#215;-cong&#691;</a
+      ><a name="3601"
+      > </a
+      ><a name="3602" href="Data.Nat.html#742" class="InductiveConstructor"
+      >0</a
+      ><a name="3603"
+      >       </a
+      ><a name="3610" href="Algebra.Operations.html#3610" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3614"
+      > </a
+      ><a name="3615" class="Symbol"
+      >=</a
+      ><a name="3616"
+      > </a
+      ><a name="3617" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="3621"
+      >
+  </a
+      ><a name="3624" href="Algebra.Operations.html#3548" class="Function"
+      >&#215;-cong&#691;</a
+      ><a name="3631"
+      > </a
+      ><a name="3632" class="Symbol"
+      >(</a
+      ><a name="3633" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="3636"
+      > </a
+      ><a name="3637" href="Algebra.Operations.html#3637" class="Bound"
+      >n</a
+      ><a name="3638" class="Symbol"
+      >)</a
+      ><a name="3639"
+      > </a
+      ><a name="3640" href="Algebra.Operations.html#3640" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3644"
+      > </a
+      ><a name="3645" class="Symbol"
+      >=</a
+      ><a name="3646"
+      > </a
+      ><a name="3647" href="Algebra.Operations.html#3640" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3651"
+      > </a
+      ><a name="3652" href="Function.html#1960" class="Function Operator"
+      >&#10216;</a
+      ><a name="3653"
+      > </a
+      ><a name="3654" href="Algebra.Structures.html#873" class="Function"
+      >+-cong</a
+      ><a name="3660"
+      > </a
+      ><a name="3661" href="Function.html#1960" class="Function Operator"
+      >&#10217;</a
+      ><a name="3662"
+      > </a
+      ><a name="3663" href="Algebra.Operations.html#3548" class="Function"
+      >&#215;-cong&#691;</a
+      ><a name="3670"
+      > </a
+      ><a name="3671" href="Algebra.Operations.html#3637" class="Bound"
+      >n</a
+      ><a name="3672"
+      > </a
+      ><a name="3673" href="Algebra.Operations.html#3640" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3677"
+      >
+
+</a
+      ><a name="3679" class="Comment"
+      >-- _&#215;&#8242;_ preserves equality.</a
+      ><a name="3706"
+      >
+
+</a
+      ><a name="3708" href="Algebra.Operations.html#3708" class="Function"
+      >&#215;&#8242;-cong</a
+      ><a name="3715"
+      > </a
+      ><a name="3716" class="Symbol"
+      >:</a
+      ><a name="3717"
+      > </a
+      ><a name="3718" href="Algebra.Operations.html#1030" class="Function Operator"
+      >_&#215;&#8242;_</a
+      ><a name="3722"
+      > </a
+      ><a name="3723" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >Preserves&#8322;</a
+      ><a name="3733"
+      > </a
+      ><a name="3734" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="3737"
+      > </a
+      ><a name="3738" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >&#10230;</a
+      ><a name="3739"
+      > </a
+      ><a name="3740" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3743"
+      > </a
+      ><a name="3744" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >&#10230;</a
+      ><a name="3745"
+      > </a
+      ><a name="3746" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3749"
+      >
+</a
+      ><a name="3750" href="Algebra.Operations.html#3708" class="Function"
+      >&#215;&#8242;-cong</a
+      ><a name="3757"
+      > </a
+      ><a name="3758" class="Symbol"
+      >{</a
+      ><a name="3759" href="Algebra.Operations.html#3759" class="Bound"
+      >n</a
+      ><a name="3760" class="Symbol"
+      >}</a
+      ><a name="3761"
+      > </a
+      ><a name="3762" class="Symbol"
+      >{</a
+      ><a name="3763" href="Algebra.Operations.html#3763" class="Bound"
+      >n&#8242;</a
+      ><a name="3765" class="Symbol"
+      >}</a
+      ><a name="3766"
+      > </a
+      ><a name="3767" class="Symbol"
+      >{</a
+      ><a name="3768" href="Algebra.Operations.html#3768" class="Bound"
+      >x</a
+      ><a name="3769" class="Symbol"
+      >}</a
+      ><a name="3770"
+      > </a
+      ><a name="3771" class="Symbol"
+      >{</a
+      ><a name="3772" href="Algebra.Operations.html#3772" class="Bound"
+      >x&#8242;</a
+      ><a name="3774" class="Symbol"
+      >}</a
+      ><a name="3775"
+      > </a
+      ><a name="3776" href="Algebra.Operations.html#3776" class="Bound"
+      >n&#8801;n&#8242;</a
+      ><a name="3780"
+      > </a
+      ><a name="3781" href="Algebra.Operations.html#3781" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3785"
+      > </a
+      ><a name="3786" class="Symbol"
+      >=</a
+      ><a name="3787"
+      > </a
+      ><a name="3788" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="3793"
+      >
+  </a
+      ><a name="3796" href="Algebra.Operations.html#3759" class="Bound"
+      >n</a
+      ><a name="3797"
+      >  </a
+      ><a name="3799" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3801"
+      > </a
+      ><a name="3802" href="Algebra.Operations.html#3768" class="Bound"
+      >x</a
+      ><a name="3803"
+      >   </a
+      ><a name="3806" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3808"
+      > </a
+      ><a name="3809" href="Relation.Binary.Core.html#5239" class="Function"
+      >sym</a
+      ><a name="3812"
+      > </a
+      ><a name="3813" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="3814"
+      > </a
+      ><a name="3815" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="3819"
+      > </a
+      ><a name="3820" href="Algebra.Operations.html#3759" class="Bound"
+      >n</a
+      ><a name="3821"
+      > </a
+      ><a name="3822" href="Algebra.Operations.html#3768" class="Bound"
+      >x</a
+      ><a name="3823"
+      > </a
+      ><a name="3824" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3825"
+      >
+  </a
+      ><a name="3828" href="Algebra.Operations.html#3759" class="Bound"
+      >n</a
+      ><a name="3829"
+      >  </a
+      ><a name="3831" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3832"
+      >  </a
+      ><a name="3834" href="Algebra.Operations.html#3768" class="Bound"
+      >x</a
+      ><a name="3835"
+      >   </a
+      ><a name="3838" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3840"
+      > </a
+      ><a name="3841" href="Algebra.Operations.html#3351" class="Function"
+      >&#215;-cong</a
+      ><a name="3847"
+      > </a
+      ><a name="3848" href="Algebra.Operations.html#3776" class="Bound"
+      >n&#8801;n&#8242;</a
+      ><a name="3852"
+      > </a
+      ><a name="3853" href="Algebra.Operations.html#3781" class="Bound"
+      >x&#8776;x&#8242;</a
+      ><a name="3857"
+      > </a
+      ><a name="3858" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3859"
+      >
+  </a
+      ><a name="3862" href="Algebra.Operations.html#3763" class="Bound"
+      >n&#8242;</a
+      ><a name="3864"
+      > </a
+      ><a name="3865" href="Algebra.Operations.html#859" class="Function Operator"
+      >&#215;</a
+      ><a name="3866"
+      >  </a
+      ><a name="3868" href="Algebra.Operations.html#3772" class="Bound"
+      >x&#8242;</a
+      ><a name="3870"
+      >  </a
+      ><a name="3872" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="3874"
+      > </a
+      ><a name="3875" href="Algebra.Operations.html#1590" class="Function"
+      >&#215;&#8776;&#215;&#8242;</a
+      ><a name="3879"
+      > </a
+      ><a name="3880" href="Algebra.Operations.html#3763" class="Bound"
+      >n&#8242;</a
+      ><a name="3882"
+      > </a
+      ><a name="3883" href="Algebra.Operations.html#3772" class="Bound"
+      >x&#8242;</a
+      ><a name="3885"
+      > </a
+      ><a name="3886" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="3887"
+      >
+  </a
+      ><a name="3890" href="Algebra.Operations.html#3763" class="Bound"
+      >n&#8242;</a
+      ><a name="3892"
+      > </a
+      ><a name="3893" href="Algebra.Operations.html#1030" class="Function Operator"
+      >&#215;&#8242;</a
+      ><a name="3895"
+      > </a
+      ><a name="3896" href="Algebra.Operations.html#3772" class="Bound"
+      >x&#8242;</a
+      ><a name="3898"
+      >  </a
+      ><a name="3900" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="3901"
+      >
+
+</a
+      ><a name="3903" class="Comment"
+      >-- _^_ preserves equality.</a
+      ><a name="3929"
+      >
+
+</a
+      ><a name="3931" href="Algebra.Operations.html#3931" class="Function"
+      >^-cong</a
+      ><a name="3937"
+      > </a
+      ><a name="3938" class="Symbol"
+      >:</a
+      ><a name="3939"
+      > </a
+      ><a name="3940" href="Algebra.Operations.html#1149" class="Function Operator"
+      >_^_</a
+      ><a name="3943"
+      > </a
+      ><a name="3944" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >Preserves&#8322;</a
+      ><a name="3954"
+      > </a
+      ><a name="3955" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3958"
+      > </a
+      ><a name="3959" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >&#10230;</a
+      ><a name="3960"
+      > </a
+      ><a name="3961" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >_&#8801;_</a
+      ><a name="3964"
+      > </a
+      ><a name="3965" href="Relation.Binary.Core.html#1559" class="Function Operator"
+      >&#10230;</a
+      ><a name="3966"
+      > </a
+      ><a name="3967" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="3970"
+      >
+</a
+      ><a name="3971" href="Algebra.Operations.html#3931" class="Function"
+      >^-cong</a
+      ><a name="3977"
+      > </a
+      ><a name="3978" class="Symbol"
+      >{</a
+      ><a name="3979" href="Algebra.Operations.html#3979" class="Bound"
+      >x</a
+      ><a name="3980" class="Symbol"
+      >}</a
+      ><a name="3981"
+      > </a
+      ><a name="3982" class="Symbol"
+      >{</a
+      ><a name="3983" href="Algebra.Operations.html#3983" class="Bound"
+      >x'</a
+      ><a name="3985" class="Symbol"
+      >}</a
+      ><a name="3986"
+      > </a
+      ><a name="3987" class="Symbol"
+      >{</a
+      ><a name="3988" href="Algebra.Operations.html#3988" class="Bound"
+      >n</a
+      ><a name="3989" class="Symbol"
+      >}</a
+      ><a name="3990"
+      > </a
+      ><a name="3991" class="Symbol"
+      >{</a
+      ><a name="3992" href="Algebra.Operations.html#3992" class="Bound"
+      >n'</a
+      ><a name="3994" class="Symbol"
+      >}</a
+      ><a name="3995"
+      > </a
+      ><a name="3996" href="Algebra.Operations.html#3996" class="Bound"
+      >x&#8776;x'</a
+      ><a name="4000"
+      > </a
+      ><a name="4001" href="Algebra.Operations.html#4001" class="Bound"
+      >n&#8801;n'</a
+      ><a name="4005"
+      > </a
+      ><a name="4006" class="Symbol"
+      >=</a
+      ><a name="4007"
+      > </a
+      ><a name="4008" href="Relation.Binary.PreorderReasoning.html#1182" class="Function Operator"
+      >begin</a
+      ><a name="4013"
+      >
+  </a
+      ><a name="4016" href="Algebra.Operations.html#3979" class="Bound"
+      >x</a
+      ><a name="4017"
+      >  </a
+      ><a name="4019" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="4020"
+      > </a
+      ><a name="4021" href="Algebra.Operations.html#3988" class="Bound"
+      >n</a
+      ><a name="4022"
+      >   </a
+      ><a name="4025" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="4027"
+      > </a
+      ><a name="4028" href="Relation.Binary.Core.html#5291" class="Function"
+      >reflexive</a
+      ><a name="4037"
+      > </a
+      ><a name="4038" href="Function.html#1863" class="Function Operator"
+      >$</a
+      ><a name="4039"
+      > </a
+      ><a name="4040" href="Relation.Binary.PropositionalEquality.html#1062" class="Function"
+      >PropEq.cong</a
+      ><a name="4051"
+      > </a
+      ><a name="4052" class="Symbol"
+      >(</a
+      ><a name="4053" href="Algebra.Operations.html#1149" class="Function Operator"
+      >_^_</a
+      ><a name="4056"
+      > </a
+      ><a name="4057" href="Algebra.Operations.html#3979" class="Bound"
+      >x</a
+      ><a name="4058" class="Symbol"
+      >)</a
+      ><a name="4059"
+      > </a
+      ><a name="4060" href="Algebra.Operations.html#4001" class="Bound"
+      >n&#8801;n'</a
+      ><a name="4064"
+      > </a
+      ><a name="4065" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="4066"
+      >
+  </a
+      ><a name="4069" href="Algebra.Operations.html#3979" class="Bound"
+      >x</a
+      ><a name="4070"
+      >  </a
+      ><a name="4072" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="4073"
+      > </a
+      ><a name="4074" href="Algebra.Operations.html#3992" class="Bound"
+      >n'</a
+      ><a name="4076"
+      >  </a
+      ><a name="4078" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#8776;&#10216;</a
+      ><a name="4080"
+      > </a
+      ><a name="4081" href="Algebra.Operations.html#4122" class="Function"
+      >^-cong&#737;</a
+      ><a name="4088"
+      > </a
+      ><a name="4089" href="Algebra.Operations.html#3992" class="Bound"
+      >n'</a
+      ><a name="4091"
+      > </a
+      ><a name="4092" href="Algebra.Operations.html#3996" class="Bound"
+      >x&#8776;x'</a
+      ><a name="4096"
+      > </a
+      ><a name="4097" href="Relation.Binary.PreorderReasoning.html#1248" class="Function Operator"
+      >&#10217;</a
+      ><a name="4098"
+      >
+  </a
+      ><a name="4101" href="Algebra.Operations.html#3983" class="Bound"
+      >x'</a
+      ><a name="4103"
+      > </a
+      ><a name="4104" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="4105"
+      > </a
+      ><a name="4106" href="Algebra.Operations.html#3992" class="Bound"
+      >n'</a
+      ><a name="4108"
+      >  </a
+      ><a name="4110" href="Relation.Binary.PreorderReasoning.html#1547" class="Function Operator"
+      >&#8718;</a
+      ><a name="4111"
+      >
+  </a
+      ><a name="4114" class="Keyword"
+      >where</a
+      ><a name="4119"
+      >
+  </a
+      ><a name="4122" href="Algebra.Operations.html#4122" class="Function"
+      >^-cong&#737;</a
+      ><a name="4129"
+      > </a
+      ><a name="4130" class="Symbol"
+      >:</a
+      ><a name="4131"
+      > </a
+      ><a name="4132" class="Symbol"
+      >&#8704;</a
+      ><a name="4133"
+      > </a
+      ><a name="4134" href="Algebra.Operations.html#4134" class="Bound"
+      >n</a
+      ><a name="4135"
+      > </a
+      ><a name="4136" class="Symbol"
+      >&#8594;</a
+      ><a name="4137"
+      > </a
+      ><a name="4138" class="Symbol"
+      >(&#955;</a
+      ><a name="4140"
+      > </a
+      ><a name="4141" href="Algebra.Operations.html#4141" class="Bound"
+      >x</a
+      ><a name="4142"
+      > </a
+      ><a name="4143" class="Symbol"
+      >&#8594;</a
+      ><a name="4144"
+      > </a
+      ><a name="4145" href="Algebra.Operations.html#4141" class="Bound"
+      >x</a
+      ><a name="4146"
+      > </a
+      ><a name="4147" href="Algebra.Operations.html#1149" class="Function Operator"
+      >^</a
+      ><a name="4148"
+      > </a
+      ><a name="4149" href="Algebra.Operations.html#4134" class="Bound"
+      >n</a
+      ><a name="4150" class="Symbol"
+      >)</a
+      ><a name="4151"
+      > </a
+      ><a name="4152" href="Relation.Binary.Core.html#1416" class="Function Operator"
+      >Preserves</a
+      ><a name="4161"
+      > </a
+      ><a name="4162" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="4165"
+      > </a
+      ><a name="4166" href="Relation.Binary.Core.html#1416" class="Function Operator"
+      >&#10230;</a
+      ><a name="4167"
+      > </a
+      ><a name="4168" href="Algebra.html#6063" class="Function Operator"
+      >_&#8776;_</a
+      ><a name="4171"
+      >
+  </a
+      ><a name="4174" href="Algebra.Operations.html#4122" class="Function"
+      >^-cong&#737;</a
+      ><a name="4181"
+      > </a
+      ><a name="4182" href="Data.Nat.html#742" class="InductiveConstructor"
+      >zero</a
+      ><a name="4186"
+      >    </a
+      ><a name="4190" href="Algebra.Operations.html#4190" class="Bound"
+      >x&#8776;x'</a
+      ><a name="4194"
+      > </a
+      ><a name="4195" class="Symbol"
+      >=</a
+      ><a name="4196"
+      > </a
+      ><a name="4197" href="Relation.Binary.Core.html#5213" class="Function"
+      >refl</a
+      ><a name="4201"
+      >
+  </a
+      ><a name="4204" href="Algebra.Operations.html#4122" class="Function"
+      >^-cong&#737;</a
+      ><a name="4211"
+      > </a
+      ><a name="4212" class="Symbol"
+      >(</a
+      ><a name="4213" href="Data.Nat.html#753" class="InductiveConstructor"
+      >suc</a
+      ><a name="4216"
+      > </a
+      ><a name="4217" href="Algebra.Operations.html#4217" class="Bound"
+      >n</a
+      ><a name="4218" class="Symbol"
+      >)</a
+      ><a name="4219"
+      > </a
+      ><a name="4220" href="Algebra.Operations.html#4220" class="Bound"
+      >x&#8776;x'</a
+      ><a name="4224"
+      > </a
+      ><a name="4225" class="Symbol"
+      >=</a
+      ><a name="4226"
+      > </a
+      ><a name="4227" href="Algebra.Operations.html#4220" class="Bound"
+      >x&#8776;x'</a
+      ><a name="4231"
+      > </a
+      ><a name="4232" href="Function.html#1960" class="Function Operator"
+      >&#10216;</a
+      ><a name="4233"
+      > </a
+      ><a name="4234" href="Algebra.Structures.html#873" class="Function"
+      >*-cong</a
+      ><a name="4240"
+      > </a
+      ><a name="4241" href="Function.html#1960" class="Function Operator"
+      >&#10217;</a
+      ><a name="4242"
+      > </a
+      ><a name="4243" href="Algebra.Operations.html#4122" class="Function"
+      >^-cong&#737;</a
+      ><a name="4250"
+      > </a
+      ><a name="4251" href="Algebra.Operations.html#4217" class="Bound"
+      >n</a
+      ><a name="4252"
+      > </a
+      ><a name="4253" href="Algebra.Operations.html#4220" class="Bound"
+      >x&#8776;x'</a
+      ><a name="4257"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

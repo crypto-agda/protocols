@@ -1,0 +1,457 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Control.Protocol.Lift</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >open</a
+      ><a name="5"
+      > </a
+      ><a name="6" class="Keyword"
+      >import</a
+      ><a name="12"
+      > </a
+      ><a name="13" href="Level.NP.html#1" class="Module"
+      >Level.NP</a
+      ><a name="21"
+      >
+</a
+      ><a name="22" class="Keyword"
+      >open</a
+      ><a name="26"
+      > </a
+      ><a name="27" class="Keyword"
+      >import</a
+      ><a name="33"
+      > </a
+      ><a name="34" href="Data.Product.NP.html#1" class="Module"
+      >Data.Product.NP</a
+      ><a name="49"
+      >
+
+</a
+      ><a name="51" class="Keyword"
+      >open</a
+      ><a name="55"
+      > </a
+      ><a name="56" class="Keyword"
+      >import</a
+      ><a name="62"
+      > </a
+      ><a name="63" href="Control.Protocol.html#1" class="Module"
+      >Control.Protocol</a
+      ><a name="79"
+      >
+
+</a
+      ><a name="81" class="Keyword"
+      >module</a
+      ><a name="87"
+      > </a
+      ><a name="88" href="Control.Protocol.Lift.html#1" class="Module"
+      >Control.Protocol.Lift</a
+      ><a name="109"
+      > </a
+      ><a name="110" href="Control.Protocol.Lift.html#110" class="Bound"
+      >a</a
+      ><a name="111"
+      > </a
+      ><a name="112" class="Symbol"
+      >{</a
+      ><a name="113" href="Control.Protocol.Lift.html#113" class="Bound"
+      >&#8467;</a
+      ><a name="114" class="Symbol"
+      >}</a
+      ><a name="115"
+      > </a
+      ><a name="116" class="Keyword"
+      >where</a
+      ><a name="121"
+      >
+    </a
+      ><a name="126" href="Control.Protocol.Lift.html#126" class="Function"
+      >lift&#7486;</a
+      ><a name="131"
+      > </a
+      ><a name="132" class="Symbol"
+      >:</a
+      ><a name="133"
+      > </a
+      ><a name="134" href="Control.Protocol.html#930" class="Datatype Operator"
+      >Proto_</a
+      ><a name="140"
+      > </a
+      ><a name="141" href="Control.Protocol.Lift.html#113" class="Bound"
+      >&#8467;</a
+      ><a name="142"
+      > </a
+      ><a name="143" class="Symbol"
+      >&#8594;</a
+      ><a name="144"
+      > </a
+      ><a name="145" href="Control.Protocol.html#930" class="Datatype Operator"
+      >Proto_</a
+      ><a name="151"
+      > </a
+      ><a name="152" class="Symbol"
+      >(</a
+      ><a name="153" href="Control.Protocol.Lift.html#110" class="Bound"
+      >a</a
+      ><a name="154"
+      > </a
+      ><a name="155" href="Agda.Primitive.html#626" class="Primitive Operator"
+      >&#8852;</a
+      ><a name="156"
+      > </a
+      ><a name="157" href="Control.Protocol.Lift.html#113" class="Bound"
+      >&#8467;</a
+      ><a name="158" class="Symbol"
+      >)</a
+      ><a name="159"
+      >
+    </a
+      ><a name="164" href="Control.Protocol.Lift.html#126" class="Function"
+      >lift&#7486;</a
+      ><a name="169"
+      > </a
+      ><a name="170" href="Control.Protocol.html#957" class="InductiveConstructor"
+      >end</a
+      ><a name="173"
+      >        </a
+      ><a name="181" class="Symbol"
+      >=</a
+      ><a name="182"
+      > </a
+      ><a name="183" href="Control.Protocol.html#957" class="InductiveConstructor"
+      >end</a
+      ><a name="186"
+      >
+    </a
+      ><a name="191" href="Control.Protocol.Lift.html#126" class="Function"
+      >lift&#7486;</a
+      ><a name="196"
+      > </a
+      ><a name="197" class="Symbol"
+      >(</a
+      ><a name="198" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >com</a
+      ><a name="201"
+      > </a
+      ><a name="202" href="Control.Protocol.Lift.html#202" class="Bound"
+      >io</a
+      ><a name="204"
+      > </a
+      ><a name="205" href="Control.Protocol.Lift.html#205" class="Bound"
+      >P</a
+      ><a name="206" class="Symbol"
+      >)</a
+      ><a name="207"
+      > </a
+      ><a name="208" class="Symbol"
+      >=</a
+      ><a name="209"
+      > </a
+      ><a name="210" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >com</a
+      ><a name="213"
+      > </a
+      ><a name="214" href="Control.Protocol.Lift.html#202" class="Bound"
+      >io</a
+      ><a name="216"
+      > </a
+      ><a name="217" class="Symbol"
+      >&#955;</a
+      ><a name="218"
+      > </a
+      ><a name="219" href="Control.Protocol.Lift.html#219" class="Bound"
+      >m</a
+      ><a name="220"
+      > </a
+      ><a name="221" class="Symbol"
+      >&#8594;</a
+      ><a name="222"
+      > </a
+      ><a name="223" href="Control.Protocol.Lift.html#126" class="Function"
+      >lift&#7486;</a
+      ><a name="228"
+      > </a
+      ><a name="229" class="Symbol"
+      >(</a
+      ><a name="230" href="Control.Protocol.Lift.html#205" class="Bound"
+      >P</a
+      ><a name="231"
+      > </a
+      ><a name="232" class="Symbol"
+      >(</a
+      ><a name="233" href="Level.html#448" class="Field"
+      >lower</a
+      ><a name="238"
+      > </a
+      ><a name="239" class="Symbol"
+      >{</a
+      ><a name="240"
+      >&#8467; </a
+      ><a name="242" class="Symbol"
+      >=</a
+      ><a name="243"
+      > </a
+      ><a name="244" href="Control.Protocol.Lift.html#110" class="Bound"
+      >a</a
+      ><a name="245" class="Symbol"
+      >}</a
+      ><a name="246"
+      > </a
+      ><a name="247" href="Control.Protocol.Lift.html#219" class="Bound"
+      >m</a
+      ><a name="248" class="Symbol"
+      >))</a
+      ><a name="250"
+      >
+
+    </a
+      ><a name="256" href="Control.Protocol.Lift.html#256" class="Function"
+      >lift-proc</a
+      ><a name="265"
+      > </a
+      ><a name="266" class="Symbol"
+      >:</a
+      ><a name="267"
+      > </a
+      ><a name="268" class="Symbol"
+      >(</a
+      ><a name="269" href="Control.Protocol.Lift.html#269" class="Bound"
+      >P</a
+      ><a name="270"
+      > </a
+      ><a name="271" class="Symbol"
+      >:</a
+      ><a name="272"
+      > </a
+      ><a name="273" href="Control.Protocol.html#930" class="Datatype Operator"
+      >Proto_</a
+      ><a name="279"
+      > </a
+      ><a name="280" href="Control.Protocol.Lift.html#113" class="Bound"
+      >&#8467;</a
+      ><a name="281" class="Symbol"
+      >)</a
+      ><a name="282"
+      > </a
+      ><a name="283" class="Symbol"
+      >&#8594;</a
+      ><a name="284"
+      > </a
+      ><a name="285" href="Control.Protocol.html#3979" class="Function Operator"
+      >&#10214;</a
+      ><a name="286"
+      > </a
+      ><a name="287" href="Control.Protocol.Lift.html#269" class="Bound"
+      >P</a
+      ><a name="288"
+      > </a
+      ><a name="289" href="Control.Protocol.html#3979" class="Function Operator"
+      >&#10215;</a
+      ><a name="290"
+      > </a
+      ><a name="291" class="Symbol"
+      >&#8594;</a
+      ><a name="292"
+      > </a
+      ><a name="293" href="Control.Protocol.html#3979" class="Function Operator"
+      >&#10214;</a
+      ><a name="294"
+      > </a
+      ><a name="295" href="Control.Protocol.Lift.html#126" class="Function"
+      >lift&#7486;</a
+      ><a name="300"
+      > </a
+      ><a name="301" href="Control.Protocol.Lift.html#269" class="Bound"
+      >P</a
+      ><a name="302"
+      > </a
+      ><a name="303" href="Control.Protocol.html#3979" class="Function Operator"
+      >&#10215;</a
+      ><a name="304"
+      >
+    </a
+      ><a name="309" href="Control.Protocol.Lift.html#256" class="Function"
+      >lift-proc</a
+      ><a name="318"
+      > </a
+      ><a name="319" href="Control.Protocol.html#957" class="InductiveConstructor"
+      >end</a
+      ><a name="322"
+      >      </a
+      ><a name="328" href="Control.Protocol.html#3730" class="InductiveConstructor"
+      >end</a
+      ><a name="331"
+      >     </a
+      ><a name="336" class="Symbol"
+      >=</a
+      ><a name="337"
+      > </a
+      ><a name="338" href="Control.Protocol.html#3730" class="InductiveConstructor"
+      >end</a
+      ><a name="341"
+      >
+    </a
+      ><a name="346" href="Control.Protocol.Lift.html#256" class="Function"
+      >lift-proc</a
+      ><a name="355"
+      > </a
+      ><a name="356" class="Symbol"
+      >(</a
+      ><a name="357" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >send</a
+      ><a name="361"
+      > </a
+      ><a name="362" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >P</a
+      ><a name="363" class="Symbol"
+      >)</a
+      ><a name="364"
+      > </a
+      ><a name="365" class="Symbol"
+      >(</a
+      ><a name="366" href="Control.Protocol.Lift.html#366" class="Bound"
+      >m</a
+      ><a name="367"
+      > </a
+      ><a name="368" href="Data.Product.html#537" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="369"
+      > </a
+      ><a name="370" href="Control.Protocol.Lift.html#370" class="Bound"
+      >p</a
+      ><a name="371" class="Symbol"
+      >)</a
+      ><a name="372"
+      > </a
+      ><a name="373" class="Symbol"
+      >=</a
+      ><a name="374"
+      > </a
+      ><a name="375" href="Level.html#435" class="InductiveConstructor"
+      >lift</a
+      ><a name="379"
+      > </a
+      ><a name="380" href="Control.Protocol.Lift.html#366" class="Bound"
+      >m</a
+      ><a name="381"
+      > </a
+      ><a name="382" href="Data.Product.html#537" class="InductiveConstructor Operator"
+      >,</a
+      ><a name="383"
+      > </a
+      ><a name="384" href="Control.Protocol.Lift.html#256" class="Function"
+      >lift-proc</a
+      ><a name="393"
+      > </a
+      ><a name="394" class="Symbol"
+      >(</a
+      ><a name="395" href="Control.Protocol.Lift.html#362" class="Bound"
+      >P</a
+      ><a name="396"
+      > </a
+      ><a name="397" href="Control.Protocol.Lift.html#366" class="Bound"
+      >m</a
+      ><a name="398" class="Symbol"
+      >)</a
+      ><a name="399"
+      > </a
+      ><a name="400" href="Control.Protocol.Lift.html#370" class="Bound"
+      >p</a
+      ><a name="401"
+      >
+    </a
+      ><a name="406" href="Control.Protocol.Lift.html#256" class="Function"
+      >lift-proc</a
+      ><a name="415"
+      > </a
+      ><a name="416" class="Symbol"
+      >(</a
+      ><a name="417" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >recv</a
+      ><a name="421"
+      > </a
+      ><a name="422" href="Control.Protocol.html#974" class="InductiveConstructor"
+      >P</a
+      ><a name="423" class="Symbol"
+      >)</a
+      ><a name="424"
+      > </a
+      ><a name="425" href="Control.Protocol.Lift.html#425" class="Bound"
+      >p</a
+      ><a name="426"
+      >       </a
+      ><a name="433" class="Symbol"
+      >=</a
+      ><a name="434"
+      > </a
+      ><a name="435" class="Symbol"
+      >&#955;</a
+      ><a name="436"
+      > </a
+      ><a name="437" class="Symbol"
+      >{</a
+      ><a name="438"
+      > </a
+      ><a name="439" class="Symbol"
+      >(</a
+      ><a name="440" href="Level.html#435" class="InductiveConstructor"
+      >lift</a
+      ><a name="444"
+      > </a
+      ><a name="445" href="Control.Protocol.Lift.html#445" class="Bound"
+      >m</a
+      ><a name="446" class="Symbol"
+      >)</a
+      ><a name="447"
+      > </a
+      ><a name="448" class="Symbol"
+      >&#8594;</a
+      ><a name="449"
+      > </a
+      ><a name="450" href="Control.Protocol.Lift.html#256" class="Function"
+      >lift-proc</a
+      ><a name="459"
+      > </a
+      ><a name="460" class="Symbol"
+      >(</a
+      ><a name="461" href="Control.Protocol.Lift.html#422" class="Bound"
+      >P</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="Control.Protocol.Lift.html#445" class="Bound"
+      >m</a
+      ><a name="464" class="Symbol"
+      >)</a
+      ><a name="465"
+      > </a
+      ><a name="466" class="Symbol"
+      >(</a
+      ><a name="467" href="Control.Protocol.Lift.html#425" class="Bound"
+      >p</a
+      ><a name="468"
+      > </a
+      ><a name="469" href="Control.Protocol.Lift.html#445" class="Bound"
+      >m</a
+      ><a name="470" class="Symbol"
+      >)</a
+      ><a name="471"
+      > </a
+      ><a name="472" class="Symbol"
+      >}</a
+      ><a name="473"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

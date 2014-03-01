@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Category.Applicative</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Applicative functors</a
+      ><a name="157"
+      >
+</a
+      ><a name="158" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="230"
+      >
+
+</a
+      ><a name="232" class="Comment"
+      >-- Note that currently the applicative functor laws are not included</a
+      ><a name="300"
+      >
+</a
+      ><a name="301" class="Comment"
+      >-- here.</a
+      ><a name="309"
+      >
+
+</a
+      ><a name="311" class="Keyword"
+      >module</a
+      ><a name="317"
+      > </a
+      ><a name="318" href="Category.Applicative.html#1" class="Module"
+      >Category.Applicative</a
+      ><a name="338"
+      > </a
+      ><a name="339" class="Keyword"
+      >where</a
+      ><a name="344"
+      >
+
+</a
+      ><a name="346" class="Keyword"
+      >open</a
+      ><a name="350"
+      > </a
+      ><a name="351" class="Keyword"
+      >import</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Data.Unit.html#1" class="Module"
+      >Data.Unit</a
+      ><a name="367"
+      >
+</a
+      ><a name="368" class="Keyword"
+      >open</a
+      ><a name="372"
+      > </a
+      ><a name="373" class="Keyword"
+      >import</a
+      ><a name="379"
+      > </a
+      ><a name="380" href="Category.Applicative.Indexed.html#1" class="Module"
+      >Category.Applicative.Indexed</a
+      ><a name="408"
+      >
+
+</a
+      ><a name="410" href="Category.Applicative.html#410" class="Function"
+      >RawApplicative</a
+      ><a name="424"
+      > </a
+      ><a name="425" class="Symbol"
+      >:</a
+      ><a name="426"
+      > </a
+      ><a name="427" class="Symbol"
+      >&#8704;</a
+      ><a name="428"
+      > </a
+      ><a name="429" class="Symbol"
+      >{</a
+      ><a name="430" href="Category.Applicative.html#430" class="Bound"
+      >f</a
+      ><a name="431" class="Symbol"
+      >}</a
+      ><a name="432"
+      > </a
+      ><a name="433" class="Symbol"
+      >&#8594;</a
+      ><a name="434"
+      > </a
+      ><a name="435" class="Symbol"
+      >(</a
+      ><a name="436" class="PrimitiveType"
+      >Set</a
+      ><a name="439"
+      > </a
+      ><a name="440" href="Category.Applicative.html#430" class="Bound"
+      >f</a
+      ><a name="441"
+      > </a
+      ><a name="442" class="Symbol"
+      >&#8594;</a
+      ><a name="443"
+      > </a
+      ><a name="444" class="PrimitiveType"
+      >Set</a
+      ><a name="447"
+      > </a
+      ><a name="448" href="Category.Applicative.html#430" class="Bound"
+      >f</a
+      ><a name="449" class="Symbol"
+      >)</a
+      ><a name="450"
+      > </a
+      ><a name="451" class="Symbol"
+      >&#8594;</a
+      ><a name="452"
+      > </a
+      ><a name="453" class="PrimitiveType"
+      >Set</a
+      ><a name="456"
+      > </a
+      ><a name="457" class="Symbol"
+      >_</a
+      ><a name="458"
+      >
+</a
+      ><a name="459" href="Category.Applicative.html#410" class="Function"
+      >RawApplicative</a
+      ><a name="473"
+      > </a
+      ><a name="474" href="Category.Applicative.html#474" class="Bound"
+      >F</a
+      ><a name="475"
+      > </a
+      ><a name="476" class="Symbol"
+      >=</a
+      ><a name="477"
+      > </a
+      ><a name="478" href="Category.Applicative.Indexed.html#607" class="Record"
+      >RawIApplicative</a
+      ><a name="493"
+      > </a
+      ><a name="494" class="Symbol"
+      >{</a
+      ><a name="495"
+      >I </a
+      ><a name="497" class="Symbol"
+      >=</a
+      ><a name="498"
+      > </a
+      ><a name="499" href="Data.Unit.html#681" class="Record"
+      >&#8868;</a
+      ><a name="500" class="Symbol"
+      >}</a
+      ><a name="501"
+      > </a
+      ><a name="502" class="Symbol"
+      >(&#955;</a
+      ><a name="504"
+      > </a
+      ><a name="505" href="Category.Applicative.html#505" class="Bound"
+      >_</a
+      ><a name="506"
+      > </a
+      ><a name="507" href="Category.Applicative.html#507" class="Bound"
+      >_</a
+      ><a name="508"
+      > </a
+      ><a name="509" class="Symbol"
+      >&#8594;</a
+      ><a name="510"
+      > </a
+      ><a name="511" href="Category.Applicative.html#474" class="Bound"
+      >F</a
+      ><a name="512" class="Symbol"
+      >)</a
+      ><a name="513"
+      >
+
+</a
+      ><a name="515" class="Keyword"
+      >module</a
+      ><a name="521"
+      > </a
+      ><a name="522" href="Category.Applicative.html#522" class="Module"
+      >RawApplicative</a
+      ><a name="536"
+      > </a
+      ><a name="537" class="Symbol"
+      >{</a
+      ><a name="538" href="Category.Applicative.html#538" class="Bound"
+      >f</a
+      ><a name="539" class="Symbol"
+      >}</a
+      ><a name="540"
+      > </a
+      ><a name="541" class="Symbol"
+      >{</a
+      ><a name="542" href="Category.Applicative.html#542" class="Bound"
+      >F</a
+      ><a name="543"
+      > </a
+      ><a name="544" class="Symbol"
+      >:</a
+      ><a name="545"
+      > </a
+      ><a name="546" class="PrimitiveType"
+      >Set</a
+      ><a name="549"
+      > </a
+      ><a name="550" href="Category.Applicative.html#538" class="Bound"
+      >f</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >&#8594;</a
+      ><a name="553"
+      > </a
+      ><a name="554" class="PrimitiveType"
+      >Set</a
+      ><a name="557"
+      > </a
+      ><a name="558" href="Category.Applicative.html#538" class="Bound"
+      >f</a
+      ><a name="559" class="Symbol"
+      >}</a
+      ><a name="560"
+      >
+                      </a
+      ><a name="583" class="Symbol"
+      >(</a
+      ><a name="584" href="Category.Applicative.html#584" class="Bound"
+      >app</a
+      ><a name="587"
+      > </a
+      ><a name="588" class="Symbol"
+      >:</a
+      ><a name="589"
+      > </a
+      ><a name="590" href="Category.Applicative.html#410" class="Function"
+      >RawApplicative</a
+      ><a name="604"
+      > </a
+      ><a name="605" href="Category.Applicative.html#542" class="Bound"
+      >F</a
+      ><a name="606" class="Symbol"
+      >)</a
+      ><a name="607"
+      > </a
+      ><a name="608" class="Keyword"
+      >where</a
+      ><a name="613"
+      >
+  </a
+      ><a name="616" class="Keyword"
+      >open</a
+      ><a name="620"
+      > </a
+      ><a name="621" href="Category.Applicative.Indexed.html#607" class="Module"
+      >RawIApplicative</a
+      ><a name="636"
+      > </a
+      ><a name="637" href="Category.Applicative.html#584" class="Bound"
+      >app</a
+      ><a name="640"
+      > </a
+      ><a name="641" class="Keyword"
+      >public</a
+      ><a name="647"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

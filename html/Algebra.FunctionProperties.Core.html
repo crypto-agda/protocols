@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Algebra.FunctionProperties.Core</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Properties of functions, such as associativity and commutativity</a
+      ><a name="201"
+      >
+</a
+      ><a name="202" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="274"
+      >
+
+</a
+      ><a name="276" class="Comment"
+      >-- This file contains some core definitions which are reexported by</a
+      ><a name="343"
+      >
+</a
+      ><a name="344" class="Comment"
+      >-- Algebra.FunctionProperties. They are placed here because</a
+      ><a name="403"
+      >
+</a
+      ><a name="404" class="Comment"
+      >-- Algebra.FunctionProperties is a parameterised module, and some of</a
+      ><a name="472"
+      >
+</a
+      ><a name="473" class="Comment"
+      >-- the parameters are irrelevant for these definitions.</a
+      ><a name="528"
+      >
+
+</a
+      ><a name="530" class="Keyword"
+      >module</a
+      ><a name="536"
+      > </a
+      ><a name="537" href="Algebra.FunctionProperties.Core.html#1" class="Module"
+      >Algebra.FunctionProperties.Core</a
+      ><a name="568"
+      > </a
+      ><a name="569" class="Keyword"
+      >where</a
+      ><a name="574"
+      >
+
+</a
+      ><a name="576" class="Keyword"
+      >open</a
+      ><a name="580"
+      > </a
+      ><a name="581" class="Keyword"
+      >import</a
+      ><a name="587"
+      > </a
+      ><a name="588" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="593"
+      >
+
+</a
+      ><a name="595" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="667"
+      >
+</a
+      ><a name="668" class="Comment"
+      >-- Unary and binary operations</a
+      ><a name="698"
+      >
+
+</a
+      ><a name="700" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="703"
+      > </a
+      ><a name="704" class="Symbol"
+      >:</a
+      ><a name="705"
+      > </a
+      ><a name="706" class="Symbol"
+      >&#8704;</a
+      ><a name="707"
+      > </a
+      ><a name="708" class="Symbol"
+      >{</a
+      ><a name="709" href="Algebra.FunctionProperties.Core.html#709" class="Bound"
+      >&#8467;</a
+      ><a name="710" class="Symbol"
+      >}</a
+      ><a name="711"
+      > </a
+      ><a name="712" class="Symbol"
+      >&#8594;</a
+      ><a name="713"
+      > </a
+      ><a name="714" class="PrimitiveType"
+      >Set</a
+      ><a name="717"
+      > </a
+      ><a name="718" href="Algebra.FunctionProperties.Core.html#709" class="Bound"
+      >&#8467;</a
+      ><a name="719"
+      > </a
+      ><a name="720" class="Symbol"
+      >&#8594;</a
+      ><a name="721"
+      > </a
+      ><a name="722" class="PrimitiveType"
+      >Set</a
+      ><a name="725"
+      > </a
+      ><a name="726" href="Algebra.FunctionProperties.Core.html#709" class="Bound"
+      >&#8467;</a
+      ><a name="727"
+      >
+</a
+      ><a name="728" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="731"
+      > </a
+      ><a name="732" href="Algebra.FunctionProperties.Core.html#732" class="Bound"
+      >A</a
+      ><a name="733"
+      > </a
+      ><a name="734" class="Symbol"
+      >=</a
+      ><a name="735"
+      > </a
+      ><a name="736" href="Algebra.FunctionProperties.Core.html#732" class="Bound"
+      >A</a
+      ><a name="737"
+      > </a
+      ><a name="738" class="Symbol"
+      >&#8594;</a
+      ><a name="739"
+      > </a
+      ><a name="740" href="Algebra.FunctionProperties.Core.html#732" class="Bound"
+      >A</a
+      ><a name="741"
+      >
+
+</a
+      ><a name="743" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="746"
+      > </a
+      ><a name="747" class="Symbol"
+      >:</a
+      ><a name="748"
+      > </a
+      ><a name="749" class="Symbol"
+      >&#8704;</a
+      ><a name="750"
+      > </a
+      ><a name="751" class="Symbol"
+      >{</a
+      ><a name="752" href="Algebra.FunctionProperties.Core.html#752" class="Bound"
+      >&#8467;</a
+      ><a name="753" class="Symbol"
+      >}</a
+      ><a name="754"
+      > </a
+      ><a name="755" class="Symbol"
+      >&#8594;</a
+      ><a name="756"
+      > </a
+      ><a name="757" class="PrimitiveType"
+      >Set</a
+      ><a name="760"
+      > </a
+      ><a name="761" href="Algebra.FunctionProperties.Core.html#752" class="Bound"
+      >&#8467;</a
+      ><a name="762"
+      > </a
+      ><a name="763" class="Symbol"
+      >&#8594;</a
+      ><a name="764"
+      > </a
+      ><a name="765" class="PrimitiveType"
+      >Set</a
+      ><a name="768"
+      > </a
+      ><a name="769" href="Algebra.FunctionProperties.Core.html#752" class="Bound"
+      >&#8467;</a
+      ><a name="770"
+      >
+</a
+      ><a name="771" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="774"
+      > </a
+      ><a name="775" href="Algebra.FunctionProperties.Core.html#775" class="Bound"
+      >A</a
+      ><a name="776"
+      > </a
+      ><a name="777" class="Symbol"
+      >=</a
+      ><a name="778"
+      > </a
+      ><a name="779" href="Algebra.FunctionProperties.Core.html#775" class="Bound"
+      >A</a
+      ><a name="780"
+      > </a
+      ><a name="781" class="Symbol"
+      >&#8594;</a
+      ><a name="782"
+      > </a
+      ><a name="783" href="Algebra.FunctionProperties.Core.html#775" class="Bound"
+      >A</a
+      ><a name="784"
+      > </a
+      ><a name="785" class="Symbol"
+      >&#8594;</a
+      ><a name="786"
+      > </a
+      ><a name="787" href="Algebra.FunctionProperties.Core.html#775" class="Bound"
+      >A</a
+      ><a name="788"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

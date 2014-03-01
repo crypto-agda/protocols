@@ -1,0 +1,2201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Algebra.FunctionProperties</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="101"
+      >
+</a
+      ><a name="102" class="Comment"
+      >-- The Agda standard library</a
+      ><a name="130"
+      >
+</a
+      ><a name="131" class="Comment"
+      >--</a
+      ><a name="133"
+      >
+</a
+      ><a name="134" class="Comment"
+      >-- Properties of functions, such as associativity and commutativity</a
+      ><a name="201"
+      >
+</a
+      ><a name="202" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="274"
+      >
+
+</a
+      ><a name="276" class="Comment"
+      >-- These properties can (for instance) be used to define algebraic</a
+      ><a name="342"
+      >
+</a
+      ><a name="343" class="Comment"
+      >-- structures.</a
+      ><a name="357"
+      >
+
+</a
+      ><a name="359" class="Keyword"
+      >open</a
+      ><a name="363"
+      > </a
+      ><a name="364" class="Keyword"
+      >import</a
+      ><a name="370"
+      > </a
+      ><a name="371" href="Level.html#1" class="Module"
+      >Level</a
+      ><a name="376"
+      >
+</a
+      ><a name="377" class="Keyword"
+      >open</a
+      ><a name="381"
+      > </a
+      ><a name="382" class="Keyword"
+      >import</a
+      ><a name="388"
+      > </a
+      ><a name="389" href="Relation.Binary.html#1" class="Module"
+      >Relation.Binary</a
+      ><a name="404"
+      >
+
+</a
+      ><a name="406" class="Comment"
+      >-- The properties are specified using the following relation as</a
+      ><a name="469"
+      >
+</a
+      ><a name="470" class="Comment"
+      >-- &quot;equality&quot;.</a
+      ><a name="484"
+      >
+
+</a
+      ><a name="486" class="Keyword"
+      >module</a
+      ><a name="492"
+      > </a
+      ><a name="493" href="Algebra.FunctionProperties.html#1" class="Module"
+      >Algebra.FunctionProperties</a
+      ><a name="519"
+      >
+         </a
+      ><a name="529" class="Symbol"
+      >{</a
+      ><a name="530" href="Algebra.FunctionProperties.html#530" class="Bound"
+      >a</a
+      ><a name="531"
+      > </a
+      ><a name="532" href="Algebra.FunctionProperties.html#532" class="Bound"
+      >&#8467;</a
+      ><a name="533" class="Symbol"
+      >}</a
+      ><a name="534"
+      > </a
+      ><a name="535" class="Symbol"
+      >{</a
+      ><a name="536" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="537"
+      > </a
+      ><a name="538" class="Symbol"
+      >:</a
+      ><a name="539"
+      > </a
+      ><a name="540" class="PrimitiveType"
+      >Set</a
+      ><a name="543"
+      > </a
+      ><a name="544" href="Algebra.FunctionProperties.html#530" class="Bound"
+      >a</a
+      ><a name="545" class="Symbol"
+      >}</a
+      ><a name="546"
+      > </a
+      ><a name="547" class="Symbol"
+      >(</a
+      ><a name="548" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >_&#8776;_</a
+      ><a name="551"
+      > </a
+      ><a name="552" class="Symbol"
+      >:</a
+      ><a name="553"
+      > </a
+      ><a name="554" href="Relation.Binary.Core.html#789" class="Function"
+      >Rel</a
+      ><a name="557"
+      > </a
+      ><a name="558" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="559"
+      > </a
+      ><a name="560" href="Algebra.FunctionProperties.html#532" class="Bound"
+      >&#8467;</a
+      ><a name="561" class="Symbol"
+      >)</a
+      ><a name="562"
+      > </a
+      ><a name="563" class="Keyword"
+      >where</a
+      ><a name="568"
+      >
+
+</a
+      ><a name="570" class="Keyword"
+      >open</a
+      ><a name="574"
+      > </a
+      ><a name="575" class="Keyword"
+      >import</a
+      ><a name="581"
+      > </a
+      ><a name="582" href="Data.Product.html#1" class="Module"
+      >Data.Product</a
+      ><a name="594"
+      >
+
+</a
+      ><a name="596" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="668"
+      >
+</a
+      ><a name="669" class="Comment"
+      >-- Unary and binary operations</a
+      ><a name="699"
+      >
+
+</a
+      ><a name="701" class="Keyword"
+      >open</a
+      ><a name="705"
+      > </a
+      ><a name="706" class="Keyword"
+      >import</a
+      ><a name="712"
+      > </a
+      ><a name="713" href="Algebra.FunctionProperties.Core.html#1" class="Module"
+      >Algebra.FunctionProperties.Core</a
+      ><a name="744"
+      > </a
+      ><a name="745" class="Keyword"
+      >public</a
+      ><a name="751"
+      >
+
+</a
+      ><a name="753" class="Comment"
+      >------------------------------------------------------------------------</a
+      ><a name="825"
+      >
+</a
+      ><a name="826" class="Comment"
+      >-- Properties of operations</a
+      ><a name="853"
+      >
+
+</a
+      ><a name="855" href="Algebra.FunctionProperties.html#855" class="Function"
+      >Associative</a
+      ><a name="866"
+      > </a
+      ><a name="867" class="Symbol"
+      >:</a
+      ><a name="868"
+      > </a
+      ><a name="869" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="872"
+      > </a
+      ><a name="873" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="874"
+      > </a
+      ><a name="875" class="Symbol"
+      >&#8594;</a
+      ><a name="876"
+      > </a
+      ><a name="877" class="PrimitiveType"
+      >Set</a
+      ><a name="880"
+      > </a
+      ><a name="881" class="Symbol"
+      >_</a
+      ><a name="882"
+      >
+</a
+      ><a name="883" href="Algebra.FunctionProperties.html#855" class="Function"
+      >Associative</a
+      ><a name="894"
+      > </a
+      ><a name="895" href="Algebra.FunctionProperties.html#895" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="898"
+      > </a
+      ><a name="899" class="Symbol"
+      >=</a
+      ><a name="900"
+      > </a
+      ><a name="901" class="Symbol"
+      >&#8704;</a
+      ><a name="902"
+      > </a
+      ><a name="903" href="Algebra.FunctionProperties.html#903" class="Bound"
+      >x</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="Algebra.FunctionProperties.html#905" class="Bound"
+      >y</a
+      ><a name="906"
+      > </a
+      ><a name="907" href="Algebra.FunctionProperties.html#907" class="Bound"
+      >z</a
+      ><a name="908"
+      > </a
+      ><a name="909" class="Symbol"
+      >&#8594;</a
+      ><a name="910"
+      > </a
+      ><a name="911" class="Symbol"
+      >((</a
+      ><a name="913" href="Algebra.FunctionProperties.html#903" class="Bound"
+      >x</a
+      ><a name="914"
+      > </a
+      ><a name="915" href="Algebra.FunctionProperties.html#895" class="Bound Operator"
+      >&#8729;</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Algebra.FunctionProperties.html#905" class="Bound"
+      >y</a
+      ><a name="918" class="Symbol"
+      >)</a
+      ><a name="919"
+      > </a
+      ><a name="920" href="Algebra.FunctionProperties.html#895" class="Bound Operator"
+      >&#8729;</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Algebra.FunctionProperties.html#907" class="Bound"
+      >z</a
+      ><a name="923" class="Symbol"
+      >)</a
+      ><a name="924"
+      > </a
+      ><a name="925" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="926"
+      > </a
+      ><a name="927" class="Symbol"
+      >(</a
+      ><a name="928" href="Algebra.FunctionProperties.html#903" class="Bound"
+      >x</a
+      ><a name="929"
+      > </a
+      ><a name="930" href="Algebra.FunctionProperties.html#895" class="Bound Operator"
+      >&#8729;</a
+      ><a name="931"
+      > </a
+      ><a name="932" class="Symbol"
+      >(</a
+      ><a name="933" href="Algebra.FunctionProperties.html#905" class="Bound"
+      >y</a
+      ><a name="934"
+      > </a
+      ><a name="935" href="Algebra.FunctionProperties.html#895" class="Bound Operator"
+      >&#8729;</a
+      ><a name="936"
+      > </a
+      ><a name="937" href="Algebra.FunctionProperties.html#907" class="Bound"
+      >z</a
+      ><a name="938" class="Symbol"
+      >))</a
+      ><a name="940"
+      >
+
+</a
+      ><a name="942" href="Algebra.FunctionProperties.html#942" class="Function"
+      >Commutative</a
+      ><a name="953"
+      > </a
+      ><a name="954" class="Symbol"
+      >:</a
+      ><a name="955"
+      > </a
+      ><a name="956" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="959"
+      > </a
+      ><a name="960" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="961"
+      > </a
+      ><a name="962" class="Symbol"
+      >&#8594;</a
+      ><a name="963"
+      > </a
+      ><a name="964" class="PrimitiveType"
+      >Set</a
+      ><a name="967"
+      > </a
+      ><a name="968" class="Symbol"
+      >_</a
+      ><a name="969"
+      >
+</a
+      ><a name="970" href="Algebra.FunctionProperties.html#942" class="Function"
+      >Commutative</a
+      ><a name="981"
+      > </a
+      ><a name="982" href="Algebra.FunctionProperties.html#982" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="985"
+      > </a
+      ><a name="986" class="Symbol"
+      >=</a
+      ><a name="987"
+      > </a
+      ><a name="988" class="Symbol"
+      >&#8704;</a
+      ><a name="989"
+      > </a
+      ><a name="990" href="Algebra.FunctionProperties.html#990" class="Bound"
+      >x</a
+      ><a name="991"
+      > </a
+      ><a name="992" href="Algebra.FunctionProperties.html#992" class="Bound"
+      >y</a
+      ><a name="993"
+      > </a
+      ><a name="994" class="Symbol"
+      >&#8594;</a
+      ><a name="995"
+      > </a
+      ><a name="996" class="Symbol"
+      >(</a
+      ><a name="997" href="Algebra.FunctionProperties.html#990" class="Bound"
+      >x</a
+      ><a name="998"
+      > </a
+      ><a name="999" href="Algebra.FunctionProperties.html#982" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1000"
+      > </a
+      ><a name="1001" href="Algebra.FunctionProperties.html#992" class="Bound"
+      >y</a
+      ><a name="1002" class="Symbol"
+      >)</a
+      ><a name="1003"
+      > </a
+      ><a name="1004" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1005"
+      > </a
+      ><a name="1006" class="Symbol"
+      >(</a
+      ><a name="1007" href="Algebra.FunctionProperties.html#992" class="Bound"
+      >y</a
+      ><a name="1008"
+      > </a
+      ><a name="1009" href="Algebra.FunctionProperties.html#982" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1010"
+      > </a
+      ><a name="1011" href="Algebra.FunctionProperties.html#990" class="Bound"
+      >x</a
+      ><a name="1012" class="Symbol"
+      >)</a
+      ><a name="1013"
+      >
+
+</a
+      ><a name="1015" href="Algebra.FunctionProperties.html#1015" class="Function"
+      >LeftIdentity</a
+      ><a name="1027"
+      > </a
+      ><a name="1028" class="Symbol"
+      >:</a
+      ><a name="1029"
+      > </a
+      ><a name="1030" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1031"
+      > </a
+      ><a name="1032" class="Symbol"
+      >&#8594;</a
+      ><a name="1033"
+      > </a
+      ><a name="1034" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1037"
+      > </a
+      ><a name="1038" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1039"
+      > </a
+      ><a name="1040" class="Symbol"
+      >&#8594;</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" class="PrimitiveType"
+      >Set</a
+      ><a name="1045"
+      > </a
+      ><a name="1046" class="Symbol"
+      >_</a
+      ><a name="1047"
+      >
+</a
+      ><a name="1048" href="Algebra.FunctionProperties.html#1015" class="Function"
+      >LeftIdentity</a
+      ><a name="1060"
+      > </a
+      ><a name="1061" href="Algebra.FunctionProperties.html#1061" class="Bound"
+      >e</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" href="Algebra.FunctionProperties.html#1063" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" class="Symbol"
+      >=</a
+      ><a name="1068"
+      > </a
+      ><a name="1069" class="Symbol"
+      >&#8704;</a
+      ><a name="1070"
+      > </a
+      ><a name="1071" href="Algebra.FunctionProperties.html#1071" class="Bound"
+      >x</a
+      ><a name="1072"
+      > </a
+      ><a name="1073" class="Symbol"
+      >&#8594;</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" class="Symbol"
+      >(</a
+      ><a name="1076" href="Algebra.FunctionProperties.html#1061" class="Bound"
+      >e</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="Algebra.FunctionProperties.html#1063" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Algebra.FunctionProperties.html#1071" class="Bound"
+      >x</a
+      ><a name="1081" class="Symbol"
+      >)</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1084"
+      > </a
+      ><a name="1085" href="Algebra.FunctionProperties.html#1071" class="Bound"
+      >x</a
+      ><a name="1086"
+      >
+
+</a
+      ><a name="1088" href="Algebra.FunctionProperties.html#1088" class="Function"
+      >RightIdentity</a
+      ><a name="1101"
+      > </a
+      ><a name="1102" class="Symbol"
+      >:</a
+      ><a name="1103"
+      > </a
+      ><a name="1104" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1105"
+      > </a
+      ><a name="1106" class="Symbol"
+      >&#8594;</a
+      ><a name="1107"
+      > </a
+      ><a name="1108" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" class="Symbol"
+      >&#8594;</a
+      ><a name="1115"
+      > </a
+      ><a name="1116" class="PrimitiveType"
+      >Set</a
+      ><a name="1119"
+      > </a
+      ><a name="1120" class="Symbol"
+      >_</a
+      ><a name="1121"
+      >
+</a
+      ><a name="1122" href="Algebra.FunctionProperties.html#1088" class="Function"
+      >RightIdentity</a
+      ><a name="1135"
+      > </a
+      ><a name="1136" href="Algebra.FunctionProperties.html#1136" class="Bound"
+      >e</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" href="Algebra.FunctionProperties.html#1138" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="1141"
+      > </a
+      ><a name="1142" class="Symbol"
+      >=</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" class="Symbol"
+      >&#8704;</a
+      ><a name="1145"
+      > </a
+      ><a name="1146" href="Algebra.FunctionProperties.html#1146" class="Bound"
+      >x</a
+      ><a name="1147"
+      > </a
+      ><a name="1148" class="Symbol"
+      >&#8594;</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" class="Symbol"
+      >(</a
+      ><a name="1151" href="Algebra.FunctionProperties.html#1146" class="Bound"
+      >x</a
+      ><a name="1152"
+      > </a
+      ><a name="1153" href="Algebra.FunctionProperties.html#1138" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1154"
+      > </a
+      ><a name="1155" href="Algebra.FunctionProperties.html#1136" class="Bound"
+      >e</a
+      ><a name="1156" class="Symbol"
+      >)</a
+      ><a name="1157"
+      > </a
+      ><a name="1158" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1159"
+      > </a
+      ><a name="1160" href="Algebra.FunctionProperties.html#1146" class="Bound"
+      >x</a
+      ><a name="1161"
+      >
+
+</a
+      ><a name="1163" href="Algebra.FunctionProperties.html#1163" class="Function"
+      >Identity</a
+      ><a name="1171"
+      > </a
+      ><a name="1172" class="Symbol"
+      >:</a
+      ><a name="1173"
+      > </a
+      ><a name="1174" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1175"
+      > </a
+      ><a name="1176" class="Symbol"
+      >&#8594;</a
+      ><a name="1177"
+      > </a
+      ><a name="1178" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1183"
+      > </a
+      ><a name="1184" class="Symbol"
+      >&#8594;</a
+      ><a name="1185"
+      > </a
+      ><a name="1186" class="PrimitiveType"
+      >Set</a
+      ><a name="1189"
+      > </a
+      ><a name="1190" class="Symbol"
+      >_</a
+      ><a name="1191"
+      >
+</a
+      ><a name="1192" href="Algebra.FunctionProperties.html#1163" class="Function"
+      >Identity</a
+      ><a name="1200"
+      > </a
+      ><a name="1201" href="Algebra.FunctionProperties.html#1201" class="Bound"
+      >e</a
+      ><a name="1202"
+      > </a
+      ><a name="1203" href="Algebra.FunctionProperties.html#1203" class="Bound"
+      >&#8729;</a
+      ><a name="1204"
+      > </a
+      ><a name="1205" class="Symbol"
+      >=</a
+      ><a name="1206"
+      > </a
+      ><a name="1207" href="Algebra.FunctionProperties.html#1015" class="Function"
+      >LeftIdentity</a
+      ><a name="1219"
+      > </a
+      ><a name="1220" href="Algebra.FunctionProperties.html#1201" class="Bound"
+      >e</a
+      ><a name="1221"
+      > </a
+      ><a name="1222" href="Algebra.FunctionProperties.html#1203" class="Bound"
+      >&#8729;</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="Data.Product.html#1083" class="Function Operator"
+      >&#215;</a
+      ><a name="1225"
+      > </a
+      ><a name="1226" href="Algebra.FunctionProperties.html#1088" class="Function"
+      >RightIdentity</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" href="Algebra.FunctionProperties.html#1201" class="Bound"
+      >e</a
+      ><a name="1241"
+      > </a
+      ><a name="1242" href="Algebra.FunctionProperties.html#1203" class="Bound"
+      >&#8729;</a
+      ><a name="1243"
+      >
+
+</a
+      ><a name="1245" href="Algebra.FunctionProperties.html#1245" class="Function"
+      >LeftZero</a
+      ><a name="1253"
+      > </a
+      ><a name="1254" class="Symbol"
+      >:</a
+      ><a name="1255"
+      > </a
+      ><a name="1256" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" class="Symbol"
+      >&#8594;</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1263"
+      > </a
+      ><a name="1264" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" class="Symbol"
+      >&#8594;</a
+      ><a name="1267"
+      > </a
+      ><a name="1268" class="PrimitiveType"
+      >Set</a
+      ><a name="1271"
+      > </a
+      ><a name="1272" class="Symbol"
+      >_</a
+      ><a name="1273"
+      >
+</a
+      ><a name="1274" href="Algebra.FunctionProperties.html#1245" class="Function"
+      >LeftZero</a
+      ><a name="1282"
+      > </a
+      ><a name="1283" href="Algebra.FunctionProperties.html#1283" class="Bound"
+      >z</a
+      ><a name="1284"
+      > </a
+      ><a name="1285" href="Algebra.FunctionProperties.html#1285" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="1288"
+      > </a
+      ><a name="1289" class="Symbol"
+      >=</a
+      ><a name="1290"
+      > </a
+      ><a name="1291" class="Symbol"
+      >&#8704;</a
+      ><a name="1292"
+      > </a
+      ><a name="1293" href="Algebra.FunctionProperties.html#1293" class="Bound"
+      >x</a
+      ><a name="1294"
+      > </a
+      ><a name="1295" class="Symbol"
+      >&#8594;</a
+      ><a name="1296"
+      > </a
+      ><a name="1297" class="Symbol"
+      >(</a
+      ><a name="1298" href="Algebra.FunctionProperties.html#1283" class="Bound"
+      >z</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" href="Algebra.FunctionProperties.html#1285" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1301"
+      > </a
+      ><a name="1302" href="Algebra.FunctionProperties.html#1293" class="Bound"
+      >x</a
+      ><a name="1303" class="Symbol"
+      >)</a
+      ><a name="1304"
+      > </a
+      ><a name="1305" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" href="Algebra.FunctionProperties.html#1283" class="Bound"
+      >z</a
+      ><a name="1308"
+      >
+
+</a
+      ><a name="1310" href="Algebra.FunctionProperties.html#1310" class="Function"
+      >RightZero</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" class="Symbol"
+      >:</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1323"
+      > </a
+      ><a name="1324" class="Symbol"
+      >&#8594;</a
+      ><a name="1325"
+      > </a
+      ><a name="1326" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1329"
+      > </a
+      ><a name="1330" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1331"
+      > </a
+      ><a name="1332" class="Symbol"
+      >&#8594;</a
+      ><a name="1333"
+      > </a
+      ><a name="1334" class="PrimitiveType"
+      >Set</a
+      ><a name="1337"
+      > </a
+      ><a name="1338" class="Symbol"
+      >_</a
+      ><a name="1339"
+      >
+</a
+      ><a name="1340" href="Algebra.FunctionProperties.html#1310" class="Function"
+      >RightZero</a
+      ><a name="1349"
+      > </a
+      ><a name="1350" href="Algebra.FunctionProperties.html#1350" class="Bound"
+      >z</a
+      ><a name="1351"
+      > </a
+      ><a name="1352" href="Algebra.FunctionProperties.html#1352" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" class="Symbol"
+      >=</a
+      ><a name="1357"
+      > </a
+      ><a name="1358" class="Symbol"
+      >&#8704;</a
+      ><a name="1359"
+      > </a
+      ><a name="1360" href="Algebra.FunctionProperties.html#1360" class="Bound"
+      >x</a
+      ><a name="1361"
+      > </a
+      ><a name="1362" class="Symbol"
+      >&#8594;</a
+      ><a name="1363"
+      > </a
+      ><a name="1364" class="Symbol"
+      >(</a
+      ><a name="1365" href="Algebra.FunctionProperties.html#1360" class="Bound"
+      >x</a
+      ><a name="1366"
+      > </a
+      ><a name="1367" href="Algebra.FunctionProperties.html#1352" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1368"
+      > </a
+      ><a name="1369" href="Algebra.FunctionProperties.html#1350" class="Bound"
+      >z</a
+      ><a name="1370" class="Symbol"
+      >)</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1373"
+      > </a
+      ><a name="1374" href="Algebra.FunctionProperties.html#1350" class="Bound"
+      >z</a
+      ><a name="1375"
+      >
+
+</a
+      ><a name="1377" href="Algebra.FunctionProperties.html#1377" class="Function"
+      >Zero</a
+      ><a name="1381"
+      > </a
+      ><a name="1382" class="Symbol"
+      >:</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1385"
+      > </a
+      ><a name="1386" class="Symbol"
+      >&#8594;</a
+      ><a name="1387"
+      > </a
+      ><a name="1388" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1393"
+      > </a
+      ><a name="1394" class="Symbol"
+      >&#8594;</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" class="PrimitiveType"
+      >Set</a
+      ><a name="1399"
+      > </a
+      ><a name="1400" class="Symbol"
+      >_</a
+      ><a name="1401"
+      >
+</a
+      ><a name="1402" href="Algebra.FunctionProperties.html#1377" class="Function"
+      >Zero</a
+      ><a name="1406"
+      > </a
+      ><a name="1407" href="Algebra.FunctionProperties.html#1407" class="Bound"
+      >z</a
+      ><a name="1408"
+      > </a
+      ><a name="1409" href="Algebra.FunctionProperties.html#1409" class="Bound"
+      >&#8729;</a
+      ><a name="1410"
+      > </a
+      ><a name="1411" class="Symbol"
+      >=</a
+      ><a name="1412"
+      > </a
+      ><a name="1413" href="Algebra.FunctionProperties.html#1245" class="Function"
+      >LeftZero</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Algebra.FunctionProperties.html#1407" class="Bound"
+      >z</a
+      ><a name="1423"
+      > </a
+      ><a name="1424" href="Algebra.FunctionProperties.html#1409" class="Bound"
+      >&#8729;</a
+      ><a name="1425"
+      > </a
+      ><a name="1426" href="Data.Product.html#1083" class="Function Operator"
+      >&#215;</a
+      ><a name="1427"
+      > </a
+      ><a name="1428" href="Algebra.FunctionProperties.html#1310" class="Function"
+      >RightZero</a
+      ><a name="1437"
+      > </a
+      ><a name="1438" href="Algebra.FunctionProperties.html#1407" class="Bound"
+      >z</a
+      ><a name="1439"
+      > </a
+      ><a name="1440" href="Algebra.FunctionProperties.html#1409" class="Bound"
+      >&#8729;</a
+      ><a name="1441"
+      >
+
+</a
+      ><a name="1443" href="Algebra.FunctionProperties.html#1443" class="Function"
+      >LeftInverse</a
+      ><a name="1454"
+      > </a
+      ><a name="1455" class="Symbol"
+      >:</a
+      ><a name="1456"
+      > </a
+      ><a name="1457" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1458"
+      > </a
+      ><a name="1459" class="Symbol"
+      >&#8594;</a
+      ><a name="1460"
+      > </a
+      ><a name="1461" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="1464"
+      > </a
+      ><a name="1465" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1466"
+      > </a
+      ><a name="1467" class="Symbol"
+      >&#8594;</a
+      ><a name="1468"
+      > </a
+      ><a name="1469" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1472"
+      > </a
+      ><a name="1473" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1474"
+      > </a
+      ><a name="1475" class="Symbol"
+      >&#8594;</a
+      ><a name="1476"
+      > </a
+      ><a name="1477" class="PrimitiveType"
+      >Set</a
+      ><a name="1480"
+      > </a
+      ><a name="1481" class="Symbol"
+      >_</a
+      ><a name="1482"
+      >
+</a
+      ><a name="1483" href="Algebra.FunctionProperties.html#1443" class="Function"
+      >LeftInverse</a
+      ><a name="1494"
+      > </a
+      ><a name="1495" href="Algebra.FunctionProperties.html#1495" class="Bound"
+      >e</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" href="Algebra.FunctionProperties.html#1497" class="Bound Operator"
+      >_&#8315;&#185;</a
+      ><a name="1500"
+      > </a
+      ><a name="1501" href="Algebra.FunctionProperties.html#1501" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" class="Symbol"
+      >=</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" class="Symbol"
+      >&#8704;</a
+      ><a name="1508"
+      > </a
+      ><a name="1509" href="Algebra.FunctionProperties.html#1509" class="Bound"
+      >x</a
+      ><a name="1510"
+      > </a
+      ><a name="1511" class="Symbol"
+      >&#8594;</a
+      ><a name="1512"
+      > </a
+      ><a name="1513" class="Symbol"
+      >(</a
+      ><a name="1514" href="Algebra.FunctionProperties.html#1509" class="Bound"
+      >x</a
+      ><a name="1515"
+      > </a
+      ><a name="1516" href="Algebra.FunctionProperties.html#1497" class="Bound Operator"
+      >&#8315;&#185;</a
+      ><a name="1518"
+      > </a
+      ><a name="1519" href="Algebra.FunctionProperties.html#1501" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1520"
+      > </a
+      ><a name="1521" href="Algebra.FunctionProperties.html#1509" class="Bound"
+      >x</a
+      ><a name="1522" class="Symbol"
+      >)</a
+      ><a name="1523"
+      > </a
+      ><a name="1524" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" href="Algebra.FunctionProperties.html#1495" class="Bound"
+      >e</a
+      ><a name="1527"
+      >
+
+</a
+      ><a name="1529" href="Algebra.FunctionProperties.html#1529" class="Function"
+      >RightInverse</a
+      ><a name="1541"
+      > </a
+      ><a name="1542" class="Symbol"
+      >:</a
+      ><a name="1543"
+      > </a
+      ><a name="1544" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1545"
+      > </a
+      ><a name="1546" class="Symbol"
+      >&#8594;</a
+      ><a name="1547"
+      > </a
+      ><a name="1548" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="1551"
+      > </a
+      ><a name="1552" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1553"
+      > </a
+      ><a name="1554" class="Symbol"
+      >&#8594;</a
+      ><a name="1555"
+      > </a
+      ><a name="1556" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1559"
+      > </a
+      ><a name="1560" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" class="Symbol"
+      >&#8594;</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" class="PrimitiveType"
+      >Set</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" class="Symbol"
+      >_</a
+      ><a name="1569"
+      >
+</a
+      ><a name="1570" href="Algebra.FunctionProperties.html#1529" class="Function"
+      >RightInverse</a
+      ><a name="1582"
+      > </a
+      ><a name="1583" href="Algebra.FunctionProperties.html#1583" class="Bound"
+      >e</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" href="Algebra.FunctionProperties.html#1585" class="Bound Operator"
+      >_&#8315;&#185;</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" href="Algebra.FunctionProperties.html#1589" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="1592"
+      > </a
+      ><a name="1593" class="Symbol"
+      >=</a
+      ><a name="1594"
+      > </a
+      ><a name="1595" class="Symbol"
+      >&#8704;</a
+      ><a name="1596"
+      > </a
+      ><a name="1597" href="Algebra.FunctionProperties.html#1597" class="Bound"
+      >x</a
+      ><a name="1598"
+      > </a
+      ><a name="1599" class="Symbol"
+      >&#8594;</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" class="Symbol"
+      >(</a
+      ><a name="1602" href="Algebra.FunctionProperties.html#1597" class="Bound"
+      >x</a
+      ><a name="1603"
+      > </a
+      ><a name="1604" href="Algebra.FunctionProperties.html#1589" class="Bound Operator"
+      >&#8729;</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" class="Symbol"
+      >(</a
+      ><a name="1607" href="Algebra.FunctionProperties.html#1597" class="Bound"
+      >x</a
+      ><a name="1608"
+      > </a
+      ><a name="1609" href="Algebra.FunctionProperties.html#1585" class="Bound Operator"
+      >&#8315;&#185;</a
+      ><a name="1611" class="Symbol"
+      >))</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1615"
+      > </a
+      ><a name="1616" href="Algebra.FunctionProperties.html#1583" class="Bound"
+      >e</a
+      ><a name="1617"
+      >
+
+</a
+      ><a name="1619" href="Algebra.FunctionProperties.html#1619" class="Function"
+      >Inverse</a
+      ><a name="1626"
+      > </a
+      ><a name="1627" class="Symbol"
+      >:</a
+      ><a name="1628"
+      > </a
+      ><a name="1629" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1630"
+      > </a
+      ><a name="1631" class="Symbol"
+      >&#8594;</a
+      ><a name="1632"
+      > </a
+      ><a name="1633" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1638"
+      > </a
+      ><a name="1639" class="Symbol"
+      >&#8594;</a
+      ><a name="1640"
+      > </a
+      ><a name="1641" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1644"
+      > </a
+      ><a name="1645" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1646"
+      > </a
+      ><a name="1647" class="Symbol"
+      >&#8594;</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" class="PrimitiveType"
+      >Set</a
+      ><a name="1652"
+      > </a
+      ><a name="1653" class="Symbol"
+      >_</a
+      ><a name="1654"
+      >
+</a
+      ><a name="1655" href="Algebra.FunctionProperties.html#1619" class="Function"
+      >Inverse</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" href="Algebra.FunctionProperties.html#1663" class="Bound"
+      >e</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Algebra.FunctionProperties.html#1665" class="Bound"
+      >&#8315;&#185;</a
+      ><a name="1667"
+      > </a
+      ><a name="1668" href="Algebra.FunctionProperties.html#1668" class="Bound"
+      >&#8729;</a
+      ><a name="1669"
+      > </a
+      ><a name="1670" class="Symbol"
+      >=</a
+      ><a name="1671"
+      > </a
+      ><a name="1672" href="Algebra.FunctionProperties.html#1443" class="Function"
+      >LeftInverse</a
+      ><a name="1683"
+      > </a
+      ><a name="1684" href="Algebra.FunctionProperties.html#1663" class="Bound"
+      >e</a
+      ><a name="1685"
+      > </a
+      ><a name="1686" href="Algebra.FunctionProperties.html#1665" class="Bound"
+      >&#8315;&#185;</a
+      ><a name="1688"
+      > </a
+      ><a name="1689" href="Algebra.FunctionProperties.html#1668" class="Bound"
+      >&#8729;</a
+      ><a name="1690"
+      > </a
+      ><a name="1691" href="Data.Product.html#1083" class="Function Operator"
+      >&#215;</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" href="Algebra.FunctionProperties.html#1529" class="Function"
+      >RightInverse</a
+      ><a name="1705"
+      > </a
+      ><a name="1706" href="Algebra.FunctionProperties.html#1663" class="Bound"
+      >e</a
+      ><a name="1707"
+      > </a
+      ><a name="1708" href="Algebra.FunctionProperties.html#1665" class="Bound"
+      >&#8315;&#185;</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="Algebra.FunctionProperties.html#1668" class="Bound"
+      >&#8729;</a
+      ><a name="1712"
+      >
+
+</a
+      ><a name="1714" href="Algebra.FunctionProperties.html#1714" class="Function Operator"
+      >_DistributesOver&#737;_</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" class="Symbol"
+      >:</a
+      ><a name="1734"
+      > </a
+      ><a name="1735" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1738"
+      > </a
+      ><a name="1739" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1740"
+      > </a
+      ><a name="1741" class="Symbol"
+      >&#8594;</a
+      ><a name="1742"
+      > </a
+      ><a name="1743" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1746"
+      > </a
+      ><a name="1747" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" class="Symbol"
+      >&#8594;</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" class="PrimitiveType"
+      >Set</a
+      ><a name="1754"
+      > </a
+      ><a name="1755" class="Symbol"
+      >_</a
+      ><a name="1756"
+      >
+</a
+      ><a name="1757" href="Algebra.FunctionProperties.html#1757" class="Bound Operator"
+      >_*_</a
+      ><a name="1760"
+      > </a
+      ><a name="1761" href="Algebra.FunctionProperties.html#1714" class="Function Operator"
+      >DistributesOver&#737;</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Algebra.FunctionProperties.html#1778" class="Bound Operator"
+      >_+_</a
+      ><a name="1781"
+      > </a
+      ><a name="1782" class="Symbol"
+      >=</a
+      ><a name="1783"
+      >
+  </a
+      ><a name="1786" class="Symbol"
+      >&#8704;</a
+      ><a name="1787"
+      > </a
+      ><a name="1788" href="Algebra.FunctionProperties.html#1788" class="Bound"
+      >x</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" href="Algebra.FunctionProperties.html#1790" class="Bound"
+      >y</a
+      ><a name="1791"
+      > </a
+      ><a name="1792" href="Algebra.FunctionProperties.html#1792" class="Bound"
+      >z</a
+      ><a name="1793"
+      > </a
+      ><a name="1794" class="Symbol"
+      >&#8594;</a
+      ><a name="1795"
+      > </a
+      ><a name="1796" class="Symbol"
+      >(</a
+      ><a name="1797" href="Algebra.FunctionProperties.html#1788" class="Bound"
+      >x</a
+      ><a name="1798"
+      > </a
+      ><a name="1799" href="Algebra.FunctionProperties.html#1757" class="Bound Operator"
+      >*</a
+      ><a name="1800"
+      > </a
+      ><a name="1801" class="Symbol"
+      >(</a
+      ><a name="1802" href="Algebra.FunctionProperties.html#1790" class="Bound"
+      >y</a
+      ><a name="1803"
+      > </a
+      ><a name="1804" href="Algebra.FunctionProperties.html#1778" class="Bound Operator"
+      >+</a
+      ><a name="1805"
+      > </a
+      ><a name="1806" href="Algebra.FunctionProperties.html#1792" class="Bound"
+      >z</a
+      ><a name="1807" class="Symbol"
+      >))</a
+      ><a name="1809"
+      > </a
+      ><a name="1810" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1811"
+      > </a
+      ><a name="1812" class="Symbol"
+      >((</a
+      ><a name="1814" href="Algebra.FunctionProperties.html#1788" class="Bound"
+      >x</a
+      ><a name="1815"
+      > </a
+      ><a name="1816" href="Algebra.FunctionProperties.html#1757" class="Bound Operator"
+      >*</a
+      ><a name="1817"
+      > </a
+      ><a name="1818" href="Algebra.FunctionProperties.html#1790" class="Bound"
+      >y</a
+      ><a name="1819" class="Symbol"
+      >)</a
+      ><a name="1820"
+      > </a
+      ><a name="1821" href="Algebra.FunctionProperties.html#1778" class="Bound Operator"
+      >+</a
+      ><a name="1822"
+      > </a
+      ><a name="1823" class="Symbol"
+      >(</a
+      ><a name="1824" href="Algebra.FunctionProperties.html#1788" class="Bound"
+      >x</a
+      ><a name="1825"
+      > </a
+      ><a name="1826" href="Algebra.FunctionProperties.html#1757" class="Bound Operator"
+      >*</a
+      ><a name="1827"
+      > </a
+      ><a name="1828" href="Algebra.FunctionProperties.html#1792" class="Bound"
+      >z</a
+      ><a name="1829" class="Symbol"
+      >))</a
+      ><a name="1831"
+      >
+
+</a
+      ><a name="1833" href="Algebra.FunctionProperties.html#1833" class="Function Operator"
+      >_DistributesOver&#691;_</a
+      ><a name="1851"
+      > </a
+      ><a name="1852" class="Symbol"
+      >:</a
+      ><a name="1853"
+      > </a
+      ><a name="1854" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1857"
+      > </a
+      ><a name="1858" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1859"
+      > </a
+      ><a name="1860" class="Symbol"
+      >&#8594;</a
+      ><a name="1861"
+      > </a
+      ><a name="1862" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1865"
+      > </a
+      ><a name="1866" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1867"
+      > </a
+      ><a name="1868" class="Symbol"
+      >&#8594;</a
+      ><a name="1869"
+      > </a
+      ><a name="1870" class="PrimitiveType"
+      >Set</a
+      ><a name="1873"
+      > </a
+      ><a name="1874" class="Symbol"
+      >_</a
+      ><a name="1875"
+      >
+</a
+      ><a name="1876" href="Algebra.FunctionProperties.html#1876" class="Bound Operator"
+      >_*_</a
+      ><a name="1879"
+      > </a
+      ><a name="1880" href="Algebra.FunctionProperties.html#1833" class="Function Operator"
+      >DistributesOver&#691;</a
+      ><a name="1896"
+      > </a
+      ><a name="1897" href="Algebra.FunctionProperties.html#1897" class="Bound Operator"
+      >_+_</a
+      ><a name="1900"
+      > </a
+      ><a name="1901" class="Symbol"
+      >=</a
+      ><a name="1902"
+      >
+  </a
+      ><a name="1905" class="Symbol"
+      >&#8704;</a
+      ><a name="1906"
+      > </a
+      ><a name="1907" href="Algebra.FunctionProperties.html#1907" class="Bound"
+      >x</a
+      ><a name="1908"
+      > </a
+      ><a name="1909" href="Algebra.FunctionProperties.html#1909" class="Bound"
+      >y</a
+      ><a name="1910"
+      > </a
+      ><a name="1911" href="Algebra.FunctionProperties.html#1911" class="Bound"
+      >z</a
+      ><a name="1912"
+      > </a
+      ><a name="1913" class="Symbol"
+      >&#8594;</a
+      ><a name="1914"
+      > </a
+      ><a name="1915" class="Symbol"
+      >((</a
+      ><a name="1917" href="Algebra.FunctionProperties.html#1909" class="Bound"
+      >y</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" href="Algebra.FunctionProperties.html#1897" class="Bound Operator"
+      >+</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" href="Algebra.FunctionProperties.html#1911" class="Bound"
+      >z</a
+      ><a name="1922" class="Symbol"
+      >)</a
+      ><a name="1923"
+      > </a
+      ><a name="1924" href="Algebra.FunctionProperties.html#1876" class="Bound Operator"
+      >*</a
+      ><a name="1925"
+      > </a
+      ><a name="1926" href="Algebra.FunctionProperties.html#1907" class="Bound"
+      >x</a
+      ><a name="1927" class="Symbol"
+      >)</a
+      ><a name="1928"
+      > </a
+      ><a name="1929" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="1930"
+      > </a
+      ><a name="1931" class="Symbol"
+      >((</a
+      ><a name="1933" href="Algebra.FunctionProperties.html#1909" class="Bound"
+      >y</a
+      ><a name="1934"
+      > </a
+      ><a name="1935" href="Algebra.FunctionProperties.html#1876" class="Bound Operator"
+      >*</a
+      ><a name="1936"
+      > </a
+      ><a name="1937" href="Algebra.FunctionProperties.html#1907" class="Bound"
+      >x</a
+      ><a name="1938" class="Symbol"
+      >)</a
+      ><a name="1939"
+      > </a
+      ><a name="1940" href="Algebra.FunctionProperties.html#1897" class="Bound Operator"
+      >+</a
+      ><a name="1941"
+      > </a
+      ><a name="1942" class="Symbol"
+      >(</a
+      ><a name="1943" href="Algebra.FunctionProperties.html#1911" class="Bound"
+      >z</a
+      ><a name="1944"
+      > </a
+      ><a name="1945" href="Algebra.FunctionProperties.html#1876" class="Bound Operator"
+      >*</a
+      ><a name="1946"
+      > </a
+      ><a name="1947" href="Algebra.FunctionProperties.html#1907" class="Bound"
+      >x</a
+      ><a name="1948" class="Symbol"
+      >))</a
+      ><a name="1950"
+      >
+
+</a
+      ><a name="1952" href="Algebra.FunctionProperties.html#1952" class="Function Operator"
+      >_DistributesOver_</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" class="Symbol"
+      >:</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1977"
+      > </a
+      ><a name="1978" class="Symbol"
+      >&#8594;</a
+      ><a name="1979"
+      > </a
+      ><a name="1980" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="1983"
+      > </a
+      ><a name="1984" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="1985"
+      > </a
+      ><a name="1986" class="Symbol"
+      >&#8594;</a
+      ><a name="1987"
+      > </a
+      ><a name="1988" class="PrimitiveType"
+      >Set</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" class="Symbol"
+      >_</a
+      ><a name="1993"
+      >
+</a
+      ><a name="1994" href="Algebra.FunctionProperties.html#1994" class="Bound"
+      >*</a
+      ><a name="1995"
+      > </a
+      ><a name="1996" href="Algebra.FunctionProperties.html#1952" class="Function Operator"
+      >DistributesOver</a
+      ><a name="2011"
+      > </a
+      ><a name="2012" href="Algebra.FunctionProperties.html#2012" class="Bound"
+      >+</a
+      ><a name="2013"
+      > </a
+      ><a name="2014" class="Symbol"
+      >=</a
+      ><a name="2015"
+      > </a
+      ><a name="2016" class="Symbol"
+      >(</a
+      ><a name="2017" href="Algebra.FunctionProperties.html#1994" class="Bound"
+      >*</a
+      ><a name="2018"
+      > </a
+      ><a name="2019" href="Algebra.FunctionProperties.html#1714" class="Function Operator"
+      >DistributesOver&#737;</a
+      ><a name="2035"
+      > </a
+      ><a name="2036" href="Algebra.FunctionProperties.html#2012" class="Bound"
+      >+</a
+      ><a name="2037" class="Symbol"
+      >)</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" href="Data.Product.html#1083" class="Function Operator"
+      >&#215;</a
+      ><a name="2040"
+      > </a
+      ><a name="2041" class="Symbol"
+      >(</a
+      ><a name="2042" href="Algebra.FunctionProperties.html#1994" class="Bound"
+      >*</a
+      ><a name="2043"
+      > </a
+      ><a name="2044" href="Algebra.FunctionProperties.html#1833" class="Function Operator"
+      >DistributesOver&#691;</a
+      ><a name="2060"
+      > </a
+      ><a name="2061" href="Algebra.FunctionProperties.html#2012" class="Bound"
+      >+</a
+      ><a name="2062" class="Symbol"
+      >)</a
+      ><a name="2063"
+      >
+
+</a
+      ><a name="2065" href="Algebra.FunctionProperties.html#2065" class="Function Operator"
+      >_IdempotentOn_</a
+      ><a name="2079"
+      > </a
+      ><a name="2080" class="Symbol"
+      >:</a
+      ><a name="2081"
+      > </a
+      ><a name="2082" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="2085"
+      > </a
+      ><a name="2086" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2087"
+      > </a
+      ><a name="2088" class="Symbol"
+      >&#8594;</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2091"
+      > </a
+      ><a name="2092" class="Symbol"
+      >&#8594;</a
+      ><a name="2093"
+      > </a
+      ><a name="2094" class="PrimitiveType"
+      >Set</a
+      ><a name="2097"
+      > </a
+      ><a name="2098" class="Symbol"
+      >_</a
+      ><a name="2099"
+      >
+</a
+      ><a name="2100" href="Algebra.FunctionProperties.html#2100" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="2103"
+      > </a
+      ><a name="2104" href="Algebra.FunctionProperties.html#2065" class="Function Operator"
+      >IdempotentOn</a
+      ><a name="2116"
+      > </a
+      ><a name="2117" href="Algebra.FunctionProperties.html#2117" class="Bound"
+      >x</a
+      ><a name="2118"
+      > </a
+      ><a name="2119" class="Symbol"
+      >=</a
+      ><a name="2120"
+      > </a
+      ><a name="2121" class="Symbol"
+      >(</a
+      ><a name="2122" href="Algebra.FunctionProperties.html#2117" class="Bound"
+      >x</a
+      ><a name="2123"
+      > </a
+      ><a name="2124" href="Algebra.FunctionProperties.html#2100" class="Bound Operator"
+      >&#8729;</a
+      ><a name="2125"
+      > </a
+      ><a name="2126" href="Algebra.FunctionProperties.html#2117" class="Bound"
+      >x</a
+      ><a name="2127" class="Symbol"
+      >)</a
+      ><a name="2128"
+      > </a
+      ><a name="2129" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="2130"
+      > </a
+      ><a name="2131" href="Algebra.FunctionProperties.html#2117" class="Bound"
+      >x</a
+      ><a name="2132"
+      >
+
+</a
+      ><a name="2134" href="Algebra.FunctionProperties.html#2134" class="Function"
+      >Idempotent</a
+      ><a name="2144"
+      > </a
+      ><a name="2145" class="Symbol"
+      >:</a
+      ><a name="2146"
+      > </a
+      ><a name="2147" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="2150"
+      > </a
+      ><a name="2151" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2152"
+      > </a
+      ><a name="2153" class="Symbol"
+      >&#8594;</a
+      ><a name="2154"
+      > </a
+      ><a name="2155" class="PrimitiveType"
+      >Set</a
+      ><a name="2158"
+      > </a
+      ><a name="2159" class="Symbol"
+      >_</a
+      ><a name="2160"
+      >
+</a
+      ><a name="2161" href="Algebra.FunctionProperties.html#2134" class="Function"
+      >Idempotent</a
+      ><a name="2171"
+      > </a
+      ><a name="2172" href="Algebra.FunctionProperties.html#2172" class="Bound"
+      >&#8729;</a
+      ><a name="2173"
+      > </a
+      ><a name="2174" class="Symbol"
+      >=</a
+      ><a name="2175"
+      > </a
+      ><a name="2176" class="Symbol"
+      >&#8704;</a
+      ><a name="2177"
+      > </a
+      ><a name="2178" href="Algebra.FunctionProperties.html#2178" class="Bound"
+      >x</a
+      ><a name="2179"
+      > </a
+      ><a name="2180" class="Symbol"
+      >&#8594;</a
+      ><a name="2181"
+      > </a
+      ><a name="2182" href="Algebra.FunctionProperties.html#2172" class="Bound"
+      >&#8729;</a
+      ><a name="2183"
+      > </a
+      ><a name="2184" href="Algebra.FunctionProperties.html#2065" class="Function Operator"
+      >IdempotentOn</a
+      ><a name="2196"
+      > </a
+      ><a name="2197" href="Algebra.FunctionProperties.html#2178" class="Bound"
+      >x</a
+      ><a name="2198"
+      >
+
+</a
+      ><a name="2200" href="Algebra.FunctionProperties.html#2200" class="Function"
+      >IdempotentFun</a
+      ><a name="2213"
+      > </a
+      ><a name="2214" class="Symbol"
+      >:</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="2219"
+      > </a
+      ><a name="2220" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2221"
+      > </a
+      ><a name="2222" class="Symbol"
+      >&#8594;</a
+      ><a name="2223"
+      > </a
+      ><a name="2224" class="PrimitiveType"
+      >Set</a
+      ><a name="2227"
+      > </a
+      ><a name="2228" class="Symbol"
+      >_</a
+      ><a name="2229"
+      >
+</a
+      ><a name="2230" href="Algebra.FunctionProperties.html#2200" class="Function"
+      >IdempotentFun</a
+      ><a name="2243"
+      > </a
+      ><a name="2244" href="Algebra.FunctionProperties.html#2244" class="Bound"
+      >f</a
+      ><a name="2245"
+      > </a
+      ><a name="2246" class="Symbol"
+      >=</a
+      ><a name="2247"
+      > </a
+      ><a name="2248" class="Symbol"
+      >&#8704;</a
+      ><a name="2249"
+      > </a
+      ><a name="2250" href="Algebra.FunctionProperties.html#2250" class="Bound"
+      >x</a
+      ><a name="2251"
+      > </a
+      ><a name="2252" class="Symbol"
+      >&#8594;</a
+      ><a name="2253"
+      > </a
+      ><a name="2254" href="Algebra.FunctionProperties.html#2244" class="Bound"
+      >f</a
+      ><a name="2255"
+      > </a
+      ><a name="2256" class="Symbol"
+      >(</a
+      ><a name="2257" href="Algebra.FunctionProperties.html#2244" class="Bound"
+      >f</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" href="Algebra.FunctionProperties.html#2250" class="Bound"
+      >x</a
+      ><a name="2260" class="Symbol"
+      >)</a
+      ><a name="2261"
+      > </a
+      ><a name="2262" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="2263"
+      > </a
+      ><a name="2264" href="Algebra.FunctionProperties.html#2244" class="Bound"
+      >f</a
+      ><a name="2265"
+      > </a
+      ><a name="2266" href="Algebra.FunctionProperties.html#2250" class="Bound"
+      >x</a
+      ><a name="2267"
+      >
+
+</a
+      ><a name="2269" href="Algebra.FunctionProperties.html#2269" class="Function Operator"
+      >_Absorbs_</a
+      ><a name="2278"
+      > </a
+      ><a name="2279" class="Symbol"
+      >:</a
+      ><a name="2280"
+      > </a
+      ><a name="2281" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="2284"
+      > </a
+      ><a name="2285" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2286"
+      > </a
+      ><a name="2287" class="Symbol"
+      >&#8594;</a
+      ><a name="2288"
+      > </a
+      ><a name="2289" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="2292"
+      > </a
+      ><a name="2293" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2294"
+      > </a
+      ><a name="2295" class="Symbol"
+      >&#8594;</a
+      ><a name="2296"
+      > </a
+      ><a name="2297" class="PrimitiveType"
+      >Set</a
+      ><a name="2300"
+      > </a
+      ><a name="2301" class="Symbol"
+      >_</a
+      ><a name="2302"
+      >
+</a
+      ><a name="2303" href="Algebra.FunctionProperties.html#2303" class="Bound Operator"
+      >_&#8729;_</a
+      ><a name="2306"
+      > </a
+      ><a name="2307" href="Algebra.FunctionProperties.html#2269" class="Function Operator"
+      >Absorbs</a
+      ><a name="2314"
+      > </a
+      ><a name="2315" href="Algebra.FunctionProperties.html#2315" class="Bound Operator"
+      >_&#8728;_</a
+      ><a name="2318"
+      > </a
+      ><a name="2319" class="Symbol"
+      >=</a
+      ><a name="2320"
+      > </a
+      ><a name="2321" class="Symbol"
+      >&#8704;</a
+      ><a name="2322"
+      > </a
+      ><a name="2323" href="Algebra.FunctionProperties.html#2323" class="Bound"
+      >x</a
+      ><a name="2324"
+      > </a
+      ><a name="2325" href="Algebra.FunctionProperties.html#2325" class="Bound"
+      >y</a
+      ><a name="2326"
+      > </a
+      ><a name="2327" class="Symbol"
+      >&#8594;</a
+      ><a name="2328"
+      > </a
+      ><a name="2329" class="Symbol"
+      >(</a
+      ><a name="2330" href="Algebra.FunctionProperties.html#2323" class="Bound"
+      >x</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="Algebra.FunctionProperties.html#2303" class="Bound Operator"
+      >&#8729;</a
+      ><a name="2333"
+      > </a
+      ><a name="2334" class="Symbol"
+      >(</a
+      ><a name="2335" href="Algebra.FunctionProperties.html#2323" class="Bound"
+      >x</a
+      ><a name="2336"
+      > </a
+      ><a name="2337" href="Algebra.FunctionProperties.html#2315" class="Bound Operator"
+      >&#8728;</a
+      ><a name="2338"
+      > </a
+      ><a name="2339" href="Algebra.FunctionProperties.html#2325" class="Bound"
+      >y</a
+      ><a name="2340" class="Symbol"
+      >))</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="2344"
+      > </a
+      ><a name="2345" href="Algebra.FunctionProperties.html#2323" class="Bound"
+      >x</a
+      ><a name="2346"
+      >
+
+</a
+      ><a name="2348" href="Algebra.FunctionProperties.html#2348" class="Function"
+      >Absorptive</a
+      ><a name="2358"
+      > </a
+      ><a name="2359" class="Symbol"
+      >:</a
+      ><a name="2360"
+      > </a
+      ><a name="2361" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="2364"
+      > </a
+      ><a name="2365" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2366"
+      > </a
+      ><a name="2367" class="Symbol"
+      >&#8594;</a
+      ><a name="2368"
+      > </a
+      ><a name="2369" href="Algebra.FunctionProperties.Core.html#743" class="Function"
+      >Op&#8322;</a
+      ><a name="2372"
+      > </a
+      ><a name="2373" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2374"
+      > </a
+      ><a name="2375" class="Symbol"
+      >&#8594;</a
+      ><a name="2376"
+      > </a
+      ><a name="2377" class="PrimitiveType"
+      >Set</a
+      ><a name="2380"
+      > </a
+      ><a name="2381" class="Symbol"
+      >_</a
+      ><a name="2382"
+      >
+</a
+      ><a name="2383" href="Algebra.FunctionProperties.html#2348" class="Function"
+      >Absorptive</a
+      ><a name="2393"
+      > </a
+      ><a name="2394" href="Algebra.FunctionProperties.html#2394" class="Bound"
+      >&#8729;</a
+      ><a name="2395"
+      > </a
+      ><a name="2396" href="Algebra.FunctionProperties.html#2396" class="Bound"
+      >&#8728;</a
+      ><a name="2397"
+      > </a
+      ><a name="2398" class="Symbol"
+      >=</a
+      ><a name="2399"
+      > </a
+      ><a name="2400" class="Symbol"
+      >(</a
+      ><a name="2401" href="Algebra.FunctionProperties.html#2394" class="Bound"
+      >&#8729;</a
+      ><a name="2402"
+      > </a
+      ><a name="2403" href="Algebra.FunctionProperties.html#2269" class="Function Operator"
+      >Absorbs</a
+      ><a name="2410"
+      > </a
+      ><a name="2411" href="Algebra.FunctionProperties.html#2396" class="Bound"
+      >&#8728;</a
+      ><a name="2412" class="Symbol"
+      >)</a
+      ><a name="2413"
+      > </a
+      ><a name="2414" href="Data.Product.html#1083" class="Function Operator"
+      >&#215;</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" class="Symbol"
+      >(</a
+      ><a name="2417" href="Algebra.FunctionProperties.html#2396" class="Bound"
+      >&#8728;</a
+      ><a name="2418"
+      > </a
+      ><a name="2419" href="Algebra.FunctionProperties.html#2269" class="Function Operator"
+      >Absorbs</a
+      ><a name="2426"
+      > </a
+      ><a name="2427" href="Algebra.FunctionProperties.html#2394" class="Bound"
+      >&#8729;</a
+      ><a name="2428" class="Symbol"
+      >)</a
+      ><a name="2429"
+      >
+
+</a
+      ><a name="2431" href="Algebra.FunctionProperties.html#2431" class="Function"
+      >Involutive</a
+      ><a name="2441"
+      > </a
+      ><a name="2442" class="Symbol"
+      >:</a
+      ><a name="2443"
+      > </a
+      ><a name="2444" href="Algebra.FunctionProperties.Core.html#700" class="Function"
+      >Op&#8321;</a
+      ><a name="2447"
+      > </a
+      ><a name="2448" href="Algebra.FunctionProperties.html#536" class="Bound"
+      >A</a
+      ><a name="2449"
+      > </a
+      ><a name="2450" class="Symbol"
+      >&#8594;</a
+      ><a name="2451"
+      > </a
+      ><a name="2452" class="PrimitiveType"
+      >Set</a
+      ><a name="2455"
+      > </a
+      ><a name="2456" class="Symbol"
+      >_</a
+      ><a name="2457"
+      >
+</a
+      ><a name="2458" href="Algebra.FunctionProperties.html#2431" class="Function"
+      >Involutive</a
+      ><a name="2468"
+      > </a
+      ><a name="2469" href="Algebra.FunctionProperties.html#2469" class="Bound"
+      >f</a
+      ><a name="2470"
+      > </a
+      ><a name="2471" class="Symbol"
+      >=</a
+      ><a name="2472"
+      > </a
+      ><a name="2473" class="Symbol"
+      >&#8704;</a
+      ><a name="2474"
+      > </a
+      ><a name="2475" href="Algebra.FunctionProperties.html#2475" class="Bound"
+      >x</a
+      ><a name="2476"
+      > </a
+      ><a name="2477" class="Symbol"
+      >&#8594;</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" href="Algebra.FunctionProperties.html#2469" class="Bound"
+      >f</a
+      ><a name="2480"
+      > </a
+      ><a name="2481" class="Symbol"
+      >(</a
+      ><a name="2482" href="Algebra.FunctionProperties.html#2469" class="Bound"
+      >f</a
+      ><a name="2483"
+      > </a
+      ><a name="2484" href="Algebra.FunctionProperties.html#2475" class="Bound"
+      >x</a
+      ><a name="2485" class="Symbol"
+      >)</a
+      ><a name="2486"
+      > </a
+      ><a name="2487" href="Algebra.FunctionProperties.html#548" class="Bound Operator"
+      >&#8776;</a
+      ><a name="2488"
+      > </a
+      ><a name="2489" href="Algebra.FunctionProperties.html#2475" class="Bound"
+      >x</a
+      ><a name="2490"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
