@@ -1,0 +1,2764 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Control.Protocol.Alternate</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Symbol"
+      >{-#</a
+      ><a name="4"
+      > </a
+      ><a name="5" class="Keyword"
+      >OPTIONS</a
+      ><a name="12"
+      > --without-K </a
+      ><a name="25" class="Symbol"
+      >#-}</a
+      ><a name="28"
+      >
+</a
+      ><a name="29" class="Keyword"
+      >open</a
+      ><a name="33"
+      > </a
+      ><a name="34" class="Keyword"
+      >import</a
+      ><a name="40"
+      > </a
+      ><a name="41" href="Function.NP.html#1" class="Module"
+      >Function.NP</a
+      ><a name="52"
+      >
+</a
+      ><a name="53" class="Keyword"
+      >open</a
+      ><a name="57"
+      > </a
+      ><a name="58" class="Keyword"
+      >import</a
+      ><a name="64"
+      > </a
+      ><a name="65" href="Type.html#1" class="Module"
+      >Type</a
+      ><a name="69"
+      >
+</a
+      ><a name="70" class="Keyword"
+      >open</a
+      ><a name="74"
+      > </a
+      ><a name="75" class="Keyword"
+      >import</a
+      ><a name="81"
+      > </a
+      ><a name="82" href="Level.NP.html#1" class="Module"
+      >Level.NP</a
+      ><a name="90"
+      >
+</a
+      ><a name="91" class="Keyword"
+      >open</a
+      ><a name="95"
+      > </a
+      ><a name="96" class="Keyword"
+      >import</a
+      ><a name="102"
+      > </a
+      ><a name="103" href="Data.Product.NP.html#1" class="Module"
+      >Data.Product.NP</a
+      ><a name="118"
+      > </a
+      ><a name="119" class="Keyword"
+      >using</a
+      ><a name="124"
+      > </a
+      ><a name="125" class="Symbol"
+      >(</a
+      ><a name="126"
+      >&#931;</a
+      ><a name="127" class="Symbol"
+      >;</a
+      ><a name="128"
+      > _&#215;_</a
+      ><a name="132" class="Symbol"
+      >;</a
+      ><a name="133"
+      > _,_</a
+      ><a name="137" class="Symbol"
+      >)</a
+      ><a name="138"
+      > </a
+      ><a name="139" class="Keyword"
+      >renaming</a
+      ><a name="147"
+      > </a
+      ><a name="148" class="Symbol"
+      >(</a
+      ><a name="149"
+      >proj&#8321; </a
+      ><a name="155" class="Symbol"
+      >to</a
+      ><a name="157"
+      > fst</a
+      ><a name="161" class="Symbol"
+      >)</a
+      ><a name="162"
+      >
+</a
+      ><a name="163" class="Keyword"
+      >open</a
+      ><a name="167"
+      > </a
+      ><a name="168" class="Keyword"
+      >import</a
+      ><a name="174"
+      > </a
+      ><a name="175" href="Data.One.html#1" class="Module"
+      >Data.One</a
+      ><a name="183"
+      > </a
+      ><a name="184" class="Keyword"
+      >using</a
+      ><a name="189"
+      > </a
+      ><a name="190" class="Symbol"
+      >(</a
+      ><a name="191"
+      >&#120793;</a
+      ><a name="192" class="Symbol"
+      >)</a
+      ><a name="193"
+      >
+</a
+      ><a name="194" class="Keyword"
+      >open</a
+      ><a name="198"
+      > </a
+      ><a name="199" class="Keyword"
+      >import</a
+      ><a name="205"
+      > </a
+      ><a name="206" href="Relation.Binary.PropositionalEquality.NP.html#1" class="Module"
+      >Relation.Binary.PropositionalEquality.NP</a
+      ><a name="246"
+      > </a
+      ><a name="247" class="Keyword"
+      >using</a
+      ><a name="252"
+      > </a
+      ><a name="253" class="Symbol"
+      >(</a
+      ><a name="254"
+      >_&#8801;_</a
+      ><a name="257" class="Symbol"
+      >;</a
+      ><a name="258"
+      > !_</a
+      ><a name="261" class="Symbol"
+      >;</a
+      ><a name="262"
+      > _&#8729;_</a
+      ><a name="266" class="Symbol"
+      >;</a
+      ><a name="267"
+      > refl</a
+      ><a name="272" class="Symbol"
+      >;</a
+      ><a name="273"
+      > ap</a
+      ><a name="276" class="Symbol"
+      >;</a
+      ><a name="277"
+      > coe</a
+      ><a name="281" class="Symbol"
+      >;</a
+      ><a name="282"
+      > coe!</a
+      ><a name="287" class="Symbol"
+      >;</a
+      ><a name="288"
+      > subst</a
+      ><a name="294" class="Symbol"
+      >)</a
+      ><a name="295"
+      >
+</a
+      ><a name="296" class="Keyword"
+      >open</a
+      ><a name="300"
+      > </a
+      ><a name="301" class="Keyword"
+      >import</a
+      ><a name="307"
+      > </a
+      ><a name="308" href="Function.Extensionality.html#1" class="Module"
+      >Function.Extensionality</a
+      ><a name="331"
+      >
+</a
+      ><a name="332" class="Keyword"
+      >open</a
+      ><a name="336"
+      > </a
+      ><a name="337" class="Keyword"
+      >import</a
+      ><a name="343"
+      > </a
+      ><a name="344" href="HoTT.html#1" class="Module"
+      >HoTT</a
+      ><a name="348"
+      >
+</a
+      ><a name="349" class="Keyword"
+      >open</a
+      ><a name="353"
+      > </a
+      ><a name="354" class="Keyword"
+      >import</a
+      ><a name="360"
+      > </a
+      ><a name="361" href="Data.ShapePolymorphism.html#1" class="Module"
+      >Data.ShapePolymorphism</a
+      ><a name="383"
+      >
+</a
+      ><a name="384" class="Keyword"
+      >open</a
+      ><a name="388"
+      > </a
+      ><a name="389" href="HoTT.html#2087" class="Module"
+      >Equivalences</a
+      ><a name="401"
+      >
+</a
+      ><a name="402" class="Keyword"
+      >open</a
+      ><a name="406"
+      > </a
+      ><a name="407" class="Keyword"
+      >import</a
+      ><a name="413"
+      > </a
+      ><a name="414" href="Type.html#1" class="Module"
+      >Type</a
+      ><a name="418"
+      >
+
+</a
+      ><a name="420" class="Keyword"
+      >open</a
+      ><a name="424"
+      > </a
+      ><a name="425" class="Keyword"
+      >import</a
+      ><a name="431"
+      > </a
+      ><a name="432" href="Control.Protocol.InOut.html#1" class="Module"
+      >Control.Protocol.InOut</a
+      ><a name="454"
+      >
+</a
+      ><a name="455" class="Keyword"
+      >open</a
+      ><a name="459"
+      > </a
+      ><a name="460" class="Keyword"
+      >import</a
+      ><a name="466"
+      > </a
+      ><a name="467" href="Control.Protocol.End.html#1" class="Module"
+      >Control.Protocol.End</a
+      ><a name="487"
+      >
+</a
+      ><a name="488" class="Keyword"
+      >import</a
+      ><a name="494"
+      > </a
+      ><a name="495" href="Control.Protocol.Core.html#1" class="Module"
+      >Control.Protocol.Core</a
+      ><a name="516"
+      > </a
+      ><a name="517" class="Symbol"
+      >as</a
+      ><a name="519"
+      > </a
+      ><a name="520" class="Module"
+      >C</a
+      ><a name="521"
+      >
+</a
+      ><a name="522" class="Keyword"
+      >open</a
+      ><a name="526"
+      > </a
+      ><a name="527" href="Control.Protocol.Core.html#1" class="Module"
+      >C</a
+      ><a name="528"
+      > </a
+      ><a name="529" class="Keyword"
+      >using</a
+      ><a name="534"
+      > </a
+      ><a name="535" class="Symbol"
+      >(</a
+      ><a name="536"
+      >end</a
+      ><a name="539" class="Symbol"
+      >;</a
+      ><a name="540"
+      >com</a
+      ><a name="543" class="Symbol"
+      >)</a
+      ><a name="544"
+      >
+
+</a
+      ><a name="546" class="Keyword"
+      >module</a
+      ><a name="552"
+      > </a
+      ><a name="553" href="Control.Protocol.Alternate.html#1" class="Module"
+      >Control.Protocol.Alternate</a
+      ><a name="579"
+      > </a
+      ><a name="580" class="Keyword"
+      >where</a
+      ><a name="585"
+      >
+
+</a
+      ><a name="587" class="Keyword"
+      >data</a
+      ><a name="591"
+      > </a
+      ><a name="592" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="597"
+      > </a
+      ><a name="598" class="Symbol"
+      >:</a
+      ><a name="599"
+      > </a
+      ><a name="600" href="Control.Protocol.InOut.html#455" class="Datatype"
+      >InOut</a
+      ><a name="605"
+      > </a
+      ><a name="606" class="Symbol"
+      >&#8594;</a
+      ><a name="607"
+      > </a
+      ><a name="608" href="Type.html#88" class="Function"
+      >&#9733;&#8321;</a
+      ><a name="610"
+      > </a
+      ><a name="611" class="Keyword"
+      >where</a
+      ><a name="616"
+      >
+  </a
+      ><a name="619" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="622"
+      > </a
+      ><a name="623" class="Symbol"
+      >:</a
+      ><a name="624"
+      > </a
+      ><a name="625" class="Symbol"
+      >&#8704;</a
+      ><a name="626"
+      > </a
+      ><a name="627" class="Symbol"
+      >{</a
+      ><a name="628" href="Control.Protocol.Alternate.html#628" class="Bound"
+      >io</a
+      ><a name="630" class="Symbol"
+      >}</a
+      ><a name="631"
+      > </a
+      ><a name="632" class="Symbol"
+      >&#8594;</a
+      ><a name="633"
+      > </a
+      ><a name="634" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="639"
+      > </a
+      ><a name="640" href="Control.Protocol.Alternate.html#628" class="Bound"
+      >io</a
+      ><a name="642"
+      >
+  </a
+      ><a name="645" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >com</a
+      ><a name="648"
+      > </a
+      ><a name="649" class="Symbol"
+      >:</a
+      ><a name="650"
+      > </a
+      ><a name="651" class="Symbol"
+      >(</a
+      ><a name="652" href="Control.Protocol.Alternate.html#652" class="Bound"
+      >io</a
+      ><a name="654"
+      > </a
+      ><a name="655" class="Symbol"
+      >:</a
+      ><a name="656"
+      > </a
+      ><a name="657" href="Control.Protocol.InOut.html#455" class="Datatype"
+      >InOut</a
+      ><a name="662" class="Symbol"
+      >){</a
+      ><a name="664" href="Control.Protocol.Alternate.html#664" class="Bound"
+      >M</a
+      ><a name="665"
+      > </a
+      ><a name="666" class="Symbol"
+      >:</a
+      ><a name="667"
+      > </a
+      ><a name="668" href="Type.html#107" class="Function"
+      >&#9733;&#8320;</a
+      ><a name="670" class="Symbol"
+      >}(</a
+      ><a name="672" href="Control.Protocol.Alternate.html#672" class="Bound"
+      >P</a
+      ><a name="673"
+      > </a
+      ><a name="674" class="Symbol"
+      >:</a
+      ><a name="675"
+      > </a
+      ><a name="676" href="Control.Protocol.Alternate.html#664" class="Bound"
+      >M</a
+      ><a name="677"
+      > </a
+      ><a name="678" class="Symbol"
+      >&#8594;</a
+      ><a name="679"
+      > </a
+      ><a name="680" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >(</a
+      ><a name="687" href="Control.Protocol.InOut.html#489" class="Function"
+      >dual&#7477;&#7484;</a
+      ><a name="693"
+      > </a
+      ><a name="694" href="Control.Protocol.Alternate.html#652" class="Bound"
+      >io</a
+      ><a name="696" class="Symbol"
+      >))</a
+      ><a name="698"
+      > </a
+      ><a name="699" class="Symbol"
+      >&#8594;</a
+      ><a name="700"
+      > </a
+      ><a name="701" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="706"
+      > </a
+      ><a name="707" href="Control.Protocol.Alternate.html#652" class="Bound"
+      >io</a
+      ><a name="709"
+      >
+
+</a
+      ><a name="711" class="Keyword"
+      >pattern</a
+      ><a name="718"
+      > recv P </a
+      ><a name="726" class="Symbol"
+      >=</a
+      ><a name="727"
+      > com In  P
+</a
+      ><a name="738" class="Keyword"
+      >pattern</a
+      ><a name="745"
+      > send P </a
+      ><a name="753" class="Symbol"
+      >=</a
+      ><a name="754"
+      > com Out P
+
+</a
+      ><a name="766" class="Keyword"
+      >module</a
+      ><a name="772"
+      > </a
+      ><a name="773" href="Control.Protocol.Alternate.html#773" class="Module"
+      >_</a
+      ><a name="774"
+      > </a
+      ><a name="775" class="Symbol"
+      >{{</a
+      ><a name="777" href="Control.Protocol.Alternate.html#777" class="Bound"
+      >_</a
+      ><a name="778"
+      > </a
+      ><a name="779" class="Symbol"
+      >:</a
+      ><a name="780"
+      > </a
+      ><a name="781" href="Function.Extensionality.html#132" class="Postulate"
+      >FunExt</a
+      ><a name="787" class="Symbol"
+      >}}</a
+      ><a name="789"
+      > </a
+      ><a name="790" class="Keyword"
+      >where</a
+      ><a name="795"
+      >
+    </a
+      ><a name="800" href="Control.Protocol.Alternate.html#800" class="Function"
+      >com=</a
+      ><a name="804"
+      > </a
+      ><a name="805" class="Symbol"
+      >:</a
+      ><a name="806"
+      > </a
+      ><a name="807" class="Symbol"
+      >&#8704;</a
+      ><a name="808"
+      > </a
+      ><a name="809" href="Control.Protocol.Alternate.html#809" class="Bound"
+      >io</a
+      ><a name="811"
+      > </a
+      ><a name="812" class="Symbol"
+      >{</a
+      ><a name="813" href="Control.Protocol.Alternate.html#813" class="Bound"
+      >M&#8320;</a
+      ><a name="815"
+      > </a
+      ><a name="816" href="Control.Protocol.Alternate.html#816" class="Bound"
+      >M&#8321;</a
+      ><a name="818" class="Symbol"
+      >}(</a
+      ><a name="820" href="Control.Protocol.Alternate.html#820" class="Bound"
+      >M=</a
+      ><a name="822"
+      > </a
+      ><a name="823" class="Symbol"
+      >:</a
+      ><a name="824"
+      > </a
+      ><a name="825" href="Control.Protocol.Alternate.html#813" class="Bound"
+      >M&#8320;</a
+      ><a name="827"
+      > </a
+      ><a name="828" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="829"
+      > </a
+      ><a name="830" href="Control.Protocol.Alternate.html#816" class="Bound"
+      >M&#8321;</a
+      ><a name="832" class="Symbol"
+      >)</a
+      ><a name="833"
+      >
+             </a
+      ><a name="847" class="Symbol"
+      >{</a
+      ><a name="848" href="Control.Protocol.Alternate.html#848" class="Bound"
+      >P&#8320;</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Control.Protocol.Alternate.html#851" class="Bound"
+      >P&#8321;</a
+      ><a name="853" class="Symbol"
+      >}(</a
+      ><a name="855" href="Control.Protocol.Alternate.html#855" class="Bound"
+      >P=</a
+      ><a name="857"
+      > </a
+      ><a name="858" class="Symbol"
+      >:</a
+      ><a name="859"
+      > </a
+      ><a name="860" class="Symbol"
+      >&#8704;</a
+      ><a name="861"
+      > </a
+      ><a name="862" href="Control.Protocol.Alternate.html#862" class="Bound"
+      >m&#8320;</a
+      ><a name="864"
+      > </a
+      ><a name="865" class="Symbol"
+      >&#8594;</a
+      ><a name="866"
+      > </a
+      ><a name="867" href="Control.Protocol.Alternate.html#848" class="Bound"
+      >P&#8320;</a
+      ><a name="869"
+      > </a
+      ><a name="870" href="Control.Protocol.Alternate.html#862" class="Bound"
+      >m&#8320;</a
+      ><a name="872"
+      > </a
+      ><a name="873" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="874"
+      > </a
+      ><a name="875" href="Control.Protocol.Alternate.html#851" class="Bound"
+      >P&#8321;</a
+      ><a name="877"
+      > </a
+      ><a name="878" class="Symbol"
+      >(</a
+      ><a name="879" href="Relation.Binary.PropositionalEquality.NP.html#1571" class="Function"
+      >coe</a
+      ><a name="882"
+      > </a
+      ><a name="883" href="Control.Protocol.Alternate.html#820" class="Bound"
+      >M=</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="Control.Protocol.Alternate.html#862" class="Bound"
+      >m&#8320;</a
+      ><a name="888" class="Symbol"
+      >))</a
+      ><a name="890"
+      >
+           </a
+      ><a name="902" class="Symbol"
+      >&#8594;</a
+      ><a name="903"
+      > </a
+      ><a name="904" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >Proto.com</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="Control.Protocol.Alternate.html#809" class="Bound"
+      >io</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Control.Protocol.Alternate.html#848" class="Bound"
+      >P&#8320;</a
+      ><a name="919"
+      > </a
+      ><a name="920" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="921"
+      > </a
+      ><a name="922" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >com</a
+      ><a name="925"
+      > </a
+      ><a name="926" href="Control.Protocol.Alternate.html#809" class="Bound"
+      >io</a
+      ><a name="928"
+      > </a
+      ><a name="929" href="Control.Protocol.Alternate.html#851" class="Bound"
+      >P&#8321;</a
+      ><a name="931"
+      >
+    </a
+      ><a name="936" href="Control.Protocol.Alternate.html#800" class="Function"
+      >com=</a
+      ><a name="940"
+      > </a
+      ><a name="941" href="Control.Protocol.Alternate.html#941" class="Bound"
+      >io</a
+      ><a name="943"
+      > </a
+      ><a name="944" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="948"
+      > </a
+      ><a name="949" href="Control.Protocol.Alternate.html#949" class="Bound"
+      >P=</a
+      ><a name="951"
+      > </a
+      ><a name="952" class="Symbol"
+      >=</a
+      ><a name="953"
+      > </a
+      ><a name="954" href="Relation.Binary.PropositionalEquality.NP.html#1330" class="Function"
+      >ap</a
+      ><a name="956"
+      > </a
+      ><a name="957" class="Symbol"
+      >(</a
+      ><a name="958" class="InductiveConstructor"
+      >com</a
+      ><a name="961"
+      > </a
+      ><a name="962" class="Symbol"
+      >_)</a
+      ><a name="964"
+      > </a
+      ><a name="965" class="Symbol"
+      >(</a
+      ><a name="966" href="Function.Extensionality.html#149" class="Postulate"
+      >&#955;=</a
+      ><a name="968"
+      > </a
+      ><a name="969" href="Control.Protocol.Alternate.html#949" class="Bound"
+      >P=</a
+      ><a name="971" class="Symbol"
+      >)</a
+      ><a name="972"
+      >
+
+    </a
+      ><a name="978" class="Keyword"
+      >module</a
+      ><a name="984"
+      > </a
+      ><a name="985" href="Control.Protocol.Alternate.html#985" class="Module"
+      >_</a
+      ><a name="986"
+      > </a
+      ><a name="987" href="Control.Protocol.Alternate.html#987" class="Bound"
+      >io</a
+      ><a name="989"
+      >
+             </a
+      ><a name="1003" class="Symbol"
+      >{</a
+      ><a name="1004" href="Control.Protocol.Alternate.html#1004" class="Bound"
+      >M&#8320;</a
+      ><a name="1006"
+      > </a
+      ><a name="1007" href="Control.Protocol.Alternate.html#1007" class="Bound"
+      >M&#8321;</a
+      ><a name="1009" class="Symbol"
+      >}(</a
+      ><a name="1011" href="Control.Protocol.Alternate.html#1011" class="Bound"
+      >M&#8771;</a
+      ><a name="1013"
+      > </a
+      ><a name="1014" class="Symbol"
+      >:</a
+      ><a name="1015"
+      > </a
+      ><a name="1016" href="Control.Protocol.Alternate.html#1004" class="Bound"
+      >M&#8320;</a
+      ><a name="1018"
+      > </a
+      ><a name="1019" href="HoTT.html#4126" class="Function Operator"
+      >&#8771;</a
+      ><a name="1020"
+      > </a
+      ><a name="1021" href="Control.Protocol.Alternate.html#1007" class="Bound"
+      >M&#8321;</a
+      ><a name="1023" class="Symbol"
+      >)</a
+      ><a name="1024"
+      >
+             </a
+      ><a name="1038" class="Symbol"
+      >{</a
+      ><a name="1039" href="Control.Protocol.Alternate.html#1039" class="Bound"
+      >P&#8320;</a
+      ><a name="1041"
+      > </a
+      ><a name="1042" href="Control.Protocol.Alternate.html#1042" class="Bound"
+      >P&#8321;</a
+      ><a name="1044" class="Symbol"
+      >}</a
+      ><a name="1045"
+      >
+             </a
+      ><a name="1059" class="Symbol"
+      >(</a
+      ><a name="1060" href="Control.Protocol.Alternate.html#1060" class="Bound"
+      >P=</a
+      ><a name="1062"
+      > </a
+      ><a name="1063" class="Symbol"
+      >:</a
+      ><a name="1064"
+      > </a
+      ><a name="1065" class="Symbol"
+      >&#8704;</a
+      ><a name="1066"
+      > </a
+      ><a name="1067" href="Control.Protocol.Alternate.html#1067" class="Bound"
+      >m&#8320;</a
+      ><a name="1069"
+      > </a
+      ><a name="1070" class="Symbol"
+      >&#8594;</a
+      ><a name="1071"
+      > </a
+      ><a name="1072" href="Control.Protocol.Alternate.html#1039" class="Bound"
+      >P&#8320;</a
+      ><a name="1074"
+      > </a
+      ><a name="1075" href="Control.Protocol.Alternate.html#1067" class="Bound"
+      >m&#8320;</a
+      ><a name="1077"
+      > </a
+      ><a name="1078" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1079"
+      > </a
+      ><a name="1080" href="Control.Protocol.Alternate.html#1042" class="Bound"
+      >P&#8321;</a
+      ><a name="1082"
+      > </a
+      ><a name="1083" class="Symbol"
+      >(</a
+      ><a name="1084" href="HoTT.html#4235" class="Function"
+      >&#8211;&gt;</a
+      ><a name="1086"
+      > </a
+      ><a name="1087" href="Control.Protocol.Alternate.html#1011" class="Bound"
+      >M&#8771;</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" href="Control.Protocol.Alternate.html#1067" class="Bound"
+      >m&#8320;</a
+      ><a name="1092" class="Symbol"
+      >))</a
+      ><a name="1094"
+      >
+             </a
+      ><a name="1108" class="Symbol"
+      >{{</a
+      ><a name="1110" href="Control.Protocol.Alternate.html#1110" class="Bound"
+      >_</a
+      ><a name="1111"
+      > </a
+      ><a name="1112" class="Symbol"
+      >:</a
+      ><a name="1113"
+      > </a
+      ><a name="1114" href="HoTT.html#8054" class="Postulate"
+      >UA</a
+      ><a name="1116" class="Symbol"
+      >}}</a
+      ><a name="1118"
+      > </a
+      ><a name="1119" class="Keyword"
+      >where</a
+      ><a name="1124"
+      >
+        </a
+      ><a name="1133" href="Control.Protocol.Alternate.html#1133" class="Function"
+      >com&#8771;</a
+      ><a name="1137"
+      > </a
+      ><a name="1138" class="Symbol"
+      >:</a
+      ><a name="1139"
+      > </a
+      ><a name="1140" class="InductiveConstructor"
+      >com</a
+      ><a name="1143"
+      > </a
+      ><a name="1144" href="Control.Protocol.Alternate.html#987" class="Bound"
+      >io</a
+      ><a name="1146"
+      > </a
+      ><a name="1147" href="Control.Protocol.Alternate.html#1039" class="Bound"
+      >P&#8320;</a
+      ><a name="1149"
+      > </a
+      ><a name="1150" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1151"
+      > </a
+      ><a name="1152" class="InductiveConstructor"
+      >com</a
+      ><a name="1155"
+      > </a
+      ><a name="1156" href="Control.Protocol.Alternate.html#987" class="Bound"
+      >io</a
+      ><a name="1158"
+      > </a
+      ><a name="1159" href="Control.Protocol.Alternate.html#1042" class="Bound"
+      >P&#8321;</a
+      ><a name="1161"
+      >
+        </a
+      ><a name="1170" href="Control.Protocol.Alternate.html#1133" class="Function"
+      >com&#8771;</a
+      ><a name="1174"
+      > </a
+      ><a name="1175" class="Symbol"
+      >=</a
+      ><a name="1176"
+      > </a
+      ><a name="1177" href="Control.Protocol.Alternate.html#800" class="Function"
+      >com=</a
+      ><a name="1181"
+      > </a
+      ><a name="1182" href="Control.Protocol.Alternate.html#987" class="Bound"
+      >io</a
+      ><a name="1184"
+      > </a
+      ><a name="1185" class="Symbol"
+      >(</a
+      ><a name="1186" href="HoTT.html#8118" class="Postulate"
+      >ua</a
+      ><a name="1188"
+      > </a
+      ><a name="1189" href="Control.Protocol.Alternate.html#1011" class="Bound"
+      >M&#8771;</a
+      ><a name="1191" class="Symbol"
+      >)</a
+      ><a name="1192"
+      > </a
+      ><a name="1193" class="Symbol"
+      >&#955;</a
+      ><a name="1194"
+      > </a
+      ><a name="1195" href="Control.Protocol.Alternate.html#1195" class="Bound"
+      >m</a
+      ><a name="1196"
+      > </a
+      ><a name="1197" class="Symbol"
+      >&#8594;</a
+      ><a name="1198"
+      > </a
+      ><a name="1199" href="Control.Protocol.Alternate.html#1060" class="Bound"
+      >P=</a
+      ><a name="1201"
+      > </a
+      ><a name="1202" href="Control.Protocol.Alternate.html#1195" class="Bound"
+      >m</a
+      ><a name="1203"
+      > </a
+      ><a name="1204" href="Relation.Binary.PropositionalEquality.NP.html#986" class="Function Operator"
+      >&#8729;</a
+      ><a name="1205"
+      > </a
+      ><a name="1206" href="Relation.Binary.PropositionalEquality.NP.html#1330" class="Function"
+      >ap</a
+      ><a name="1208"
+      > </a
+      ><a name="1209" href="Control.Protocol.Alternate.html#1042" class="Bound"
+      >P&#8321;</a
+      ><a name="1211"
+      > </a
+      ><a name="1212" class="Symbol"
+      >(</a
+      ><a name="1213" href="Relation.Binary.PropositionalEquality.NP.html#1077" class="Function Operator"
+      >!</a
+      ><a name="1214"
+      > </a
+      ><a name="1215" href="HoTT.html#8324" class="Function"
+      >coe-&#946;</a
+      ><a name="1220"
+      > </a
+      ><a name="1221" href="Control.Protocol.Alternate.html#1011" class="Bound"
+      >M&#8771;</a
+      ><a name="1223"
+      > </a
+      ><a name="1224" href="Control.Protocol.Alternate.html#1195" class="Bound"
+      >m</a
+      ><a name="1225" class="Symbol"
+      >)</a
+      ><a name="1226"
+      >
+
+    </a
+      ><a name="1232" href="Control.Protocol.Alternate.html#1232" class="Function"
+      >send=</a
+      ><a name="1237"
+      > </a
+      ><a name="1238" class="Symbol"
+      >=</a
+      ><a name="1239"
+      > </a
+      ><a name="1240" href="Control.Protocol.Alternate.html#800" class="Function"
+      >com=</a
+      ><a name="1244"
+      > </a
+      ><a name="1245" href="Control.Protocol.InOut.html#476" class="InductiveConstructor"
+      >Out</a
+      ><a name="1248"
+      >
+    </a
+      ><a name="1253" href="Control.Protocol.Alternate.html#1253" class="Function"
+      >send&#8771;</a
+      ><a name="1258"
+      > </a
+      ><a name="1259" class="Symbol"
+      >=</a
+      ><a name="1260"
+      > </a
+      ><a name="1261" href="Control.Protocol.Alternate.html#1133" class="Function"
+      >com&#8771;</a
+      ><a name="1265"
+      > </a
+      ><a name="1266" href="Control.Protocol.InOut.html#476" class="InductiveConstructor"
+      >Out</a
+      ><a name="1269"
+      >
+    </a
+      ><a name="1274" href="Control.Protocol.Alternate.html#1274" class="Function"
+      >recv=</a
+      ><a name="1279"
+      > </a
+      ><a name="1280" class="Symbol"
+      >=</a
+      ><a name="1281"
+      > </a
+      ><a name="1282" href="Control.Protocol.Alternate.html#800" class="Function"
+      >com=</a
+      ><a name="1286"
+      > </a
+      ><a name="1287" href="Control.Protocol.InOut.html#473" class="InductiveConstructor"
+      >In</a
+      ><a name="1289"
+      >
+    </a
+      ><a name="1294" href="Control.Protocol.Alternate.html#1294" class="Function"
+      >recv&#8771;</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" class="Symbol"
+      >=</a
+      ><a name="1301"
+      > </a
+      ><a name="1302" href="Control.Protocol.Alternate.html#1133" class="Function"
+      >com&#8771;</a
+      ><a name="1306"
+      > </a
+      ><a name="1307" href="Control.Protocol.InOut.html#473" class="InductiveConstructor"
+      >In</a
+      ><a name="1309"
+      >
+ 
+    </a
+      ><a name="1316" href="Control.Protocol.Alternate.html#1316" class="Function"
+      >com=&#8242;</a
+      ><a name="1321"
+      > </a
+      ><a name="1322" class="Symbol"
+      >:</a
+      ><a name="1323"
+      > </a
+      ><a name="1324" class="Symbol"
+      >&#8704;</a
+      ><a name="1325"
+      > </a
+      ><a name="1326" href="Control.Protocol.Alternate.html#1326" class="Bound"
+      >io</a
+      ><a name="1328"
+      > </a
+      ><a name="1329" class="Symbol"
+      >{</a
+      ><a name="1330" href="Control.Protocol.Alternate.html#1330" class="Bound"
+      >M</a
+      ><a name="1331" class="Symbol"
+      >}{</a
+      ><a name="1333" href="Control.Protocol.Alternate.html#1333" class="Bound"
+      >P&#8320;</a
+      ><a name="1335"
+      > </a
+      ><a name="1336" href="Control.Protocol.Alternate.html#1336" class="Bound"
+      >P&#8321;</a
+      ><a name="1338"
+      > </a
+      ><a name="1339" class="Symbol"
+      >:</a
+      ><a name="1340"
+      > </a
+      ><a name="1341" href="Control.Protocol.Alternate.html#1330" class="Bound"
+      >M</a
+      ><a name="1342"
+      > </a
+      ><a name="1343" class="Symbol"
+      >&#8594;</a
+      ><a name="1344"
+      > </a
+      ><a name="1345" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1350"
+      > </a
+      ><a name="1351" class="Symbol"
+      >_}(</a
+      ><a name="1354" href="Control.Protocol.Alternate.html#1354" class="Bound"
+      >P=</a
+      ><a name="1356"
+      > </a
+      ><a name="1357" class="Symbol"
+      >:</a
+      ><a name="1358"
+      > </a
+      ><a name="1359" class="Symbol"
+      >&#8704;</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" href="Control.Protocol.Alternate.html#1361" class="Bound"
+      >m</a
+      ><a name="1362"
+      > </a
+      ><a name="1363" class="Symbol"
+      >&#8594;</a
+      ><a name="1364"
+      > </a
+      ><a name="1365" href="Control.Protocol.Alternate.html#1333" class="Bound"
+      >P&#8320;</a
+      ><a name="1367"
+      > </a
+      ><a name="1368" href="Control.Protocol.Alternate.html#1361" class="Bound"
+      >m</a
+      ><a name="1369"
+      > </a
+      ><a name="1370" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1371"
+      > </a
+      ><a name="1372" href="Control.Protocol.Alternate.html#1336" class="Bound"
+      >P&#8321;</a
+      ><a name="1374"
+      > </a
+      ><a name="1375" href="Control.Protocol.Alternate.html#1361" class="Bound"
+      >m</a
+      ><a name="1376" class="Symbol"
+      >)</a
+      ><a name="1377"
+      > </a
+      ><a name="1378" class="Symbol"
+      >&#8594;</a
+      ><a name="1379"
+      > </a
+      ><a name="1380" class="InductiveConstructor"
+      >com</a
+      ><a name="1383"
+      > </a
+      ><a name="1384" href="Control.Protocol.Alternate.html#1326" class="Bound"
+      >io</a
+      ><a name="1386"
+      > </a
+      ><a name="1387" href="Control.Protocol.Alternate.html#1333" class="Bound"
+      >P&#8320;</a
+      ><a name="1389"
+      > </a
+      ><a name="1390" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1391"
+      > </a
+      ><a name="1392" class="InductiveConstructor"
+      >com</a
+      ><a name="1395"
+      > </a
+      ><a name="1396" href="Control.Protocol.Alternate.html#1326" class="Bound"
+      >io</a
+      ><a name="1398"
+      > </a
+      ><a name="1399" href="Control.Protocol.Alternate.html#1336" class="Bound"
+      >P&#8321;</a
+      ><a name="1401"
+      >
+    </a
+      ><a name="1406" href="Control.Protocol.Alternate.html#1316" class="Function"
+      >com=&#8242;</a
+      ><a name="1411"
+      > </a
+      ><a name="1412" href="Control.Protocol.Alternate.html#1412" class="Bound"
+      >io</a
+      ><a name="1414"
+      > </a
+      ><a name="1415" class="Symbol"
+      >=</a
+      ><a name="1416"
+      > </a
+      ><a name="1417" href="Control.Protocol.Alternate.html#800" class="Function"
+      >com=</a
+      ><a name="1421"
+      > </a
+      ><a name="1422" href="Control.Protocol.Alternate.html#1412" class="Bound"
+      >io</a
+      ><a name="1424"
+      > </a
+      ><a name="1425" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="1429"
+      >
+
+    </a
+      ><a name="1435" href="Control.Protocol.Alternate.html#1435" class="Function"
+      >send=&#8242;</a
+      ><a name="1441"
+      > </a
+      ><a name="1442" class="Symbol"
+      >:</a
+      ><a name="1443"
+      > </a
+      ><a name="1444" class="Symbol"
+      >&#8704;</a
+      ><a name="1445"
+      > </a
+      ><a name="1446" class="Symbol"
+      >{</a
+      ><a name="1447" href="Control.Protocol.Alternate.html#1447" class="Bound"
+      >M</a
+      ><a name="1448" class="Symbol"
+      >}{</a
+      ><a name="1450" href="Control.Protocol.Alternate.html#1450" class="Bound"
+      >P&#8320;</a
+      ><a name="1452"
+      > </a
+      ><a name="1453" href="Control.Protocol.Alternate.html#1453" class="Bound"
+      >P&#8321;</a
+      ><a name="1455"
+      > </a
+      ><a name="1456" class="Symbol"
+      >:</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" href="Control.Protocol.Alternate.html#1447" class="Bound"
+      >M</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" class="Symbol"
+      >&#8594;</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1467"
+      > </a
+      ><a name="1468" class="Symbol"
+      >_}(</a
+      ><a name="1471" href="Control.Protocol.Alternate.html#1471" class="Bound"
+      >P=</a
+      ><a name="1473"
+      > </a
+      ><a name="1474" class="Symbol"
+      >:</a
+      ><a name="1475"
+      > </a
+      ><a name="1476" class="Symbol"
+      >&#8704;</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="Control.Protocol.Alternate.html#1478" class="Bound"
+      >m</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" class="Symbol"
+      >&#8594;</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" href="Control.Protocol.Alternate.html#1450" class="Bound"
+      >P&#8320;</a
+      ><a name="1484"
+      > </a
+      ><a name="1485" href="Control.Protocol.Alternate.html#1478" class="Bound"
+      >m</a
+      ><a name="1486"
+      > </a
+      ><a name="1487" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1488"
+      > </a
+      ><a name="1489" href="Control.Protocol.Alternate.html#1453" class="Bound"
+      >P&#8321;</a
+      ><a name="1491"
+      > </a
+      ><a name="1492" href="Control.Protocol.Alternate.html#1478" class="Bound"
+      >m</a
+      ><a name="1493" class="Symbol"
+      >)</a
+      ><a name="1494"
+      > </a
+      ><a name="1495" class="Symbol"
+      >&#8594;</a
+      ><a name="1496"
+      > </a
+      ><a name="1497" href="Control.Protocol.Alternate.html#746"
+      >send</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="Control.Protocol.Alternate.html#1450" class="Bound"
+      >P&#8320;</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" href="Control.Protocol.Alternate.html#746"
+      >send</a
+      ><a name="1511"
+      > </a
+      ><a name="1512" href="Control.Protocol.Alternate.html#1453" class="Bound"
+      >P&#8321;</a
+      ><a name="1514"
+      >
+    </a
+      ><a name="1519" href="Control.Protocol.Alternate.html#1435" class="Function"
+      >send=&#8242;</a
+      ><a name="1525"
+      > </a
+      ><a name="1526" class="Symbol"
+      >=</a
+      ><a name="1527"
+      > </a
+      ><a name="1528" href="Control.Protocol.Alternate.html#1232" class="Function"
+      >send=</a
+      ><a name="1533"
+      > </a
+      ><a name="1534" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="1538"
+      >
+
+    </a
+      ><a name="1544" href="Control.Protocol.Alternate.html#1544" class="Function"
+      >recv=&#8242;</a
+      ><a name="1550"
+      > </a
+      ><a name="1551" class="Symbol"
+      >:</a
+      ><a name="1552"
+      > </a
+      ><a name="1553" class="Symbol"
+      >&#8704;</a
+      ><a name="1554"
+      > </a
+      ><a name="1555" class="Symbol"
+      >{</a
+      ><a name="1556" href="Control.Protocol.Alternate.html#1556" class="Bound"
+      >M</a
+      ><a name="1557" class="Symbol"
+      >}{</a
+      ><a name="1559" href="Control.Protocol.Alternate.html#1559" class="Bound"
+      >P&#8320;</a
+      ><a name="1561"
+      > </a
+      ><a name="1562" href="Control.Protocol.Alternate.html#1562" class="Bound"
+      >P&#8321;</a
+      ><a name="1564"
+      > </a
+      ><a name="1565" class="Symbol"
+      >:</a
+      ><a name="1566"
+      > </a
+      ><a name="1567" href="Control.Protocol.Alternate.html#1556" class="Bound"
+      >M</a
+      ><a name="1568"
+      > </a
+      ><a name="1569" class="Symbol"
+      >&#8594;</a
+      ><a name="1570"
+      > </a
+      ><a name="1571" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1576"
+      > </a
+      ><a name="1577" class="Symbol"
+      >_}(</a
+      ><a name="1580" href="Control.Protocol.Alternate.html#1580" class="Bound"
+      >P=</a
+      ><a name="1582"
+      > </a
+      ><a name="1583" class="Symbol"
+      >:</a
+      ><a name="1584"
+      > </a
+      ><a name="1585" class="Symbol"
+      >&#8704;</a
+      ><a name="1586"
+      > </a
+      ><a name="1587" href="Control.Protocol.Alternate.html#1587" class="Bound"
+      >m</a
+      ><a name="1588"
+      > </a
+      ><a name="1589" class="Symbol"
+      >&#8594;</a
+      ><a name="1590"
+      > </a
+      ><a name="1591" href="Control.Protocol.Alternate.html#1559" class="Bound"
+      >P&#8320;</a
+      ><a name="1593"
+      > </a
+      ><a name="1594" href="Control.Protocol.Alternate.html#1587" class="Bound"
+      >m</a
+      ><a name="1595"
+      > </a
+      ><a name="1596" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1597"
+      > </a
+      ><a name="1598" href="Control.Protocol.Alternate.html#1562" class="Bound"
+      >P&#8321;</a
+      ><a name="1600"
+      > </a
+      ><a name="1601" href="Control.Protocol.Alternate.html#1587" class="Bound"
+      >m</a
+      ><a name="1602" class="Symbol"
+      >)</a
+      ><a name="1603"
+      > </a
+      ><a name="1604" class="Symbol"
+      >&#8594;</a
+      ><a name="1605"
+      > </a
+      ><a name="1606" href="Control.Protocol.Alternate.html#719"
+      >recv</a
+      ><a name="1610"
+      > </a
+      ><a name="1611" href="Control.Protocol.Alternate.html#1559" class="Bound"
+      >P&#8320;</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1615"
+      > </a
+      ><a name="1616" href="Control.Protocol.Alternate.html#719"
+      >recv</a
+      ><a name="1620"
+      > </a
+      ><a name="1621" href="Control.Protocol.Alternate.html#1562" class="Bound"
+      >P&#8321;</a
+      ><a name="1623"
+      >
+    </a
+      ><a name="1628" href="Control.Protocol.Alternate.html#1544" class="Function"
+      >recv=&#8242;</a
+      ><a name="1634"
+      > </a
+      ><a name="1635" class="Symbol"
+      >=</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="Control.Protocol.Alternate.html#1274" class="Function"
+      >recv=</a
+      ><a name="1642"
+      > </a
+      ><a name="1643" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="1647"
+      >
+
+</a
+      ><a name="1649" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;_&#10215;</a
+      ><a name="1653"
+      > </a
+      ><a name="1654" class="Symbol"
+      >:</a
+      ><a name="1655"
+      > </a
+      ><a name="1656" class="Symbol"
+      >&#8704;</a
+      ><a name="1657"
+      > </a
+      ><a name="1658" class="Symbol"
+      >{</a
+      ><a name="1659" href="Control.Protocol.Alternate.html#1659" class="Bound"
+      >io</a
+      ><a name="1661" class="Symbol"
+      >}</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" class="Symbol"
+      >&#8594;</a
+      ><a name="1664"
+      > </a
+      ><a name="1665" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1670"
+      > </a
+      ><a name="1671" href="Control.Protocol.Alternate.html#1659" class="Bound"
+      >io</a
+      ><a name="1673"
+      > </a
+      ><a name="1674" class="Symbol"
+      >&#8594;</a
+      ><a name="1675"
+      > </a
+      ><a name="1676" href="Control.Protocol.Core.html#790" class="Function"
+      >C.Proto</a
+      ><a name="1683"
+      >
+</a
+      ><a name="1684" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="1686"
+      > </a
+      ><a name="1687" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="1690"
+      >      </a
+      ><a name="1696" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="1697"
+      > </a
+      ><a name="1698" class="Symbol"
+      >=</a
+      ><a name="1699"
+      > </a
+      ><a name="1700" href="Control.Protocol.Core.html#657" class="InductiveConstructor"
+      >end</a
+      ><a name="1703"
+      >
+</a
+      ><a name="1704" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="1706"
+      > </a
+      ><a name="1707" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >com</a
+      ><a name="1710"
+      > </a
+      ><a name="1711" href="Control.Protocol.Alternate.html#1711" class="Bound"
+      >io</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" href="Control.Protocol.Alternate.html#1714" class="Bound"
+      >P</a
+      ><a name="1715"
+      > </a
+      ><a name="1716" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="1717"
+      > </a
+      ><a name="1718" class="Symbol"
+      >=</a
+      ><a name="1719"
+      > </a
+      ><a name="1720" href="Control.Protocol.Core.html#674" class="InductiveConstructor"
+      >com</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="Control.Protocol.Alternate.html#1711" class="Bound"
+      >io</a
+      ><a name="1726"
+      > </a
+      ><a name="1727" class="Symbol"
+      >&#955;</a
+      ><a name="1728"
+      > </a
+      ><a name="1729" href="Control.Protocol.Alternate.html#1729" class="Bound"
+      >m</a
+      ><a name="1730"
+      > </a
+      ><a name="1731" class="Symbol"
+      >&#8594;</a
+      ><a name="1732"
+      > </a
+      ><a name="1733" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="1735"
+      > </a
+      ><a name="1736" href="Control.Protocol.Alternate.html#1714" class="Bound"
+      >P</a
+      ><a name="1737"
+      > </a
+      ><a name="1738" href="Control.Protocol.Alternate.html#1729" class="Bound"
+      >m</a
+      ><a name="1739"
+      > </a
+      ><a name="1740" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="1741"
+      >
+
+</a
+      ><a name="1743" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10214;_&#10215;</a
+      ><a name="1746"
+      > </a
+      ><a name="1747" class="Symbol"
+      >:</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" class="Symbol"
+      >&#8704;</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" class="Symbol"
+      >{</a
+      ><a name="1752" href="Control.Protocol.Alternate.html#1752" class="Bound"
+      >io</a
+      ><a name="1754" class="Symbol"
+      >}</a
+      ><a name="1755"
+      > </a
+      ><a name="1756" class="Symbol"
+      >&#8594;</a
+      ><a name="1757"
+      > </a
+      ><a name="1758" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1763"
+      > </a
+      ><a name="1764" href="Control.Protocol.Alternate.html#1752" class="Bound"
+      >io</a
+      ><a name="1766"
+      > </a
+      ><a name="1767" class="Symbol"
+      >&#8594;</a
+      ><a name="1768"
+      > </a
+      ><a name="1769" href="Type.html#125" class="Function"
+      >&#9733;</a
+      ><a name="1770"
+      >
+</a
+      ><a name="1771" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10214;</a
+      ><a name="1772"
+      > </a
+      ><a name="1773" href="Control.Protocol.Alternate.html#1773" class="Bound"
+      >P</a
+      ><a name="1774"
+      > </a
+      ><a name="1775" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10215;</a
+      ><a name="1776"
+      > </a
+      ><a name="1777" class="Symbol"
+      >=</a
+      ><a name="1778"
+      > </a
+      ><a name="1779" href="Control.Protocol.Core.html#3371" class="Function Operator"
+      >C.&#10214;</a
+      ><a name="1782"
+      > </a
+      ><a name="1783" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="1785"
+      > </a
+      ><a name="1786" href="Control.Protocol.Alternate.html#1773" class="Bound"
+      >P</a
+      ><a name="1787"
+      > </a
+      ><a name="1788" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="1789"
+      > </a
+      ><a name="1790" href="Control.Protocol.Core.html#3371" class="Function Operator"
+      >&#10215;</a
+      ><a name="1791"
+      >
+
+</a
+      ><a name="1793" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="1797"
+      > </a
+      ><a name="1798" class="Symbol"
+      >:</a
+      ><a name="1799"
+      > </a
+      ><a name="1800" class="Symbol"
+      >&#8704;</a
+      ><a name="1801"
+      > </a
+      ><a name="1802" class="Symbol"
+      >{</a
+      ><a name="1803" href="Control.Protocol.Alternate.html#1803" class="Bound"
+      >io</a
+      ><a name="1805" class="Symbol"
+      >}</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" class="Symbol"
+      >&#8594;</a
+      ><a name="1808"
+      > </a
+      ><a name="1809" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1814"
+      > </a
+      ><a name="1815" href="Control.Protocol.Alternate.html#1803" class="Bound"
+      >io</a
+      ><a name="1817"
+      > </a
+      ><a name="1818" class="Symbol"
+      >&#8594;</a
+      ><a name="1819"
+      > </a
+      ><a name="1820" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1825"
+      > </a
+      ><a name="1826" class="Symbol"
+      >(</a
+      ><a name="1827" href="Control.Protocol.InOut.html#489" class="Function"
+      >dual&#7477;&#7484;</a
+      ><a name="1833"
+      > </a
+      ><a name="1834" href="Control.Protocol.Alternate.html#1803" class="Bound"
+      >io</a
+      ><a name="1836" class="Symbol"
+      >)</a
+      ><a name="1837"
+      >
+</a
+      ><a name="1838" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="1842"
+      > </a
+      ><a name="1843" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="1846"
+      >        </a
+      ><a name="1854" class="Symbol"
+      >=</a
+      ><a name="1855"
+      > </a
+      ><a name="1856" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="1859"
+      >
+</a
+      ><a name="1860" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="1864"
+      > </a
+      ><a name="1865" class="Symbol"
+      >(</a
+      ><a name="1866" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >com</a
+      ><a name="1869"
+      > </a
+      ><a name="1870" href="Control.Protocol.Alternate.html#1870" class="Bound"
+      >io</a
+      ><a name="1872"
+      > </a
+      ><a name="1873" href="Control.Protocol.Alternate.html#1873" class="Bound"
+      >P</a
+      ><a name="1874" class="Symbol"
+      >)</a
+      ><a name="1875"
+      > </a
+      ><a name="1876" class="Symbol"
+      >=</a
+      ><a name="1877"
+      > </a
+      ><a name="1878" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >com</a
+      ><a name="1881"
+      > </a
+      ><a name="1882" class="Symbol"
+      >(</a
+      ><a name="1883" href="Control.Protocol.InOut.html#489" class="Function"
+      >dual&#7477;&#7484;</a
+      ><a name="1889"
+      > </a
+      ><a name="1890" href="Control.Protocol.Alternate.html#1870" class="Bound"
+      >io</a
+      ><a name="1892" class="Symbol"
+      >)</a
+      ><a name="1893"
+      > </a
+      ><a name="1894" class="Symbol"
+      >&#955;</a
+      ><a name="1895"
+      > </a
+      ><a name="1896" href="Control.Protocol.Alternate.html#1896" class="Bound"
+      >m</a
+      ><a name="1897"
+      > </a
+      ><a name="1898" class="Symbol"
+      >&#8594;</a
+      ><a name="1899"
+      > </a
+      ><a name="1900" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="1904"
+      > </a
+      ><a name="1905" class="Symbol"
+      >(</a
+      ><a name="1906" href="Control.Protocol.Alternate.html#1873" class="Bound"
+      >P</a
+      ><a name="1907"
+      > </a
+      ><a name="1908" href="Control.Protocol.Alternate.html#1896" class="Bound"
+      >m</a
+      ><a name="1909" class="Symbol"
+      >)</a
+      ><a name="1910"
+      >
+
+</a
+      ><a name="1912" class="Keyword"
+      >module</a
+      ><a name="1918"
+      > </a
+      ><a name="1919" href="Control.Protocol.Alternate.html#1919" class="Module"
+      >_</a
+      ><a name="1920"
+      > </a
+      ><a name="1921" class="Symbol"
+      >{</a
+      ><a name="1922" href="Control.Protocol.Alternate.html#1922" class="Bound"
+      >io</a
+      ><a name="1924" class="Symbol"
+      >}(</a
+      ><a name="1926" href="Control.Protocol.Alternate.html#1926" class="Bound"
+      >P</a
+      ><a name="1927"
+      > </a
+      ><a name="1928" class="Symbol"
+      >:</a
+      ><a name="1929"
+      > </a
+      ><a name="1930" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="1935"
+      > </a
+      ><a name="1936" href="Control.Protocol.Alternate.html#1922" class="Bound"
+      >io</a
+      ><a name="1938" class="Symbol"
+      >)</a
+      ><a name="1939"
+      > </a
+      ><a name="1940" class="Keyword"
+      >where</a
+      ><a name="1945"
+      >
+    </a
+      ><a name="1950" href="Control.Protocol.Alternate.html#1950" class="Function Operator"
+      >&#10214;_&#8869;&#10215;</a
+      ><a name="1954"
+      > </a
+      ><a name="1955" class="Symbol"
+      >:</a
+      ><a name="1956"
+      > </a
+      ><a name="1957" href="Type.html#125" class="Function"
+      >&#9733;</a
+      ><a name="1958"
+      >
+    </a
+      ><a name="1963" href="Control.Protocol.Alternate.html#1950" class="Function Operator"
+      >&#10214;_&#8869;&#10215;</a
+      ><a name="1967"
+      > </a
+      ><a name="1968" class="Symbol"
+      >=</a
+      ><a name="1969"
+      > </a
+      ><a name="1970" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10214;</a
+      ><a name="1971"
+      > </a
+      ><a name="1972" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="1976"
+      > </a
+      ><a name="1977" href="Control.Protocol.Alternate.html#1926" class="Bound"
+      >P</a
+      ><a name="1978"
+      > </a
+      ><a name="1979" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10215;</a
+      ><a name="1980"
+      >
+
+    </a
+      ><a name="1986" href="Control.Protocol.Alternate.html#1986" class="Function"
+      >Log</a
+      ><a name="1989"
+      > </a
+      ><a name="1990" class="Symbol"
+      >:</a
+      ><a name="1991"
+      > </a
+      ><a name="1992" href="Type.html#125" class="Function"
+      >&#9733;</a
+      ><a name="1993"
+      >
+    </a
+      ><a name="1998" href="Control.Protocol.Alternate.html#1986" class="Function"
+      >Log</a
+      ><a name="2001"
+      > </a
+      ><a name="2002" class="Symbol"
+      >=</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" href="Control.Protocol.Core.html#3371" class="Function Operator"
+      >C.&#10214;</a
+      ><a name="2007"
+      > </a
+      ><a name="2008" href="Control.Protocol.Core.html#2847" class="Function"
+      >C.source-of</a
+      ><a name="2019"
+      > </a
+      ><a name="2020" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2022"
+      > </a
+      ><a name="2023" href="Control.Protocol.Alternate.html#1926" class="Bound"
+      >P</a
+      ><a name="2024"
+      > </a
+      ><a name="2025" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="2026"
+      > </a
+      ><a name="2027" href="Control.Protocol.Core.html#3371" class="Function Operator"
+      >&#10215;</a
+      ><a name="2028"
+      >
+
+</a
+      ><a name="2030" class="Keyword"
+      >module</a
+      ><a name="2036"
+      > </a
+      ><a name="2037" href="Control.Protocol.Alternate.html#2037" class="Module"
+      >_</a
+      ><a name="2038"
+      > </a
+      ><a name="2039" class="Symbol"
+      >{{</a
+      ><a name="2041" href="Control.Protocol.Alternate.html#2041" class="Bound"
+      >_</a
+      ><a name="2042"
+      > </a
+      ><a name="2043" class="Symbol"
+      >:</a
+      ><a name="2044"
+      > </a
+      ><a name="2045" href="Function.Extensionality.html#132" class="Postulate"
+      >FunExt</a
+      ><a name="2051" class="Symbol"
+      >}}</a
+      ><a name="2053"
+      > </a
+      ><a name="2054" class="Keyword"
+      >where</a
+      ><a name="2059"
+      >
+    </a
+      ><a name="2064" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >P&#10214;_&#8869;&#10215;</a
+      ><a name="2069"
+      > </a
+      ><a name="2070" class="Symbol"
+      >:</a
+      ><a name="2071"
+      > </a
+      ><a name="2072" class="Symbol"
+      >&#8704;</a
+      ><a name="2073"
+      > </a
+      ><a name="2074" class="Symbol"
+      >{</a
+      ><a name="2075" href="Control.Protocol.Alternate.html#2075" class="Bound"
+      >io</a
+      ><a name="2077" class="Symbol"
+      >}(</a
+      ><a name="2079" href="Control.Protocol.Alternate.html#2079" class="Bound"
+      >P</a
+      ><a name="2080"
+      > </a
+      ><a name="2081" class="Symbol"
+      >:</a
+      ><a name="2082"
+      > </a
+      ><a name="2083" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2088"
+      > </a
+      ><a name="2089" href="Control.Protocol.Alternate.html#2075" class="Bound"
+      >io</a
+      ><a name="2091" class="Symbol"
+      >)</a
+      ><a name="2092"
+      > </a
+      ><a name="2093" class="Symbol"
+      >&#8594;</a
+      ><a name="2094"
+      > </a
+      ><a name="2095" href="Control.Protocol.Core.html#2752" class="Function"
+      >C.dual</a
+      ><a name="2101"
+      > </a
+      ><a name="2102" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2104"
+      > </a
+      ><a name="2105" href="Control.Protocol.Alternate.html#2079" class="Bound"
+      >P</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="2108"
+      > </a
+      ><a name="2109" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2110"
+      > </a
+      ><a name="2111" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2113"
+      > </a
+      ><a name="2114" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="2118"
+      > </a
+      ><a name="2119" href="Control.Protocol.Alternate.html#2079" class="Bound"
+      >P</a
+      ><a name="2120"
+      > </a
+      ><a name="2121" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="2122"
+      >
+    </a
+      ><a name="2127" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2129"
+      > </a
+      ><a name="2130" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="2133"
+      >      </a
+      ><a name="2139" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >&#8869;&#10215;</a
+      ><a name="2141"
+      > </a
+      ><a name="2142" class="Symbol"
+      >=</a
+      ><a name="2143"
+      > </a
+      ><a name="2144" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="2148"
+      >
+    </a
+      ><a name="2153" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2155"
+      > </a
+      ><a name="2156" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >com</a
+      ><a name="2159"
+      > </a
+      ><a name="2160" href="Control.Protocol.Alternate.html#2160" class="Bound"
+      >io</a
+      ><a name="2162"
+      > </a
+      ><a name="2163" href="Control.Protocol.Alternate.html#2163" class="Bound"
+      >P</a
+      ><a name="2164"
+      > </a
+      ><a name="2165" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >&#8869;&#10215;</a
+      ><a name="2167"
+      > </a
+      ><a name="2168" class="Symbol"
+      >=</a
+      ><a name="2169"
+      > </a
+      ><a name="2170" href="Control.Protocol.Core.html#941" class="Function"
+      >C.com=</a
+      ><a name="2176"
+      > </a
+      ><a name="2177" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="2181"
+      > </a
+      ><a name="2182" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="2186"
+      > </a
+      ><a name="2187" class="Symbol"
+      >&#955;</a
+      ><a name="2188"
+      > </a
+      ><a name="2189" href="Control.Protocol.Alternate.html#2189" class="Bound"
+      >m</a
+      ><a name="2190"
+      > </a
+      ><a name="2191" class="Symbol"
+      >&#8594;</a
+      ><a name="2192"
+      > </a
+      ><a name="2193" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2195"
+      > </a
+      ><a name="2196" href="Control.Protocol.Alternate.html#2163" class="Bound"
+      >P</a
+      ><a name="2197"
+      > </a
+      ><a name="2198" href="Control.Protocol.Alternate.html#2189" class="Bound"
+      >m</a
+      ><a name="2199"
+      > </a
+      ><a name="2200" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >&#8869;&#10215;</a
+      ><a name="2202"
+      >
+
+    </a
+      ><a name="2208" href="Control.Protocol.Alternate.html#2208" class="Function"
+      >telecom</a
+      ><a name="2215"
+      > </a
+      ><a name="2216" class="Symbol"
+      >:</a
+      ><a name="2217"
+      > </a
+      ><a name="2218" class="Symbol"
+      >&#8704;</a
+      ><a name="2219"
+      > </a
+      ><a name="2220" class="Symbol"
+      >{</a
+      ><a name="2221" href="Control.Protocol.Alternate.html#2221" class="Bound"
+      >io</a
+      ><a name="2223" class="Symbol"
+      >}</a
+      ><a name="2224"
+      > </a
+      ><a name="2225" class="Symbol"
+      >(</a
+      ><a name="2226" href="Control.Protocol.Alternate.html#2226" class="Bound"
+      >P</a
+      ><a name="2227"
+      > </a
+      ><a name="2228" class="Symbol"
+      >:</a
+      ><a name="2229"
+      > </a
+      ><a name="2230" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2235"
+      > </a
+      ><a name="2236" href="Control.Protocol.Alternate.html#2221" class="Bound"
+      >io</a
+      ><a name="2238" class="Symbol"
+      >)</a
+      ><a name="2239"
+      > </a
+      ><a name="2240" class="Symbol"
+      >&#8594;</a
+      ><a name="2241"
+      > </a
+      ><a name="2242" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10214;</a
+      ><a name="2243"
+      > </a
+      ><a name="2244" href="Control.Protocol.Alternate.html#2226" class="Bound"
+      >P</a
+      ><a name="2245"
+      > </a
+      ><a name="2246" href="Control.Protocol.Alternate.html#1743" class="Function Operator"
+      >&#10215;</a
+      ><a name="2247"
+      > </a
+      ><a name="2248" class="Symbol"
+      >&#8594;</a
+      ><a name="2249"
+      > </a
+      ><a name="2250" href="Control.Protocol.Alternate.html#1950" class="Function Operator"
+      >&#10214;</a
+      ><a name="2251"
+      > </a
+      ><a name="2252" href="Control.Protocol.Alternate.html#2226" class="Bound"
+      >P</a
+      ><a name="2253"
+      > </a
+      ><a name="2254" href="Control.Protocol.Alternate.html#1950" class="Function Operator"
+      >&#8869;&#10215;</a
+      ><a name="2256"
+      > </a
+      ><a name="2257" class="Symbol"
+      >&#8594;</a
+      ><a name="2258"
+      > </a
+      ><a name="2259" href="Control.Protocol.Alternate.html#1986" class="Function"
+      >Log</a
+      ><a name="2262"
+      > </a
+      ><a name="2263" href="Control.Protocol.Alternate.html#2226" class="Bound"
+      >P</a
+      ><a name="2264"
+      >
+    </a
+      ><a name="2269" href="Control.Protocol.Alternate.html#2208" class="Function"
+      >telecom</a
+      ><a name="2276"
+      > </a
+      ><a name="2277" href="Control.Protocol.Alternate.html#2277" class="Bound"
+      >P</a
+      ><a name="2278"
+      > </a
+      ><a name="2279" href="Control.Protocol.Alternate.html#2279" class="Bound"
+      >t</a
+      ><a name="2280"
+      > </a
+      ><a name="2281" href="Control.Protocol.Alternate.html#2281" class="Bound"
+      >u</a
+      ><a name="2282"
+      > </a
+      ><a name="2283" class="Symbol"
+      >=</a
+      ><a name="2284"
+      > </a
+      ><a name="2285" href="Control.Protocol.Core.html#3653" class="Function"
+      >C.telecom</a
+      ><a name="2294"
+      > </a
+      ><a name="2295" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2297"
+      > </a
+      ><a name="2298" href="Control.Protocol.Alternate.html#2277" class="Bound"
+      >P</a
+      ><a name="2299"
+      > </a
+      ><a name="2300" href="Control.Protocol.Alternate.html#1649" class="Function Operator"
+      >&#10215;</a
+      ><a name="2301"
+      > </a
+      ><a name="2302" href="Control.Protocol.Alternate.html#2279" class="Bound"
+      >t</a
+      ><a name="2303"
+      > </a
+      ><a name="2304" class="Symbol"
+      >(</a
+      ><a name="2305" href="Relation.Binary.PropositionalEquality.Core.html#733" class="Function"
+      >subst</a
+      ><a name="2310"
+      > </a
+      ><a name="2311" href="Control.Protocol.Core.html#3371" class="Function Operator"
+      >C.&#10214;_&#10215;</a
+      ><a name="2316"
+      > </a
+      ><a name="2317" class="Symbol"
+      >(</a
+      ><a name="2318" href="Relation.Binary.PropositionalEquality.NP.html#1077" class="Function Operator"
+      >!</a
+      ><a name="2319"
+      > </a
+      ><a name="2320" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >P&#10214;</a
+      ><a name="2322"
+      > </a
+      ><a name="2323" href="Control.Protocol.Alternate.html#2277" class="Bound"
+      >P</a
+      ><a name="2324"
+      > </a
+      ><a name="2325" href="Control.Protocol.Alternate.html#2064" class="Function Operator"
+      >&#8869;&#10215;</a
+      ><a name="2327" class="Symbol"
+      >)</a
+      ><a name="2328"
+      > </a
+      ><a name="2329" href="Control.Protocol.Alternate.html#2281" class="Bound"
+      >u</a
+      ><a name="2330" class="Symbol"
+      >)</a
+      ><a name="2331"
+      >
+
+</a
+      ><a name="2333" href="Control.Protocol.Alternate.html#2333" class="Function"
+      >send&#8242;</a
+      ><a name="2338"
+      > </a
+      ><a name="2339" class="Symbol"
+      >:</a
+      ><a name="2340"
+      > </a
+      ><a name="2341" href="Type.html#125" class="Function"
+      >&#9733;</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" class="Symbol"
+      >&#8594;</a
+      ><a name="2344"
+      > </a
+      ><a name="2345" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2350"
+      > </a
+      ><a name="2351" href="Control.Protocol.InOut.html#473" class="InductiveConstructor"
+      >In</a
+      ><a name="2353"
+      > </a
+      ><a name="2354" class="Symbol"
+      >&#8594;</a
+      ><a name="2355"
+      > </a
+      ><a name="2356" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2361"
+      > </a
+      ><a name="2362" href="Control.Protocol.InOut.html#476" class="InductiveConstructor"
+      >Out</a
+      ><a name="2365"
+      >
+</a
+      ><a name="2366" href="Control.Protocol.Alternate.html#2333" class="Function"
+      >send&#8242;</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" href="Control.Protocol.Alternate.html#2372" class="Bound"
+      >M</a
+      ><a name="2373"
+      > </a
+      ><a name="2374" href="Control.Protocol.Alternate.html#2374" class="Bound"
+      >P</a
+      ><a name="2375"
+      > </a
+      ><a name="2376" class="Symbol"
+      >=</a
+      ><a name="2377"
+      > </a
+      ><a name="2378" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >send</a
+      ><a name="2382"
+      > </a
+      ><a name="2383" class="Symbol"
+      >&#955;</a
+      ><a name="2384"
+      > </a
+      ><a name="2385" class="Symbol"
+      >(</a
+      ><a name="2386" href="Control.Protocol.Alternate.html#2386" class="Bound"
+      >_</a
+      ><a name="2387"
+      > </a
+      ><a name="2388" class="Symbol"
+      >:</a
+      ><a name="2389"
+      > </a
+      ><a name="2390" href="Control.Protocol.Alternate.html#2372" class="Bound"
+      >M</a
+      ><a name="2391" class="Symbol"
+      >)</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" class="Symbol"
+      >&#8594;</a
+      ><a name="2394"
+      > </a
+      ><a name="2395" href="Control.Protocol.Alternate.html#2374" class="Bound"
+      >P</a
+      ><a name="2396"
+      >
+
+</a
+      ><a name="2398" href="Control.Protocol.Alternate.html#2398" class="Function"
+      >recv&#8242;</a
+      ><a name="2403"
+      > </a
+      ><a name="2404" class="Symbol"
+      >:</a
+      ><a name="2405"
+      > </a
+      ><a name="2406" href="Type.html#125" class="Function"
+      >&#9733;</a
+      ><a name="2407"
+      > </a
+      ><a name="2408" class="Symbol"
+      >&#8594;</a
+      ><a name="2409"
+      > </a
+      ><a name="2410" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" href="Control.Protocol.InOut.html#476" class="InductiveConstructor"
+      >Out</a
+      ><a name="2419"
+      > </a
+      ><a name="2420" class="Symbol"
+      >&#8594;</a
+      ><a name="2421"
+      > </a
+      ><a name="2422" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2427"
+      > </a
+      ><a name="2428" href="Control.Protocol.InOut.html#473" class="InductiveConstructor"
+      >In</a
+      ><a name="2430"
+      >
+</a
+      ><a name="2431" href="Control.Protocol.Alternate.html#2398" class="Function"
+      >recv&#8242;</a
+      ><a name="2436"
+      > </a
+      ><a name="2437" href="Control.Protocol.Alternate.html#2437" class="Bound"
+      >M</a
+      ><a name="2438"
+      > </a
+      ><a name="2439" href="Control.Protocol.Alternate.html#2439" class="Bound"
+      >P</a
+      ><a name="2440"
+      > </a
+      ><a name="2441" class="Symbol"
+      >=</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >recv</a
+      ><a name="2447"
+      > </a
+      ><a name="2448" class="Symbol"
+      >&#955;</a
+      ><a name="2449"
+      > </a
+      ><a name="2450" class="Symbol"
+      >(</a
+      ><a name="2451" href="Control.Protocol.Alternate.html#2451" class="Bound"
+      >_</a
+      ><a name="2452"
+      > </a
+      ><a name="2453" class="Symbol"
+      >:</a
+      ><a name="2454"
+      > </a
+      ><a name="2455" href="Control.Protocol.Alternate.html#2437" class="Bound"
+      >M</a
+      ><a name="2456" class="Symbol"
+      >)</a
+      ><a name="2457"
+      > </a
+      ><a name="2458" class="Symbol"
+      >&#8594;</a
+      ><a name="2459"
+      > </a
+      ><a name="2460" href="Control.Protocol.Alternate.html#2439" class="Bound"
+      >P</a
+      ><a name="2461"
+      >
+
+</a
+      ><a name="2463" class="Keyword"
+      >module</a
+      ><a name="2469"
+      > </a
+      ><a name="2470" href="Control.Protocol.Alternate.html#2470" class="Module"
+      >_</a
+      ><a name="2471"
+      > </a
+      ><a name="2472" class="Symbol"
+      >{{</a
+      ><a name="2474" href="Control.Protocol.Alternate.html#2474" class="Bound"
+      >_</a
+      ><a name="2475"
+      > </a
+      ><a name="2476" class="Symbol"
+      >:</a
+      ><a name="2477"
+      > </a
+      ><a name="2478" href="Function.Extensionality.html#132" class="Postulate"
+      >FunExt</a
+      ><a name="2484" class="Symbol"
+      >}}</a
+      ><a name="2486"
+      > </a
+      ><a name="2487" class="Keyword"
+      >where</a
+      ><a name="2492"
+      >
+    </a
+      ><a name="2497" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2512"
+      > </a
+      ><a name="2513" class="Symbol"
+      >:</a
+      ><a name="2514"
+      > </a
+      ><a name="2515" class="Symbol"
+      >&#8704;</a
+      ><a name="2516"
+      > </a
+      ><a name="2517" class="Symbol"
+      >{</a
+      ><a name="2518" href="Control.Protocol.Alternate.html#2518" class="Bound"
+      >io</a
+      ><a name="2520" class="Symbol"
+      >}</a
+      ><a name="2521"
+      > </a
+      ><a name="2522" class="Symbol"
+      >(</a
+      ><a name="2523" href="Control.Protocol.Alternate.html#2523" class="Bound"
+      >P</a
+      ><a name="2524"
+      > </a
+      ><a name="2525" class="Symbol"
+      >:</a
+      ><a name="2526"
+      > </a
+      ><a name="2527" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2532"
+      > </a
+      ><a name="2533" href="Control.Protocol.Alternate.html#2518" class="Bound"
+      >io</a
+      ><a name="2535" class="Symbol"
+      >)</a
+      ><a name="2536"
+      > </a
+      ><a name="2537" class="Symbol"
+      >&#8594;</a
+      ><a name="2538"
+      > </a
+      ><a name="2539" href="Relation.Binary.PropositionalEquality.Core.html#733" class="Function"
+      >subst</a
+      ><a name="2544"
+      > </a
+      ><a name="2545" href="Control.Protocol.Alternate.html#592" class="Datatype"
+      >Proto</a
+      ><a name="2550"
+      > </a
+      ><a name="2551" class="Symbol"
+      >(</a
+      ><a name="2552" href="Control.Protocol.InOut.html#546" class="Function"
+      >dual&#7477;&#7484;-involutive</a
+      ><a name="2569"
+      > </a
+      ><a name="2570" href="Control.Protocol.Alternate.html#2518" class="Bound"
+      >io</a
+      ><a name="2572" class="Symbol"
+      >)</a
+      ><a name="2573"
+      > </a
+      ><a name="2574" class="Symbol"
+      >(</a
+      ><a name="2575" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="2579"
+      > </a
+      ><a name="2580" class="Symbol"
+      >(</a
+      ><a name="2581" href="Control.Protocol.Alternate.html#1793" class="Function"
+      >dual</a
+      ><a name="2585"
+      > </a
+      ><a name="2586" href="Control.Protocol.Alternate.html#2523" class="Bound"
+      >P</a
+      ><a name="2587" class="Symbol"
+      >))</a
+      ><a name="2589"
+      > </a
+      ><a name="2590" href="Relation.Binary.Core.html#4631" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2591"
+      > </a
+      ><a name="2592" href="Control.Protocol.Alternate.html#2523" class="Bound"
+      >P</a
+      ><a name="2593"
+      >
+    </a
+      ><a name="2598" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2613"
+      > </a
+      ><a name="2614" class="Symbol"
+      >{</a
+      ><a name="2615" href="Control.Protocol.InOut.html#473" class="InductiveConstructor"
+      >In</a
+      ><a name="2617" class="Symbol"
+      >}</a
+      ><a name="2618"
+      >  </a
+      ><a name="2620" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="2623"
+      >      </a
+      ><a name="2629" class="Symbol"
+      >=</a
+      ><a name="2630"
+      > </a
+      ><a name="2631" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="2635"
+      >
+    </a
+      ><a name="2640" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2655"
+      > </a
+      ><a name="2656" class="Symbol"
+      >{</a
+      ><a name="2657" href="Control.Protocol.InOut.html#476" class="InductiveConstructor"
+      >Out</a
+      ><a name="2660" class="Symbol"
+      >}</a
+      ><a name="2661"
+      > </a
+      ><a name="2662" href="Control.Protocol.Alternate.html#619" class="InductiveConstructor"
+      >end</a
+      ><a name="2665"
+      >      </a
+      ><a name="2671" class="Symbol"
+      >=</a
+      ><a name="2672"
+      > </a
+      ><a name="2673" href="Relation.Binary.Core.html#4681" class="InductiveConstructor"
+      >refl</a
+      ><a name="2677"
+      >
+    </a
+      ><a name="2682" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2697"
+      >       </a
+      ><a name="2704" class="Symbol"
+      >(</a
+      ><a name="2705" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >send</a
+      ><a name="2709"
+      > </a
+      ><a name="2710" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >P</a
+      ><a name="2711" class="Symbol"
+      >)</a
+      ><a name="2712"
+      > </a
+      ><a name="2713" class="Symbol"
+      >=</a
+      ><a name="2714"
+      > </a
+      ><a name="2715" href="Control.Protocol.Alternate.html#1316" class="Function"
+      >com=&#8242;</a
+      ><a name="2720"
+      > </a
+      ><a name="2721" class="Symbol"
+      >_</a
+      ><a name="2722"
+      > </a
+      ><a name="2723" class="Symbol"
+      >&#955;</a
+      ><a name="2724"
+      > </a
+      ><a name="2725" href="Control.Protocol.Alternate.html#2725" class="Bound"
+      >m</a
+      ><a name="2726"
+      > </a
+      ><a name="2727" class="Symbol"
+      >&#8594;</a
+      ><a name="2728"
+      > </a
+      ><a name="2729" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2744"
+      > </a
+      ><a name="2745" class="Symbol"
+      >(</a
+      ><a name="2746" href="Control.Protocol.Alternate.html#2710" class="Bound"
+      >P</a
+      ><a name="2747"
+      > </a
+      ><a name="2748" href="Control.Protocol.Alternate.html#2725" class="Bound"
+      >m</a
+      ><a name="2749" class="Symbol"
+      >)</a
+      ><a name="2750"
+      >
+    </a
+      ><a name="2755" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2770"
+      >       </a
+      ><a name="2777" class="Symbol"
+      >(</a
+      ><a name="2778" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >recv</a
+      ><a name="2782"
+      > </a
+      ><a name="2783" href="Control.Protocol.Alternate.html#645" class="InductiveConstructor"
+      >P</a
+      ><a name="2784" class="Symbol"
+      >)</a
+      ><a name="2785"
+      > </a
+      ><a name="2786" class="Symbol"
+      >=</a
+      ><a name="2787"
+      > </a
+      ><a name="2788" href="Control.Protocol.Alternate.html#1316" class="Function"
+      >com=&#8242;</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" class="Symbol"
+      >_</a
+      ><a name="2795"
+      > </a
+      ><a name="2796" class="Symbol"
+      >&#955;</a
+      ><a name="2797"
+      > </a
+      ><a name="2798" href="Control.Protocol.Alternate.html#2798" class="Bound"
+      >m</a
+      ><a name="2799"
+      > </a
+      ><a name="2800" class="Symbol"
+      >&#8594;</a
+      ><a name="2801"
+      > </a
+      ><a name="2802" href="Control.Protocol.Alternate.html#2497" class="Function"
+      >dual-involutive</a
+      ><a name="2817"
+      > </a
+      ><a name="2818" class="Symbol"
+      >(</a
+      ><a name="2819" href="Control.Protocol.Alternate.html#2783" class="Bound"
+      >P</a
+      ><a name="2820"
+      > </a
+      ><a name="2821" href="Control.Protocol.Alternate.html#2798" class="Bound"
+      >m</a
+      ><a name="2822" class="Symbol"
+      >)</a
+      ><a name="2823"
+      >
+
+    </a
+      ><a name="2829" class="Comment"
+      >{-
+    dual-equiv : Is-equiv dual
+    dual-equiv = self-inv-is-equiv dual-involutive
+
+    dual-inj : &#8704; {P Q} &#8594; dual P &#8801; dual Q &#8594; P &#8801; Q
+    dual-inj = Is-equiv.injective dual-equiv
+    -}</a
+      ><a name="3015"
+      >
+</a
+      ><a name="3016" class="Comment"
+      >-- -}</a
+      ><a name="3021"
+      >
+</a
+      ><a name="3022" class="Comment"
+      >-- -}</a
+      ><a name="3027"
+      >
+</a
+      ><a name="3028" class="Comment"
+      >-- -}</a
+      ><a name="3033"
+      >
+</a
+      ><a name="3034" class="Comment"
+      >-- -}</a
+      ><a name="3039"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

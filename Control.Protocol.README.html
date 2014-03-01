@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >Control.Protocol.README</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="Control.Protocol.README.html#1" class="Module"
+      >Control.Protocol.README</a
+      ><a name="31"
+      > </a
+      ><a name="32" class="Keyword"
+      >where</a
+      ><a name="37"
+      >
+
+</a
+      ><a name="39" class="Comment"
+      >-- This module exports the most common definitions</a
+      ><a name="89"
+      >
+</a
+      ><a name="90" class="Keyword"
+      >import</a
+      ><a name="96"
+      > </a
+      ><a name="97" href="Control.Protocol.html#1" class="Module"
+      >Control.Protocol</a
+      ><a name="113"
+      >
+
+</a
+      ><a name="115" class="Comment"
+      >-- Protocols, duality, log, telecom</a
+      ><a name="150"
+      >
+</a
+      ><a name="151" class="Keyword"
+      >import</a
+      ><a name="157"
+      > </a
+      ><a name="158" href="Control.Protocol.Core.html#1" class="Module"
+      >Control.Protocol.Core</a
+      ><a name="179"
+      >
+
+</a
+      ><a name="181" class="Comment"
+      >-- Examples</a
+      ><a name="192"
+      >
+</a
+      ><a name="193" class="Keyword"
+      >import</a
+      ><a name="199"
+      > </a
+      ><a name="200" href="Control.Protocol.Examples.html#1" class="Module"
+      >Control.Protocol.Examples</a
+      ><a name="225"
+      >
+
+</a
+      ><a name="227" class="Comment"
+      >-- Sequencing protocols (_&gt;&gt;=_, _&gt;&gt;_, replicate&#7486;...)</a
+      ><a name="279"
+      >
+</a
+      ><a name="280" class="Keyword"
+      >import</a
+      ><a name="286"
+      > </a
+      ><a name="287" href="Control.Protocol.Sequence.html#1" class="Module"
+      >Control.Protocol.Sequence</a
+      ><a name="312"
+      >
+
+</a
+      ><a name="314" class="Comment"
+      >-- Simple Query/Response abstraction</a
+      ><a name="350"
+      >
+</a
+      ><a name="351" class="Keyword"
+      >import</a
+      ><a name="357"
+      > </a
+      ><a name="358" href="Control.Protocol.ClientServer.html#1" class="Module"
+      >Control.Protocol.ClientServer</a
+      ><a name="387"
+      >
+
+</a
+      ><a name="389" class="Comment"
+      >-- Choices (arity 0 and 2):</a
+      ><a name="416"
+      >
+</a
+      ><a name="417" class="Comment"
+      >-- This corresponds to the additive fragment of</a
+      ><a name="464"
+      >
+</a
+      ><a name="465" class="Comment"
+      >-- linear logic (&#8853;, 0, &amp;, &#8868;).</a
+      ><a name="494"
+      >
+</a
+      ><a name="495" class="Keyword"
+      >import</a
+      ><a name="501"
+      > </a
+      ><a name="502" href="Control.Protocol.Additive.html#1" class="Module"
+      >Control.Protocol.Additive</a
+      ><a name="527"
+      >
+
+</a
+      ><a name="529" class="Comment"
+      >-- Concurrent or interleaved protocols</a
+      ><a name="567"
+      >
+</a
+      ><a name="568" class="Comment"
+      >-- This corresponds to the multiplicative fragment</a
+      ><a name="618"
+      >
+</a
+      ><a name="619" class="Comment"
+      >-- of linear logic (&#8855;, 1, &#8523;, &#8869;)</a
+      ><a name="650"
+      >
+</a
+      ><a name="651" class="Keyword"
+      >import</a
+      ><a name="657"
+      > </a
+      ><a name="658" href="Control.Protocol.Multiplicative.html#1" class="Module"
+      >Control.Protocol.Multiplicative</a
+      ><a name="689"
+      >
+
+</a
+      ><a name="691" class="Comment"
+      >-- A simple yet powerful multiparty layer</a
+      ><a name="732"
+      >
+</a
+      ><a name="733" class="Comment"
+      >-- on top of dependent protocols.</a
+      ><a name="766"
+      >
+</a
+      ><a name="767" class="Keyword"
+      >import</a
+      ><a name="773"
+      > </a
+      ><a name="774" href="Control.Protocol.MultiParty.html#1" class="Module"
+      >Control.Protocol.MultiParty</a
+      ><a name="801"
+      >
+
+</a
+      ><a name="803" class="Comment"
+      >-- Internals</a
+      ><a name="815"
+      >
+</a
+      ><a name="816" class="Keyword"
+      >import</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="Control.Protocol.End.html#1" class="Module"
+      >Control.Protocol.End</a
+      ><a name="843"
+      >
+</a
+      ><a name="844" class="Keyword"
+      >import</a
+      ><a name="850"
+      > </a
+      ><a name="851" href="Control.Protocol.InOut.html#1" class="Module"
+      >Control.Protocol.InOut</a
+      ><a name="873"
+      >
+
+</a
+      ><a name="875" class="Comment"
+      >-- Less important: experimental...</a
+      ><a name="909"
+      >
+</a
+      ><a name="910" class="Keyword"
+      >import</a
+      ><a name="916"
+      > </a
+      ><a name="917" href="Control.Protocol.Alternate.html#1" class="Module"
+      >Control.Protocol.Alternate</a
+      ><a name="943"
+      >
+</a
+      ><a name="944" class="Keyword"
+      >import</a
+      ><a name="950"
+      > </a
+      ><a name="951" href="Control.Protocol.CLL.html#1" class="Module"
+      >Control.Protocol.CLL</a
+      ><a name="971"
+      >
+</a
+      ><a name="972" class="Keyword"
+      >import</a
+      ><a name="978"
+      > </a
+      ><a name="979" href="Control.Protocol.Extend.html#1" class="Module"
+      >Control.Protocol.Extend</a
+      ><a name="1002"
+      >
+</a
+      ><a name="1003" class="Keyword"
+      >import</a
+      ><a name="1009"
+      > </a
+      ><a name="1010" href="Control.Protocol.Lift.html#1" class="Module"
+      >Control.Protocol.Lift</a
+      ><a name="1031"
+      >
+</a
+      ><a name="1032" class="Keyword"
+      >import</a
+      ><a name="1038"
+      > </a
+      ><a name="1039" href="Control.Protocol.Relation.html#1" class="Module"
+      >Control.Protocol.Relation</a
+      ><a name="1064"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>
