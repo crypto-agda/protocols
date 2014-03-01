@@ -153,14 +153,23 @@ Log-⅋-× {send P}{send Q} (inl m , p) = first  (_,_ m) $ Log-⅋-× {P m} {sen
 Log-⅋-× {send P}{send Q} (inr m , p) = second (_,_ m) $ Log-⅋-× {send P} {Q m} p
 
 module _ {{_ : FunExt}} where
-  ⊗⅋-dual : ∀ P Q → dual (P ⅋ Q) ≡ dual P ⊗ dual Q
-  ⊗⅋-dual end Q = refl
-  ⊗⅋-dual (recv P) Q = com=′ _ λ m → ⊗⅋-dual (P m) _
-  ⊗⅋-dual (send P) end = refl
-  ⊗⅋-dual (send P) (recv Q) = com=′ _ λ n → ⊗⅋-dual (send P) (Q n)
-  ⊗⅋-dual (send P) (send Q) = com=′ _
-    [inl: (λ m → ⊗⅋-dual (P m) (send Q))
-    ,inr: (λ n → ⊗⅋-dual (send P) (Q n)) ]
+  dual-⅋ : ∀ P Q → dual (P ⅋ Q) ≡ dual P ⊗ dual Q
+  dual-⅋ end Q = refl
+  dual-⅋ (recv P) Q = com=′ _ λ m → dual-⅋ (P m) _
+  dual-⅋ (send P) end = refl
+  dual-⅋ (send P) (recv Q) = com=′ _ λ n → dual-⅋ (send P) (Q n)
+  dual-⅋ (send P) (send Q) = com=′ _
+    [inl: (λ m → dual-⅋ (P m) (send Q))
+    ,inr: (λ n → dual-⅋ (send P) (Q n)) ]
+
+  dual-⊗ : ∀ P Q → dual (P ⊗ Q) ≡ dual P ⅋ dual Q
+  dual-⊗ end Q = refl
+  dual-⊗ (send P) Q = com=′ _ λ m → dual-⊗ (P m) _
+  dual-⊗ (recv P) end = refl
+  dual-⊗ (recv P) (send Q) = com=′ _ λ n → dual-⊗ (recv P) (Q n)
+  dual-⊗ (recv P) (recv Q) = com=′ _
+    [inl: (λ m → dual-⊗ (P m) (recv Q))
+    ,inr: (λ n → dual-⊗ (recv P) (Q n)) ]
 
 module _ {{_ : FunExt}}{{_ : UA}} where
 
