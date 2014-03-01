@@ -15,18 +15,19 @@ open import Control.Protocol
 
 module Control.Protocol.Additive where
 
-module send/recv-𝟘 (P : 𝟘 → Proto){{_ : FunExt}}{{_ : UA}} where
+module send/recv-𝟘 (P : 𝟘 → Proto) where
     P⊤ : Proto
     P⊤ = recvE 𝟘 P
 
     P0 : Proto
     P0 = sendE 𝟘 P
 
-    P0-empty : ⟦ P0 ⟧ ≡ 𝟘
-    P0-empty = ua (equiv fst (λ()) (λ()) (λ { (() , _) }))
+    module _ {{_ : FunExt}}{{_ : UA}} where
+        P0-empty : ⟦ P0 ⟧ ≡ 𝟘
+        P0-empty = ua (equiv fst (λ()) (λ()) (λ { (() , _) }))
 
-    P⊤-uniq : ⟦ P⊤ ⟧ ≡ 𝟙
-    P⊤-uniq = Π𝟘-uniq _
+        P⊤-uniq : ⟦ P⊤ ⟧ ≡ 𝟙
+        P⊤-uniq = Π𝟘-uniq _
 
 open send/recv-𝟘 (λ _ → end) public
 
