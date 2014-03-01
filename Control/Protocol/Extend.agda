@@ -4,7 +4,7 @@ open import Function
 open import Function.Extensionality
 open import Relation.Binary.PropositionalEquality
 
-open import Control.Protocol
+open import Control.Protocol.Core
 
 module Control.Protocol.Extend where
 

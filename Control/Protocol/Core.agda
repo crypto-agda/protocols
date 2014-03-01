@@ -11,9 +11,10 @@ open import Data.ShapePolymorphism
 open Equivalences
 
 open import Control.Protocol.InOut
-open import Control.Protocol.End
 
 module Control.Protocol.Core where
+
+open import Control.Protocol.End    public
 
 {-
 module UniversalProtocols ℓ {U : ★_(ₛ ℓ)}(U⟦_⟧ : U → ★_ ℓ) where

@@ -3,7 +3,7 @@ open import Function.NP
 open import Data.Nat
 open import Data.Product.NP using (_,_)
 
-open import Control.Protocol
+open import Control.Protocol.Core
 open import Control.Protocol.Sequence
 
 module Control.Protocol.ClientServer (Query : ★₀) (Resp : Query → ★₀) where

@@ -1,7 +1,8 @@
 open import Level.NP
 open import Data.Product.NP
 
-open import Control.Protocol
+open import Control.Protocol.Core
+open import Control.Protocol.End
 
 module Control.Protocol.Lift a {ℓ} where
     liftᴾ : Proto_ ℓ → Proto_ (a ⊔ ℓ)

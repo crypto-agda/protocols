@@ -11,7 +11,8 @@ open import Function.Extensionality
 open import HoTT
 open Equivalences
 
-open import Control.Protocol
+open import Control.Protocol.Core
+open import Control.Protocol.End
 open import Control.Protocol.Additive
 open import Control.Protocol.Sequence
 
@@ -294,8 +295,8 @@ data View-∘-proto : (P Q R : Proto) → ★₁ where
            → View-∘-proto (send P) (send Q) R
   recvLL : ∀ {M} (P : M → Proto) Q R
            → View-∘-proto (recv P) Q R
-  recvR-sendR : ∀ {MP MQ MR}ioP(P : MP → Proto)(Q : MQ → Proto)(R : MR → Proto)
-                → View-∘-proto (com ioP P) (recv Q) (send R)
+  recvR-sendR : ∀ {MP MQ MR}(P : MP → Proto)(Q : MQ → Proto)(R : MR → Proto)
+                → View-∘-proto (send P) (recv Q) (send R)
   recvRR : ∀ {MP MQ MR}(P : MP → Proto)(Q : MQ → Proto)(R : MR → Proto)
            → View-∘-proto (send P) (recv Q) (recv R)
   endL : ∀ Q R → View-∘-proto end Q R
@@ -309,7 +310,7 @@ view-∘-proto (recv P) Q        R        = recvLL P Q R
 view-∘-proto (send P) end      R        = sendLM P R
 view-∘-proto (send P) (recv Q) end      = recvL-sendR P Q
 view-∘-proto (send P) (recv Q) (recv R) = recvRR P Q R
-view-∘-proto (send P) (recv Q) (send R) = recvR-sendR Out P Q R
+view-∘-proto (send P) (recv Q) (send R) = recvR-sendR P Q R
 view-∘-proto (send P) (send Q) R        = sendLL P Q R
 
 module _ {{_ : FunExt}}{{_ : UA}} where
@@ -318,8 +319,8 @@ module _ {{_ : FunExt}}{{_ : UA}} where
     ⅋-∘ (inl m , pq) qr | sendLL P Q R = ⅋-sendL R m (⅋-∘ {P m} {send Q} {R} pq qr)
     ⅋-∘ (inr m , pq) qr | sendLL P Q R = ⅋-∘ {send P} {Q m} pq (qr m)
     ⅋-∘ pq qr           | recvLL P Q M = λ m → ⅋-∘ {P m} (pq m) qr
-    ⅋-∘ pq (inl m , qr) | recvR-sendR ioP P Q R = ⅋-∘ {com ioP P} {Q m} {send R} (coe (⅋-recvR (com ioP P) Q) pq m) qr
-    ⅋-∘ pq (inr m , qr) | recvR-sendR ioP P Q R = ⅋-sendR (com ioP P) m (⅋-∘ {com ioP P} {recv Q} {R m} pq qr)
+    ⅋-∘ pq (inl m , qr) | recvR-sendR P Q R = ⅋-∘ {send P} {Q m} {send R} (coe (⅋-recvR (send P) Q) pq m) qr
+    ⅋-∘ pq (inr m , qr) | recvR-sendR P Q R = ⅋-sendR (send P) m (⅋-∘ {send P} {recv Q} {R m} pq qr)
     ⅋-∘ pq qr           | recvRR P Q R = λ m → ⅋-∘ {send P} {recv Q} {R m} pq (qr m)
     ⅋-∘ pq qr           | endL Q R = ⊸-apply {Q} {R} qr pq
     ⅋-∘ (m , pq) qr     | sendLM P R = ⅋-sendL R m (par (P m) R pq qr)

@@ -11,7 +11,8 @@ open import Function.Extensionality
 open import HoTT
 open import Data.ShapePolymorphism
 open Equivalences
-open import Control.Protocol
+open import Control.Protocol.Core
+open import Control.Protocol.InOut
 
 module Control.Protocol.MultiParty where
 
@@ -115,12 +116,12 @@ module _ {I : ★} where
 
         {-
     module _ {p q r : I → 𝟚} where
-        choreo-merge-assoc : (ℂ : MProto I)(Rqr : Nand° q r)(Rpq : Nand° p q)(Rpqr : Nand° p _)(Rpqr' : Nand° _ r) →
+        group-merge-assoc : (ℂ : MProto I)(Rqr : Nand° q r)(Rpq : Nand° p q)(Rpqr : Nand° p _)(Rpqr' : Nand° _ r) →
                              (ℂp : ⟦ ℂ / p ⟧) (ℂq : ⟦ ℂ / q ⟧) (ℂr : ⟦ ℂ / r ⟧)
                              → group-merge Rpqr ℂ ℂp (group-merge Rqr ℂ ℂq ℂr)
                              ≡ subst (λ x → ⟦ ℂ / nand° x ⟧) {!!}
                                (group-merge Rpqr' ℂ (group-merge Rpq ℂ ℂp ℂq) ℂr)
-        choreo-merge-assoc = {!!}
+        group-merge-assoc = {!!}
         -}
 
     R-p-¬p-1 : ∀ (φ : I → 𝟚) i → R (φ i) (not (φ i)) 1₂
@@ -129,12 +130,13 @@ module _ {I : ★} where
     R-p-¬p-1 φ i | 0₂ = r01
 
     module _ {{_ : FunExt}} where
-        choreo-bi : {φ : I → 𝟚}(ℂ : MProto I) → ⟦ ℂ / φ ⟧ → ⟦ ℂ / (not ∘ φ) ⟧ → ⟦ MLog ℂ ⟧
-        choreo-bi {φ} ℂ ℂp ℂ¬p = group-merge' (R-p-¬p-1 φ) ℂ ℂp ℂ¬p
+        group-bipart : {φ : I → 𝟚}(ℂ : MProto I) → ⟦ ℂ / φ ⟧ → ⟦ ℂ / (not ∘ φ) ⟧ → ⟦ MLog ℂ ⟧
+        group-bipart {φ} ℂ ℂp ℂ¬p = group-merge' (R-p-¬p-1 φ) ℂ ℂp ℂ¬p
 
 module _ {{_ : FunExt}} where
-    choreo2 : (ℂ : MProto 𝟚) → ⟦ ℂ / id ⟧ → ⟦ ℂ / not ⟧ → ⟦ MLog ℂ ⟧
-    choreo2 = choreo-bi
+    -- Equivalent to telecom
+    2com : (ℂ : MProto 𝟚) → ⟦ ℂ / id ⟧ → ⟦ ℂ / not ⟧ → ⟦ MLog ℂ ⟧
+    2com = group-bipart
 
 module ThreeParty where
   data 𝟛 : ★ where

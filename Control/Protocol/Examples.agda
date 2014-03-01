@@ -14,7 +14,6 @@ open Equivalences
 
 open import Control.Protocol
 open import Control.Protocol.Lift
-open import Control.Protocol.Multiplicative
 
 module Control.Protocol.Examples where
 

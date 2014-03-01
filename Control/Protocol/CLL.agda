@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K #-}
 open import Type
-open import Control.Protocol
+open import Control.Protocol.Core
 open import Control.Protocol.Additive
 open import Control.Protocol.Multiplicative
 

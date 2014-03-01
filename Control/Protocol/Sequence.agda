@@ -8,7 +8,7 @@ open import Function.Extensionality
 open import HoTT
 open Equivalences
 
-open import Control.Protocol
+open import Control.Protocol.Core
 
 module Control.Protocol.Sequence where
 
