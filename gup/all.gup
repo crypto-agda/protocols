@@ -1,0 +1,3 @@
+#!/bin/bash -eu
+gup -u protocols.agda
+exec agda-pkg -cagda-pkg.conf protocols.agda
