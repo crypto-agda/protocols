@@ -39,6 +39,7 @@ module _ {{_ : FunExt}}{{_ : UA}} where
   ⊤-⅋ : ∀ P → ⟦ P⊤ ⅋ P ⟧
   ⊤-⅋ P = λ()
 
+infixr 4 _⊸_
 _⊸_ : (P Q : Proto) → Proto
 P ⊸ Q = dual P ⅋ Q
 
@@ -68,7 +69,7 @@ module _ {{_ : FunExt}}{{_ : UA}} where
   ⊗-comm (recv P) end      = refl
   ⊗-comm (recv P) (send Q) = Σ=′ _ λ m → ⊗-comm (recv P) (Q m)
   ⊗-comm (recv P) (recv Q) = Π≃ ⊎-comm-equiv [inl: (λ m → ⊗-comm (P m) (recv Q))
-                                              ,inr: (λ m → ⊗-comm (recv P) (Q m)) ]
+                                             ,inr: (λ m → ⊗-comm (recv P) (Q m)) ]
 
   ⊗-assoc : ∀ P Q R → P ⊗ (Q ⊗ R) ≡ (P ⊗ Q) ⊗ R
   ⊗-assoc end      Q        R        = refl
@@ -78,9 +79,14 @@ module _ {{_ : FunExt}}{{_ : UA}} where
   ⊗-assoc (recv P) (recv Q) end      = refl
   ⊗-assoc (recv P) (recv Q) (send R) = send=′ λ m → ⊗-assoc (recv P) (recv Q) (R m)
   ⊗-assoc (recv P) (recv Q) (recv R) = recv≃ ⊎-assoc-equiv
+                                            [inl: (λ m → ⊗-assoc (P m) (recv Q) (recv R))
+                                            ,inr: [inl: (λ m → ⊗-assoc (recv P) (Q m) (recv R))
+                                                  ,inr: (λ m → ⊗-assoc (recv P) (recv Q) (R m)) ] ]
+                                            {- This use to work (and should) with older versions of Agda (11-Dec 2013)
                                             λ { (inl m)       → ⊗-assoc (P m) (recv Q) (recv R)
                                               ; (inr (inl m)) → ⊗-assoc (recv P) (Q m) (recv R)
                                               ; (inr (inr m)) → ⊗-assoc (recv P) (recv Q) (R m) }
+                                            -}
 
   ⅋-recvR : ∀ P{M}(Q : M → Proto) → ⟦ P ⅋ recv Q ⟧ ≡ (Π M λ m → ⟦ P ⅋ Q m ⟧)
   ⅋-recvR end      Q = refl
@@ -93,7 +99,7 @@ module _ {{_ : FunExt}}{{_ : UA}} where
   ⅋-comm (send P) end      = refl
   ⅋-comm (send P) (recv Q) = Π=′ _ λ m → ⅋-comm (send P) (Q m)
   ⅋-comm (send P) (send Q) = Σ≃ ⊎-comm-equiv [inl: (λ m → ⅋-comm (P m) (send Q))
-                                              ,inr: (λ m → ⅋-comm (send P) (Q m)) ]
+                                             ,inr: (λ m → ⅋-comm (send P) (Q m)) ]
 
   ⅋-assoc : ∀ P Q R → P ⅋ (Q ⅋ R) ≡ (P ⅋ Q) ⅋ R
   ⅋-assoc end      Q        R        = refl
@@ -103,9 +109,9 @@ module _ {{_ : FunExt}}{{_ : UA}} where
   ⅋-assoc (send P) (send Q) end      = refl
   ⅋-assoc (send P) (send Q) (recv R) = recv=′ λ m → ⅋-assoc (send P) (send Q) (R m)
   ⅋-assoc (send P) (send Q) (send R) = send≃ ⊎-assoc-equiv
-                                            λ { (inl m)       → ⅋-assoc (P m) (send Q) (send R)
-                                              ; (inr (inl m)) → ⅋-assoc (send P) (Q m) (send R)
-                                              ; (inr (inr m)) → ⅋-assoc (send P) (send Q) (R m) }
+                                            [inl: (λ m → ⅋-assoc (P m) (send Q) (send R))
+                                            ,inr: [inl: (λ m → ⅋-assoc (send P) (Q m) (send R))
+                                                  ,inr: (λ m → ⅋-assoc (send P) (send Q) (R m)) ] ]
 
 module _ {P Q R}{{_ : FunExt}} where
   dist-⊗-⊕′ : (Q ⊕ R) ⊗ P ≡ (Q ⊗ P) ⊕ (R ⊗ P)
@@ -130,14 +136,14 @@ module _ {P Q R}{{_ : FunExt}} where
                 ∙ ! &≡×
 
   -- sends can be pulled out of tensor
-  source->>=-⊗ : ∀ P Q R → (source-of P >>= Q) ⊗ R ≡ source-of P >>= λ log → (Q log ⊗ R)
+  source->>=-⊗ : ∀ P Q R → (source-of P >>= Q) ⊗ R ≡ (source-of P >>= λ log → (Q log ⊗ R))
   source->>=-⊗ end       Q R = refl
   source->>=-⊗ (com _ P) Q R = send=′ λ m → source->>=-⊗ (P m) (Q ∘ _,_ m) R
 
   -- consequence[Q = const end]: ∀ P R → source-of P ⊗ R ≡ source-of P >> R
 
   -- recvs can be pulled out of par
-  sink->>=-⅋ : ∀ P Q R → (sink-of P >>= Q) ⅋ R ≡ sink-of P >>= λ log → (Q log ⅋ R)
+  sink->>=-⅋ : ∀ P Q R → (sink-of P >>= Q) ⅋ R ≡ (sink-of P >>= λ log → (Q log ⅋ R))
   sink->>=-⅋ end       Q R = refl
   sink->>=-⅋ (com _ P) Q R = recv=′ λ m → sink->>=-⅋ (P m) (Q ∘ _,_ m) R
 
