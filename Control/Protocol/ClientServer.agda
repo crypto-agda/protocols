@@ -11,17 +11,17 @@ module Control.Protocol.ClientServer (Query : ★₀) (Resp : Query → ★₀) 
     ClientRound = send λ (q : Query) → recv λ (r : Resp q) → end
     ServerRound = dual ClientRound
 
-    Client Server : ℕ → Proto
-    Client n = replicateᴾ n ClientRound
-    Server = dual ∘ Client
+    ClientRounds ServerRounds : ℕ → Proto
+    ClientRounds n = replicateᴾ n ClientRound
+    ServerRounds = dual ∘ ClientRounds
 
-    DynamicServer StaticServer : Proto
-    DynamicServer = recv λ n →
-                    Server n
-    StaticServer  = send λ n →
-                    Server n
+    Server Client : Proto
+    Client = send λ n →
+             ClientRounds n
+    Server = recv λ n →
+             ServerRounds n
 
     module PureServer (serve : Π Query Resp) where
-      server : ∀ n → ⟦ Server n ⟧
+      server : ⟦ Server ⟧
       server zero      = _
       server (suc n) q = serve q , server n
