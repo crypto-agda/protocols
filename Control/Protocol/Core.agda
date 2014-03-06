@@ -156,7 +156,7 @@ module _ {{_ : FunExt}} where
     dual-involutive (com io P) = com= (dualᴵᴼ-involutive io) refl λ m → dual-involutive (P m)
 
     dual-equiv : Is-equiv dual
-    dual-equiv = self-inv-is-equiv dual-involutive
+    dual-equiv = self-inv-is-equiv _ dual-involutive
 
     dual-inj : ∀ {P Q} → dual P ≡ dual Q → P ≡ Q
     dual-inj = Is-equiv.injective dual-equiv
