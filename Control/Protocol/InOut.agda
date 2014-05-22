@@ -25,7 +25,7 @@ dualᴵᴼ-involutive In = refl
 dualᴵᴼ-involutive Out = refl
 
 dualᴵᴼ-equiv : Is-equiv dualᴵᴼ
-dualᴵᴼ-equiv = self-inv-is-equiv dualᴵᴼ dualᴵᴼ-involutive
+dualᴵᴼ-equiv = self-inv-is-equiv _ dualᴵᴼ-involutive
 
 dualᴵᴼ-inj : ∀ {x y} → dualᴵᴼ x ≡ dualᴵᴼ y → x ≡ y
 dualᴵᴼ-inj = Is-equiv.injective dualᴵᴼ-equiv
