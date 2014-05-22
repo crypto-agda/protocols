@@ -6,7 +6,7 @@ open import Data.Zero
 open import Data.One using (𝟙)
 open import Data.Two hiding (_≟_; nand)
 open Data.Two.Indexed
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; subst; ap; coe; coe!)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; tr; ap; coe; coe!)
 open import Function.Extensionality
 open import HoTT
 open import Data.ShapePolymorphism
@@ -112,7 +112,7 @@ module _ {I : ★} where
     module _ {p q r : I → 𝟚}(pqr : R° p q r){{_ : FunExt}} where
         group-merge' : (ℂ : MProto I) → ⟦ ℂ / p ⟧ → ⟦ ℂ / q ⟧ → ⟦ ℂ / r ⟧
         group-merge' ℂ p q with Nand-R° pqr
-        ... | z , e = subst (⟦_⟧ ∘ _/_ ℂ) (! e) (group-merge z ℂ p q)
+        ... | z , e = tr (⟦_⟧ ∘ _/_ ℂ) (! e) (group-merge z ℂ p q)
 
         {-
     module _ {p q r : I → 𝟚} where

@@ -10,6 +10,7 @@ open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; re
 open import Function.Extensionality
 open import HoTT
 open Equivalences
+open import Type.Identities
 
 open import Control.Protocol.Core
 
@@ -27,7 +28,7 @@ module send/recv-𝟘 (P : 𝟘 → Proto) where
         P0-empty = ua (equiv fst (λ()) (λ()) (λ { (() , _) }))
 
         P⊤-uniq : ⟦ P⊤ ⟧ ≡ 𝟙
-        P⊤-uniq = Π𝟘-uniq _
+        P⊤-uniq = Π𝟘-uniq₀ _
 
 open send/recv-𝟘 (λ _ → end) public
 
@@ -100,7 +101,7 @@ module _ {P Q} where
         ×→&→× p = λ= λ { `L → refl ; `R → refl }
 
         &≃× : ⟦ P & Q ⟧ ≃ (⟦ P ⟧ × ⟦ Q ⟧)
-        &≃× = &→× , record { linv = ×→& ; is-linv = ×→&→× ; rinv = ×→& ; is-rinv = &→×→& }
+        &≃× = &→× , is-equiv ×→& &→×→& ×→&→×
 
         &≡× : {{_ : UA}} → ⟦ P & Q ⟧ ≡ (⟦ P ⟧ × ⟦ Q ⟧)
         &≡× = ua &≃×

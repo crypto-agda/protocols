@@ -4,10 +4,11 @@ open import Type
 open import Data.Product.NP using (Σ; _×_; _,_; first) renaming (proj₁ to fst; proj₂ to snd)
 open import Data.Two hiding (_≟_)
 open import Data.Nat hiding (_⊔_)
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; _∙_; refl; ap; coe; coe!; !_) renaming (subst to tr)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; _∙_; refl; ap; coe; coe!; !_ ; tr)-- renaming (subst to tr)
 open import Function.Extensionality
 open import HoTT
 open Equivalences
+open import Type.Identities
 
 open import Control.Protocol.Core
 
@@ -50,10 +51,11 @@ module _ {{_ : FunExt}} where
                   → tr (λ x → ⟦ Q (telecom P x p') ⟧) (>>=-fst-inv P p q)
                        (>>=-snd P {Q} ([ P ] p >>>= q) p') ≡ q (telecom P p p')
     >>=-snd-inv end          end     q p' = refl
-    >>=-snd-inv (recv P) {Q} p       q (m , p') = ap (flip _$_ (>>=-snd (P m) ([ P m ] p m >>>= (λ log → q (m , log))) p'))
+    >>=-snd-inv (recv P) {Q} p       q (m , p') =
+      ap (flip _$_ (>>=-snd (P m) ([ P m ] p m >>>= (λ log → q (m , log))) p'))
                                                      (tr-λ= (λ z → ⟦ Q (m , telecom (P m) z p') ⟧)
-                                                               (λ m → >>=-fst-inv (P m) (p m) (q ∘ _,_ m)))
-                                                ∙ >>=-snd-inv (P m) {Q ∘ _,_ m} (p m) (λ log → q (m , log)) p'
+                                                               (λ m → >>=-fst-inv (P m) {Q ∘ _,_ m} (p m) (q ∘ _,_ m)))
+                                                ∙ >>=-snd-inv (P m) {Q ∘ _,_ m} (p m) (q ∘ _,_ m) p'
     >>=-snd-inv (send P) {Q} (m , p) q p' = tr-snd= (λ { (m , p) → ⟦ Q (m , telecom (P m) p (p' m)) ⟧ })
                                                     (>>=-fst-inv (P m) p (q ∘ _,_ m))
                                                     (>>=-snd (P m) {Q ∘ _,_ m} ([ P m ] p >>>= (q ∘ _,_ m)) (p' m))

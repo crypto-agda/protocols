@@ -6,10 +6,11 @@ open import Data.Sum renaming (inj₁ to inl; inj₂ to inr; [_,_] to [inl:_,inr
 open import Data.One using (𝟙)
 open import Data.LR
 open import Relation.Binary
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; subst; ap; coe; coe!)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; tr; ap; coe; coe!)
 open import Function.Extensionality
 open import HoTT
 open Equivalences
+open import Type.Identities
 
 open import Control.Protocol.Core
 open import Control.Protocol.End
@@ -147,7 +148,7 @@ module _ {P Q R}{{_ : FunExt}} where
   sink->>=-⅋ end       Q R = refl
   sink->>=-⅋ (com _ P) Q R = recv=′ λ m → sink->>=-⅋ (P m) (Q ∘ _,_ m) R
 
-  -- source-⅋ : source-of P ⅋ source-of Q ≡ 
+  -- source-⅋ : source-of P ⅋ source-of Q ≡
 
   -- consequence[Q = const end]: ∀ P R → sink-of P ⅋ R ≡ sink-of P >> R
 
@@ -284,7 +285,7 @@ module _ {{_ : FunExt}}{{_ : UA}} where
     switchL P Q R pqr = switchL' P Q R (⊗-fst (P ⅋ Q) R pqr) (⊗-snd (P ⅋ Q) R pqr)
 
     ⊸-apply : ∀ {P Q} → ⟦ dual P ⅋ Q ⟧ → ⟦ P ⟧ → ⟦ Q ⟧
-    ⊸-apply {P} {Q} pq p = ⅋-apply (dual P) Q pq (subst ⟦_⟧ (! (dual-involutive P)) p)
+    ⊸-apply {P} {Q} pq p = ⅋-apply (dual P) Q pq (tr ⟦_⟧ (! (dual-involutive P)) p)
 
     o-o-apply : ∀ P Q → ⟦ P o-o Q ⟧ → ⟦ P ⟧ → ⟦ Q ⟧
     o-o-apply P Q Po-oQ p = ⊸-apply {P} {Q} (⊗-fst (P ⊸ Q) (Q ⊸ P) Po-oQ) p
