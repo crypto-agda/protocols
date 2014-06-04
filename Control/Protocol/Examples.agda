@@ -13,7 +13,6 @@ open import Data.ShapePolymorphism
 open Equivalences
 
 open import Control.Protocol
-open import Control.Protocol.Lift
 
 module Control.Protocol.Examples where
 
