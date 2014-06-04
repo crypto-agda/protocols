@@ -2,7 +2,7 @@
 open import Function.NP
 open import Type
 open import Level.NP
-open import Data.Product.NP using (Σ; _×_; _,_) renaming (proj₁ to fst)
+open import Data.Product.NP using (Σ; _×_; _,_)
 open import Data.One using (𝟙)
 open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; ap; coe; coe!)
 open import Function.Extensionality

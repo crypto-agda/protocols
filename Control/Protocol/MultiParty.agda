@@ -1,12 +1,12 @@
 {-# OPTIONS --without-K #-}
 open import Function.NP
 open import Type
-open import Data.Product.NP renaming (proj₁ to fst; proj₂ to snd) using (Σ;_,_)
+open import Data.Product.NP using (Σ;_,_;fst;snd)
 open import Data.Zero
 open import Data.One using (𝟙)
 open import Data.Two hiding (_≟_; nand)
 open Data.Two.Indexed
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; subst; ap; coe; coe!)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; tr; ap; coe; coe!)
 open import Function.Extensionality
 open import HoTT
 open import Data.ShapePolymorphism
@@ -23,6 +23,15 @@ module _ (I : ★) where
       end       : MProto
 
 module _ {I : ★} where 
+    send-to : (A : I) {M : ★} (B : I) (ℂ : ..(m : M) → MProto I) → MProto I
+    send-to A B ℂ = A -[ _ ]→ B ⁏ ℂ
+
+    broadcast : (A : I) {M : ★} (ℂ : (m : M) → MProto I) → MProto I
+    broadcast A ℂ = A -[ _ ]→★⁏ ℂ
+
+    broadcast☐ : (A : I) {M : ★} (ℂ : ..(m : M) → MProto I) → MProto I
+    broadcast☐ A ℂ = broadcast A λ { [ m ] → ℂ m }
+
     _-[_]→ø⁏_ : ∀ (A : I)(M : ★)(ℂ : ..(m : M) → MProto I) → MProto I
     A -[ M ]→ø⁏ ℂ = A -[ ☐ M ]→★⁏ λ { [ m ] → ℂ m }
 
@@ -112,14 +121,14 @@ module _ {I : ★} where
     module _ {p q r : I → 𝟚}(pqr : R° p q r){{_ : FunExt}} where
         group-merge' : (ℂ : MProto I) → ⟦ ℂ / p ⟧ → ⟦ ℂ / q ⟧ → ⟦ ℂ / r ⟧
         group-merge' ℂ p q with Nand-R° pqr
-        ... | z , e = subst (⟦_⟧ ∘ _/_ ℂ) (! e) (group-merge z ℂ p q)
+        ... | z , e = tr (⟦_⟧ ∘ _/_ ℂ) (! e) (group-merge z ℂ p q)
 
         {-
     module _ {p q r : I → 𝟚} where
         group-merge-assoc : (ℂ : MProto I)(Rqr : Nand° q r)(Rpq : Nand° p q)(Rpqr : Nand° p _)(Rpqr' : Nand° _ r) →
                              (ℂp : ⟦ ℂ / p ⟧) (ℂq : ⟦ ℂ / q ⟧) (ℂr : ⟦ ℂ / r ⟧)
                              → group-merge Rpqr ℂ ℂp (group-merge Rqr ℂ ℂq ℂr)
-                             ≡ subst (λ x → ⟦ ℂ / nand° x ⟧) {!!}
+                             ≡ tr (λ x → ⟦ ℂ / nand° x ⟧) {!!}
                                (group-merge Rpqr' ℂ (group-merge Rpq ℂ ℂp ℂq) ℂr)
         group-merge-assoc = {!!}
         -}
@@ -170,7 +179,7 @@ module ThreeParty where
   3com (2₃ -[ M ]→★⁏    ℂ) p0 p1 (m , p2) = m , 3com (ℂ m) (p0 m) (p1 m) p2
   3com end p0 p1 p2 = _
 
-  {- This does scale -}
+  {- ...this one does -}
   module _ {{_ : FunExt}} where
     3com' : (ℂ : MProto 𝟛) → ⟦ ℂ / 0₃? ⟧ → ⟦ ℂ / 1₃? ⟧ → ⟦ ℂ / 2₃? ⟧ → ⟦ MLog ℂ ⟧
     3com' ℂ p0 p1 p2 = group-merge' (R-p-¬p-1 0₃?) ℂ p0 (group-merge' R-1-2-¬0 ℂ p1 p2)
