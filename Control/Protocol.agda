@@ -7,3 +7,4 @@ open import Control.Protocol.Sequence       public
 open import Control.Protocol.Additive       public
 open import Control.Protocol.Multiplicative public
 open import Control.Protocol.MultiParty     public
+open import Control.Protocol.Lift           public
