@@ -2,9 +2,9 @@
 open import Function.NP
 open import Type
 open import Level.NP
-open import Data.Product.NP using (Σ; _×_; _,_) renaming (proj₁ to fst)
+open import Data.Product.NP using (Σ; _×_; _,_)
 open import Data.One using (𝟙)
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; ap; coe; coe!; subst)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; ap; coe; coe!; tr)
 open import Function.Extensionality
 open import HoTT
 open import Data.ShapePolymorphism
@@ -77,7 +77,7 @@ module _ {{_ : FunExt}} where
     P⟦ com io P ⊥⟧ = C.com= refl refl λ m → P⟦ P m ⊥⟧
 
     telecom : ∀ {io} (P : Proto io) → ⟦ P ⟧ → ⟦ P ⊥⟧ → Log P
-    telecom P t u = C.telecom P⟦ P ⟧ t (subst C.⟦_⟧ (! P⟦ P ⊥⟧) u)
+    telecom P t u = C.telecom P⟦ P ⟧ t (tr C.⟦_⟧ (! P⟦ P ⊥⟧) u)
 
 send′ : ★ → Proto In → Proto Out
 send′ M P = send λ (_ : M) → P
@@ -86,7 +86,7 @@ recv′ : ★ → Proto Out → Proto In
 recv′ M P = recv λ (_ : M) → P
 
 module _ {{_ : FunExt}} where
-    dual-involutive : ∀ {io} (P : Proto io) → subst Proto (dualᴵᴼ-involutive io) (dual (dual P)) ≡ P
+    dual-involutive : ∀ {io} (P : Proto io) → tr Proto (dualᴵᴼ-involutive io) (dual (dual P)) ≡ P
     dual-involutive {In}  end      = refl
     dual-involutive {Out} end      = refl
     dual-involutive       (send P) = com=′ _ λ m → dual-involutive (P m)
