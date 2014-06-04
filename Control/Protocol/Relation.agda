@@ -1,7 +1,7 @@
 {-# OPTIONS --without-K #-}
 open import Type
 open import Function.NP
-open import Data.Product.NP renaming (proj₁ to fst; proj₂ to snd) using (Σ;_,_)
+open import Data.Product.NP using (Σ;_,_;fst;snd)
 open import Relation.Binary
 open import Relation.Binary.PropositionalEquality
 

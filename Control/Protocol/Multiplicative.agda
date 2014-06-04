@@ -1,12 +1,13 @@
 {-# OPTIONS --without-K #-}
 open import Function.NP
 open import Type
-open import Data.Product.NP renaming (proj₁ to fst; proj₂ to snd) using (∃;Σ;_×_;_,_;first;second)
+open import Type.Identities
+open import Data.Product.NP using (∃;Σ;_×_;_,_;first;second;fst;snd)
 open import Data.Sum renaming (inj₁ to inl; inj₂ to inr; [_,_] to [inl:_,inr:_]) hiding ([_,_]′)
 open import Data.One using (𝟙)
 open import Data.LR
 open import Relation.Binary
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; subst; ap; coe; coe!)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; tr; ap; coe; coe!)
 open import Function.Extensionality
 open import HoTT
 open Equivalences
@@ -284,7 +285,7 @@ module _ {{_ : FunExt}}{{_ : UA}} where
     switchL P Q R pqr = switchL' P Q R (⊗-fst (P ⅋ Q) R pqr) (⊗-snd (P ⅋ Q) R pqr)
 
     ⊸-apply : ∀ {P Q} → ⟦ dual P ⅋ Q ⟧ → ⟦ P ⟧ → ⟦ Q ⟧
-    ⊸-apply {P} {Q} pq p = ⅋-apply (dual P) Q pq (subst ⟦_⟧ (! (dual-involutive P)) p)
+    ⊸-apply {P} {Q} pq p = ⅋-apply (dual P) Q pq (tr ⟦_⟧ (! (dual-involutive P)) p)
 
     o-o-apply : ∀ P Q → ⟦ P o-o Q ⟧ → ⟦ P ⟧ → ⟦ Q ⟧
     o-o-apply P Q Po-oQ p = ⊸-apply {P} {Q} (⊗-fst (P ⊸ Q) (Q ⊸ P) Po-oQ) p

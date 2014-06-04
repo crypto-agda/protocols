@@ -8,6 +8,7 @@ import Control.Protocol.Core
 import Control.Protocol.End
 import Control.Protocol.Examples
 import Control.Protocol.Extend
+import Control.Protocol.IP
 import Control.Protocol.InOut
 import Control.Protocol.Lift
 import Control.Protocol.MultiParty
