@@ -1,9 +1,17 @@
 module runningtest where
 
+infixr 0 _$_
+_$_ : ∀ {a b} {A : Set a} {B : A → Set b} →
+      ((x : A) → B x) → ((x : A) → B x)
+f $ x = f x
+
+record 𝟙 : Set₀ where
+
 data Bool : Set where
   true false : Bool
 
 record _×_ (A B : Set) : Set where
+  constructor _,_
   field
     fst : A
     snd : B
@@ -45,6 +53,24 @@ infixr 5 _++_
 postulate
     _++_ : String → String → String
 --_++_ = primStringAppend
+    reverse : String → String
+    sort : String → String
+    split-half : String → String × String
+    String▹List : String → List Char
+    List▹String : List Char → String
+    _≤Char_ : Char → Char → Bool
+
+module _ {A : Set} (_≤_ : A → A → Bool) where
+
+    merge-sort-list : (l₀ l₁ : List A) → List A
+    merge-sort-list [] l₁ = l₁
+    merge-sort-list l₀ [] = l₀
+    merge-sort-list (x₀ ∷ l₀) (x₁ ∷ l₁) with x₀ ≤ x₁
+    ... | true  = x₀ ∷ merge-sort-list l₀ (x₁ ∷ l₁)
+    ... | false = x₁ ∷ merge-sort-list (x₀ ∷ l₀) l₁
+
+merge-sort : String → String → String
+merge-sort s₀ s₁ = List▹String (merge-sort-list _≤Char_ (String▹List s₀) (String▹List s₁))
 
 {-
 toList : String → List Char
@@ -90,48 +116,64 @@ _==_ : String → String → Bool
 s₁ == s₂ = ⌊ s₁ ≟ s₂ ⌋
 -}
 
-★₀ = Set₀
+data Proc (D : Set₀) (M : Set₀) : Set₀ where
+  end    : Proc D M
+  output : D → M → Proc D M → Proc D M
+  input  : D → (M → Proc D M) → Proc D M
+  start  : Proc 𝟙 M → (D → Proc D M) → Proc D M
 
-data ℕ : ★₀ where
-  zero : ℕ
-  suc  : ℕ → ℕ
+reverser : Proc 𝟙 String
+reverser = input _ λ s → output _ (reverse s) end
 
-{-# BUILTIN NATURAL ℕ #-}
+cater : Proc 𝟙 String
+cater = input _ λ s₀ → input _ λ s₁ → output _ (s₀ ++ s₁) end
 
-_+_ : ℕ → ℕ → ℕ
-zero  + y = y
-suc x + y = suc (x + y)
+cater-client : ∀ {D} → D → String → String → Proc D String
+cater-client d s₀ s₁ = output d s₀ (output d s₁ (input d λ _ → end))
 
-data Proc (M : ★₀) : ★₀ where
-  end    : Proc M
-  output : M → Proc M → Proc M
-  input  : (M → Proc M) → Proc M
+cater-reverser-client : ∀ {D} → D → D → String → Proc D String
+cater-reverser-client cater-addr reverser-addr s =
+  output reverser-addr s $
+    output cater-addr s $
+      input reverser-addr λ rs →
+        output cater-addr rs $
+           input cater-addr λ res →
+              end
 
-adder : Proc ℕ
-adder = input λ m → input λ n → output (m + n) end
+str-sorter₀ : ∀ {D} → D → Proc D String
+str-sorter₀ d = input d λ s → output d (sort s) end
 
-client : Proc ℕ
-client = output 31 (output 11 (input λ _ → end))
+str-sorter-client : ∀ {D} → D → String → Proc D String
+str-sorter-client d s = output d s $ input d λ _ → end
 
-record 𝟙 : ★₀ where
+str-merger : ∀ {D} (upstream helper₀ helper₁ : D) → Proc D String
+str-merger upstream helper₀ helper₁ =
+  input upstream λ s →
+  let (s₀ , s₁) = split-half s in
+  output helper₀ s₀ $
+  output helper₁ s₁ $
+  input helper₀ λ ss₀ →
+  input helper₁ λ ss₁ →
+  output upstream (merge-sort ss₀ ss₁)
+  end
 
-seven : 𝟙 → ℕ
-seven _ = 3 + 4
+dyn-merger : ∀ {D} → D → Proc 𝟙 String → Proc D String
+dyn-merger upstream helper =
+  start helper λ helper₀ →
+  start helper λ helper₁ →
+  str-merger upstream helper₀ helper₁
 
-three : 𝟙 → ℕ
-three _ = suc (suc zero) + suc zero
+str-sorter₁ : ∀ {D} → D → Proc D String
+str-sorter₁ upstream = dyn-merger upstream (str-sorter₀ _)
 
-cater : Proc String
-cater = input λ s₀ → input λ s₁ → output (s₀ ++ s₁) end
+str-sorter₂ : ∀ {D} → D → Proc D String
+str-sorter₂ upstream = dyn-merger upstream (str-sorter₁ _)
 
-cater-client : String → String → Proc String
-cater-client s₀ s₁ = output s₀ (output s₁ end)
-
-data Value : ★₀ where
+data Value : Set₀ where
   array  : List Value → Value
   object : List (String × Value) → Value
   string : String → Value
-  number : ℕ {- upgrade -} → Value
+  -- number : ℕ {- upgrade -} → Value
   bool   : Bool → Value
   null   : Value
 -- -}
