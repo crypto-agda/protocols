@@ -1,7 +1,8 @@
 {-# OPTIONS --without-K #-}
 open import Function.NP
 open import Type
-open import Data.Product.NP renaming (proj₁ to fst; proj₂ to snd) using (_×_; _,_)
+open import Type.Identities
+open import Data.Product.NP using (_×_; _,_; fst; snd)
 open import Data.Zero using (𝟘)
 open import Data.Sum renaming (inj₁ to inl; inj₂ to inr; [_,_] to [inl:_,inr:_]) hiding ([_,_]′)
 open import Data.One using (𝟙)
@@ -101,7 +102,7 @@ module _ {P Q} where
         ×→&→× p = λ= λ { `L → refl ; `R → refl }
 
         &≃× : ⟦ P & Q ⟧ ≃ (⟦ P ⟧ × ⟦ Q ⟧)
-        &≃× = &→× , is-equiv ×→& &→×→& ×→&→×
+        &≃× = equiv &→× ×→& &→×→& ×→&→×
 
         &≡× : {{_ : UA}} → ⟦ P & Q ⟧ ≡ (⟦ P ⟧ × ⟦ Q ⟧)
         &≡× = ua &≃×

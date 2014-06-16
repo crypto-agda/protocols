@@ -2,8 +2,10 @@
 open import Function.NP
 open import Type
 open import Level.NP
-open import Data.Product.NP using (Σ; _×_; _,_) renaming (proj₁ to fst)
+open import Data.Product.NP using (Σ; _×_; _,_)
+open import Data.Zero using (𝟘)
 open import Data.One using (𝟙)
+open import Data.Two using (𝟚; 0₂; 1₂)
 open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; ap; coe; coe!)
 open import Function.Extensionality
 open import HoTT
@@ -182,3 +184,7 @@ module _ {{_ : FunExt}} where
 
     dual-Log : ∀ P → Log (dual P) ≡ Log P
     dual-Log = ap ⟦_⟧ ∘ source-of-dual-oblivious
+
+✓ᴾ : 𝟚 → Proto
+✓ᴾ 0₂ = send′ 𝟘 end
+✓ᴾ 1₂ = end

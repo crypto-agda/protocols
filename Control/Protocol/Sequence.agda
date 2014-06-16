@@ -1,10 +1,11 @@
 {-# OPTIONS --without-K #-}
 open import Function.NP
 open import Type
-open import Data.Product.NP using (Σ; _×_; _,_; first) renaming (proj₁ to fst; proj₂ to snd)
+open import Type.Identities
+open import Data.Product.NP using (Σ; _×_; _,_; first)
 open import Data.Two hiding (_≟_)
 open import Data.Nat hiding (_⊔_)
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; _∙_; refl; ap; coe; coe!; !_ ; tr)-- renaming (subst to tr)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; _∙_; refl; ap; coe; coe!; !_; tr)
 open import Function.Extensionality
 open import HoTT
 open Equivalences
@@ -53,6 +54,7 @@ module _ {{_ : FunExt}} where
     >>=-fst-inv (recv P) p       q = λ= λ m → >>=-fst-inv (P m) (p m) λ log → q (m , log)
     >>=-fst-inv (send P) (m , p) q = snd= (>>=-fst-inv (P m) p λ log → q (m , log))
 
+    {-
     >>=-snd-inv : ∀ P {Q}(p : ⟦ P ⟧)(q : ((log : Log P) → ⟦ Q log ⟧))(p' : ⟦ P ⊥⟧)
                   → tr (λ x → ⟦ Q (telecom P x p') ⟧) (>>=-fst-inv P p q)
                        (>>=-snd P {Q} ([ P ] p >>>= q) p') ≡ q (telecom P p p')
@@ -66,6 +68,7 @@ module _ {{_ : FunExt}} where
                                                     (>>=-fst-inv (P m) p (q ∘ _,_ m))
                                                     (>>=-snd (P m) {Q ∘ _,_ m} ([ P m ] p >>>= (q ∘ _,_ m)) (p' m))
                                           ∙ >>=-snd-inv (P m) {Q ∘ _,_ m} p (λ log → q (m , log)) (p' m)
+    -}
 
     {- hmmm...
     >>=-uniq : ∀ P {Q} (pq : ⟦ P >>= Q ⟧)(p' : ⟦ P ⊥⟧) → pq ≡ [ P ] (>>=-fst P {Q} pq) >>>= (λ log → {!>>=-snd P {Q} pq p'!})
@@ -139,6 +142,14 @@ module _ {{_ : FunExt}} where
     dual-replicateᴾ zero    P = refl
     dual-replicateᴾ (suc n) P = dual->> P (replicateᴾ n P) ∙ ap (_>>_ (dual P)) (dual-replicateᴾ n P)
 
+    {-
+    module _ {{_ : UA}} where
+        >>>-right-unit : ∀ P (p : ⟦ P ⟧) → tr ⟦_⟧ (>>-right-unit P) ([ P ] p >>> end) ≡ p
+        >>>-right-unit end      p = refl
+        >>>-right-unit (recv P) p = {!!} ∙ λ= λ m →  >>>-right-unit (P m) (p m)
+        >>>-right-unit (send P) (m , p) = {!!} ∙ pair= refl (>>>-right-unit (P m) p)
+    -}
+
 {- An incremental telecom function which makes processes communicate
    during a matching initial protocol. -}
 >>=-telecom : (P : Proto){Q : Log P → Proto}{R : Log P → Proto}
@@ -164,3 +175,7 @@ module _ {{_ : FunExt}} where
 >>-compose end (recv P) p>>q (m , q>>r) = >>-compose end (P m) (p>>q m) q>>r
 >>-compose (send P) Q (m , p>>q) q>>r = m , >>-compose (P m) Q p>>q q>>r
 >>-compose (recv P) Q p>>q q>>r m = >>-compose (P m) Q (p>>q m) q>>r
+-- -}
+-- -}
+-- -}
+-- -}

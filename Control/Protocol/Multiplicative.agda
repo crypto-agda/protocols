@@ -1,7 +1,8 @@
 {-# OPTIONS --without-K #-}
 open import Function.NP
 open import Type
-open import Data.Product.NP renaming (proj₁ to fst; proj₂ to snd) using (∃;Σ;_×_;_,_;first;second)
+open import Type.Identities
+open import Data.Product.NP using (∃;Σ;_×_;_,_;first;second;fst;snd)
 open import Data.Sum renaming (inj₁ to inl; inj₂ to inr; [_,_] to [inl:_,inr:_]) hiding ([_,_]′)
 open import Data.One using (𝟙)
 open import Data.LR
