@@ -1,12 +1,87 @@
 var require = require("requirejs");
-var m = require("jAgda.runningtest.js");
 var requestjs = require("request");
 var http = require("http");
 var sha256 = require("crypto-js/sha256");
 var crypto = require("crypto");
+var m = require("jAgda.runningtest.js");
+
+function id(x) { return x }
 
 var nil  = m["List"]["[]"];
 var cons = m["List"]["_∷_"];
+var tt   = m["𝟙"]["record"];
+
+function fromJSBool(b) {
+  return m["Bool"][(b)? "true" : "false"]
+}
+
+function fromBool(b) {
+  return b({"true": function() { return true }, "false": function() { return false } })
+}
+
+function fromJSArray(a){
+  var len = a.length;
+  var l = nil;
+  for (var i = len - 1; i >= 0; i--) {
+    l = cons(a[i])(l)
+  }
+  return l
+}
+
+function fromList(l0){
+  var a = [];
+  var i = 0;
+  function go(l) {
+    l({"[]":  function() { }
+      ,"_∷_": function(x,xs) { a[i] = x; i++; go(xs) } });
+  }
+  go(l0);
+  return a
+}
+
+// fromListValue = fromList ∘ map fromValue
+function fromListValue(l0){
+  var a = [];
+  var i = 0;
+  function go(l) {
+    l({"[]":  function() { }
+      ,"_∷_": function(x,xs) { a[i] = fromValue(x); i++; go(xs) } });
+  }
+  go(l0);
+  return a
+}
+
+function objectFromList(l0) {
+  var o = {};
+  function go(l) {
+    l({"[]":  function() { }
+      ,"_∷_": function(x,xs) { o[x["fst"]] = fromValue(x["snd"]); go(xs) } });
+  }
+  go(l0);
+  return o
+}
+
+function fromValue(v) {
+  return v({"array":  function(l) { return fromListValue(l) }
+           ,"object": function(l) { return objectFromList(l) }
+           ,"string": id
+           ,"number": id
+           ,"bool":   fromBool
+           ,"null":   function() { return null }
+           })
+}
+
+/*
+function toValue(v) {
+  case
+*/
+
+m["fromJSBool"] = fromJSBool;
+m["fromJSArray"] = fromJSArray;
+m["fromList"] = fromList;
+m["fromValue"] = fromValue;
+//m["JSON-stringify"] = JSON.stringify;
+//m["console-log"] = function(s) { return function(k) { return function() { console.log(s); k() } } }
 
 /*
 var zero = m["ℕ"]["zero"];
@@ -29,28 +104,6 @@ function fromNat(n){
 }
 */
 
-function toList(a){
-  var len = a.length;
-  var l = nil;
-  for (var i = len - 1; i >= 0; i--) {
-    l = cons(a[i])(l)
-  }
-  return l
-}
-
-function fromList(l0){
-  var a = [];
-  var i = 0;
-  function go(l) {
-    l({"[]":  function() { }
-      ,"_∷_": function(x,xs) { a[i] = x; i++; go(xs) } });
-  }
-  go(l0);
-  return a
-}
-
-var cat = m["_++_"];
-
 //var adderclient = m["client"];
 //var adder = m["adder"];
 
@@ -59,26 +112,7 @@ var reverser = m["reverser"];
 var caterclient = m["cater-client"];
 var caterreverserclient = m["cater-reverser-client"];
 
-m["_++_"] = function (x) {
-  return function (y) {
-    return (x + y);
-  };
-};
-
-m["reverse"] = function (x) {
-  return x.split("").reverse().join("");
-};
-
-m["sort"] = function (x) {
-  return x.split("").sort().join("");
-}
-
-m["split-half"] = function (x) {
-  var l = x.length;
-  return m["_×_"]["_,_"](x.substring(0,l/2))(x.substring(l/2))
-}
-
-m["_×_"]["fst"] = function (y0) {
+m["Σ"]["fst"] = function (y0) {
   return function (y1) {
   return function (x0) {
     return x0["fst"];
@@ -86,7 +120,7 @@ m["_×_"]["fst"] = function (y0) {
   }
 }
 
-m["_×_"]["snd"] = function (y0) {
+m["Σ"]["snd"] = function (y0) {
   return function (y1) {
   return function (x0) {
     return x0["snd"];
@@ -95,58 +129,12 @@ m["_×_"]["snd"] = function (y0) {
 }
 
 m["String▹List"] = function (x) {
-  return toList(x.split(""))
+  return fromJSArray(x.split(""))
 }
 
 m["List▹String"] = function (x) {
   return fromList(x).join("")
 }
-
-m["_≤Char_"] = function (x) {
-  return function (y) {
-    return fromJSBool(x <= y)
-  }
-}
-
-function fromJSBool(b) {
-  return m["Bool"][(b)? "true" : "false"]
-}
-
-/*
-function mergeSort(xs,ys) {
-  var lxs = xs.length;
-  var lys = ys.length;
-  var ixs = 0;
-  var jxs = 0;
-  while (ixs <= lxs)
-}
-
-m["merge-sort"] = function (x) {
-  return function (y) {
-    return
-  }
-}
-*/
-
-/*
-function com(r,proc){
-  function send(n,k){
-    //console.log("send: " + fromNat(n));
-    console.log("send: " + n);
-    com(r,k);
-  }
-  function recv(k){
-    console.log("recv: " + typeof(k));
-    var kx = k(r);
-    console.log("next: " + kx);
-    com(r,kx);
-  }
-  function end(){
-    console.log("end");
-  }
-  proc({"output": send, "input": recv, "end": end });
-}
-*/
 
 var fresh_port = 20000; // we hope is fresh
 function next_port(){
@@ -160,8 +148,8 @@ function q(x) {
 }
 
 function uq(x) {
-  if (x) {
-    return x.substring(1,x.length - 1)
+  if (typeof(x) == "string") {
+    return x.substring(1, x.length - 1)
   } else {
     return x
   }
@@ -181,12 +169,30 @@ function post(tokens,dest,query,cb) {
       throw ("Unexpected status code: " + response.statusCode + ". Body: " + response.body)
     }
   })
+  /*
+  host, port, path ... dest
+  http.request({"method": "post", "uri": dest, "headers": h}, function (response) {
+    if (response.statusCode == 200) {
+      tokens[dest] = response.headers["x-token"];
+      cb(uq(response.headers["x-response"]))
+    } else {
+      response.setEncoding('utf8');
+      response.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+      });
+      throw ("Unexpected status code: " + response.statusCode)
+    }
+  })
+  */
 }
 
-function server(ip,port,initServer){
+// server : (ip port : String)(proc : Proc String String)
+//          (callback : HTTPServer → (uri : String) → JSCmd) → JSCmd
+function server(ip,port,initServer,callback){
   var sessions = {};
   var fresh_session = 0;
   var seed = crypto.randomBytes(32);
+  console.log(seed);
   var uri = "http://" + ip + ":" + port + "/";
   var clientTokens = {};
   function new_session(o){
@@ -256,14 +262,18 @@ function server(ip,port,initServer){
       console.log("client start a new process");
       // TODO deallocate servers
       var newPort = next_port();
-      var newURI = server(localIP, newPort, proc);
-      go(k(newURI))
+      server(localIP, newPort, proc, function (http_server, newURI) {
+        go(k(newURI))
+      })
     }
     function end() {
       err(400, "server already ended the protocol")
     }
+    function error(msg) {
+      err(400, msg)
+    }
     function go(s) {
-      s({"input": input, "output": output, "start": start, "end": end})
+      s({"input": input, "output": output, "start": start, "end": end, "error": error})
     }
     if (req.method === "POST") {
       var req_token = req.headers["x-token"];
@@ -281,11 +291,13 @@ function server(ip,port,initServer){
       err(404, "not a POST")
     }
   }
-  http.createServer(handle_request).listen(port, ip);
+  var http_server = http.createServer(handle_request);
+  http_server.listen(port, ip);
   console.log("Server running at " + uri);
-  return uri
+  callback(http_server, uri)
 }
 
+// client : Proc String String → JSCmd → JSCmd
 function client(clientInit,cb){
   var tokens = {};
   function input(dest,k) {
@@ -304,18 +316,24 @@ function client(clientInit,cb){
     console.log("client start a new process");
     // TODO deallocate servers
     var newPort = next_port();
-    var newURI = server(localIP, newPort, proc);
-    go(k(newURI))
+    server(localIP, newPort, proc, function (http_server, newURI) {
+      go(k(newURI))
+    })
   }
   function end() {
     console.log("client ends");
     cb()
   }
+  function error(msg) {
+    err(400, msg)
+  }
   function go(c) {
-    c({"input": input, "output": output, "start": start, "end": end})
+    c({"input": input, "output": output, "start": start, "end": end, "error": error})
   }
   go(clientInit)
 }
+
+m["client"] = function(proc) { return function(cb) { return function() { client(proc, cb) } } };
 
 /*
 console.log("server(cater):");
@@ -335,9 +353,55 @@ console.log("str-sorter-client:");
 client(m["str-sorter-client"](undefined)("http://127.0.0.1:1341/")("Something to be sorted!"), function () {});
 */
 
-server("127.0.0.1", 1342, m["str-sorter₂"](undefined)(undefined));
+// http://javascript.crockford.com/www_svendtofte_com/code/curried_javascript/index.html
+function curry(func,args,space) {
+    var n  = func.length - args.length; //arguments still to come
+    var sa = Array.prototype.slice.apply(args); // saved accumulator array
+    function accumulator(moreArgs,sa,n) {
+        var saPrev = sa.slice(0); // to reset
+        var nPrev  = n; // to reset
+        for(var i=0;i<moreArgs.length;i++,n--) {
+            sa[sa.length] = moreArgs[i];
+        }
+        if ((n-moreArgs.length)<=0) {
+            var res = func.apply(space,sa);
+            // reset vars, so curried function can be applied to new params.
+            sa = saPrev;
+            n  = nPrev;
+            return res;
+        } else {
+            return function (){
+                // arguments are params, so closure bussiness is avoided.
+                return accumulator(arguments,sa.slice(0),n);
+            }
+        }
+    }
+    return accumulator([],sa,n);
+}
+
+function runJSCmd(c) {
+  c({"server": function(ip, port, proc, cb) {
+                 server(ip, port, proc, function(http_server, uri) {
+                   runJSCmd(cb(http_server)(uri))
+                 })
+               }
+    ,"client":      function(proc, cb) { client(proc, function() { runJSCmd(cb) }) }
+    ,"end":         function () { }
+    ,"console-log": function (s, cb) { console.log(s); runJSCmd(cb) }
+    })
+}
+
+runJSCmd(m["main"](tt));
+/*
+server("127.0.0.1", 1342, m["str-sorter₂"](undefined)(undefined), function () {
+
 console.log("str-sorter-client:");
-client(m["str-sorter-client"](undefined)("http://127.0.0.1:1342/")("Something to be sorted!"), function () {});
+client(m["str-sorter-client"](undefined)("http://127.0.0.1:1342/")("Something to be sorted!"), function () {
+
+});
+
+});
+*/
 
 //setTimeout(function() { console.log("timeout") }, (3 * 1000));
 
