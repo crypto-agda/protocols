@@ -11,6 +11,7 @@ open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; re
 open import Function.Extensionality
 open import HoTT
 open Equivalences
+open import Type.Identities
 
 open import Control.Protocol.Core
 

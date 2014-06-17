@@ -9,6 +9,7 @@ open import Relation.Binary.PropositionalEquality.NP using (_≡_; _∙_; refl; 
 open import Function.Extensionality
 open import HoTT
 open Equivalences
+open import Type.Identities
 
 open import Control.Protocol.Core
 
@@ -33,13 +34,19 @@ P >> Q = P >>= λ _ → Q
 >>=-snd (recv P) pq       (m , p) = >>=-snd (P m) (pq m) p
 >>=-snd (send P) (m , pq) p       = >>=-snd (P m) pq (p m)
 
+>>-snd : ∀ P {Q} (pq : ⟦ P >> Q ⟧)(p : ⟦ P ⊥⟧) → ⟦ Q ⟧
+>>-snd P = >>=-snd P
+
 [_]_>>>=_ : ∀ P {Q} → ⟦ P ⟧ → ((log : Log P) → ⟦ Q log ⟧) → ⟦ P >>= Q ⟧
 [ end    ] p       >>>= q = q _
 [ recv P ] p       >>>= q = λ m → [ P m ] p m >>>= λ log → q (m , log)
 [ send P ] (m , p) >>>= q = m , [ P m ] p >>>= λ log → q (m , log)
 
+[_]_>>>ᴸ_ : ∀ P {Q} → ⟦ P ⟧ → (Log P → ⟦ Q ⟧) → ⟦ P >> Q ⟧
+[ P ] p >>>ᴸ q = [ P ] p >>>= q
+
 [_]_>>>_ : ∀ P {Q} → ⟦ P ⟧ → ⟦ Q ⟧ → ⟦ P >> Q ⟧
-[ P ] p >>> q = [ P ] p >>>= λ _ → q
+[ P ] p >>> q = [ P ] p >>>ᴸ (const q)
 
 module _ {{_ : FunExt}} where
     >>=-fst-inv : ∀ P {Q}(p : ⟦ P ⟧)(q : ((log : Log P) → ⟦ Q log ⟧)) → >>=-fst P {Q} ([ P ] p >>>= q) ≡ p
@@ -52,10 +59,11 @@ module _ {{_ : FunExt}} where
                   → tr (λ x → ⟦ Q (telecom P x p') ⟧) (>>=-fst-inv P p q)
                        (>>=-snd P {Q} ([ P ] p >>>= q) p') ≡ q (telecom P p p')
     >>=-snd-inv end          end     q p' = refl
-    >>=-snd-inv (recv P) {Q} p       q (m , p') = {!ap (flip _$_ (>>=-snd (P m) ([ P m ] p m >>>= (λ log → q (m , log))) p'))
-                                                     {!(tr-λ= (λ z → ⟦ Q (m , telecom (P m) z p') ⟧)
-                                                               {!(λ m → >>=-fst-inv (P m) (p m) (q ∘ _,_ m))!})!}
-                                                !} ∙ >>=-snd-inv (P m) {Q ∘ _,_ m} (p m) (λ log → q (m , log)) p'
+    >>=-snd-inv (recv P) {Q} p       q (m , p') =
+      ap (flip _$_ (>>=-snd (P m) ([ P m ] p m >>>= (λ log → q (m , log))) p'))
+                                                     (tr-λ= (λ z → ⟦ Q (m , telecom (P m) z p') ⟧)
+                                                               (λ m → >>=-fst-inv (P m) {Q ∘ _,_ m} (p m) (q ∘ _,_ m)))
+                                                ∙ >>=-snd-inv (P m) {Q ∘ _,_ m} (p m) (q ∘ _,_ m) p'
     >>=-snd-inv (send P) {Q} (m , p) q p' = tr-snd= (λ { (m , p) → ⟦ Q (m , telecom (P m) p (p' m)) ⟧ })
                                                     (>>=-fst-inv (P m) p (q ∘ _,_ m))
                                                     (>>=-snd (P m) {Q ∘ _,_ m} ([ P m ] p >>>= (q ∘ _,_ m)) (p' m))
@@ -92,6 +100,18 @@ module _ {{_ : FunExt}}{{_ : UA}} where
 ++Log (com q P) (x , xs) ys = x , ++Log (P x) xs ys
 
 module _ {{_ : FunExt}}{{_ : UA}} where
+  ++Log≡++Log' : ∀ P {Q} xs ys  → ++Log P {Q} xs ys ≡ ++Log' P xs ys
+  ++Log≡++Log' end xs ys
+    = ! coe-β _ _
+    ∙ ap (coe 𝟙×-snd) (! coe×= End-uniq refl)
+    ∙ coe∘coe 𝟙×-snd (×= End-uniq refl) (xs , ys)
+    ∙ coe-same (! (!-inv (×= End-uniq refl ∙ 𝟙×-snd))) (xs , ys)
+  ++Log≡++Log' (com io P) (m , xs) ys
+    = ap (_,_ m) (++Log≡++Log' (P m) xs ys)
+    ∙ ! coe!Σ=′ _ (λ m → Log->>=-Σ (P m))
+    ∙ ap (coe (! Σ=′ _ (λ m₁ → Log->>=-Σ (P m₁)))) (! coe!-β _ _)
+    ∙ coe∘coe (! Σ=′ _ (λ m → Log->>=-Σ (P m))) (! Σ-assoc) ((m , xs) , ys)
+    ∙ coe-same (! (hom-!-∙ (Σ=′ _ (λ m → Log->>=-Σ (P m))) Σ-assoc)) ((m , xs) , ys)
 
 module _ {{_ : FunExt}} where
     >>-right-unit : ∀ P → (P >> end) ≡ P
@@ -140,11 +160,21 @@ module _ {{_ : FunExt}} where
 >>=-telecom (send P) (m , p0) p1       = first (_,_ m) (>>=-telecom (P m) p0 (p1 m))
 >>=-telecom (recv P) p0       (m , p1) = first (_,_ m) (>>=-telecom (P m) (p0 m) p1)
 
-module _ (P : Proto){Q R : Proto} where
-    >>-telecom : ⟦ P >> Q  ⟧
-               → ⟦ P >> R ⊥⟧
-               → Log P × ⟦ Q ⟧ × ⟦ R ⊥⟧
-    >>-telecom = >>=-telecom P
+>>-telecom : (P : Proto){Q R : Proto}
+           → ⟦ P >> Q  ⟧
+           → ⟦ P >> R ⊥⟧
+           → Log P × ⟦ Q ⟧ × ⟦ R ⊥⟧
+>>-telecom P p q = >>=-telecom P p q
+
+>>-compose : (P Q : Proto){R : Proto}
+  → ⟦ P >> Q ⟧
+  → ⟦ dual Q >> R ⟧
+  → ⟦ P >> R ⟧
+>>-compose end end p>>q q>>r = q>>r
+>>-compose end (send P) (m , p>>q) q>>r = >>-compose end (P m) p>>q (q>>r m)
+>>-compose end (recv P) p>>q (m , q>>r) = >>-compose end (P m) (p>>q m) q>>r
+>>-compose (send P) Q (m , p>>q) q>>r = m , >>-compose (P m) Q p>>q q>>r
+>>-compose (recv P) Q p>>q q>>r m = >>-compose (P m) Q (p>>q m) q>>r
 -- -}
 -- -}
 -- -}

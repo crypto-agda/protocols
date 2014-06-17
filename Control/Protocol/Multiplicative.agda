@@ -11,6 +11,7 @@ open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; re
 open import Function.Extensionality
 open import HoTT
 open Equivalences
+open import Type.Identities
 
 open import Control.Protocol.Core
 open import Control.Protocol.End
@@ -148,7 +149,7 @@ module _ {P Q R}{{_ : FunExt}} where
   sink->>=-⅋ end       Q R = refl
   sink->>=-⅋ (com _ P) Q R = recv=′ λ m → sink->>=-⅋ (P m) (Q ∘ _,_ m) R
 
-  -- source-⅋ : source-of P ⅋ source-of Q ≡ 
+  -- source-⅋ : source-of P ⅋ source-of Q ≡
 
   -- consequence[Q = const end]: ∀ P R → sink-of P ⅋ R ≡ sink-of P >> R
 
