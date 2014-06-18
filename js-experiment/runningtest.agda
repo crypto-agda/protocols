@@ -1,5 +1,11 @@
 module runningtest where
 
+-- open import Level.NP
+
+-- open import Function.NP
+id : ∀ {a} {A : Set a} (x : A) → A
+id x = x
+
 infixr 9 _∘_
 _∘_ : ∀ {a b c}
         {A : Set a} {B : A → Set b} {C : {x : A} → B x → Set c} →
@@ -12,20 +18,24 @@ _$_ : ∀ {a b} {A : Set a} {B : A → Set b} →
       ((x : A) → B x) → ((x : A) → B x)
 f $ x = f x
 
+-- open import Data.One
 record 𝟙 : Set₀ where
 
 data Bool : Set where
   true false : Bool
 
+-- open import Data.Product.NP
 record Σ (A : Set)(B : A → Set) : Set where
   constructor _,_
   field
     fst : A
     snd : B fst
+open Σ
 
 _×_ : (A B : Set) → Set
 A × B = Σ A (λ _ → B)
 
+-- open import Data.Sum.NP
 data _⊎_ (A B : Set) : Set where
   inl : A → A ⊎ B
   inr : B → A ⊎ B
@@ -36,12 +46,7 @@ data _⊎_ (A B : Set) : Set where
 [inl: f ,inr: g ] (inl x) = f x
 [inl: f ,inr: g ] (inr y) = g y
 
-postulate
-  Char : Set
-
-{-# BUILTIN CHAR Char #-}
-{-# COMPILED_TYPE Char Char #-}
-
+-- open import Data.List using (List; []; _∷_)
 infixr 5 _∷_
 
 data List {a} (A : Set a) : Set a where
@@ -52,9 +57,17 @@ data List {a} (A : Set a) : Set a where
 {-# BUILTIN NIL  []   #-}
 {-# BUILTIN CONS _∷_  #-}
 
+-- open import Relation.Binary.PropositionalEquality
+data _≡_ {A : Set} (x : A) : A → Set where
+  refl : x ≡ x
+
+ap : {A B : Set} (f : A → B) {x y : A} (p : x ≡ y) → f x ≡ f y
+ap f refl = refl
+
 infixr 5 _++_
 
 postulate
+    Char        : Set
     String      : Set
     Integer     : Set
     zero        : Integer
@@ -70,6 +83,7 @@ postulate
     _≤Char_     : Char → Char → Bool
 
 {-# BUILTIN STRING String #-}
+{-# BUILTIN CHAR   Char #-}
 
 {-# COMPILED_JS zero      0 #-}
 {-# COMPILED_JS one       1 #-}
@@ -80,7 +94,6 @@ postulate
 {-# COMPILED_JS take-half function(x) { return x.substring(0,x.length/2); }      #-}
 {-# COMPILED_JS drop-half function(x) { return x.substring(x.length/2); }        #-}
 {-# COMPILED_JS _≤Char_   function(x) { return function(y) { return exports["fromJSBool"](x <= y); }; } #-}
-
 
 data Value : Set₀ where
   array  : List Value → Value
@@ -116,12 +129,6 @@ module _ {A : Set} (_≤_ : A → A → Bool) where
 
 merge-sort : String → String → String
 merge-sort s₀ s₁ = List▹String (merge-sort-list _≤Char_ (String▹List s₀) (String▹List s₁))
-
-data _≡_ {A : Set} (x : A) : A → Set where
-  refl : x ≡ x
-
-ap : {A B : Set} (f : A → B) {x y : A} (p : x ≡ y) → f x ≡ f y
-ap f refl = refl
 
 data Error (A : Set) : Set where
   succeed : A → Error A
@@ -218,12 +225,60 @@ telecom end p q = _
 telecom (send P) (m , p) q = m , telecom (P m) p (q m)
 telecom (recv P) p (m , q) = m , telecom (P m) (p m) q
 
+{-
+open import Category.Profunctor
+
+Prism : (S T A B : Set) → Set₁
+Prism S T A B = ∀ {_↝_}{{_ : Choice {₀} _↝_}} → (A ↝ B) → (S ↝ T)
+
+Prism' : (S A : Set) → Set₁
+Prism' S A = Prism S S A A
+
+module _ {S T A B : Set} where
+    prism : (B → T) → (S → T ⊎ A) → Prism S T A B
+    prism bt sta = dimap sta [inl: id ,inr: bt ] ∘ right
+      where open Choice {{...}}
+-}
+
+Prism : (S T A B : Set) → Set
+Prism S T A B = (B → T) × (S → T ⊎ A)
+
+Prism' : (S A : Set) → Set
+Prism' S A = Prism S S A A
+
+module _ {S T A B : Set} where
+    prism : (B → T) → (S → T ⊎ A) → Prism S T A B
+    prism = _,_
+
+    -- This is particular case of lens' _#_
+    _#_ : Prism S T A B → B → T
+    _#_ = fst
+
+    -- This is particular case of lens' review
+    review = _#_
+
+    -- _^._ : Prism S T A B → S → ...
+
+module _ {S A : Set} where
+    prism' : (A → S) → (S → S ⊎ A) → Prism' S A
+    prism' = prism
+
 data Proc (D : Set₀) (M : Set₀) : Set₀ where
   end    : Proc D M
   output : (d : D) (m : M) (p : Proc D M) → Proc D M
   input  : (d : D) (p : M → Proc D M) → Proc D M
   start  : (p : Proc 𝟙 M) (q : D → Proc D M) → Proc D M
   error  : (err : String) → Proc D M
+
+module _ {A B : Set} (f : Prism' A B) where
+  mapProc : ∀ {D} → Proc D B → Proc D A
+  mapProc end = end
+  mapProc (output d m p) = output d (f # m) (mapProc p)
+  mapProc (input d p) = input d ([inl: (λ _ → error "mapProc/input")
+                                 ,inr: (λ b → mapProc (p b)) ]
+                                 ∘ snd f)
+  mapProc (start p q) = start (mapProc p) (λ d → mapProc (q d))
+  mapProc (error err) = error err
 
 module _ {D : Set} d where
     toProc : (P : Proto) → ⟦ P ⟧ → Proc D String
@@ -328,6 +383,17 @@ data JSCmd : Set where
 main : 𝟙 → JSCmd
 main _ =
   console-log (JSON-stringify (fromValue test-value)) $
+
+  console-log "server(cater):" $
+  server "127.0.0.1" "1337" cater λ _ cater-uri →
+  console-log "client(caterclient):" $
+  client (cater-client cater-uri "Hello " "World!") $
+  client (cater-client cater-uri "Bonjour " "monde!") $
+  console-log "server(reverser):" $
+  server "127.0.0.1" "1338" reverser λ _ reverser-uri →
+  console-log "client(cater-reverser-client):" $
+  client (cater-reverser-client cater-uri reverser-uri "red") $
+
   server "127.0.0.1" "1342" (str-sorter₂ _) λ http_server uri →
   console-log "str-sorter-client:" $
   client (str-sorter-client "http://127.0.0.1:1342/" "Something to be sorted!")

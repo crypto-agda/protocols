@@ -22,48 +22,41 @@ function fromBool(b) {
 function fromJSArray(a){
   var len = a.length;
   var l = nil;
+  Object.freeze(l);
   for (var i = len - 1; i >= 0; i--) {
-    l = cons(a[i])(l)
+    l = cons(a[i])(l);
+    Object.freeze(l)
   }
   return l
 }
 
-function fromList(l0){
+function fromList(l0,fromElt){
   var a = [];
   var i = 0;
   function go(l) {
     l({"[]":  function() { }
-      ,"_∷_": function(x,xs) { a[i] = x; i++; go(xs) } });
+      ,"_∷_": function(x,xs) { a[i] = fromElt(x); i++; go(xs) } });
   }
   go(l0);
+  Object.freeze(a);
   return a
 }
 
-// fromListValue = fromList ∘ map fromValue
-function fromListValue(l0){
-  var a = [];
-  var i = 0;
-  function go(l) {
-    l({"[]":  function() { }
-      ,"_∷_": function(x,xs) { a[i] = fromValue(x); i++; go(xs) } });
-  }
-  go(l0);
-  return a
-}
-
-function objectFromList(l0) {
+function objectFromList(l0,key,val) {
   var o = {};
   function go(l) {
     l({"[]":  function() { }
-      ,"_∷_": function(x,xs) { o[x["fst"]] = fromValue(x["snd"]); go(xs) } });
+      ,"_∷_": function(x,xs) { o[key(x)] = val(x); go(xs) } });
   }
   go(l0);
+  Object.freeze(o);
   return o
 }
 
 function fromValue(v) {
-  return v({"array":  function(l) { return fromListValue(l) }
-           ,"object": function(l) { return objectFromList(l) }
+  return v({"array":  function(l) { return fromList(l, fromValue) }
+           ,"object": function(l) { return objectFromList(l, function(x) { return x["fst"] },
+                                                             function(x) { return fromValue(x["snd"]) }) }
            ,"string": id
            ,"number": id
            ,"bool":   fromBool
@@ -71,14 +64,9 @@ function fromValue(v) {
            })
 }
 
-/*
-function toValue(v) {
-  case
-*/
-
 m["fromJSBool"] = fromJSBool;
-m["fromJSArray"] = fromJSArray;
-m["fromList"] = fromList;
+// m["fromJSArray"] = fromJSArray;
+// m["fromList"] = fromList;
 m["fromValue"] = fromValue;
 //m["JSON-stringify"] = JSON.stringify;
 //m["console-log"] = function(s) { return function(k) { return function() { console.log(s); k() } } }
@@ -104,14 +92,6 @@ function fromNat(n){
 }
 */
 
-//var adderclient = m["client"];
-//var adder = m["adder"];
-
-var cater = m["cater"];
-var reverser = m["reverser"];
-var caterclient = m["cater-client"];
-var caterreverserclient = m["cater-reverser-client"];
-
 m["Σ"]["fst"] = function (y0) {
   return function (y1) {
   return function (x0) {
@@ -133,7 +113,7 @@ m["String▹List"] = function (x) {
 }
 
 m["List▹String"] = function (x) {
-  return fromList(x).join("")
+  return fromList(x,id).join("")
 }
 
 var fresh_port = 20000; // we hope is fresh
@@ -333,52 +313,6 @@ function client(clientInit,cb){
   go(clientInit)
 }
 
-m["client"] = function(proc) { return function(cb) { return function() { client(proc, cb) } } };
-
-/*
-console.log("server(cater):");
-server("127.0.0.1", 1337, cater);
-console.log("client(caterclient):");
-client(caterclient(undefined)("http://127.0.0.1:1337/")("Hello ")("World!"),function() { });
-client(caterclient(undefined)("http://127.0.0.1:1337/")("Bonjour ")("monde!"),function() { });
-console.log("server(reverser):");
-server("127.0.0.1", 1338, reverser);
-console.log("client(caterreverserclient):");
-client(caterreverserclient(undefined)("http://127.0.0.1:1337/")("http://127.0.0.1:1338/")("red"),function() { });
-*/
-
-/*
-server("127.0.0.1", 1341, m["str-sorter₁"](undefined)(undefined));
-console.log("str-sorter-client:");
-client(m["str-sorter-client"](undefined)("http://127.0.0.1:1341/")("Something to be sorted!"), function () {});
-*/
-
-// http://javascript.crockford.com/www_svendtofte_com/code/curried_javascript/index.html
-function curry(func,args,space) {
-    var n  = func.length - args.length; //arguments still to come
-    var sa = Array.prototype.slice.apply(args); // saved accumulator array
-    function accumulator(moreArgs,sa,n) {
-        var saPrev = sa.slice(0); // to reset
-        var nPrev  = n; // to reset
-        for(var i=0;i<moreArgs.length;i++,n--) {
-            sa[sa.length] = moreArgs[i];
-        }
-        if ((n-moreArgs.length)<=0) {
-            var res = func.apply(space,sa);
-            // reset vars, so curried function can be applied to new params.
-            sa = saPrev;
-            n  = nPrev;
-            return res;
-        } else {
-            return function (){
-                // arguments are params, so closure bussiness is avoided.
-                return accumulator(arguments,sa.slice(0),n);
-            }
-        }
-    }
-    return accumulator([],sa,n);
-}
-
 function runJSCmd(c) {
   c({"server": function(ip, port, proc, cb) {
                  server(ip, port, proc, function(http_server, uri) {
@@ -391,30 +325,4 @@ function runJSCmd(c) {
     })
 }
 
-runJSCmd(m["main"](tt));
-/*
-server("127.0.0.1", 1342, m["str-sorter₂"](undefined)(undefined), function () {
-
-console.log("str-sorter-client:");
-client(m["str-sorter-client"](undefined)("http://127.0.0.1:1342/")("Something to be sorted!"), function () {
-
-});
-
-});
-*/
-
-//setTimeout(function() { console.log("timeout") }, (3 * 1000));
-
-/*
-console.log("3+4: " + fromNat(plus(nat(3))(nat(4))));
-console.log("cater:");
-com("test",cater);
-console.log("caterclient:");
-com("test",caterclient);
-console.log("adder:");
-com(nat(42),adder);
-console.log("adderclient:");
-com(nat(42),adderclient);
-console.log("three: " + fromNat(m["three"](null)));
-//console.log("seven: " + fromNat(m["seven"](null)));
-*/
+runJSCmd(m["main"](tt))
