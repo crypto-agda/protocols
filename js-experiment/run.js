@@ -1,5 +1,5 @@
 var require = require("requirejs");
-var requestjs = require("request");
+var request = require("request");
 var http = require("http");
 var sha256 = require("crypto-js/sha256");
 var crypto = require("crypto");
@@ -30,23 +30,23 @@ function fromJSArray(a){
   return l
 }
 
-function fromList(l0,fromElt){
+function fromList(l0, fromElt){
   var a = [];
   var i = 0;
   function go(l) {
     l({"[]":  function() { }
-      ,"_∷_": function(x,xs) { a[i] = fromElt(x); i++; go(xs) } });
+      ,"_∷_": function(x, xs) { a[i] = fromElt(x); i++; go(xs) } });
   }
   go(l0);
   Object.freeze(a);
   return a
 }
 
-function objectFromList(l0,key,val) {
+function objectFromList(l0, key, val) {
   var o = {};
   function go(l) {
     l({"[]":  function() { }
-      ,"_∷_": function(x,xs) { o[key(x)] = val(x); go(xs) } });
+      ,"_∷_": function(x, xs) { o[key(x)] = val(x); go(xs) } });
   }
   go(l0);
   Object.freeze(o);
@@ -113,7 +113,7 @@ m["String▹List"] = function (x) {
 }
 
 m["List▹String"] = function (x) {
-  return fromList(x,id).join("")
+  return fromList(x, id).join("")
 }
 
 var fresh_port = 20000; // we hope is fresh
@@ -123,177 +123,169 @@ function next_port(){
 
 var localIP = "127.0.0.1";
 
-function q(x) {
-  return '"' + x + '"'
-}
-
-function uq(x) {
-  if (typeof(x) == "string") {
-    return x.substring(1, x.length - 1)
-  } else {
-    return x
-  }
-}
-
-function post(tokens,dest,query,cb) {
+function post(tokens, dest, query, cb) {
   var h = {};
   var token = tokens[dest];
-  if (token) { h["x-token"] = token };
-  if (query) { h["x-query"] = q(query) };
-  requestjs.post({"uri": dest, "headers": h}, function (error, response, body) {
+  if (token) { h.token = token };
+  if (query) { h.query = query };
+  request.post({uri: dest, json: h}, function (error, response, body) {
     if (error) { throw error };
     if (response.statusCode == 200) {
-      tokens[dest] = response.headers["x-token"];
-      cb(uq(response.headers["x-response"]))
+      tokens[dest] = body.token;
+      cb(body.response)
     } else {
-      throw ("Unexpected status code: " + response.statusCode + ". Body: " + response.body)
+      throw ("Unexpected status code: " + response.statusCode + ". Body: " + body)
     }
   })
-  /*
-  host, port, path ... dest
-  http.request({"method": "post", "uri": dest, "headers": h}, function (response) {
-    if (response.statusCode == 200) {
-      tokens[dest] = response.headers["x-token"];
-      cb(uq(response.headers["x-response"]))
-    } else {
-      response.setEncoding('utf8');
-      response.on('data', function (chunk) {
-        console.log('BODY: ' + chunk);
-      });
-      throw ("Unexpected status code: " + response.statusCode)
-    }
-  })
-  */
 }
 
 // server : (ip port : String)(proc : Proc String String)
 //          (callback : HTTPServer → (uri : String) → JSCmd) → JSCmd
-function server(ip,port,initServer,callback){
-  var sessions = {};
-  var fresh_session = 0;
+function server(ip, port, initServer, callback){
+
+  var server_tokens = {};
+  var client_tokens = {};
+  var server_token_num = 0;
   var seed = crypto.randomBytes(32);
   console.log(seed);
   var uri = "http://" + ip + ":" + port + "/";
-  var clientTokens = {};
-  function new_session(o){
-    // TODO atomic
-    var session_num = fresh_session;
-    fresh_session += 1;
-    var token = sha256(seed + ":" + session_num);
-    sessions[token] = o;
+
+  function new_token(o){
+    var token = sha256(seed + ":" + server_token_num++).toString();
+    server_tokens[token] = o;
     o.token = token;
     // TODO timestamp/expiration
     // setTimeout(cb, ms)
     return token
   }
-  function handle_request(req,res) {
-    var query = uq(req.headers["x-query"]);
-    function err(code,msg){
+
+  function handle_request(req, res) {
+
+    function err(code, msg){
       res.writeHead(code);
       res.end(msg)
     }
+
     function ok(msg){
-      if (msg) {
-        res.writeHead(200,
-            {"Content-Length": msg.length
-            ,"Content-Type":   "text/plain"});
-        res.end(msg)
-      } else {
-        res.writeHead(200);
-        res.end()
-      }
+      var s = JSON.stringify(msg);
+      res.writeHead(200,
+          {"content-length": s.length
+          ,"content-type":   "application/json"});
+      res.end(s)
     }
-    function input(d,k){
+
+    var body = "";
+    var query = null;
+
+    function input(d, k){
       if (typeof(d) == "string") {
-        console.log("server [" + uri + "] d=" + d + " query=" + q(query));
         if (query) {
-          err(400, "x-query present and typeof(d) == string")
+          err(400, "query present and typeof(d) == string")
         } else {
-          post(clientTokens, d, null, function (resp) {
+          console.log("[" + uri + "] server needs a query from dest: " + d);
+          post(client_tokens, d, null, function (resp) {
             go(k(resp))
           })
         }
       } else {
         if (query) {
-          console.log("server [" + uri + "] receives: " + q(query));
-          res.setHeader("x-token", new_session({"callback": k(query)}));
-          ok()
+          console.log("[" + uri + "] server receives: " + JSON.stringify(query));
+          ok({token: new_token({callback: k(query)})})
         } else {
-          err(400, "[server wants to 'input'] x-query expected")
+          err(400, "server wants to receive: a query field was expected")
         }
       }
     }
-    function output(d,msg,k){
+
+    function output(d, msg, k){
       if (query) {
-        err(400, "[server wants to 'output'] No x-query expected")
+        err(400, "server wants to send: no query field was expected")
       } else if (typeof(d) == "string") {
-        console.log("server [" + uri + "] sends: " + q(msg) + " to: " + d);
-        post(clientTokens,d,msg,function (resp) {
+        console.log("[" + uri + "] server sends: " + JSON.stringify(msg) + " to: " + d);
+        post(client_tokens, d, msg, function (resp) {
           go(k)
         })
       } else {
-        console.log("server [" + uri + "] sends: " + q(msg));
-        res.setHeader("x-token", new_session({"callback": k}));
-        res.setHeader("x-response", q(msg));
-        ok()
+        console.log("[" + uri + "] server sends: " + JSON.stringify(msg));
+        ok({token: new_token({callback: k}), response: msg})
       }
     }
+
     function start(proc, k) {
-      console.log("client start a new process");
+      console.log("[" + uri + "] server starts a new process");
       // TODO deallocate servers
       var newPort = next_port();
       server(localIP, newPort, proc, function (http_server, newURI) {
         go(k(newURI))
       })
     }
+
     function end() {
       err(400, "server already ended the protocol")
     }
+
     function error(msg) {
       err(400, msg)
     }
+
     function go(s) {
       s({"input": input, "output": output, "start": start, "end": end, "error": error})
     }
+
     if (req.method === "POST") {
-      var req_token = req.headers["x-token"];
-      if (!req_token) { // no token, initialize
-        go(initServer)
-      } else { // token present in request
-        var session = sessions[req_token];
-        if (session) { // valid token
-          go(session.callback)
+
+      req.on('data', function (chunk) { body += chunk });
+
+      req.on('end', function () {
+        body  = JSON.parse(body);
+
+        if (body) {
+          query = body.query;
+
+          if (!body.token) { // no token, initialize
+            go(initServer)
+          } else { // token present in request
+            var session = server_tokens[body.token];
+            if (session) { // valid token
+              go(session.callback)
+            } else {
+              err(404, "invalid token")
+            }
+          }
         } else {
-          err(404, "invalid token")
+          err(400, "invalid JSON body")
         }
-      }
+      })
+
     } else {
       err(404, "not a POST")
     }
+
   }
+
   var http_server = http.createServer(handle_request);
   http_server.listen(port, ip);
-  console.log("Server running at " + uri);
+  console.log("[" + uri + "] server running");
   callback(http_server, uri)
 }
 
 // client : Proc String String → JSCmd → JSCmd
-function client(clientInit,cb){
+function client(clientInit, cb){
   var tokens = {};
-  function input(dest,k) {
-    post(tokens,dest,null, function (resp) {
+  function input(dest, k) {
+    post(tokens, dest, null, function (resp) {
       console.log("client receives: " + resp + " from: " + dest);
       go(k(resp))
     })
   }
-  function output(dest,query,k) {
+  function output(dest, query, k) {
     console.log("client sends: " + query + " to: " + dest);
-    post(tokens,dest,query, function (resp) {
+    post(tokens, dest, query, function (resp) {
       go(k)
     })
   }
   function start(proc, k) {
-    console.log("client start a new process");
+    console.log("client starts a new process");
     // TODO deallocate servers
     var newPort = next_port();
     server(localIP, newPort, proc, function (http_server, newURI) {
