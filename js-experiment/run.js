@@ -83,7 +83,7 @@ function nat(n){
   }
 }
 function fromNat(n){
-  if (typeof(n) == "number") {
+  if (typeof(n) === "number") {
     return n;
   } else {
     return n({"zero": function()  { return 0; }
@@ -130,7 +130,7 @@ function post(tokens, dest, query, cb) {
   if (query) { h.query = query };
   request.post({uri: dest, json: h}, function (error, response, body) {
     if (error) { throw error };
-    if (response.statusCode == 200) {
+    if (response.statusCode === 200) {
       tokens[dest] = body.token;
       cb(body.response)
     } else {
@@ -178,9 +178,9 @@ function server(ip, port, initServer, callback){
     var query = null;
 
     function input(d, k){
-      if (typeof(d) == "string") {
+      if (typeof(d) === "string") {
         if (query) {
-          err(400, "query present and typeof(d) == string")
+          err(400, "query present and typeof(d) is string")
         } else {
           console.log("[" + uri + "] server needs a query from dest: " + d);
           post(client_tokens, d, null, function (resp) {
@@ -200,7 +200,7 @@ function server(ip, port, initServer, callback){
     function output(d, msg, k){
       if (query) {
         err(400, "server wants to send: no query field was expected")
-      } else if (typeof(d) == "string") {
+      } else if (typeof(d) === "string") {
         console.log("[" + uri + "] server sends: " + JSON.stringify(msg) + " to: " + d);
         post(client_tokens, d, msg, function (resp) {
           go(k)
