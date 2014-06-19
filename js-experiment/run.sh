@@ -1,3 +1,2 @@
 agda --js runningtest.agda
-
-node run.js
+coffee -b run.coffee
