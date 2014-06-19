@@ -38,11 +38,15 @@ postulate
 {-# COMPILED_JS sort      function(x) { return x.split("").sort().join(""); }    #-}
 {-# COMPILED_JS take-half function(x) { return x.substring(0,x.length/2); }      #-}
 {-# COMPILED_JS drop-half function(x) { return x.substring(x.length/2); }        #-}
-{-# COMPILED_JS _≤Char_   function(x) { return function(y) { return exports["fromJSBool"](x <= y); }; } #-}
+{-# COMPILED_JS List▹String require("libagda").listToString #-}
+{-# COMPILED_JS String▹List require("libagda").stringToList #-}
+{-# COMPILED_JS _≤Char_   function(x) { return function(y) { return require("libagda").fromJSBool(x <= y); }; } #-}
 {-# COMPILED_JS JSON-stringify function(x) { return JSON.stringify(x); } #-}
 {-# COMPILED_JS fromString function(x) { return x; } #-}
 {-# COMPILED_JS fromNumber function(x) { return x; } #-}
 {-# COMPILED_JS nullJS     null #-}
+{-# COMPILED_JS onString   require("libagda").onString #-}
+{-# COMPILED_JS onString2  require("libagda").onString2 #-}
 
 data Value : Set₀ where
   array  : List Value → Value
@@ -54,3 +58,5 @@ data Value : Set₀ where
 
 postulate
     fromValue : Value → JSValue
+
+{-# COMPILED_JS fromValue require("libagda").fromValue #-}

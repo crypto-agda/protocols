@@ -3,88 +3,14 @@ request = require "request"
 http    = require "http"
 sha256  = require "crypto-js/sha256"
 crypto  = require "crypto"
-m       = require "jAgda.runningtest.js"
-
-id = (x) -> x
-
-nil  = m["List"]["[]"]
-cons = m["List"]["_∷_"]
-tt   = m["𝟙"]["record"]
-
-fromJSBool = (b) -> m["Bool"][if b then "true" else "false"]
-
-fromBool = (b) ->
-  b
-    "true":  () -> true
-    "false": () -> false
-
-fromJSArray = (a) ->
-  len = a.length
-  l = nil
-  Object.freeze l
-  i = len - 1
-  while i >= 0
-    l = cons(a[i])(l)
-    Object.freeze l
-    i--
-  l
-
-fromList = (l0, fromElt) ->
-  a = []
-  i = 0
-  go = (l) ->
-    l
-      "[]":  () -> { }
-      "_∷_": (x, xs) ->
-                a[i] = fromElt x
-                i++
-                go xs
-  go l0
-  Object.freeze a
-  a
-
-objectFromList = (l0, key, val) ->
-  o = {}
-  go = (l) ->
-    l
-      "[]":  () -> { }
-      "_∷_": (x, xs) ->
-              o[key x] = val x
-              go xs
-  go l0
-  Object.freeze o
-  o
-
-fromValue = (v) ->
-  v
-    "array":  (l) -> fromList l, fromValue
-    "object": (l) -> objectFromList l, ((x) -> x["fst"]), ((x) -> fromValue x["snd"])
-    "string": id
-    "number": id
-    "bool":   fromBool
-    "null":   () -> null
-
-onString = (f) -> (x) ->
-  if typeof x is "string"
-    f x
-  else
-    throw "onString(): not a string"
-
-onString2 = (f) -> (x) -> (y) ->
-  if typeof x is "string" and typeof y is "string"
-    f(x)(y)
-  else
-    throw "onString(): not a string"
-
-m["fromJSBool"] = fromJSBool;
-m["fromValue"] = fromValue;
-m["onString"] = onString;
-m["onString2"] = onString2;
+libagda = require "libagda"
+#prelude = require "jAgda.prelude.js"
+#libjs   = require "jAgda.libjs.js"
 
 ###
-var zero = m["ℕ"]["zero"];
-var suc  = m["ℕ"]["suc"];
-var plus = m["_+_"];
+var zero = prelude["ℕ"]["zero"];
+var suc  = prelude["ℕ"]["suc"];
+var plus = prelude["_+_"];
 function nat(n){
   if (n > 0) {
     return suc(nat(n - 1));
@@ -102,14 +28,7 @@ function fromNat(n){
 }
 ###
 
-m["Σ"]["fst"] = (x) -> (y) -> (z) -> z.fst
-m["Σ"]["snd"] = (x) -> (y) -> (z) -> z.snd
-
-m["String▹List"] = (x) -> fromJSArray (x.split "")
-
-m["List▹String"] = (x) -> (fromList x, id).join("")
-
-fresh_port = 20000; # we hope is fresh
+fresh_port = 20000 # we hope is fresh
 next_port = () -> ++fresh_port
 
 localIP = "127.0.0.1"
@@ -164,9 +83,9 @@ server = (ip, port, init_server, callback) ->
     query = null
 
     input = (d, k) ->
-      if typeof d is "string"
+      if d isnt ""
         if query
-          err 400, "query present and typeof(d) is string"
+          err 400, "query present but destination URI is not"
         else
           console.log ("[" + uri + "] server needs a query from dest: " + d)
           post client_tokens, d, null, (resp) ->
@@ -182,7 +101,7 @@ server = (ip, port, init_server, callback) ->
     output = (d, msg, k) ->
       if query
         err 400, "server wants to send: no query field was expected"
-      else if  typeof d is "string"
+      else if d isnt ""
         console.log ("[" + uri + "] server sends: " + JSON.stringify(msg) + " to: " + d)
         post client_tokens, d, msg, (resp) -> go k
       else
@@ -287,4 +206,4 @@ runJSCmd = (c) ->
     end:         () -> { }
     console_log: (s, cb) -> console.log s; runJSCmd cb
 
-runJSCmd (m.main tt)
+runJSCmd ((require "jAgda.runningtest.js").main libagda.tt)
