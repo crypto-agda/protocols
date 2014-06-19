@@ -64,10 +64,20 @@ function fromValue(v) {
            })
 }
 
+function onString(f) { return function(x) { if (typeof(x) === "string") { return f(x); } else { throw "onString(): not a string"; }; }; }
+function onString2(f) { return function(x) { return function(y) {
+    if (typeof(x) === "string" && typeof(y) === "string") {
+        return f(x)(y)
+    } else {
+        throw "onString(): not a string";
+    }; }; } }
+
 m["fromJSBool"] = fromJSBool;
 // m["fromJSArray"] = fromJSArray;
 // m["fromList"] = fromList;
 m["fromValue"] = fromValue;
+m["onString"] = onString;
+m["onString2"] = onString2;
 //m["JSON-stringify"] = JSON.stringify;
 //m["console-log"] = function(s) { return function(k) { return function() { console.log(s); k() } } }
 
@@ -274,12 +284,12 @@ function client(clientInit, cb){
   var tokens = {};
   function input(dest, k) {
     post(tokens, dest, null, function (resp) {
-      console.log("client receives: " + resp + " from: " + dest);
+      console.log("client receives: " + JSON.stringify(resp) + " from: " + dest);
       go(k(resp))
     })
   }
   function output(dest, query, k) {
-    console.log("client sends: " + query + " to: " + dest);
+    console.log("client sends: " + JSON.stringify(query) + " to: " + dest);
     post(tokens, dest, query, function (resp) {
       go(k)
     })
