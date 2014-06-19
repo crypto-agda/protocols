@@ -15,6 +15,7 @@ data 𝟘 : Set where
 _≢_ : {A : Set}(x y : A) → Set₀
 x ≢ y = x ≡ y → 𝟘
 
+infixl 5 _,_↦_
 data Env : Set₁ where
   ε : Env
   _,_↦_ : Env → URI → Proto → Env
@@ -67,12 +68,10 @@ data _⊢_ (Δ : Env) : JSProc → Set₁ where
         → --------------------
            Δ ⊢ input d p
 
-           {-
   start : ∀ {s p} P
-        → [ clientURI ↦ P ] ⊢ {!!}
+        → [ clientURI ↦ P ] ⊢ s → (∀ d → (Δ , d ↦ dual P) ⊢ p d)
         → -------------------
           Δ ⊢ start s p
-          -}
 
 toProcWT : ∀ {d} P → (p : ⟦ P ⟧) → [ d ↦ dual P ] ⊢ toProc d P p
 toProcWT end p = end
