@@ -69,10 +69,10 @@ infixr 5 _++_
 postulate
     Char        : Set
     String      : Set
-    Integer     : Set
-    zero        : Integer
-    one         : Integer
-    _+_         : Integer → Integer → Integer
+    Number      : Set
+    zero        : Number
+    one         : Number
+    _+_         : Number  → Number  → Number
     _++_        : String → String → String
     reverse     : String → String
     sort        : String → String
@@ -82,6 +82,17 @@ postulate
     List▹String : List Char → String
     _≤Char_     : Char → Char → Bool
 
+    JSValue : Set
+    _+JS_       : JSValue → JSValue → JSValue
+    JSON-stringify : JSValue → String
+    fromString : String → JSValue
+    fromNumber : Number → JSValue
+    -- fromBool   : Bool → JSValue
+    nullJS     : JSValue
+    -- JSON-parse :
+    onString : (String → String) → JSValue → JSValue
+    onString2 : (String → String → String) → JSValue → JSValue → JSValue
+
 {-# BUILTIN STRING String #-}
 {-# BUILTIN CHAR   Char #-}
 
@@ -89,26 +100,27 @@ postulate
 {-# COMPILED_JS one       1 #-}
 {-# COMPILED_JS _+_       function(x) { return function(y) { return x + y; }; }  #-}
 {-# COMPILED_JS _++_      function(x) { return function(y) { return x + y; }; }  #-}
+{-# COMPILED_JS _+JS_     function(x) { return function(y) { return x + y; }; }  #-}
 {-# COMPILED_JS reverse   function(x) { return x.split("").reverse().join(""); } #-}
 {-# COMPILED_JS sort      function(x) { return x.split("").sort().join(""); }    #-}
 {-# COMPILED_JS take-half function(x) { return x.substring(0,x.length/2); }      #-}
 {-# COMPILED_JS drop-half function(x) { return x.substring(x.length/2); }        #-}
 {-# COMPILED_JS _≤Char_   function(x) { return function(y) { return exports["fromJSBool"](x <= y); }; } #-}
+{-# COMPILED_JS JSON-stringify function(x) { return JSON.stringify(x); } #-}
+{-# COMPILED_JS fromString function(x) { return x; } #-}
+{-# COMPILED_JS fromNumber function(x) { return x; } #-}
+{-# COMPILED_JS nullJS     null #-}
 
 data Value : Set₀ where
   array  : List Value → Value
   object : List (String × Value) → Value
   string : String → Value
-  number : Integer → Value
+  number : Number  → Value
   bool   : Bool → Value
   null   : Value
 
 postulate
-    JSValue : Set
-    JSON-stringify : JSValue → String
     fromValue : Value → JSValue
-    -- JSON-parse :
-{-# COMPILED_JS JSON-stringify function(x) { return JSON.stringify(x); } #-}
 
 test-value = object (("array"  , array (array [] ∷ array (array [] ∷ []) ∷ [])) ∷
                      ("object" , array (object [] ∷ object (("a", string "b") ∷ []) ∷ [])) ∷
@@ -324,59 +336,65 @@ module _ {D} (dP dQ : D) where
     toProc-⅋ (send P) (send Q) (inr x , r) = output dQ (serialize x) (toProc-⅋ (send P) (Q x) r)
 -}
 
-reverser : Proc 𝟙 String
-reverser = input _ λ s → output _ (reverse s) end
+reverser : Proc 𝟙 JSValue
+reverser = input _ λ s → output _ (onString reverse s) end
 
-cater : Proc 𝟙 String
-cater = input _ λ s₀ → input _ λ s₁ → output _ (s₀ ++ s₁) end
+adder : Proc 𝟙 JSValue
+adder = input _ λ s₀ → input _ λ s₁ → output _ (s₀ +JS s₁) end
 
-cater-client : ∀ {D} → D → String → String → Proc D String
-cater-client d s₀ s₁ = output d s₀ (output d s₁ (input d λ _ → end))
+adder-client : ∀ {D} → D → JSValue → JSValue → Proc D JSValue
+adder-client d s₀ s₁ = output d s₀ (output d s₁ (input d λ _ → end))
 
-cater-reverser-client : ∀ {D} → D → D → String → Proc D String
-cater-reverser-client cater-addr reverser-addr s =
+adder-reverser-client : ∀ {D} → D → D → JSValue → Proc D JSValue
+adder-reverser-client adder-addr reverser-addr s =
   output reverser-addr s $
-  output cater-addr s $
+  output adder-addr s $
   input reverser-addr λ rs →
-  output cater-addr rs $
-  input cater-addr λ res →
+  output adder-addr rs $
+  input adder-addr λ res →
   end
 
-str-sorter₀ : ∀ {D} → D → Proc D String
-str-sorter₀ d = input d λ s → output d (sort s) end
+str-sorter₀ : ∀ {D} → D → Proc D JSValue
+str-sorter₀ d = input d λ s → output d (onString sort s) end
 
-str-sorter-client : ∀ {D} → D → String → Proc D String
+str-sorter-client : ∀ {D} → D → JSValue → Proc D JSValue
 str-sorter-client d s = output d s $ input d λ _ → end
 
-str-merger : ∀ {D} (upstream helper₀ helper₁ : D) → Proc D String
+str-merger : ∀ {D} (upstream helper₀ helper₁ : D) → Proc D JSValue
 str-merger upstream helper₀ helper₁ =
   input upstream λ s →
-  output helper₀ (take-half s) $
-  output helper₁ (drop-half s) $
+  output helper₀ (onString take-half s) $
+  output helper₁ (onString drop-half s) $
   input helper₀ λ ss₀ →
   input helper₁ λ ss₁ →
-  output upstream (merge-sort ss₀ ss₁)
+  output upstream (onString2 merge-sort ss₀ ss₁)
   end
 
-dyn-merger : ∀ {D} → D → Proc 𝟙 String → Proc D String
+dyn-merger : ∀ {D} → D → Proc 𝟙 JSValue → Proc D JSValue
 dyn-merger upstream helper =
   start helper λ helper₀ →
   start helper λ helper₁ →
   str-merger upstream helper₀ helper₁
 
-str-sorter₁ : ∀ {D} → D → Proc D String
+str-sorter₁ : ∀ {D} → D → Proc D JSValue
 str-sorter₁ upstream = dyn-merger upstream (str-sorter₀ _)
 
-str-sorter₂ : ∀ {D} → D → Proc D String
+str-sorter₂ : ∀ {D} → D → Proc D JSValue
 str-sorter₂ upstream = dyn-merger upstream (str-sorter₁ _)
+
+stringifier : Proc 𝟙 JSValue
+stringifier = input _ λ v → output _ (fromString (JSON-stringify v)) end
+
+stringifier-client : ∀ {D} → D → JSValue → Proc D JSValue
+stringifier-client d v = output d v $ input d λ _ → end
 
 postulate
   HTTPServer : Set
 
 data JSCmd : Set where
-  server : (ip port : String)(proc : Proc 𝟙 String)
+  server : (ip port : String)(proc : Proc 𝟙 JSValue)
            (callback : HTTPServer → (uri : String) → JSCmd) → JSCmd
-  client : Proc String String → JSCmd → JSCmd
+  client : Proc String JSValue → JSCmd → JSCmd
   end : JSCmd
   console-log : String → JSCmd → JSCmd
 
@@ -384,19 +402,22 @@ main : 𝟙 → JSCmd
 main _ =
   console-log (JSON-stringify (fromValue test-value)) $
 
-  console-log "server(cater):" $
-  server "127.0.0.1" "1337" cater λ _ cater-uri →
-  console-log "client(caterclient):" $
-  client (cater-client cater-uri "Hello " "World!") $
-  client (cater-client cater-uri "Bonjour " "monde!") $
+  console-log "server(adder):" $
+  server "127.0.0.1" "1337" adder λ _ adder-uri →
+  console-log "client(adderclient):" $
+  client (adder-client adder-uri (fromString "Hello ") (fromString "World!")) $
+  client (adder-client adder-uri (fromString "Bonjour ") (fromString "monde!")) $
   console-log "server(reverser):" $
   server "127.0.0.1" "1338" reverser λ _ reverser-uri →
-  console-log "client(cater-reverser-client):" $
-  client (cater-reverser-client cater-uri reverser-uri "red") $
+  console-log "client(adder-reverser-client):" $
+  client (adder-reverser-client adder-uri reverser-uri (fromString "red")) $
 
-  server "127.0.0.1" "1342" (str-sorter₂ _) λ http_server uri →
+  server "127.0.0.1" "1342" (str-sorter₂ _) λ http_server str-sorter₂-uri →
   console-log "str-sorter-client:" $
-  client (str-sorter-client "http://127.0.0.1:1342/" "Something to be sorted!")
+  client (str-sorter-client str-sorter₂-uri (fromString "Something to be sorted!")) $
+
+  server "127.0.0.1" "1343" stringifier λ _ stringifier-uri →
+  client (stringifier-client stringifier-uri (fromValue test-value)) $
   end
 -- -}
 -- -}
