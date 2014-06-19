@@ -3,7 +3,7 @@ open import runningtest
 module Types
   (D : Set₀) where -- (M : Set₀){{M≃S : M ≃? String}} where
 
-SERIAL = String
+SERIAL = JSValue
 
 SER : Set → Set
 SER M = M ≃? SERIAL

@@ -170,7 +170,7 @@ open _≃?_ {{...}}
 
 data Proto : Set₁ where
   end : Proto
-  send recv : {M : Set} {{M≃S : M ≃? String}} (P : M → Proto) → Proto
+  send recv : {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
 
 dual : Proto → Proto
 dual end      = end
@@ -293,12 +293,12 @@ module _ {A B : Set} (f : Prism' A B) where
   mapProc (error err) = error err
 
 module _ {D : Set} d where
-    toProc : (P : Proto) → ⟦ P ⟧ → Proc D String
+    toProc : (P : Proto) → ⟦ P ⟧ → Proc D JSValue
     toProc end      _       = end
     toProc (send P) (m , p) = output d (serialize m) (toProc (P m) p)
     toProc (recv P) p       = input d λ s → [succeed: (λ m → toProc (P m) (p m)) ,fail: error ] (parse s)
 
-toProcLog : (P : Proto) → ⟦ log P ⟧ → List String
+toProcLog : (P : Proto) → ⟦ log P ⟧ → List JSValue
 toProcLog end      _       = []
 toProcLog (send P) (m , p) = serialize m ∷ toProcLog (P m) p
 toProcLog (recv P) (m , p) = serialize m ∷ toProcLog (P m) p
