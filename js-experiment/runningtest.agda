@@ -284,10 +284,7 @@ module _ {D : Set} d where
     toProc : (P : Proto) → ⟦ P ⟧ → Proc D String
     toProc end      _       = end
     toProc (send P) (m , p) = output d (serialize m) (toProc (P m) p)
-    toProc (recv P) p       = input d λ s → f (parse s)
-      where f : Error _ → Proc D String
-            f (succeed m) = toProc (P m) (p m)
-            f (fail err)  = error err
+    toProc (recv P) p       = input d λ s → [succeed: (λ m → toProc (P m) (p m)) ,fail: error ] (parse s)
 
 toProcLog : (P : Proto) → ⟦ log P ⟧ → List String
 toProcLog end      _       = []

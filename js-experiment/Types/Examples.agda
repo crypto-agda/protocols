@@ -1,5 +1,5 @@
 open import runningtest
-open import Types String String
+open import Types String
 
 
 module Types.Examples (d : String) where
@@ -14,7 +14,8 @@ module Types.Examples (d : String) where
                 end
 
   Δ : Env
-  Δ = ε , d ↦ cater-Proto
+  Δ = [ d ↦ cater-Proto ]
 
-  prf : ∀ {s₀ s₁} → Δ ⊢ᶜ (cater-client d s₀ s₁)
-  prf = output here here (output here here (input here (λ m p → end)))
+  prf : ∀ {s₀ s₁} → Δ ⊢ (cater-client d s₀ s₁)
+  prf = output here (output here (input here (λ m → end)))
+  -- (output here here (input here λ { m here → end ; m (there x ()) }))
