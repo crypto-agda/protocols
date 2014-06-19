@@ -1,14 +1,15 @@
-open import runningtest
+open import libjs
+open import proc
+open import proto
+open import prelude
 
-module Types
-  (D : Set₀) where -- (M : Set₀){{M≃S : M ≃? String}} where
+module Types where
 
 SERIAL = JSValue
 
 SER : Set → Set
 SER M = M ≃? SERIAL
 
-open _≃?_ {{...}}
 data 𝟘 : Set where
 
 _≢_ : {A : Set}(x y : A) → Set₀
@@ -16,9 +17,9 @@ x ≢ y = x ≡ y → 𝟘
 
 data Env : Set₁ where
   ε : Env
-  _,_↦_ : Env → D → Proto → Env
+  _,_↦_ : Env → URI → Proto → Env
 
-[_↦_] : D → Proto → Env
+[_↦_] : URI → Proto → Env
 [ d ↦ P ] = ε , d ↦ P
 
 data Com : Set where send recv : Com
@@ -27,7 +28,7 @@ com : {M : Set}{{_ : M ≃? SERIAL}} → Com → (M → Proto) → Proto
 com send P = send P
 com recv P = recv P
 
-data _↦_is_∈_ (d : D){M : Set}{{_ : M ≃? SERIAL}}(c : Com)(P : M → Proto) : Env → Set₁ where
+data _↦_is_∈_ (d : URI){M : Set}{{_ : M ≃? SERIAL}}(c : Com)(P : M → Proto) : Env → Set₁ where
   here : ∀ {Δ} → d ↦ c is P ∈ (Δ , d ↦ com c P)
   there : ∀ {Δ d' P'} → d ≢ d' → d ↦ c is P ∈ Δ
                       → d ↦ c is P ∈ (Δ , d' ↦ P')
@@ -37,7 +38,7 @@ module _ {d c M}{{_ : M ≃? SERIAL}} {P} where
   ._ [ here {Δ} ≔ m ] = Δ , d ↦ P m
   ._ [ there {d' = d'}{P'} x₁ var ≔ m ] = _ [ var ≔ m ] , d' ↦ P'
 
-AllEnv : (P : D → Proto → Set) → Env → Set
+AllEnv : (P : URI → Proto → Set) → Env → Set
 AllEnv P ε = 𝟙
 AllEnv P (Δ , d ↦ p) = AllEnv P Δ × P d p
 
@@ -50,7 +51,7 @@ module _ {M : Set}{{_ : SER M}} where
   _parsesTo_ : SERIAL → M → Set
   s parsesTo m = succeed m ≡ parse s
 
-data _⊢_ (Δ : Env) : Proc D SERIAL → Set₁ where
+data _⊢_ (Δ : Env) : JSProc → Set₁ where
 
   end : {_ : AllEnv (λ _ p → Ended p) Δ}
      → --------------
@@ -65,6 +66,19 @@ data _⊢_ (Δ : Env) : Proc D SERIAL → Set₁ where
         → (l : d ↦ send is P ∈ Δ) → (∀ s m → s parsesTo m → Δ [ l ≔ m ] ⊢ p s)
         → --------------------
            Δ ⊢ input d p
+
+           {-
+  start : ∀ {s p} P
+        → [ clientURI ↦ P ] ⊢ {!!}
+        → -------------------
+          Δ ⊢ start s p
+          -}
+
+toProcWT : ∀ {d} P → (p : ⟦ P ⟧) → [ d ↦ dual P ] ⊢ toProc d P p
+toProcWT end p = end
+toProcWT (send P) (m , p) = output here (toProcWT (P m) p)
+toProcWT (recv P) p = input here λ { s m prf → subst (λ X → _ ⊢ [succeed: _ ,fail: _ ] X)
+                                                     prf (toProcWT (P m) (p m)) }
 
 
 -- -}
