@@ -46,12 +46,12 @@ define ["exports"], (libagda) ->
 
   fromValue = (v) ->
     v
-      "array":  (l) -> fromList l, fromValue
-      "object": (l) -> objectFromList l, ((x) -> x["fst"]), ((x) -> fromValue x["snd"])
-      "string": id
-      "number": id
-      "bool":   fromAgdaBool
-      "null":   () -> null
+      array:  (l) -> fromList l, fromValue
+      object: (l) -> objectFromList l, ((x) -> x.fst), ((x) -> fromValue x.snd)
+      string: id
+      number: id
+      bool:   fromAgdaBool
+      null:   () -> null
   libagda.fromValue = fromValue
 
   tt   = (x) -> x.record()
@@ -69,17 +69,8 @@ define ["exports"], (libagda) ->
     else
       throw "onString(): not a string"
 
-  libagda.onString2 = (f) -> (x) -> (y) ->
-    if typeof x is "string" and typeof y is "string"
-      f(x)(y)
-    else
-      throw "onString2(): not a string"
-
   fromJSArray = (a) -> foldrArray a, nil, cons
   libagda.fromJSArray = fromJSArray
-
-  libagda.stringToList = (x) -> fromJSArray (x.split "")
-  libagda.listToString = (x) -> (fromList x, id).join ""
 
   return libagda
 
@@ -89,13 +80,22 @@ define ["exports"], (libagda) ->
   prelude["Σ"]["fst"] = (x) -> (y) -> (z) -> z.fst
   prelude["Σ"]["snd"] = (x) -> (y) -> (z) -> z.snd
 
-
-  prelude_Bool =
-    true:  (x) -> x.true()
-    false: (x) -> x.false()
-
-  libjs["fromJSBool"] = fromJSBool
-  libjs["fromValue"] = fromValue
-  libjs["onString"] = onString
-  libjs["onString2"] = onString2
+var zero = prelude["ℕ"]["zero"];
+var suc  = prelude["ℕ"]["suc"];
+var plus = prelude["_+_"];
+function nat(n){
+  if (n > 0) {
+    return suc(nat(n - 1));
+  } else {
+    return zero;
+  }
+}
+function fromNat(n){
+  if (typeof(n) is "number") {
+    return n;
+  } else {
+    return n({"zero": function()  { return 0; }
+             ,"suc":  function(x) { return 1 + fromNat(x); } });
+  }
+}
 ###

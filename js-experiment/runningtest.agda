@@ -5,6 +5,7 @@ open import libjs
 open import proto
 open import proc
 
+test-value : Value
 test-value = object (("array"  , array (array [] ∷ array (array [] ∷ []) ∷ [])) ∷
                      ("object" , array (object [] ∷ object (("a", string "b") ∷ []) ∷ [])) ∷
                      ("string" , array (string "" ∷ string "a" ∷ [])) ∷
@@ -12,11 +13,17 @@ test-value = object (("array"  , array (array [] ∷ array (array [] ∷ []) ∷
                      ("bool"   , array (bool true ∷ bool false ∷ [])) ∷
                      ("null"   , array (null ∷ [])) ∷ [])
 
+test =
+    fromString (JSON-stringify (fromValue test-value))
+    ===
+    fromString "{\"array\":[[],[[]]],\"object\":[{},{\"a\":\"b\"}],\"string\":[\"\",\"a\"],\"number\":[0,1],\"bool\":[true,false],\"null\":[null]}"
+
+
 merge-sort-string : String → String → String
 merge-sort-string s₀ s₁ = List▹String (merge-sort-list _≤Char_ (String▹List s₀) (String▹List s₁))
 
 reverser : JSProc
-reverser = input … λ s → output … (onString reverse s) end
+reverser = input … λ s → output … (fromString (onString reverse s)) end
 
 adder : JSProc
 adder = input … λ s₀ → input … λ s₁ → output … (s₀ +JS s₁) end
@@ -35,7 +42,7 @@ module _ (adder-addr reverser-addr : URI)(s : JSValue) where
     end
 
 str-sorter₀ : URI → JSProc
-str-sorter₀ d = input d λ s → output d (onString sort s) end
+str-sorter₀ d = input d λ s → output d (fromString (onString sort s)) end
 
 str-sorter-client : ∀ {D} → D → JSValue → Proc D JSValue
 str-sorter-client d s = output d s $ input d λ _ → end
@@ -44,11 +51,11 @@ module _ (upstream helper₀ helper₁ : URI) where
   str-merger : JSProc
   str-merger =
     input upstream λ s →
-    output helper₀ (onString take-half s) $
-    output helper₁ (onString drop-half s) $
+    output helper₀ (fromString (onString take-half s)) $
+    output helper₁ (fromString (onString drop-half s)) $
     input helper₀ λ ss₀ →
     input helper₁ λ ss₁ →
-    output upstream (onString2 merge-sort-string ss₀ ss₁)
+    output upstream (fromString (onString (onString merge-sort-string ss₀) ss₁))
     end
 
 dyn-merger : URI → JSProc → JSProc
@@ -69,10 +76,9 @@ stringifier = input … λ v → output … (fromString (JSON-stringify v)) end
 stringifier-client : ∀ {D} → D → JSValue → Proc D JSValue
 stringifier-client d v = output d v $ input d λ _ → end
 
-main : 𝟙 → JSCmd
-main _ =
-  console_log (JSON-stringify (fromValue test-value)) $
-
+main : JSCmd
+main =
+  assert test $
   console_log "server(adder):" $
   server "127.0.0.1" "1337" adder λ _ adder-uri →
   console_log "client(adderclient):" $

@@ -99,4 +99,5 @@ data JSCmd : Set where
   client : JSProc → JSCmd → JSCmd
 
   end         : JSCmd
+  assert      : Bool → JSCmd → JSCmd
   console_log : String → JSCmd → JSCmd
