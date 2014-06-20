@@ -89,8 +89,9 @@ module _ {D} (dP dQ : D) where
     toProc-⅋ (send P) (send Q) (inr x , r) = output dQ (serialize x) (toProc-⅋ (send P) (Q x) r)
 -}
 
-postulate
+abstract
   HTTPServer : Set
+  HTTPServer = JSValue
 
 data JSCmd : Set where
   server : (ip port : String)(proc : JSProc)
@@ -98,4 +99,5 @@ data JSCmd : Set where
   client : JSProc → JSCmd → JSCmd
 
   end         : JSCmd
+  assert      : Bool → JSCmd → JSCmd
   console_log : String → JSCmd → JSCmd
