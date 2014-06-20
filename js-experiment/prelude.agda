@@ -79,6 +79,9 @@ data _≡_ {A : Set} (x : A) : A → Set where
 ap : {A B : Set} (f : A → B) {x y : A} (p : x ≡ y) → f x ≡ f y
 ap f refl = refl
 
+sym : {A : Set}{x y : A} → x ≡ y → y ≡ x
+sym refl = refl
+
 subst : {A : Set}(P : A → Set₁){x y : A} → x ≡ y → P x → P y
 subst P refl px = px
 

@@ -58,10 +58,10 @@ data _⊢_ (Δ : Env) : JSProc → Set₁ where
      → --------------
          Δ ⊢ end
 
-  output : ∀ {d M m p}{{_ : SER M}}{P : M → Proto}
-        → (l : d ↦ recv is P ∈ Δ) → Δ [ l ≔ m ] ⊢ p
+  output : ∀ {d M s m p}{{_ : SER M}}{P : M → Proto}
+        → (l : d ↦ recv is P ∈ Δ) → s parsesTo m → Δ [ l ≔ m ] ⊢ p
         → ------------------
-          Δ ⊢ output d (serialize m) p
+          Δ ⊢ output d s p
 
   input : ∀ {d p M}{{_ : SER M}}{P}
         → (l : d ↦ send is P ∈ Δ) → (∀ s m → s parsesTo m → Δ [ l ≔ m ] ⊢ p s)
@@ -75,7 +75,7 @@ data _⊢_ (Δ : Env) : JSProc → Set₁ where
 
 toProcWT : ∀ {d} P → (p : ⟦ P ⟧) → [ d ↦ dual P ] ⊢ toProc d P p
 toProcWT end p = end
-toProcWT (send P) (m , p) = output here (toProcWT (P m) p)
+toProcWT (send P) (m , p) = output here (sym (rinv m)) (toProcWT (P m) p)
 toProcWT (recv P) p = input here λ { s m prf → subst (λ X → _ ⊢ [succeed: _ ,fail: _ ] X)
                                                      prf (toProcWT (P m) (p m)) }
 
