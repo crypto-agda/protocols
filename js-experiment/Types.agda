@@ -31,13 +31,13 @@ com recv P = recv P
 
 data _↦_is_∈_ (d : URI){M : Set}{{_ : M ≃? SERIAL}}(c : Com)(P : M → Proto) : Env → Set₁ where
   here : ∀ {Δ} → d ↦ c is P ∈ (Δ , d ↦ com c P)
-  there : ∀ {Δ d' P'} → d ≢ d' → d ↦ c is P ∈ Δ
+  there : ∀ {Δ d' P'} → d ↦ c is P ∈ Δ
                       → d ↦ c is P ∈ (Δ , d' ↦ P')
 
 module _ {d c M}{{_ : M ≃? SERIAL}} {P} where
   _[_≔_] : (Δ : Env) → d ↦ c is P ∈ Δ → M → Env
   ._ [ here {Δ} ≔ m ] = Δ , d ↦ P m
-  ._ [ there {d' = d'}{P'} x₁ var ≔ m ] = _ [ var ≔ m ] , d' ↦ P'
+  ._ [ there {d' = d'}{P'} var ≔ m ] = _ [ var ≔ m ] , d' ↦ P'
 
 AllEnv : (P : URI → Proto → Set) → Env → Set
 AllEnv P ε = 𝟙
@@ -59,21 +59,21 @@ data _⊢_ (Δ : Env) : JSProc → Set₁ where
          Δ ⊢ end
 
   output : ∀ {d M s m p}{{_ : SER M}}{P : M → Proto}
-        → (l : d ↦ recv is P ∈ Δ) → s parsesTo m → Δ [ l ≔ m ] ⊢ p
+        → (l : d ↦ send is P ∈ Δ) → s parsesTo m → Δ [ l ≔ m ] ⊢ p
         → ------------------
           Δ ⊢ output d s p
 
   input : ∀ {d p M}{{_ : SER M}}{P}
-        → (l : d ↦ send is P ∈ Δ) → (∀ s m → s parsesTo m → Δ [ l ≔ m ] ⊢ p s)
+        → (l : d ↦ recv is P ∈ Δ) → (∀ s m → s parsesTo m → Δ [ l ≔ m ] ⊢ p s)
         → --------------------
            Δ ⊢ input d p
 
   start : ∀ {s p} P
-        → [ clientURI ↦ P ] ⊢ s → (∀ d → (Δ , d ↦ dual P) ⊢ p d)
+        → [ clientURI ↦ dual P ] ⊢ s → (∀ d → (Δ , d ↦ P) ⊢ p d)
         → -------------------
           Δ ⊢ start s p
 
-toProcWT : ∀ {d} P → (p : ⟦ P ⟧) → [ d ↦ dual P ] ⊢ toProc d P p
+toProcWT : ∀ {d} P → (p : ⟦ P ⟧) → [ d ↦ P ] ⊢ toProc d P p
 toProcWT end p = end
 toProcWT (send P) (m , p) = output here (sym (rinv m)) (toProcWT (P m) p)
 toProcWT (recv P) p = input here λ { s m prf → subst (λ X → _ ⊢ [succeed: _ ,fail: _ ] X)

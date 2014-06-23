@@ -9,16 +9,16 @@ module Terms where
 data ⊢_ (Δ : Env) : Set₁ where
   end : {_ : AllEnv (λ _ → Ended) Δ} → ⊢ Δ
   output : ∀ {d M P}{{_ : SER M}}
-         → (l : d ↦ recv is P ∈ Δ) → (m : M)
+         → (l : d ↦ send is P ∈ Δ) → (m : M)
          → ⊢ Δ [ l ≔ m ]
          → ⊢ Δ
   input : ∀ {d M P}{{_ : SER M}}
-    → (l : d ↦ send is P ∈ Δ)
+    → (l : d ↦ recv is P ∈ Δ)
     → (∀ m → ⊢ Δ [ l ≔ m ])
     → ⊢ Δ
   start : ∀ P
-        → ⊢ [ clientURI ↦ P ]
-        → (∀ d → ⊢ (Δ , d ↦ dual P))
+        → ⊢ [ clientURI ↦ dual P ]
+        → (∀ d → ⊢ (Δ , d ↦ P))
         → ⊢ Δ
 
 ⊢toProc : ∀ {Δ} → ⊢ Δ → JSProc
