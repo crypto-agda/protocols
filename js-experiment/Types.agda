@@ -18,24 +18,24 @@ x ≢ y = x ≡ y → 𝟘
 infixl 5 _,_↦_
 data Env : Set₁ where
   ε : Env
-  _,_↦_ : Env → URI → Proto → Env
+  _,_↦_ : (Δ : Env)(d : URI)(P : Proto) → Env
 
 [_↦_] : URI → Proto → Env
 [ d ↦ P ] = ε , d ↦ P
 
-data Com : Set where send recv : Com
+infixr 4 _+++_
+_+++_ : Env → Env → Env
+Δ +++ ε = Δ
+Δ +++ (Δ' , d ↦ P) = (Δ +++ Δ') , d ↦ P
 
-com : {M : Set}{{_ : M ≃? SERIAL}} → Com → (M → Proto) → Proto
-com send P = send P
-com recv P = recv P
 
-data _↦_is_∈_ (d : URI){M : Set}{{_ : M ≃? SERIAL}}(c : Com)(P : M → Proto) : Env → Set₁ where
-  here : ∀ {Δ} → d ↦ c is P ∈ (Δ , d ↦ com c P)
-  there : ∀ {Δ d' P'} → d ↦ c is P ∈ Δ
-                      → d ↦ c is P ∈ (Δ , d' ↦ P')
+data _↦_∈_ (d : URI)(P : Proto) : Env → Set₁ where
+  here : ∀ {Δ} → d ↦ P ∈ (Δ , d ↦ P)
+  there : ∀ {Δ d' P'} → d ↦ P ∈ Δ
+                      → d ↦ P ∈ (Δ , d' ↦ P')
 
 module _ {d c M}{{_ : M ≃? SERIAL}} {P} where
-  _[_≔_] : (Δ : Env) → d ↦ c is P ∈ Δ → M → Env
+  _[_≔_] : (Δ : Env) → d ↦ com c {M} P ∈ Δ → M → Env
   ._ [ here {Δ} ≔ m ] = Δ , d ↦ P m
   ._ [ there {d' = d'}{P'} var ≔ m ] = _ [ var ≔ m ] , d' ↦ P'
 
@@ -45,8 +45,7 @@ AllEnv P (Δ , d ↦ p) = AllEnv P Δ × P d p
 
 Ended : Proto → Set
 Ended end = 𝟙
-Ended (send P) = 𝟘
-Ended (recv P) = 𝟘
+Ended (com _ P) = 𝟘
 
 module _ {M : Set}{{_ : SER M}} where
   _parsesTo_ : SERIAL → M → Set
@@ -59,12 +58,12 @@ data _⊢_ (Δ : Env) : JSProc → Set₁ where
          Δ ⊢ end
 
   output : ∀ {d M s m p}{{_ : SER M}}{P : M → Proto}
-        → (l : d ↦ send is P ∈ Δ) → s parsesTo m → Δ [ l ≔ m ] ⊢ p
+        → (l : d ↦ send P ∈ Δ) → s parsesTo m → Δ [ l ≔ m ] ⊢ p
         → ------------------
           Δ ⊢ output d s p
 
-  input : ∀ {d p M}{{_ : SER M}}{P}
-        → (l : d ↦ recv is P ∈ Δ) → (∀ s m → s parsesTo m → Δ [ l ≔ m ] ⊢ p s)
+  input : ∀ {d p M}{{_ : SER M}}{P : M → Proto}
+        → (l : d ↦ recv P ∈ Δ) → (∀ s m → s parsesTo m → Δ [ l ≔ m ] ⊢ p s)
         → --------------------
            Δ ⊢ input d p
 

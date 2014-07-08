@@ -31,6 +31,7 @@ postulate
     fromString     : String → JSValue
     fromChar       : Char   → JSValue
     fromNumber     : Number → JSValue
+    objectFromList : {A : Set} → List (A) → (A → String) → (A → JSValue) → JSValue
     castNumber     : JSValue → Number
     castString     : JSValue → String
     nullJS         : JSValue
@@ -80,11 +81,28 @@ data Value : Set₀ where
 postulate
     fromValue : Value → JSValue
 
+data ValueView : Set₀ where
+  array  : List JSValue → ValueView
+  object : List (String × JSValue) → ValueView
+  string : String → ValueView
+  number : Number  → ValueView
+  bool   : Bool → ValueView
+  null   : ValueView
+
+
+postulate
+    fromJSValue : JSValue → ValueView
+
 {-# COMPILED_JS fromValue require("libagda").fromValue #-}
 
 fromBool : Bool → JSValue
 fromBool true  = trueJS
 fromBool false = falseJS
+
+Object = List (String × JSValue)
+
+fromObject : Object → JSValue
+fromObject o = objectFromList o fst snd
 
 _≤Char_ : Char → Char → Bool
 x ≤Char y = fromChar x ≤JS fromChar y

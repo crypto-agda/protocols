@@ -2,20 +2,62 @@ module _ where
 
 open import prelude
 open import libjs
+open import libjs.Properties
+
+module _ {A B} {{AS : A ≃? JSValue}}{{BS : B ≃? JSValue}}where
+
+  serial : A ⊎ B → JSValue
+  serial (inl a) = fromObject [ "inl" , serialize a ]
+  serial (inr b) = fromObject [ "inr" , serialize b ]
+
+  pars : JSValue → Error (A ⊎ B)
+  pars s with fromJSValue s
+  ... | object (("inl" , x) ∷ []) = mapE inl (parse x)
+  ... | object (("inr" , x) ∷ []) = mapE inr (parse x)
+  ... | _ = fail ""
+
+  postulate
+    linv' : (x : JSValue) → All (_≡_ x ∘ serial) (pars x)
+
+  rinv' : (x : A ⊎ B) → pars (serial x) ≡ succeed x
+  rinv' (inl a) rewrite tofromObject [ "inl" , serialize a ]
+                      | rinv a = refl
+  rinv' (inr b) rewrite tofromObject [ "inr" , serialize b ]
+                      | rinv b = refl
+
+  ⊎-≃? : (A ⊎ B) ≃? JSValue
+  ⊎-≃? = record { serialize = serial ; parse = pars ; linv = linv' ; rinv = rinv' }
+
+
+postulate
+  LR-Ser : LR ≃? JSValue
+
+data Com : Set where IN OUT : Com
 
 data Proto : Set₁ where
   end : Proto
-  send recv : {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
+  com : Com → {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
+
+pattern send P = com OUT P
+pattern recv P = com IN P
+
+
+mapProto : (Com → Com) → Proto → Proto
+mapProto f end = end
+mapProto f (com c P) = com (f c) (λ m → mapProto f (P m))
+
+dualC : Com → Com
+dualC IN = OUT
+dualC OUT = IN
 
 dual : Proto → Proto
-dual end      = end
-dual (send P) = recv λ m → dual (P m)
-dual (recv P) = send λ m → dual (P m)
+dual = mapProto dualC
+
+logC : Com → Com
+logC _ = OUT
 
 log : Proto → Proto
-log end      = end
-log (send P) = send λ m → log (P m)
-log (recv P) = send λ m → log (P m)
+log = mapProto logC
 
 ⟦_⟧ : Proto → Set
 ⟦ end ⟧ = 𝟙
@@ -27,15 +69,20 @@ log (recv P) = send λ m → log (P m)
 ⟦ send P ⟧D D = D × Σ _ λ m → ⟦ P m ⟧D D
 ⟦ recv P ⟧D D = D × ((m : _) → ⟦ P m ⟧D D)
 
-{-
 _⅋_ : Proto → Proto → Proto
 end    ⅋ Q      = Q
 recv P ⅋ Q      = recv λ m → P m ⅋ Q
 P      ⅋ end    = P
 P      ⅋ recv Q = recv λ m → P ⅋ Q m
-send P ⅋ send Q = send {{{!!}}} [inl: (λ m → P m ⅋ send Q)
-                                ,inr: (λ n → send P ⅋ Q n) ]
--}
+send P ⅋ send Q = com OUT {{⊎-≃?}}
+   [inl: (λ m → P m ⅋ send Q)
+   ,inr: (λ n → send P ⅋ Q n) ]
+
+_⅋'_ : Proto → Proto → Proto
+end ⅋' Q = Q
+com x P ⅋' end = com x P
+com x P ⅋' com y Q = send [L: com x (λ m → P m ⅋' com y Q)
+                          ,R: com y (λ m → com x P ⅋' Q m) ]
 
                              {-
 _⊗_ : Proto → Proto → Proto

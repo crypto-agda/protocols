@@ -18,8 +18,14 @@ _$_ : ∀ {a b} {A : Set a} {B : A → Set b} →
       ((x : A) → B x) → ((x : A) → B x)
 f $ x = f x
 
+_$′_ : ∀ {a b} {A : Set a} {B : Set b} →
+      (A → B) → (A → B)
+f $′ x = f x
+
 -- open import Data.One
 record 𝟙 : Set₀ where
+  constructor <>
+open 𝟙
 
 data Bool : Set where
   true false : Bool
@@ -29,6 +35,13 @@ data Bool : Set where
         ((x : Bool) → C x)
 [true: f ,false: g ] true  = f
 [true: f ,false: g ] false = g
+
+data LR : Set where L R : LR
+
+[L:_,R:_] : ∀ {c}{C : LR → Set c} →
+  C L → C R → (x : LR) → C x
+[L: f ,R: g ] L = f
+[L: f ,R: g ] R = g
 
 -- open import Data.Product.NP
 record Σ (A : Set)(B : A → Set) : Set where
@@ -59,6 +72,9 @@ data List {a} (A : Set a) : Set a where
   []  : List A
   _∷_ : (x : A) (xs : List A) → List A
 
+[_] : ∀ {a}{A : Set a} → A → List A
+[ x ] = x ∷ []
+
 {-# BUILTIN LIST List #-}
 {-# BUILTIN NIL  []   #-}
 {-# BUILTIN CONS _∷_  #-}
@@ -73,16 +89,19 @@ module _ {A : Set} (_≤_ : A → A → Bool) where
     ... | false = x₁ ∷ merge-sort-list (x₀ ∷ l₀) l₁
 
 -- open import Relation.Binary.PropositionalEquality
-data _≡_ {A : Set} (x : A) : A → Set where
+data _≡_ {a}{A : Set a} (x : A) : A → Set a where
   refl : x ≡ x
 
-ap : {A B : Set} (f : A → B) {x y : A} (p : x ≡ y) → f x ≡ f y
+{-# BUILTIN EQUALITY _≡_ #-}
+{-# BUILTIN REFL refl #-}
+
+ap : ∀{a b}{A : Set a}{B : Set b} (f : A → B) {x y : A} (p : x ≡ y) → f x ≡ f y
 ap f refl = refl
 
-sym : {A : Set}{x y : A} → x ≡ y → y ≡ x
+sym : ∀{a}{A : Set a}{x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
-subst : {A : Set}(P : A → Set₁){x y : A} → x ≡ y → P x → P y
+subst : ∀{a p}{A : Set a}(P : A → Set p){x y : A} → x ≡ y → P x → P y
 subst P refl px = px
 
 postulate
@@ -155,6 +174,14 @@ module _ {S T A B : Set} where
 module _ {S A : Set} where
     prism' : (A → S) → (S → S ⊎ A) → Prism' S A
     prism' = prism
+
+module _ {a b}{A : Set a}{B : A → Set b} where
+  case_of_ : (x : A) → ((y : A) → B y) → B x
+  case x of f = f x
+
+module _ {a b}{A : Set a}{B : Set b} where
+  case_of′_ : A → (A → B) → B
+  case_of′_ = case_of_
 
 … : {A : Set}{{x : A}} → A
 … {{x}} = x
