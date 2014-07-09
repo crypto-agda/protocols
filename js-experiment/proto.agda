@@ -37,6 +37,19 @@ data Com : Set where IN OUT : Com
 data Proto : Set₁ where
   end : Proto
   com : Com → {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
+  {-
+  send : {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
+  recv : {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
+
+com : Com → {M : Set} {{M≃S : M ≃? JSValue}} (P : M → Proto) → Proto
+com IN  = recv
+com OUT = send
+
+dual : Proto → Proto
+dual end = end
+dual (send P) = recv λ m → dual (P m)
+dual (recv P) = send λ m → dual (P m)
+  -}
 
 pattern send P = com OUT P
 pattern recv P = com IN P

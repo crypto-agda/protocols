@@ -1,9 +1,10 @@
 module runningtest where
 
-open import prelude
+open import prelude hiding (reverse)
 open import libjs
 open import proto
 open import proc
+open import uri
 
 test-value : Value
 test-value = object (("array"  , array (array [] ∷ array (array [] ∷ []) ∷ [])) ∷

@@ -6,6 +6,7 @@ open import Terms
 open import Types
 open import runningtest using (merge-sort-string)
 open import Terms.Syntax
+open import uri
 
 module Terms.Examples where
 
@@ -27,14 +28,6 @@ postulate
 postulate
   merge-sort-spec : ∀ s s' → merge-sort-string (sort s) (sort s') ≡ sort (s ++ s')
   half-spec : ∀ s → (take-half s ++ drop-half s) ≡ s
-
-ap₂ : ∀ {a b c}{A : Set a}{B : Set b}{C : Set c}(f : A → B → C){x x' y y'} → x ≡ x' → y ≡ y'
-    → f x y ≡ f x' y'
-ap₂ f refl refl = refl
-
-infixr 6 _∙_
-_∙_ : ∀ {a}{A : Set a}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-refl ∙ p = p
 
 module extrinsic where
 
@@ -61,12 +54,14 @@ module extrinsic where
 
   str-sorter₁ : ∀ {d} → ⊢ [ d ↦ sorter-Proto ]
   str-sorter₁
-    = start (dual sorter-Proto) str-sorter₀ λ h₀ →
+    = {!start (dual sorter-Proto) str-sorter₀ λ h₀ →
       start (dual sorter-Proto) str-sorter₀ λ h₁ →
-      str-merger
+      str-merger!}
 
+      {-
   extrinsic : ∀ {d} → Satisfy {d = d} sorter-Proto sorter-Prop str-sorter₁
   extrinsic (s , _) = merge-sort-spec (take-half s) (drop-half s) ∙ ap sort (half-spec s)
+  -}
 
 
 module str-sorter where
@@ -104,9 +99,9 @@ module str-sorter where
        end))
 
   str-sorter₁ : ∀ {d} → ⊢ [ d ↦ sorter-Proto ]
-  str-sorter₁ = start (dual sorter-Proto) str-sorter₀ λ h₀ →
+  str-sorter₁ = {!start (dual sorter-Proto) str-sorter₀ λ h₀ →
                 start (dual sorter-Proto) str-sorter₀ λ h₁ →
-                str-merger
+                str-merger!}
 
  -- -}
  -- -}

@@ -22,6 +22,8 @@ _$′_ : ∀ {a b} {A : Set a} {B : Set b} →
       (A → B) → (A → B)
 f $′ x = f x
 
+data 𝟘 : Set where
+
 -- open import Data.One
 record 𝟙 : Set₀ where
   constructor <>
@@ -79,6 +81,13 @@ data List {a} (A : Set a) : Set a where
 {-# BUILTIN NIL  []   #-}
 {-# BUILTIN CONS _∷_  #-}
 
+reverse : {A : Set} → List A → List A
+reverse {A} = go []
+  where
+    go : List A → List A → List A
+    go acc []       = acc
+    go acc (x ∷ xs) = go (x ∷ acc) xs
+
 module _ {A : Set} (_≤_ : A → A → Bool) where
 
     merge-sort-list : (l₀ l₁ : List A) → List A
@@ -89,11 +98,15 @@ module _ {A : Set} (_≤_ : A → A → Bool) where
     ... | false = x₁ ∷ merge-sort-list (x₀ ∷ l₀) l₁
 
 -- open import Relation.Binary.PropositionalEquality
+infix 0 _≡_
 data _≡_ {a}{A : Set a} (x : A) : A → Set a where
   refl : x ≡ x
 
 {-# BUILTIN EQUALITY _≡_ #-}
 {-# BUILTIN REFL refl #-}
+
+_≢_ : ∀ {a}{A : Set a}(x y : A) → Set a
+x ≢ y = x ≡ y → 𝟘
 
 ap : ∀{a b}{A : Set a}{B : Set b} (f : A → B) {x y : A} (p : x ≡ y) → f x ≡ f y
 ap f refl = refl
@@ -101,8 +114,21 @@ ap f refl = refl
 sym : ∀{a}{A : Set a}{x y : A} → x ≡ y → y ≡ x
 sym refl = refl
 
+! : ∀{a}{A : Set a}{x y : A} → x ≡ y → y ≡ x
+! refl = refl
+
 subst : ∀{a p}{A : Set a}(P : A → Set p){x y : A} → x ≡ y → P x → P y
 subst P refl px = px
+
+tr = subst
+
+ap₂ : ∀ {a b c}{A : Set a}{B : Set b}{C : Set c}(f : A → B → C){x x' y y'} → x ≡ x' → y ≡ y'
+    → f x y ≡ f x' y'
+ap₂ f refl refl = refl
+
+infixr 6 _∙_
+_∙_ : ∀ {a}{A : Set a}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+refl ∙ p = p
 
 postulate
   String : Set

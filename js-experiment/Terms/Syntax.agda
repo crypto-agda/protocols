@@ -4,12 +4,14 @@ open import libjs
 open import proc
 open import proto
 open import prelude
+open import uri
 
 module Terms.Syntax where
 
-
+{-
 _,,_ : ∀ {Δ Δ'} → (⊢ Δ → ⊢ Δ') → ⊢ Δ → ⊢ Δ'
 f ,, x = f x
+-}
 
 record _×₀₁_ (A : Set)(B : Set₁) : Set₁ where
   constructor _,₀₁_

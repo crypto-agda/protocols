@@ -1,6 +1,6 @@
 module _ where
 
-open import prelude
+open import prelude hiding (reverse)
 
 data JSType : Set where
   array object number string bool null : JSType

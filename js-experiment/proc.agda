@@ -3,6 +3,7 @@ module _ where
 open import prelude
 open import libjs
 open import proto
+open import uri
 
 data Proc (D : Set₀) (M : Set₀) : Set₀ where
   end    : Proc D M
@@ -10,15 +11,6 @@ data Proc (D : Set₀) (M : Set₀) : Set₀ where
   input  : (d : D) (p : M → Proc D M) → Proc D M
   start  : (p : Proc D M) (q : D → Proc D M) → Proc D M
   error  : (err : String) → Proc D M
-
-abstract
-  URI = String
-  showURI : URI → String
-  showURI = id
-  readURI : String → URI
-  readURI = id
-  clientURI : URI
-  clientURI = ""
 
 JSProc = Proc URI JSValue
 

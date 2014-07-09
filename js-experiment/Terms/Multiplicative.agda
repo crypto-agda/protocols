@@ -6,7 +6,7 @@ open import prelude
 module Terms.Multiplicative where
 
 wk : ∀ {Δ d} → ⊢ᶜᶠ Δ → ⊢ᶜᶠ (Δ , d ↦ end)
-wk end = end {allEnded = … , _} -- instance arguments should eta more yah
+wk end = end {e = … , _} -- instance arguments should eta more yah
 wk (output l m der) = output (there l) m (wk der)
 wk (input l x₁) = input (there l) (λ m → wk (x₁ m))
 
