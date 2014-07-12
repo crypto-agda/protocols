@@ -5,7 +5,7 @@ open import uri
 
 module Terms where
 
-infix 2 ⊢_ ⊢ᶜᶠ_
+infix 2 ⊢ˢ_ ⊢_ ⊢ᶜᶠ_
 
 data ⊢_ : (Δ : Env) → Set₁ where
   end : ∀{Δ}{e : EndedEnv Δ}
@@ -66,6 +66,31 @@ data ⊢ᶜᶠ_ (Δ : Env) : Set₁ where
             (p : ∀ m → ⊢ᶜᶠ Δ [ l ≔ m ])
             ----------------------------
                      → ⊢ᶜᶠ Δ
+
+-- The Δ for the server contains the view point of the clients
+-- The point is that the meaning of _,_ in Δ is ⊗ while it
+-- is ⅋ in ⊢ᶜᶠ
+record ⊢ˢ_ (Δ : Env) : Set₁ where
+  coinductive
+  field
+    server-output :
+      ∀ {d M}{{_ : SER M}}{P : M → Proto}
+        (l : d ↦ recv P ∈ Δ) →
+        Σ M λ m → ⊢ˢ Δ [ l ≔ m ]
+    server-input :
+      ∀ {d M}{{_ : SER M}}{P : M → Proto}
+        (l : d ↦ send P ∈ Δ)
+        (m : M) → ⊢ˢ Δ [ l ≔ m ]
+open ⊢ˢ_ public
+
+-- This is just to confirm that we have enough cases
+telecom' : ∀ {Δ} → ⊢ᶜᶠ Δ → ⊢ˢ Δ → 𝟙
+telecom' end q = _
+telecom' (output l m p) q
+  = telecom' p (server-input q l m)
+telecom' (input l p) q
+  = case server-output q l of λ { (m , s) →
+      telecom' (p m) s }
 
 embedᶜᶠ : ∀ {Δ} → ⊢ᶜᶠ Δ → ⊢ Δ
 embedᶜᶠ (end {e = e}) = end {e = e}
