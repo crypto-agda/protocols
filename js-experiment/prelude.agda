@@ -1,6 +1,8 @@
 module _ where
 
--- open import Level.NP
+open import Agda.Primitive public
+  using    (Level; _⊔_)
+  renaming (lzero to ₀; lsuc to ₛ)
 
 -- open import Function.NP
 id : ∀ {a} {A : Set a} (x : A) → A
@@ -46,7 +48,7 @@ data LR : Set where L R : LR
 [L: f ,R: g ] R = g
 
 -- open import Data.Product.NP
-record Σ (A : Set)(B : A → Set) : Set where
+record Σ {a b}(A : Set a)(B : A → Set b) : Set(a ⊔ b) where
   constructor _,_
   field
     fst : A

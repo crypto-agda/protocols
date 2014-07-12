@@ -6,11 +6,6 @@ open import uri
 
 module Types where
 
-SERIAL = JSValue
-
-SER : Set → Set
-SER M = M ≃? SERIAL
-
 infixl 5 _,_↦_
 data Env : Set₁ where
   ε : Env
@@ -38,10 +33,14 @@ data _↦_∈_ (d : URI)(P : Proto) : Env → Set₁ where
   there : ∀ {Δ d' P'} → d ↦ P ∈ Δ
                       → d ↦ P ∈ (Δ , d' ↦ P')
 
+module _ {d P} where
+  _[_≔_↦_] : ∀ Δ → d ↦ P ∈ Δ → URI → Proto → Env
+  ._ [ here {Δ} ≔ c ↦ Q ] = Δ , c ↦ Q
+  ._ [ there {d' = d'}{P'} l ≔ c ↦ Q ] = _ [ l ≔ c ↦ Q ] , d' ↦ P'
+
 module _ {d c M}{{_ : M ≃? SERIAL}} {P} where
   _[_≔_] : (Δ : Env) → d ↦ com c {M} P ∈ Δ → M → Env
-  ._ [ here {Δ} ≔ m ] = Δ , d ↦ P m
-  ._ [ there {d' = d'}{P'} var ≔ m ] = _ [ var ≔ m ] , d' ↦ P'
+  Δ [ l ≔ m ] = Δ [ l ≔ d ↦ P m ]
 
 AllEnv : (P : URI → Proto → Set) → Env → Set
 AllEnv P ε = 𝟙

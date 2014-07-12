@@ -4,6 +4,11 @@ open import prelude
 open import libjs
 open import libjs.Properties
 
+SERIAL = JSValue
+
+SER : Set → Set
+SER M = M ≃? SERIAL
+
 module _ {A B} {{AS : A ≃? JSValue}}{{BS : B ≃? JSValue}}where
 
   serial : A ⊎ B → JSValue
@@ -54,6 +59,13 @@ dual (recv P) = send λ m → dual (P m)
 pattern send P = com OUT P
 pattern recv P = com IN P
 
+[send:_recv:_end:_] :
+  ∀ {ℓ}{X : Set ℓ}
+  (s r : {M : Set}{{_ : SER M}}(P : M → Proto) → X)
+  (end : X) → Proto → X
+[send: s recv: r end: e ] end = e
+[send: s recv: r end: e ] (send P) = s P
+[send: s recv: r end: e ] (recv P) = r P
 
 mapProto : (Com → Com) → Proto → Proto
 mapProto f end = end
@@ -106,6 +118,12 @@ P      ⊗ send Q = send λ m → P ⊗ Q m
 recv P ⊗ recv Q = recv [inl: (λ m → P m ⊗ recv Q)
                        ,inr: (λ n → recv P ⊗ Q n) ]
 -}
+
+_⊗_ : Proto → Proto → Proto
+end ⊗ Q = Q
+com x P ⊗ end = com x P
+com x P ⊗ com y Q = recv [L: com x (λ m → P m ⊗ com y Q)
+                         ,R: com y (λ m → com x P ⊗ Q m) ]
 
 telecom : (P : Proto) (p : ⟦ P ⟧) (q : ⟦ dual P ⟧) → ⟦ log P ⟧
 telecom end p q = _

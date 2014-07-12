@@ -24,11 +24,6 @@ data ⊢_ : (Δ : Env) → Set₁ where
                  ----------------------
                      → ⊢ Δ
 
-  end-last : ∀ {Δ d}
-               (p : ⊢ (Δ , d ↦ end))
-               ----------------------
-                 → ⊢ Δ
-
   mix : ∀ {Δ Δ₀ Δ₁} (Δₛ : [ Δ is Δ₀ ⋎ Δ₁ ])
           (p : ⊢ Δ₀) (q : ⊢ Δ₁)
           --------------------
@@ -46,6 +41,16 @@ data ⊢_ : (Δ : Env) → Set₁ where
       ∀ {Δ c d P Q} →
       (p : ⊢ Δ , c ↦ P , d ↦ Q)
       → ⊢ Δ , d ↦ Q , c ↦ P
+
+  wk-last : ∀ {Δ d}
+              (p : ⊢ Δ)
+              -----------------------
+                → ⊢ (Δ , d ↦ end)
+
+  end-last : ∀ {Δ d}
+               (p : ⊢ (Δ , d ↦ end))
+               ----------------------
+                 → ⊢ Δ
 
 data ⊢ᶜᶠ_ (Δ : Env) : Set₁ where
   end : {e : EndedEnv Δ} → ⊢ᶜᶠ Δ
@@ -117,10 +122,103 @@ end-lastᶜᶠ (end {e = e , _}) = end {e = e}
 end-lastᶜᶠ (output (there l) m p) = output l m (end-lastᶜᶠ p)
 end-lastᶜᶠ (input (there l) p) = input l λ m → end-lastᶜᶠ (p m)
 
+wk-lastᶜᶠ : ∀ {Δ d}
+             (p : ⊢ᶜᶠ Δ)
+             -----------------------
+               → ⊢ᶜᶠ (Δ , d ↦ end)
+wk-lastᶜᶠ end = end {e = … , _}
+wk-lastᶜᶠ (output l m p) = output (there l) m (wk-lastᶜᶠ p)
+wk-lastᶜᶠ (input l p) = input (there l) λ m → wk-lastᶜᶠ (p m)
+
+wk-,,ᶜᶠ : ∀ {Δ₀ Δ₁} → ⊢ᶜᶠ Δ₀ → EndedEnv Δ₁ → ⊢ᶜᶠ Δ₀ ,, Δ₁
+wk-,,ᶜᶠ {Δ₁ = ε} p E = p
+wk-,,ᶜᶠ {Δ₁ = Δ₁ , d ↦ P} p (E , e) rewrite Ended-≡end e
+  = wk-lastᶜᶠ (wk-,,ᶜᶠ p E)
+
+module _ {d P Δ₀} where
+  pre-wk-∈ : ∀ {Δ₁} → d ↦ P ∈ Δ₁ → d ↦ P ∈ (Δ₀ ,, Δ₁)
+  pre-wk-∈ here = here
+  pre-wk-∈ (there l) = there (pre-wk-∈ l)
+
+{-
+pre-wkᶜᶠ : ∀ {Δ₀ Δ₁} → EndedEnv Δ₀ → ⊢ᶜᶠ Δ₁ → ⊢ᶜᶠ Δ₀ ,, Δ₁
+pre-wkᶜᶠ EΔ₀ end = end {e = {!!}}
+pre-wkᶜᶠ {Δ₀} {Δ₁} EΔ₀ (output l m p) =
+  output (pre-wk-∈ l) m (pre-wkᶜᶠ {Δ₀} {{!Δ₁!}} EΔ₀ {!!})
+pre-wkᶜᶠ EΔ₀ (input l p) = {!!}
+-}
+
+fwd-mixᶜᶠ : ∀ {Δ c d} P → ⊢ᶜᶠ Δ → ⊢ᶜᶠ (Δ , c ↦ P , d ↦ dual P)
+fwd-mixᶜᶠ end p = wk-lastᶜᶠ (wk-lastᶜᶠ p)
+fwd-mixᶜᶠ (recv P) p = input (there here) λ m → output here m (fwd-mixᶜᶠ (P m) p)
+fwd-mixᶜᶠ (send P) p = input here λ m → output (there here) m (fwd-mixᶜᶠ (P m) p)
+
 fwdᶜᶠ : ∀ c d {P} → ⊢ᶜᶠ (ε , c ↦ P , d ↦ dual P)
-fwdᶜᶠ _ _ {end} = end
-fwdᶜᶠ _ _ {recv P} = input (there here) λ m → output here m (fwdᶜᶠ _ _ {P m})
-fwdᶜᶠ _ _ {send P} = input here λ m → output (there here) m (fwdᶜᶠ _ _ {P m})
+fwdᶜᶠ _ _ {P} = fwd-mixᶜᶠ {ε} P end
+
+ε,, : ∀ Δ → ε ,, Δ ≡ Δ
+ε,, ε = refl
+ε,, (Δ , d ↦ P) rewrite ε,, Δ = refl
+
+postulate
+ exchᶜᶠ :
+  ∀ Δ₀ Δ₁ →
+  (p : ⊢ᶜᶠ Δ₁ ,, Δ₀)
+  → ⊢ᶜᶠ Δ₀ ,, Δ₁
+  {-
+exchᶜᶠ ε Δ₁ p rewrite ε,, Δ₁ = p
+exchᶜᶠ Δ₀ ε p rewrite ε,, Δ₀ = p
+exchᶜᶠ (Δ₀ , d ↦ P) (Δ₁ , d₁ ↦ P₁) end = {!!}
+exchᶜᶠ (Δ₀ , d ↦ ._) (Δ₁ , d₁ ↦ P₁) (output here m p) = {!exchᶜᶠ!}
+exchᶜᶠ (Δ₀ , d ↦ P) (Δ₁ , d₁ ↦ P₁) (output (there l) m p) = {!!}
+exchᶜᶠ (Δ₀ , d ↦ P) (Δ₁ , d₁ ↦ P₁) (input l p) = {!!}
+-}
+
+pre-wkᶜᶠ : ∀ {Δ₀ Δ₁} → EndedEnv Δ₀ → ⊢ᶜᶠ Δ₁ → ⊢ᶜᶠ Δ₀ ,, Δ₁
+pre-wkᶜᶠ {Δ₀} {Δ₁} E p = exchᶜᶠ Δ₀ Δ₁ (wk-,,ᶜᶠ p E)
+
+end-of : Env → Env
+end-of ε = ε
+end-of (Δ , d ↦ P) = end-of Δ , d ↦ end
+
+end-of-Ended : ∀ Δ → EndedEnv (end-of Δ)
+end-of-Ended ε = _
+end-of-Ended (Δ , d ↦ P) = end-of-Ended Δ , _
+
+end-of-⋎ : ∀ Δ → [ Δ is Δ ⋎ end-of Δ ]
+end-of-⋎ ε = ε
+end-of-⋎ (Δ , d ↦ P) = end-of-⋎ Δ , d ↦₀ P
+
+end-of-,,-⋎ : ∀ Δ₀ Δ₁ → [ Δ₀ ,, Δ₁ is Δ₀ ,, end-of Δ₁ ⋎ end-of Δ₀ ,, Δ₁ ]
+end-of-,,-⋎ Δ₀ ε = end-of-⋎ Δ₀
+end-of-,,-⋎ Δ₀ (Δ₁ , d ↦ P) = end-of-,,-⋎ Δ₀ Δ₁ , d ↦₁ P
+
+,,-assoc : ∀ {Δ₀ Δ₁ Δ₂} → Δ₀ ,, (Δ₁ ,, Δ₂) ≡ (Δ₀ ,, Δ₁) ,, Δ₂
+,,-assoc {Δ₂ = ε} = refl
+,,-assoc {Δ₀} {Δ₁} {Δ₂ , d ↦ P} rewrite ,,-assoc {Δ₀} {Δ₁} {Δ₂} = refl
+
+cut,,ᶜᶠ : ∀ {Δ₀ Δ₁} d P
+            (p : ⊢ᶜᶠ (Δ₀ , d ↦ dual P))
+            (q : ⊢ᶜᶠ (Δ₁ , d ↦ P))
+           ---------------------------
+              → ⊢ᶜᶠ Δ₀ ,, Δ₁
+cut,,ᶜᶠ {Δ₀}{Δ₁} d P p q =
+  end-lastᶜᶠ
+    (cutᶜᶠ Δₛ d P
+       (exchᶜᶠ (Δ₀ ,, end-of Δ₁) (ε , d ↦ dual P)
+              (tr ⊢ᶜᶠ_ (! (,,-assoc {ε , d ↦ dual P} {Δ₀} {end-of Δ₁}))
+                 (wk-,,ᶜᶠ
+                   (exchᶜᶠ (ε , d ↦ dual P) _ p) (end-of-Ended _))))
+       (pre-wkᶜᶠ (end-of-Ended _) q))
+  where Δₛ = end-of-,,-⋎ Δ₀ Δ₁
+
+postulate
+  !cut,,ᶜᶠ : ∀ {Δ₀ Δ₁} d P
+            (p : ⊢ᶜᶠ (Δ₀ , d ↦ P))
+            (q : ⊢ᶜᶠ (Δ₁ , d ↦ dual P))
+           ---------------------------
+              → ⊢ᶜᶠ Δ₀ ,, Δ₁
+-- !cut,,ᶜᶠ {Δ₀}{Δ₁} d P p q = {!!}
 
 -- only the last two are exchanged, some more has to be done
 exch-lastᶜᶠ :
@@ -134,6 +232,88 @@ exch-lastᶜᶠ (output (there (there l)) m p) = output (there (there l)) m (exc
 exch-lastᶜᶠ (input here p) = input (there here) λ m → exch-lastᶜᶠ (p m)
 exch-lastᶜᶠ (input (there here) p) = input here λ m → exch-lastᶜᶠ (p m)
 exch-lastᶜᶠ (input (there (there l)) p) = input (there (there l)) λ m → exch-lastᶜᶠ (p  m)
+
+{-
+data Relabel : Env → Env → Set where
+  ε : Relabel ε ε
+  _,_↦_ : ∀ {Δ₀ Δ₁ c d P} → Relabel Δ₀ Δ₁ → Relabel (Δ₀ , c ↦ P) (Δ₁ , d ↦ P)
+
+module _ where
+    rebalel-∈ : ∀ {Δ₀ Δ₁} → Relabel Δ₀ Δ₁
+                  (l : d ↦ P ∈ Δ₀)
+                    → ⊢ᶜᶠ Δ₁
+    relabel : ∀ {Δ₀ Δ₁} → Relabel Δ₀ Δ₁
+            (p : ⊢ᶜᶠ Δ₀)
+              → ⊢ᶜᶠ Δ₁
+    relabel end = {!end!}
+    relabel (output l m p) = output {!l!} {!!} {!!}
+    relabel (input l p) = {!!}
+
+parᶜᶠ : ∀ {Δ c} P Q
+        (p : ⊢ᶜᶠ (Δ , c ↦ P , c ↦ Q))
+          → ⊢ᶜᶠ (Δ , c ↦ (P ⅋' Q))
+-- TODO only one channel name!!!
+-- TODO empty context
+-- TODO try to match on 'p' first
+broken-parᶜᶠ : ∀ {c d e} P Q
+        (p : ⊢ᶜᶠ (ε , c ↦ P , d ↦ Q))
+          → ⊢ᶜᶠ (ε , e ↦ (P ⅋' Q))
+broken-parᶜᶠ end Q p = {!end-lastᶜᶠ (exch-lastᶜᶠ p)!}
+broken-parᶜᶠ (com x P) end p = end-lastᶜᶠ {!p!}
+broken-parᶜᶠ (com x P) (com y Q) (end {e = _ , ()})
+
+broken-parᶜᶠ (com x P) (com .OUT Q) (output here m p)
+  = output here R (output here m (broken-parᶜᶠ _ _ p))
+broken-parᶜᶠ (com x P) (com .IN Q) (input here p)
+  = output here R (input here λ m → broken-parᶜᶠ _ _ (p m))
+
+broken-parᶜᶠ (com .OUT P) (com y Q) (output (there here) m p)
+  = output here L (output here m (broken-parᶜᶠ _ _ p))
+broken-parᶜᶠ (com .IN P) (com y Q) (input (there here) p)
+  = output here L (input here λ m → broken-parᶜᶠ _ _ (p m))
+
+broken-parᶜᶠ (com x P) (com y Q) (output (there (there ())) m p)
+broken-parᶜᶠ (com x P) (com y Q) (input (there (there ())) p)
+-}
+
+module _ {c d cd} where
+    bi-fwd : ∀ P Q → ⊢ᶜᶠ (ε , cd ↦ P ⊗ Q , c ↦ dual P , d ↦ dual Q)
+
+    private
+      module _ {M} {{_ : SER M}} {P : M → Proto} {Q} where
+        goL : ∀ x → ⊢ᶜᶠ ε , cd ↦ com x (λ m → P m ⊗ Q)
+                          , c  ↦ dual (com x P)
+                          , d  ↦ dual Q
+
+        goL IN  = input (there (there here)) λ m → output (there here) m (bi-fwd _ _)
+        goL OUT = input (there here) λ m → output (there (there here)) m (bi-fwd _ _)
+
+        goR : ∀ x → ⊢ᶜᶠ ε , cd ↦ com x (λ m → Q ⊗ P m)
+                          , c  ↦ dual Q
+                          , d  ↦ dual (com x P)
+        goR IN  = input (there (there here)) λ m → output here m (bi-fwd _ _)
+        goR OUT = input here λ m → output (there (there here)) m (bi-fwd _ _)
+
+    bi-fwd end Q = exch-lastᶜᶠ (wk-lastᶜᶠ (fwdᶜᶠ _ _))
+    bi-fwd (com x P) end = wk-lastᶜᶠ (fwdᶜᶠ _ _)
+    bi-fwd (com x P) (com y Q) = input (there (there here)) [L: goL x ,R: goR y ]
+
+    module _ {Δ₀ Δ₁ P Q} where
+        ⊗ᶜᶠ : (p : ⊢ᶜᶠ (Δ₀ , c ↦ P))
+             (q : ⊢ᶜᶠ (Δ₁ , d ↦ Q))
+             ----------------------------------
+               → ⊢ᶜᶠ (Δ₀ ,, Δ₁ , cd ↦ (P ⊗ Q))
+        ⊗ᶜᶠ p q = !cut,,ᶜᶠ _ _ p (!cut,,ᶜᶠ _ _ q (bi-fwd P Q))
+
+  {-
+exchᶜᶠ :
+  ∀ {Δ c d P Q} →
+  (l : c ↦ P ∈ Δ)
+  (p : ⊢ᶜᶠ Δ , d ↦ Q)
+  → ⊢ᶜᶠ Δ [ l ≔ d ↦ Q ] , c ↦ P
+exchᶜᶠ here p = exch-lastᶜᶠ p
+exchᶜᶠ (there l) p = {!!}
+-}
 
 {-
 rotᶜᶠ : ∀ Δ {c P} →
@@ -151,12 +331,27 @@ exchᶜᶠ (Δ₁ , d ↦ P)  (end e) = end {!!}
 exchᶜᶠ (Δ₁ , d₁ ↦ ._) (output here m p) = output here m ({!exchᶜᶠ Δ₁ p!})
 exchᶜᶠ (Δ₁ , d ↦ P)  (output (there l) m p) = {!!}
 exchᶜᶠ (Δ₁ , d ↦ P)  (input l p) = {!!}
+-}
 
 _⊆_ : (Δ₀ Δ₁ : Env) → Set₁
 _⊇_ : (Δ₀ Δ₁ : Env) → Set₁
 
 Δ₀ ⊆ Δ₁ = ∀ {d P} → d ↦ P ∈ Δ₀ → d ↦ P ∈ Δ₁
 Δ₀ ⊇ Δ₁ = Δ₁ ⊆ Δ₀
+
+get-put : ∀ {d P Δ c Q} →
+        (l : d ↦ P ∈ Δ) → c ↦ Q ∈ (Δ [ l ≔ c ↦ Q ])
+get-put here = here
+get-put (there l) = there (get-put l)
+
+{-
+⊆_[_≔_↦_] : ∀ {Δ₀ Δ₁} (f : Δ₀ ⊆ Δ₁)
+               {d P} (l : d ↦ P ∈ Δ₀) (c : URI) (Q : Proto)
+             → (Δ₀ [ l ≔ c ↦ Q ]) ⊆ (Δ₁ [ f l ≔ c ↦ Q ])
+⊆ f [ l ≔ c ↦ Q ] {d'} {P'} l' = {!!}
+
+(l : d ↦ P ∈ Δ)
+→ Δ [ l ≔ ]
 
 record _≈_ (Δ₀ Δ₁ : Env) : Set₁ where
   constructor _,_
@@ -165,19 +360,28 @@ record _≈_ (Δ₀ Δ₁ : Env) : Set₁ where
     ≈⊇ : Δ₀ ⊇ Δ₁
 open _≈_ public
 
-≈_[_≔_] : ∀ {Δ₀ Δ₁ d M} {P : M → Proto} {{ser : SER M}}
-            (Δₑ : Δ₀ ≈ Δ₁) (l : d ↦ com OUT P ∈ Δ₀) (m : M) →
-            (Δ₀ [ l ≔ m ]) ≈ (Δ₁ [ ≈⊆ Δₑ l ≔ m ])
-≈ Δₑ [ l ≔ m ] = (λ l' → {!≈⊆ Δₑ!}) , {!!}
+≈_[_≔_↦_] : ∀ {Δ₀ Δ₁} (Δₑ : Δ₀ ≈ Δ₁)
+               {d P} (l : d ↦ P ∈ Δ₀) (c : URI) (Q : Proto)
+             → (Δ₀ [ l ≔ c ↦ Q ]) ≈ (Δ₁ [ ≈⊆ Δₑ l ≔ m ])
+≈ Δₑ [ here ≔ m ] = {!!}
+≈ Δₑ [ there l ≔ m ] = {!!}
+
+{-(λ l' → {!≈⊆ Δₑ!}) , from
+  where
+    from : ∀ {Δ₀ Δ₁ d io M} {P : M → Proto} {ser : SER M}
+             {Δₑ : Δ₀ ≈ Δ₁} {l : d ↦ com io P ∈ Δ₀} {m : M} {d₁} {P₁} →
+           d₁ ↦ P₁ ∈ (Δ₁ [ ≈⊆ Δₑ l ≔ m ]) → d₁ ↦ P₁ ∈ (Δ₀ [ l ≔ m ])
+    from = {!!}
 
 ≈ᶜᶠ : ∀ {Δ₀ Δ₁}
        (Δₑ : Δ₀ ≈ Δ₁)
        (p : ⊢ᶜᶠ Δ₀)
        -----------
          → ⊢ᶜᶠ Δ₁
-≈ᶜᶠ Δₑ (end e) = end {!!}
+≈ᶜᶠ Δₑ (end {e = e}) = end {e = {!!}}
 ≈ᶜᶠ Δₑ (output l m p) = output (≈⊆ Δₑ l) m (≈ᶜᶠ (≈ Δₑ [ l ≔ m ]) p)
 ≈ᶜᶠ Δₑ (input l p) = {!!}
+-}
 -}
 
 cut-elim : ∀ {Δ} (p : ⊢ Δ)
@@ -189,12 +393,11 @@ cut-elim (input l p) = input l (λ m → cut-elim (p m))
 cut-elim (mix Δₛ p q) = mixᶜᶠ Δₛ (cut-elim p) (cut-elim q)
 cut-elim (cut Δₛ {P} {d} p q) = end-lastᶜᶠ (cutᶜᶠ Δₛ d P (cut-elim p) (cut-elim q))
 cut-elim (end-last p) = end-lastᶜᶠ (cut-elim p)
+cut-elim (wk-last p) = wk-lastᶜᶠ (cut-elim p)
 cut-elim (fwd c d) = fwdᶜᶠ c d
 cut-elim (exch-last p) = exch-lastᶜᶠ (cut-elim p)
 
 {-
-
-ends,, : Ended Δ₀ → ⊢ Δ₁ → ⊢ Δ₀ ,, Δ₁
 
 start : ∀ {Δ} P
        → ⊢ [ clientURI ↦ dual P ]
