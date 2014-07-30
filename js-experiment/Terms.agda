@@ -114,30 +114,23 @@ cutᶜᶠ : ∀ {Δ Δ₀ Δ₁}
          (q : ⊢ᶜᶠ (Δ₁ , d ↦ P))
          ---------------------------
            → ⊢ᶜᶠ (Δ , d ↦ end)
-cutᶜᶠ Δₛ d end p q = mixᶜᶠ (Δₛ , d ↦₀ end) p q
 
 cutᶜᶠ Δₛ d (recv P) (output here m p) (input here q) = cutᶜᶠ Δₛ d (P m) p (q m)
 cutᶜᶠ Δₛ d (send P) (input here p) (output here m q) = cutᶜᶠ Δₛ d (P m) (p m) q
 
-cutᶜᶠ Δₛ d (send P) (output (there l) m p) q
+cutᶜᶠ Δₛ d P (output (there l) m p) q
   = output (there (Zip-com∈₀ Δₛ l)) m (cutᶜᶠ (Zip-≔₀ l Δₛ) d _ p q)
-cutᶜᶠ Δₛ d (recv P) (output (there l) m p) q
-  = output (there (Zip-com∈₀ Δₛ l)) m (cutᶜᶠ (Zip-≔₀ l Δₛ) d _ p q)
-cutᶜᶠ Δₛ d (recv P) (input (there l) p) q
+cutᶜᶠ Δₛ d P (input (there l) p) q
   = input (there (Zip-com∈₀ Δₛ l)) λ m → cutᶜᶠ (Zip-≔₀ l Δₛ) d _ (p m) q
-cutᶜᶠ Δₛ d (send P) (input (there l) p) q
-  = input (there (Zip-com∈₀ Δₛ l)) λ m → cutᶜᶠ (Zip-≔₀ l Δₛ) d _ (p m) q
-cutᶜᶠ Δₛ d (recv P) p (output (there l) m q)
+cutᶜᶠ Δₛ d P p (output (there l) m q)
   = output (there (Zip-com∈₁ Δₛ l)) m (cutᶜᶠ (Zip-≔₁ l Δₛ) d _ p q)
-cutᶜᶠ Δₛ d (send P) p (output (there l) m q)
-  = output (there (Zip-com∈₁ Δₛ l)) m (cutᶜᶠ (Zip-≔₁ l Δₛ) d _ p q)
-cutᶜᶠ Δₛ d (send P) p (input (there l) q)
-  = input (there (Zip-com∈₁ Δₛ l)) λ m → cutᶜᶠ (Zip-≔₁ l Δₛ) d _ p (q m)
-cutᶜᶠ Δₛ d (recv P) p (input (there l) q)
+cutᶜᶠ Δₛ d P p (input (there l) q)
   = input (there (Zip-com∈₁ Δₛ l)) λ m → cutᶜᶠ (Zip-≔₁ l Δₛ) d _ p (q m)
 
+cutᶜᶠ Δₛ d end p q = mixᶜᶠ (Δₛ , d ↦₀ end) p q
 cutᶜᶠ _ _ (com _ _) (end {e = _ , ()}) _
 cutᶜᶠ _ _ (com _ _) _ (end {e = _ , ()})
+
 
 end-lastᶜᶠ : ∀ {Δ d}
               (p : ⊢ᶜᶠ (Δ , d ↦ end))
@@ -232,7 +225,7 @@ cut,,ᶜᶠ {Δ₀}{Δ₁} d P p q =
     (cutᶜᶠ Δₛ d P
        (exchᶜᶠ (Δ₀ ,, end-of Δ₁) (ε , d ↦ dual P)
               (tr ⊢ᶜᶠ_ (! (,,-assoc {ε , d ↦ dual P} {Δ₀} {end-of Δ₁}))
-                 (wk-,,ᶜᶠ
+                 (wk-,,ᶜᶠ {_} {end-of Δ₁}
                    (exchᶜᶠ (ε , d ↦ dual P) _ p) (end-of-Ended _))))
        (pre-wkᶜᶠ (end-of-Ended _) q))
   where Δₛ = end-of-,,-⋎ Δ₀ Δ₁
