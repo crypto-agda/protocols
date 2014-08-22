@@ -55,7 +55,7 @@ record Σ {a b}(A : Set a)(B : A → Set b) : Set(a ⊔ b) where
     snd : B fst
 open Σ public
 
-_×_ : (A B : Set) → Set
+_×_ : ∀{a b}(A : Set a)(B : Set b) → Set _
 A × B = Σ A (λ _ → B)
 
 -- open import Data.Sum.NP
