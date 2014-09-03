@@ -26,6 +26,12 @@ f $′ x = f x
 
 data 𝟘 : Set where
 
+¬_ : ∀ {a} → Set a → Set a
+¬ A = A → 𝟘
+
+𝟘-elim : ∀ {a} {A : Set a} → 𝟘 → A
+𝟘-elim ()
+
 -- open import Data.One
 record 𝟙 : Set₀ where
   constructor <>
@@ -59,7 +65,7 @@ _×_ : ∀{a b}(A : Set a)(B : Set b) → Set _
 A × B = Σ A (λ _ → B)
 
 -- open import Data.Sum.NP
-data _⊎_ (A B : Set) : Set where
+data _⊎_ {a b}(A : Set a) (B : Set b) : Set(a ⊔ b) where
   inl : A → A ⊎ B
   inr : B → A ⊎ B
 
