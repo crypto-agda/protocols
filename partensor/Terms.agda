@@ -138,6 +138,7 @@ data _≈_ : Proto → Proto → Set₁ where
 
   ⊗-congₗ : ∀ {P P' Q} → P ≈ P' → P ⊗ Q ≈ P' ⊗ Q
   ⊗ε : ∀ {P} → P ⊗ act end ≈ P
+  ⊗ε' : ∀ {P} → P ≈ P ⊗ act end
   ⊗-comm : ∀ {P Q} → P ⊗ Q ≈ Q ⊗ P
   ⊗-assoc : ∀ {P Q R} → (P ⊗ Q) ⊗ R ≈ P ⊗ (Q ⊗ R)
 
@@ -159,6 +160,19 @@ id'≈ = ⅋ε' · ⅋ε
 !' ⅋ε' = ⅋ε
 !' ⅋-comm = ⅋-comm
 !' ⅋-assoc = ⅋-comm · ⅋-congₗ ⅋-comm · ⅋-assoc · ⅋-comm · ⅋-congₗ ⅋-comm
+
+!≈_ : ∀ {P Q} → P ≈ Q → Q ≈ P
+!≈ (e · e₁) = !≈ e₁ · !≈ e
+!≈ ⅋-congₗ e = ⅋-congₗ (!≈ e)
+!≈ ⅋ε = ⅋ε'
+!≈ ⅋ε' = ⅋ε
+!≈ ⅋-comm = ⅋-comm
+!≈ ⅋-assoc = ⅋-comm · ⅋-congₗ ⅋-comm · ⅋-assoc · ⅋-comm · ⅋-congₗ ⅋-comm
+!≈ ⊗-congₗ e = ⊗-congₗ (!≈ e)
+!≈ ⊗ε = ⊗ε'
+!≈ ⊗ε' = ⊗ε
+!≈ ⊗-comm = ⊗-comm
+!≈ ⊗-assoc = ⊗-comm · ⊗-congₗ ⊗-comm · ⊗-assoc · ⊗-comm · ⊗-congₗ ⊗-comm
 
 ⅋'-congᵣ : ∀ {P P' Q} → P ≈' P' → Q ⅋ P ≈' Q ⅋ P'
 ⅋'-congᵣ e = ⅋-comm · ⅋-congₗ e · ⅋-comm
@@ -203,20 +217,25 @@ data ⟪_⟫ (Δ : Proto) : Set₁ where
     → ⟪ Δ ⟫
 
 
-data NotPar : Proto → Set₁ where
-  act1 : ∀ {x M P} → NotPar (act (com x {M} P))
-  ten : ∀ {A B} → NotPar (A ⊗ B)
+data NotParEnd : Proto → Set₁ where
+  act : ∀ {x M P} → NotParEnd (act (com x {M} P))
+  ten : ∀ {A B} → NotParEnd (A ⊗ B)
 
-data NotPar' : Proto → Set₁ where
-  act0 : ∀ {S} → NotPar' (act S)
-  ten : ∀ {A B} → NotPar' (A ⊗ B)
+data NotPar : Proto → Set₁ where
+  act : ∀ {S} → NotPar (act S)
+  ten : ∀ {A B} → NotPar (A ⊗ B)
 
 ≔-same : ∀ {P Q}(l : P ∈' Q) → Q ≈' Q [ l ≔ P ]'
 ≔-same here = id'≈
 ≔-same (left x) = ⅋-congₗ (≔-same x)
 ≔-same (right x) = ⅋'-congᵣ (≔-same x)
 
-∈'-conv : ∀ {P Q Γ} → NotPar Γ → P ≈' Q → Γ ∈' P → Γ ∈' Q
+⅋≔ : ∀ {P Q R}(l : P ∈' Q) → Q [ l ≔ R ]' ≈' Q [ l ≔ act end ]' ⅋ R
+⅋≔ here = ⅋ε' · ⅋-comm
+⅋≔ (left l) = ⅋-congₗ (⅋≔ l) · ⅋-assoc · ⅋'-congᵣ ⅋-comm · !' ⅋-assoc
+⅋≔ (right l) = ⅋'-congᵣ (⅋≔ l) · !' ⅋-assoc
+
+∈'-conv : ∀ {P Q Γ} → NotParEnd Γ → P ≈' Q → Γ ∈' P → Γ ∈' Q
 ∈'-conv np (e · e₁) l = ∈'-conv np e₁ (∈'-conv np e l)
 ∈'-conv () (⅋-congₗ e) here
 ∈'-conv np (⅋-congₗ e) (left l) = left (∈'-conv np e l)
@@ -234,7 +253,7 @@ data NotPar' : Proto → Set₁ where
 ∈'-conv np ⅋-assoc (left (right l)) = right (left l)
 ∈'-conv np ⅋-assoc (right l) = right (right l)
 
-≔'-conv : ∀ {P Q Γ S'}(np : NotPar Γ)(e : P ≈' Q)(l : Γ ∈' P)
+≔'-conv : ∀ {P Q Γ S'}(np : NotParEnd Γ)(e : P ≈' Q)(l : Γ ∈' P)
   → P [ l ≔ S' ]' ≈' Q [ ∈'-conv np e l ≔ S' ]'
 ≔'-conv np (e · e₁) l = ≔'-conv np e l · ≔'-conv np e₁ _
 ≔'-conv () (⅋-congₗ e) here
@@ -262,10 +281,10 @@ data NotPar' : Proto → Set₁ where
 module _ {x M P}(let S = com x {M} P) where
 
   ∈-conv : ∀ {P Q} → P ≈' Q → S ∈ P → S ∈ Q
-  ∈-conv e l = ∈'-conv act1 e l
+  ∈-conv e l = ∈'-conv act e l
 
   ≔-conv : ∀ {P Q S'}(e : P ≈' Q)(l : S ∈ P) → P [ l ≔ S' ] ≈' Q [ ∈-conv e l ≔ S' ]
-  ≔-conv e l = ≔'-conv act1 e l
+  ≔-conv e l = ≔'-conv act e l
 
 
 conv : ∀ {P Q} → P ≈' Q → ⟪ P ⟫ → ⟪ Q ⟫
@@ -286,7 +305,7 @@ fwd (act x) = fwd-S x
 fwd (Γ ⅋ Γ₁) = pair (⊆-in (right here)) ⅋ε (fwd Γ) (fwd Γ₁)
 fwd (Γ ⊗ Γ₁) = pair (⊆-in (left here)) (⅋-comm · ⅋ε) (conv ⅋-comm (fwd Γ)) (conv ⅋-comm (fwd Γ₁))
 
-same-var : ∀ {Δ Γ Γ'}(np : NotPar' Γ)(np' : NotPar' Γ')(l : Γ ∈' Δ)(l' : Γ' ∈' Δ) →
+same-var : ∀ {Δ Γ Γ'}(np : NotPar Γ)(np' : NotPar Γ')(l : Γ ∈' Δ)(l' : Γ' ∈' Δ) →
   (∃ λ (nl : ∀ {S'} → Γ ∈' Δ [ l' ≔ S' ]')
   → ∃ λ (nl' : ∀ {S} → Γ' ∈' Δ [ l ≔ S ]')
   → ∀ {S S'} → ((Δ [ l' ≔ S' ]') [ nl ≔ S ]') ≈' (Δ [ l ≔ S ]') [ nl' ≔ S' ]')
@@ -314,7 +333,7 @@ same-⊗var (⊆-in l) (⊆-in l') | inj₁ (nl , nl' , s) = inj₁ (⊆-in nl ,
 same-⊗var (⊆-in l) (⊆-in .l) | inj₂ (refl , refl) = inj₂ (refl , refl)
 
 
-∈'-≔' : ∀ {Δ Γ Γ' S}(l : Γ ∈' Δ) → Γ' ∈' Δ → NotPar' Γ → NotPar' Γ'
+∈'-≔' : ∀ {Δ Γ Γ' S}(l : Γ ∈' Δ) → Γ' ∈' Δ → NotPar Γ → NotPar Γ'
   → Γ ≢ Γ' → Γ' ∈' Δ [ l ≔ S ]'
 ∈'-≔' here here np np' e = 𝟘-elim (e refl)
 ∈'-≔' (left l) here np () e
@@ -327,7 +346,7 @@ same-⊗var (⊆-in l) (⊆-in .l) | inj₂ (refl , refl) = inj₂ (refl , refl)
 ∈'-≔' (right l) (right l') np np' e = right (∈'-≔' l l' np np' e)
 
 ≔'-swap : ∀ {Δ Γ Γ' M M'}(l : Γ ∈' Δ)(l' : Γ' ∈' Δ)
-    (np : NotPar' Γ)(np' : NotPar' Γ')(e : Γ ≢ Γ')(e' : Γ' ≢ Γ)
+    (np : NotPar Γ)(np' : NotPar Γ')(e : Γ ≢ Γ')(e' : Γ' ≢ Γ)
   → (Δ [ l' ≔ M' ]') [ ∈'-≔' l' l np' np e' ≔ M ]'
   ≈' (Δ [ l ≔ M ]') [ ∈'-≔' l l' np np' e ≔ M' ]'
 ≔'-swap here here np np' e e' = 𝟘-elim (e refl)
@@ -342,13 +361,13 @@ same-⊗var (⊆-in l) (⊆-in .l) | inj₂ (refl , refl) = inj₂ (refl , refl)
 
 module _ {S} where
   ∈-/ : ∀ {Δ Γ}(l : Γ ⊆ Δ) → S ∈ Δ → S ∈ (Δ / l)
-  ∈-/ (⊆-in l) l' = ∈'-≔' l l' ten act0 (λ ())
+  ∈-/ (⊆-in l) l' = ∈'-≔' l l' ten act (λ ())
 
   ⊆-≔ : ∀ {Γ Δ M} → Γ ⊆ Δ → (l : S ∈ Δ) → Γ ⊆ Δ [ l ≔ M ]
-  ⊆-≔ (⊆-in l) l' = ⊆-in (∈'-≔' l' l act0 ten (λ ()))
+  ⊆-≔ (⊆-in l) l' = ⊆-in (∈'-≔' l' l act ten (λ ()))
 
   ≔/ : ∀ {Γ Δ M}(l : Γ ⊆ Δ)(v : S ∈ Δ) → Δ [ v ≔ M ] / ⊆-≔ l v ≈' (Δ / l) [ ∈-/ l v ≔ M ]
-  ≔/ (⊆-in l) l' = ≔'-swap l l' ten act0 (λ ()) (λ ())
+  ≔/ (⊆-in l) l' = ≔'-swap l l' ten act (λ ()) (λ ())
 
 in-sub : ∀ {Γ Γ' Δ}(l : Γ ∈' Δ) → Γ' ∈' Δ [ l ≔ Γ' ]'
 in-sub here = here
@@ -383,9 +402,9 @@ end' (P⊗ p p₁) = pair (⊆-in here) ⅋ε' (conv (⅋ε' · ⅋-comm) (end' 
 cut₁ : ∀ {Δ Δ' S}(l : S ∈ Δ)(l' : dual S ∈ Δ') → ⟪ Δ ⟫ → ⟪ Δ' ⟫ → ⟪ Δ [ l ≔ end ] ⅋ Δ' [ l' ≔ end ] ⟫
 cut₁ {S = end} cl cl' p q = conv (⅋'-cong (≔-same cl) (≔-same cl')) (mix p q)
 cut₁ {S = com x P} cl cl' (pair (⊆-in tl) s p p₁) q
- with ∈'-≔' {S = act end} cl tl act0 ten act≠⊗
-    | ∈'-≔' {S = act end} tl cl ten act0 ⊗≠act
-    | ≔'-swap {M = act end} {M' = act end} cl tl act0 ten act≠⊗ ⊗≠act
+ with ∈'-≔' {S = act end} cl tl act ten act≠⊗
+    | ∈'-≔' {S = act end} tl cl ten act ⊗≠act
+    | ≔'-swap {M = act end} {M' = act end} cl tl act ten act≠⊗ ⊗≠act
 ... | ntl | ncl | sub with ∈-conv s ncl | ≔-conv {S' = end} s ncl
 ... | left gncl | sub' = pair (⊆-in (left ntl))
                             (⅋-congₗ (!' sub · sub')
@@ -399,9 +418,9 @@ cut₁ {S = com x P} cl cl' (pair (⊆-in tl) s p p₁) q
        (conv (⅋-assoc · ⅋'-congᵣ ⅋-comm · !' ⅋-assoc)
          (cut₁ (left gncl) cl' p₁ q))
 cut₁ {S = com x P} cl cl' p (pair (⊆-in tl) s q q₁)
- with ∈'-≔' {S = act end} cl' tl act0 ten act≠⊗
-    | ∈'-≔' {S = act end} tl cl' ten act0 ⊗≠act
-    | ≔'-swap {M = act end} {M' = act end} cl' tl act0 ten act≠⊗ ⊗≠act
+ with ∈'-≔' {S = act end} cl' tl act ten act≠⊗
+    | ∈'-≔' {S = act end} tl cl' ten act ⊗≠act
+    | ≔'-swap {M = act end} {M' = act end} cl' tl act ten act≠⊗ ⊗≠act
 ... | ntl | ncl' | sub with ∈-conv s ncl' | ≔-conv {S' = end} s ncl'
 ... | left gncl' | sub' = pair (⊆-in (right ntl))
   (⅋'-congᵣ (!' sub · sub') · !' ⅋-assoc)
@@ -414,14 +433,14 @@ cut₁ {S = com x P} cl cl' p (pair (⊆-in tl) s q q₁)
 cut₁ {S = com x P} cl cl' (end p) q = 𝟘-elim (∉-PEnd p cl)
 cut₁ {S = com x P} cl cl' p (end q) = 𝟘-elim (∉-PEnd q cl')
 
-cut₁ cl cl' (input l x) (input l' x₁) with same-var act0 act0 cl l | same-var act0 act0 cl' l'
+cut₁ cl cl' (input l x) (input l' x₁) with same-var act act cl l | same-var act act cl' l'
 cut₁ cl cl' (input l x₁) (input l' x₂) | inj₁ (ncl , nl , s) | Q = input (left nl) λ m
   → conv (⅋-congₗ s) (cut₁ ncl cl' (x₁ m) (input l' x₂))
 cut₁ cl cl' (input l x₁) (input l' x₂) | inj₂ y | inj₁ (ncl' , nl' , s) = input (right nl') λ m
   → conv (⅋'-congᵣ s) (cut₁ cl ncl' (input l x₁) (x₂ m))
 cut₁ cl cl' (input l x) (input l' x₁) | inj₂ (refl , proj₂) | inj₂ (() , proj₄)
 
-cut₁ cl cl' (input l p) (output l' m q) with same-var act0 act0 cl l | same-var act0 act0 cl' l'
+cut₁ cl cl' (input l p) (output l' m q) with same-var act act cl l | same-var act act cl' l'
 cut₁ cl cl' (input l p) (output l' m q) | inj₁ (ncl , nl , s) | Q = input (left nl) λ m'
  → conv (⅋-congₗ s) (cut₁ ncl cl' (p m') (output l' m q))
 cut₁ cl cl' (input l p) (output l' m q) | inj₂ y | inj₁ (ncl' , nl' , s) = output (right nl') m
@@ -429,7 +448,7 @@ cut₁ cl cl' (input l p) (output l' m q) | inj₂ y | inj₁ (ncl' , nl' , s) =
 cut₁ cl cl' (input .cl p) (output .cl' m q) | inj₂ (refl , refl) | inj₂ (refl , refl)
   = conv (⅋'-cong (sub-twice cl) (sub-twice cl')) (cut₁ (in-sub cl) (in-sub cl') (p m) q)
 
-cut₁ cl cl' (output l m p) (input l' q) with same-var act0 act0 cl l | same-var act0 act0 cl' l'
+cut₁ cl cl' (output l m p) (input l' q) with same-var act act cl l | same-var act act cl' l'
 cut₁ cl cl' (output l m p) (input l' q) | inj₁ (ncl , nl , s) | Q = output (left nl) m
   (conv (⅋-congₗ s) (cut₁ ncl cl' p (input l' q)))
 cut₁ cl cl' (output l m p) (input l' q) | inj₂ y | inj₁ (ncl' , nl' , s) = input (right nl') λ m' →
@@ -437,7 +456,7 @@ cut₁ cl cl' (output l m p) (input l' q) | inj₂ y | inj₁ (ncl' , nl' , s) =
 cut₁ cl cl' (output .cl m p) (input .cl' q) | inj₂ (refl , refl) | inj₂ (refl , refl)
   = conv (⅋'-cong (sub-twice cl) (sub-twice cl')) (cut₁ (in-sub cl) (in-sub cl') p (q m))
 
-cut₁ cl cl' (output l m p) (output l' m₁ q) with same-var act0 act0 cl l | same-var act0 act0 cl' l'
+cut₁ cl cl' (output l m p) (output l' m₁ q) with same-var act act cl l | same-var act act cl' l'
 cut₁ cl cl' (output l m p) (output l' m₁ q) | inj₁ (ncl , nl , s) | Q = output (left nl) m (conv (⅋-congₗ s)
   (cut₁ ncl cl' p (output l' m₁ q)))
 cut₁ cl cl' (output l m p) (output l' m₁ q) | inj₂ y | inj₁ (ncl' , nl' , s) = output (right nl') m₁
