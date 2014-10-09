@@ -1,32 +1,10 @@
-open import partensor.Terms renaming (conv to conv')
+open import partensor.Terms-merge renaming (conv to conv')
 open import Data.Zero
 open import Data.Product
 open import Data.Sum
 open import Relation.Binary.PropositionalEquality.NP
 
 module partensor.TermsAssoc where
-
-data OnlyTensor : Proto → Set₁ where
-  act : OnlyTensor (act end)
-  par : ∀ {P Q} → OnlyTensor P → OnlyTensor Q → OnlyTensor (P ⅋ Q)
-  ten : ∀ {P Q} → OnlyTensor (P ⊗ Q)
-
-data ⟪_⟫' (Δ : Proto) : Set₁ where
-  end : PEnded Δ → ⟪ Δ ⟫'
-
-  input : ∀ {M P} (l : recv P ∈ Δ)
-    → ((m : M) → ⟪ Δ [ l ≔ P m ] ⟫')
-    → ⟪ Δ ⟫'
-
-  output : ∀ {M P} (l : send P ∈ Δ)
-    → (m : M) → ⟪ Δ [ l ≔ P m ] ⟫'
-    → ⟪ Δ ⟫'
-
-  pair : ∀ {Γ Γ' A B}
-    → (l : A ⊗ B ⊆ Δ) → (Δ / l) ≈' (Γ ⅋ Γ')
-    → OnlyTensor Δ
-    → ⟪ Γ ⅋ A ⟫' → ⟪ Γ' ⅋ B ⟫'
-    → ⟪ Δ ⟫'
 
 module _ {C} where
   ⊗-split' : ∀ {Γ A B}(l : A ⊗ B ∈' Γ) → ⟪ Γ ⟫
