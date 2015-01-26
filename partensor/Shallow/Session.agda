@@ -1,17 +1,12 @@
-open import Data.Product
 open import Data.Zero
-open import Data.Sum
-
+open import Data.One
 open import Relation.Binary.PropositionalEquality.NP
 
 module partensor.Shallow.Session where
 
 data Com : Set where IN OUT : Com
 
--- infix 5 _⅋_ _⊗_
-
-… : {A : Set}{{x : A}} → A
-… {{x = x}} = x
+infix 5 _⅋_ _⊗_
 
 mutual
   data Action : Set₁ where
@@ -19,7 +14,7 @@ mutual
 
   data Session : Set₁ where
     act : Action → Session
-    ⅋ ⊗ : Session → Session → Session
+    _⅋_ _⊗_ : Session → Session → Session
     end : Session
 
 pattern send {M} P = com OUT {M} P
@@ -43,11 +38,11 @@ mutual
     ⊗⅋ : ∀ {A A' B B'}
        → Dual A A' → Dual A' A
        → Dual B B' → Dual B' B
-       → Dual (⊗ A B) (⅋ A' B')
+       → Dual (A ⊗ B) (A' ⅋ B')
     ⅋⊗ : ∀ {A A' B B'}
        → Dual A A' → Dual A' A
        → Dual B B' → Dual B' B
-       → Dual (⅋ A B) (⊗ A' B')
+       → Dual (A ⅋ B) (A' ⊗ B')
 
 symDualS : ∀ {P Q} → DualS P Q → DualS Q P
 symDualS (?! x x₁) = !? x₁ x
@@ -58,6 +53,16 @@ symDual end = end
 symDual (act p) = act (symDualS p)
 symDual (⊗⅋ x x₁ x₂ x₃) = ⅋⊗ x₁ x x₃ x₂
 symDual (⅋⊗ x x₁ x₂ x₃) = ⊗⅋ x₁ x x₃ x₂
+
+Ended : Session → Set
+Ended end = 𝟙
+Ended _   = 𝟘
+
+Ended-≡end : ∀ {P} → Ended P → P ≡ end
+Ended-≡end {act x} ()
+Ended-≡end {P ⅋ P₁} ()
+Ended-≡end {P ⊗ P₁} ()
+Ended-≡end {end} p = refl
 
 {-
 data NotPar : Proto → Set₁ where
