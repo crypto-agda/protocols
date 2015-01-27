@@ -13,6 +13,8 @@ data Sel (δ : Dom) : Set where
   ₀ ₁ : Sel δ
   ₘ : Env.Selection δ → Sel δ
 
+infixl 4 _,[_]
+
 data Doms  : Set where
   · : Doms
   _,[_] : Doms → Dom → Doms
@@ -46,8 +48,14 @@ module _ {δs} (I : Proto δs) (σs : Selection δs) where
         _/₁_ : Proto δs
         _/₁_ = zipWith SelProj._/₁_ I σs
 
+data SelAtMost (n : ℕ){δ : Dom} : Sel δ → ℕ → Set where
+  ₀ : SelAtMost n ₀ n
+  ₁ : SelAtMost n ₁ n
+  ₘ : ∀ {σ} → SelAtMost n (ₘ σ) (suc n)
+
 data AtMost : ℕ → ∀ {δs} → Selection δs → Set where
-  
+  · : ∀ {n} → AtMost n ·
+  _,[_] : ∀ {n m δ δs}{I σ} → AtMost n {δs} I → SelAtMost n {δ} σ m → AtMost m (I ,[ σ ])
 
 {-
 data ZipP : ℕ → Proto → Proto → Proto → Set₁ where
@@ -59,43 +67,60 @@ data ZipP : ℕ → Proto → Proto → Proto → Set₁ where
   _,[_]ₘ : ∀ {n}{Δ₀ Δ₁ Δ}{δ}{η₀ η₁ η : Env δ}
              (Z : ZipP n Δ Δ₀ Δ₁)(Zη : Zip η η₀ η₁)
            → ZipP (suc n) (Δ ,[ η ]) (Δ₀ ,[ η₀ ]) (Δ₁ ,[ η₁ ])
--}
 
-{-
 _,[_↦_] : Proto → URI → Session → Proto
 Δ ,[ d ↦ P ] = Δ ,[ (ε , d ↦ P) ]
 
+-}
+infixr 4 _♦Doms_
+_♦Doms_ : Doms → Doms → Doms
+Δ ♦Doms · = Δ
+Δ ♦Doms (Δ' ,[ η ]) = (Δ ♦Doms Δ') ,[ η ]
+
 infixr 4 _♦Proto_
-_♦Proto_ : Proto → Proto → Proto
+_♦Proto_ : ∀ {δs δs'} → Proto δs → Proto δs' → Proto (δs ♦Doms δs')
 Δ ♦Proto · = Δ
 Δ ♦Proto (Δ' ,[ η ]) = (Δ ♦Proto Δ') ,[ η ]
 
-data Point : Proto → Set₁ where
-  here  : ∀ {I}   → Point I
-  there : ∀ {I δ} {Δ : Env δ} → Point I → Point (I ,[ Δ ])
+data Point : ∀ {δs} → Proto δs → Set₁ where
+  here  : ∀ {δs I}   → Point {δs} I
+  there : ∀ {δs I δ} {Δ : Env δ} → Point {δs} I → Point (I ,[ Δ ])
 
-insert : ∀(P : Proto) → Point P → Proto → Proto
+infix 4 [_]∈_
+
+data [_]∈_ {δ} (η : Env δ) : ∀ {δs} → Proto δs → Set₁ where
+  here  : ∀ {δs}{I : Proto δs}   → [ η ]∈ I ,[ η ]
+  there : ∀ {δs δ}{I : Proto δs} {Δ : Env δ} → [ η ]∈ I → [ η ]∈ I ,[ Δ ]
+
+module DomsFun where
+  insert : (δs : Doms){P : Proto δs} → Point P → Doms → Doms
+  insert δs here δs' = δs' ♦Doms δs
+  insert (δs ,[ η ]) (there l) δs' = insert δs l δs' ,[ η ]
+
+  _[_≔*_] : ∀ (δs : Doms){I : Proto δs}{δ}{η : Env δ} → [ η ]∈ I → Doms → Doms
+  (δs ,[ _ ]) [ here ≔* δs' ] = δs' ♦Doms δs
+  (δs ,[ η ]) [ there l ≔* δs' ] = δs [ l ≔* δs' ] ,[ η ]
+
+insert : ∀{δs δs'}(P : Proto δs)(p : Point P) → Proto δs' → Proto (DomsFun.insert δs p δs')
 insert Δ           here     Δ' = Δ' ♦Proto Δ
 insert (Δ ,[ η ]) (there l) Δ' = insert Δ l Δ' ,[ η ]
 
-data [_]∈_ {δ} (η : Env δ) : Proto → Set₁ where
-  here  : ∀ {I}   → [ η ]∈ I ,[ η ]
-  there : ∀ {I δ} {Δ : Env δ} → [ η ]∈ I → [ η ]∈ I ,[ Δ ]
-
-_[_≔*_] : ∀{δ}{η : Env δ}(P : Proto) → [ η ]∈ P → Proto → Proto
-(Δ ,[ _ ]) [ here    ≔* Δ' ] = Δ' ♦Proto Δ
+_[_≔*_] : ∀{δ δs δs'}{η : Env δ}(P : Proto δs)(l : [ η ]∈ P) → Proto δs' → Proto (δs DomsFun.[ l ≔* δs' ])
+(Δ ,[ _ ]) [ here    ≔* Δ' ] =  Δ' ♦Proto Δ
 (Δ ,[ η ]) [ there l ≔* Δ' ] = Δ [ l ≔* Δ' ] ,[ η ]
 
-All : (Pred : ∀ {δ} → Env δ → Set) → Proto → Set
+_/_ : ∀ {δ δs}{η : Env δ}(I : Proto δs) → (l : [ η ]∈ I) → Proto (δs DomsFun.[ l ≔* · ])
+Δ / l = Δ [ l ≔* · ]
+
+All : (Pred : ∀ {δ} → Env δ → Set) → ∀ {δs} → Proto δs → Set
 All Pred · = 𝟙
 All Pred (Δ ,[ E ]) = All Pred Δ × Pred E
 
-Ended : Proto → Set
+Ended : ∀ {δs} → Proto δs → Set
 Ended = All Env.Ended
 
-{-
-[_↦_]∈_ : (d : URI)(S : Session) → Proto → Set₁
-[ d ↦ S ]∈ P = [ (ε , d ↦ S) ]∈ P
+[_↦_]∈_ : ∀{δs}(d : URI)(S : Session) → Proto δs → Set₁
+[ d ↦ S ]∈ P = [ Env.ε Env., d ↦ S ]∈ P
 -- -}
 -- -}
 -- -}

@@ -19,6 +19,7 @@ open import partensor.Shallow.Proto as Proto -- hiding (Env; module Env; _↦_�
 
 module partensor.Shallow.Term where
 
+{-
 data ⟨_⟩ (Δ : Proto) : Set₁ where
   end :
     Proto.Ended Δ
@@ -27,14 +28,14 @@ data ⟨_⟩ (Δ : Proto) : Set₁ where
   ⅋-inp :
     ∀ {c S₀ S₁}
       (l : [ (ε , c ↦ S₀ ⅋ S₁) ]∈ Δ )
-      (P : ∀ c₀ c₁ → ⟨ Δ [ l ≔* · ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ] ⟩)
+      (P : ∀ c₀ c₁ → ⟨ Δ [ l ≔* (· ,[ ε , c₀ ↦ S₀ ] ,[ ε , c₁ ↦ S₁ ]) ] ⟩)
     → ⟨ Δ ⟩
 
   ⊗-out :
     ∀ {c S₀ S₁ δ} {η : Env δ}
       (l : [ η ]∈ Δ)
       (l' : c ↦ S₀ ⊗ S₁ ∈ η)
-      (P : c₁ → ⟨ Δ [ l ≔* · ,[ (η / l' , c₀ ↦ S₀ , c₁ ↦ S₁) ] ] ⟩)
+      (P : ∀ c₁ → ⟨ Δ [ l ≔* · ,[ (η / l' , c₀ ↦ S₀ , c₁ ↦ S₁) ] ] ⟩)
       (P₀ : ∀ c₀ → ⟨ Δ [ l ≔* · ,[ (η / l' , c₀ ↦ S₀ , c₁ ↦ S₁) ] ] ⟩)
       (P₁ : ∀ c₁ → ⟨ Δ₁ ⟩)
     → ⟨ Δ ⟩
@@ -50,9 +51,9 @@ data ⟨_⟩ (Δ : Proto) : Set₁ where
       (P : ∀ c₀ c₁ → ⟨ insert Δ l (· ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ])⟩)
       (D : Dual S₀ S₁)
     → ⟨ Δ ⟩
+-}
 
-{-
-data ⟨_⟩ (Δ : Proto) : Set₁ where
+data ⟨_⟩{δs}(Δ : Proto δs) : Set₁ where
   end :
     Proto.Ended Δ
     → ⟨ Δ ⟩
@@ -60,30 +61,30 @@ data ⟨_⟩ (Δ : Proto) : Set₁ where
   ⅋-inp :
     ∀ {c S₀ S₁}
       (l : [ (ε , c ↦ S₀ ⅋ S₁) ]∈ Δ )
-      (P : ∀ c₀ c₁ → ⟨ Δ [ l ≔* · ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ] ⟩)
+      (P : ∀ c₀ c₁ → ⟨ Δ [ l ≔* · ,[ ε , c₀ ↦ S₀ ] ,[ ε , c₁ ↦ S₁ ] ] ⟩)
     → ⟨ Δ ⟩
 
   ⊗-out :
     ∀ {c S₀ S₁ δ} {η : Env δ}
       (l : [ η ]∈ Δ)
       (l' : c ↦ S₀ ⊗ S₁ ∈ η)
-      (P : ∀ c₀ c₁ → ⟨ Δ [ l ≔* · ,[ (η / l' , c₀ ↦ S₀ , c₁ ↦ S₁) ] ] ⟩)
+      (P : ∀ c₀ c₁ → ⟨ Δ [ l ≔* · ,[ (η Env./ l' , c₀ ↦ S₀ , c₁ ↦ S₁) ] ] ⟩)
     → ⟨ Δ ⟩
 
   split :
-    ∀ {Δ₀ Δ₁}
-      (Z : ZipP 1 Δ Δ₀ Δ₁)
-      (P₀ : ⟨ Δ₀ ⟩)
-      (P₁ : ⟨ Δ₁ ⟩)
+      (Z : Proto.Selection δs)
+      (P₀ : ⟨ Δ Proto./₀ Z ⟩)
+      (P₁ : ⟨ Δ Proto./₁ Z ⟩)
     → ⟨ Δ ⟩
 
   nu :
     ∀ {S₀ S₁}
       (l : Point Δ)
-      (P : ∀ c₀ c₁ → ⟨ insert Δ l (· ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ])⟩)
+      (P : ∀ c₀ c₁ → ⟨ insert Δ l (· ,[ ε , c₀ ↦ S₀ ] ,[ ε , c₁ ↦ S₁ ])⟩)
       (D : Dual S₀ S₁)
     → ⟨ Δ ⟩
 
+{-
 ⊗Env→Session : ∀ {δ} → Env δ → Session
 ⊗Env→Session ε = end
 ⊗Env→Session (Δ , c ↦ v) = ⊗Env→Session Δ ⊗ v
@@ -92,26 +93,26 @@ Proto→Dom : Proto → Dom
 Proto→Dom · = ε
 Proto→Dom (I ,[ Δ ]) = Proto→Dom I , {!!}
 
-{-
 Proto→Env : Proto → Env {!!}
 Proto→Env · = ε
 Proto→Env (I ,[ Δ ]) = Proto→Env I , ? ↦ {!⊗Env→Session!}
+-}
 
 module Translation
  {t}
- (T⟨_⟩ : ∀ {δ} → Env δ → Set t)
+ (T⟨_⟩ : ∀ {δs} → Proto δs → Set t)
  (⊗-out :
     ∀ {δ Δ c S₀ S₁}
-      (l  : c ↦ (S₀ ⊗ S₁) ∈ Δ)
-      (σ  : Selection δ)
-      (P₀ : ∀ c₀ → T⟨ (Δ / l) /₀ σ , c₀ ↦ S₀ ⟩)
-      (P₁ : ∀ c₁ → T⟨ (Δ / l) /₁ σ , c₁ ↦ S₁ ⟩)
+      (l  : [ c ↦ (S₀ ⊗ S₁) ]∈ Δ)
+      (σ  : Proto.Selection δ)
+      (P₀ : ∀ c₀ → T⟨ (Δ Proto./ l) Proto./₀ σ , c₀ ↦ S₀ ⟩)
+      (P₁ : ∀ c₁ → T⟨ (Δ Proto./ l) Proto./₁ σ , c₁ ↦ S₁ ⟩)
     → T⟨ Δ ⟩)
 
  (⅋-inp :
     ∀ {δ}{Δ : Env δ}{c S₀ S₁}
       (l : c ↦ (S₀ ⅋ S₁) ∈ Δ)
-      (P : ∀ c₀ c₁ → T⟨ (Δ / l) , c₀ ↦ S₀ , c₁ ↦ S₁ ⟩)
+      (P : ∀ c₀ c₁ → T⟨ (Δ Proto./ l) , c₀ ↦ S₀ , c₁ ↦ S₁ ⟩)
     → T⟨ Δ ⟩)
 
  (end :
@@ -121,13 +122,13 @@ module Translation
 
  (cut :
     ∀ {δ}{Δ : Env δ}{S₀ S₁}
-      (σ  : Selection δ)
-      (P₀ : ∀ c₀ → T⟨ Δ /₀ σ , c₀ ↦ S₀ ⟩)
-      (P₁ : ∀ c₁ → T⟨ Δ /₁ σ , c₁ ↦ S₁ ⟩)
+      (σ  : Proto.Selection δ)
+      (P₀ : ∀ c₀ → T⟨ Δ Proto./₀ σ , c₀ ↦ S₀ ⟩)
+      (P₁ : ∀ c₁ → T⟨ Δ Proto./₁ σ , c₁ ↦ S₁ ⟩)
       (D : Dual S₀ S₁)
     → T⟨ Δ ⟩) where
 
-  go : ∀ {I : Proto} → ⟨ I ⟩ → T⟨ Proto→Env I ⟩
+  go : ∀ {I : Proto} → ⟨ I ⟩ → T⟨ I ⟩
   go = {!!}
 
 {-

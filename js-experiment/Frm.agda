@@ -1,8 +1,8 @@
 {-# OPTIONS --without-K #-}
 module Frm where
-open import proto hiding (_⊗_; _⅋_) renaming (Proto to Session)
+open import proto hiding (_⊗_; _⅋_ ; Ended) renaming (Proto to Session)
 open import Types using  (Ended)
-open import prelude
+open import prelude hiding (module _∈_ ; _∈_ ; _[_≔_])
 
 data Frm {a} (A : Set a) : Set a where
   ε       : Frm A
@@ -14,14 +14,31 @@ data _∈_ {a} {A : Set a} (S : A) : Frm A → Set a where
   left  : ∀ {Γ Δ} → S ∈ Γ → S ∈ (Γ ⅋ Δ)
   right : ∀ {Γ Δ} → S ∈ Δ → S ∈ (Γ ⅋ Δ)
 
+data _⊗∈_ {a} {A : Set a} (S : A) : Frm A → Set a where
+  act   : ∀ {S'} → S ≡ S' → S ⊗∈ (act S')
+  left  : ∀ {Γ Δ} → S ⊗∈ Γ → S ⊗∈ (Γ ⊗ Δ)
+  right : ∀ {Γ Δ} → S ⊗∈ Δ → S ⊗∈ (Γ ⊗ Δ)
+
 _∉_ : ∀ {a} {A : Set a} (S : A) → Frm A → Set a
 S ∉ Γ = ¬(S ∈ Γ)
+
+module _ {ℓ}{P Q : Set ℓ}(f : P → Q) where
+  mapFrm : Frm P → Frm Q
+  mapFrm ε = ε
+  mapFrm (act S) = act (f S)
+  mapFrm (P₁ ⅋ P₂) = mapFrm P₁ ⅋ mapFrm P₂
+  mapFrm (P₁ ⊗ P₂) = mapFrm P₁ ⊗ mapFrm P₂
 
 module _ {a}{A : Set a}{S : A} where
   _[_≔_] : ∀ Δ → S ∈ Δ → A → Frm A
   ._ [ act e ≔ Q ]           = act Q
   ._ [ left  {Γ} {Δ} p ≔ Q ] = (Γ [ p ≔ Q ]) ⅋ Δ
   ._ [ right {Γ} {Δ} p ≔ Q ] = Γ ⅋ (Δ [ p ≔ Q ])
+
+  _⊗[_≔_] : ∀ Δ → S ⊗∈ Δ → A → Frm A
+  ._ ⊗[ act e ≔ Q ]           = act Q
+  ._ ⊗[ left  {Γ} {Δ} p ≔ Q ] = (Γ ⊗[ p ≔ Q ]) ⊗ Δ
+  ._ ⊗[ right {Γ} {Δ} p ≔ Q ] = Γ ⊗ (Δ ⊗[ p ≔ Q ])
 
 module _ {a} {A : Set a} where
     AllEnv : (P : A → Set) → Frm A → Set
@@ -30,12 +47,13 @@ module _ {a} {A : Set a} where
     AllEnv P (Γ ⅋ Δ) = AllEnv P Γ × AllEnv P Δ
     AllEnv P (Γ ⊗ Δ) = AllEnv P Γ × AllEnv P Δ
 
-data [_is_⋎_]S : (S S₀ S₁ : Session) → Set₁ where 
+
+data [_is_⋎_]S : (S S₀ S₁ : Session) → Set₁ where
   act₀ : ∀ {P} → [ P is P ⋎ end ]S
   act₁ : ∀ {P} → [ P is end ⋎ P ]S
 
 module FrmZip {a ℓ} {A : Set a} ([_is_⋎_]' : (P Q R : A) → Set ℓ) where
-    data [_is_⋎_] : (Δ Δ₀ Δ₁ : Frm A) → Set (a ⊔ ℓ) where 
+    data [_is_⋎_] : (Δ Δ₀ Δ₁ : Frm A) → Set (a ⊔ ℓ) where
       ε   : [ ε is ε ⋎ ε ]
       act : ∀ {P Q R}
           → [ P is Q ⋎ R ]'
@@ -49,16 +67,38 @@ module FrmZip {a ℓ} {A : Set a} ([_is_⋎_]' : (P Q R : A) → Set ℓ) where
           → [ Δ' is Δ₀' ⋎ Δ₁' ]
           → [ Δ ⅋ Δ' is Δ₀ ⅋ Δ₀' ⋎ Δ₁ ⅋ Δ₁' ]
 
-open FrmZip [_is_⋎_]S 
+open FrmZip [_is_⋎_]S
 
 Proto = Frm Session
+
+dual' : Proto → Proto
+dual' ε = ε
+dual' (act S) = act (dual S)
+dual' (P ⅋ P₁) = dual' P ⊗ dual' P₁
+dual' (P ⊗ P₁) = dual' P ⅋ dual' P₁
+
+∈-bdual : ∀ {l l' Γ}(a : l ∈ Γ)(b : l' ∈ dual' Γ) → (Γ ≡ act l) × (l' ≡ dual l)
+∈-bdual (act p) (act x) = (ap act (! p)) , (x ∙ ap dual (! p))
+∈-bdual (left a) ()
+∈-bdual (right a) ()
 
 module _ {c M}{{_ : M ≃? SERIAL}}{S} where
   _[_≔_]' : (Δ : Proto) → com c {M} S ∈ Δ → M → Proto
   Δ [ l ≔ m ]' = Δ [ l ≔ S m ]
 
+  _⊗[_≔_]' : (Δ : Proto) → com c {M} S ⊗∈ Δ → M → Proto
+  Δ ⊗[ l ≔ m ]' = Δ ⊗[ l ≔ S m ]
+
 EndedEnv : Proto → Set
 EndedEnv = AllEnv Ended
+
+-- AllEnv
+data E : Proto → Set₁ where
+  ε : E ε
+  act : E (act end)
+  _⊗_ : ∀ {Γ Δ} (e₀ : E Γ)(e₁ : E Δ) → E (Γ ⊗ Δ)
+  _⅋_ : ∀ {Γ Δ} (e₀ : E Γ)(e₁ : E Δ) → E (Γ ⅋ Δ)
+
 
 ZipAll : ∀ {P Δ₀ Δ₁ Δ} → [ Δ is Δ₀ ⋎ Δ₁ ] → AllEnv P Δ₀ → AllEnv P Δ₁ → AllEnv P Δ
 ZipAll ε A₀ A₁ = <>
@@ -97,6 +137,16 @@ Zip-identity {{e₀ , e₁}} (z₀ ⅋ z₁) = ap₂ _⅋_ (Zip-identity z₀) (
 
 Zip-identity' : ∀ {Δ₀ Δ₁ Δ} {{Δ₁E : EndedEnv Δ₁}} → [ Δ is Δ₀ ⋎ Δ₁ ] → Δ₀ ≡ Δ
 Zip-identity' Z = Zip-identity (Zip-comm Z)
+
+Zip-E₀ : ∀ {Δ Δ₀ Δ₁} → E Δ₀ → [ Δ is Δ₀ ⋎ Δ₁ ] → Δ ≡ Δ₁
+Zip-E₀ e ε = refl
+Zip-E₀ act (act act₀) = refl
+Zip-E₀ act (act act₁) = refl
+Zip-E₀ (e₀ ⊗ e₁) (z₀ ⊗ z₁) = ap₂ _⊗_ (Zip-E₀ e₀ z₀) (Zip-E₀ e₁ z₁)
+Zip-E₀ (e₀ ⅋ e₁) (z₀ ⅋ z₁) = ap₂ _⅋_ (Zip-E₀ e₀ z₀) (Zip-E₀ e₁ z₁)
+
+Zip-E₁ : ∀ {Δ Δ₀ Δ₁} → E Δ₁ → [ Δ is Δ₀ ⋎ Δ₁ ] → Δ ≡ Δ₀
+Zip-E₁ e z = Zip-E₀ e (Zip-comm z)
 
 module _ {io M}{{_ : SER M}} {P : M → Session} where
     ZipS-com∈₀ : ∀ {S₀ S₁ S} → [ S is S₀ ⋎ S₁ ]S → com io P ∈ act S₀ → com io P ∈ act S
