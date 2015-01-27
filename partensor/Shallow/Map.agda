@@ -1,11 +1,28 @@
 open import Data.One
 open import Data.Two
 open import Data.Product using (_×_)
+open import Relation.Binary.PropositionalEquality
 open import partensor.Shallow.Dom
 
 module partensor.Shallow.Map where
 
 infixl 4 _,_↦_
+
+{-
+data Map {a} (A : Set a) : Set a where
+  ε : Map A
+  _,_↦_ : (E : Map A) (c : URI) (v : A) → Map A
+
+data MapDom {a} {A : Set a} : (M : Map A) (δ : Dom) → Set a where
+  ε     : MapDom ε ε
+  _,_↦_ : ∀ {M δ} (MD : MapDom M δ) (c : URI) (v : A) → MapDom (M , c ↦ v) (δ , c)
+
+data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : Map A → Set₁ where
+  here  : ∀ {M} → d ↦ S ∈ (M , d ↦ S)
+  there : ∀ {M : Map A} {d' S'}
+          → d ↦ S ∈ M
+          → d ↦ S ∈ (M , d' ↦ S')
+-}
 
 data Map {a} (A : Set a) : Dom → Set a where
   ε     : Map A ε
@@ -22,9 +39,10 @@ module _ {a}{A : Set a}{d v} where
   ._ [ here  {M = M}         ]≔ v' = M , d ↦ v'
   ._ [ there {d' = d'}{S'} l ]≔ v' = _ [ l ]≔ v' , d' ↦ S'
 
-All : ∀ {a}{A : Set a}{δ}(Pred : URI → A → Set) → Map A δ → Set
-All Pred ε = 𝟙
-All Pred (M , d ↦ p) = All Pred M × Pred d p
+module _ {a} {A : Set a} where
+    All : ∀ {δ}(Pred : URI → A → Set) → Map A δ → Set
+    All Pred ε = 𝟙
+    All Pred (M , d ↦ p) = All Pred M × Pred d p
 
 infixr 4 _♦Map_
 _♦Map_ : ∀ {a}{A : Set a}{D₀ D₁} → Map A D₀ → Map A D₁ → Map A (D₀ ♦Dom D₁)
@@ -44,8 +62,15 @@ zipWith f (mA , c ↦ v₀) (mB , .c ↦ v₁) = zipWith f mA mB , c ↦ f v₀ 
 Selection : Dom → Set
 Selection = Map 𝟚
 
+SelectionAll≡ : 𝟚 → ∀ {δ} → Selection δ → Set
+SelectionAll≡ b = All λ _ → _≡_ b
+
 module With-end {a}{A : Set a}(end : A) where
     T = Map A
+
+    module _ {δ}(Δ : T δ) where
+        _/* : T δ
+        _/* = map (λ _ → end) Δ
 
     module _ {δ}(Δ : T δ)(σ : Selection δ) where
         _/₀_ : T δ
