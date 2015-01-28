@@ -172,6 +172,7 @@ unthere… NES EE (mk here lE) = 𝟘-elim (not-there NES EE lE)
 unthere… NES EE (mk (there lI) lE) = mk lI lE
 
 record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  constructor mk
   field
     l…  : [ c ↦ S …]∈ I
   open [↦…]∈ l…
