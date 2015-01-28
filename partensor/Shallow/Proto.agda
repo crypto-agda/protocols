@@ -40,7 +40,7 @@ Proto     = Maps Session
 Selection = Maps 𝟚
 
 infix 5 _,[_↦_]
-_,[_↦_] : ∀{a}{A : Set a}{δs}(I : Maps A δs)(c : URI)(v : A) → Maps A (δs ,[ ε , c ])
+_,[_↦_] : ∀{a}{A : Set a}{δs}(I : Maps A δs)(c : URI)(v : A) → Maps A (δs ,[ ε , c ↦* ])
 I ,[ c ↦ v ] = I ,[ (ε , c ↦ v) ]
 
 zipWith : ∀ {δs} (f : ∀ {δ} → Env δ → Sel δ → Env δ) → Proto δs → Selection δs → Proto δs
@@ -120,8 +120,44 @@ data [_]∈_ {a}{A : Set a}{δ}(Δ : Map A δ) : ∀ {δs} → Maps A δs → Se
   here  : ∀ {δs}{I : Maps A δs} → [ Δ ]∈ I ,[ Δ ]
   there : ∀ {δs δ}{I : Maps A δs} {Δ' : Map A δ} → [ Δ ]∈ I → [ Δ ]∈ I ,[ Δ' ]
 
-[_↦_]∈_ : ∀{a}{A : Set a}{δs}(d : URI)(S : A) → Maps A δs → Set a
-[ d ↦ S ]∈ P = [ Env.ε Env., d ↦ S ]∈ P
+{-
+data Mode : Set where
+  ended :
+  open  : 
+
+record [_,_↦_]∈_ (m : Mode){δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  field
+    δE  : Dom
+    E   : Env δE
+    lM  : [ E ]∈ I
+    lE  : c Env.↦ S ∈ E
+    E/c : Env.Ended (E Env./ lE)
+module [↦]∈ = [_↦_]∈_
+
+record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  field
+-}
+
+record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  constructor mk
+  field
+    {δE} : Dom
+    {E}  : Env δE
+    lI   : [ E ]∈ I
+    lE   : c Env.↦ S ∈ E
+  E/ : Env δE
+  E/ = E Env./ lE
+module [↦…]∈ = [_↦_…]∈_
+open [↦…]∈ using (E/) public
+
+record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  field
+    l…  : [ c ↦ S …]∈ I
+  open [↦…]∈ l…
+  field
+    E/c : Env.Ended (E Env./ lE)
+  open [↦…]∈ l… public
+module [↦]∈ = [_↦_]∈_
 
 {-
 module DomsFun where
@@ -156,10 +192,21 @@ forget : ∀ {δ δs}{Δ : Env δ}{I : Proto δs}(l : [ Δ ]∈ I) → Doms'.[ �
 forget here = here
 forget (there l) = there (forget l)
 
-infixl 6 _/_
-_/_ : ∀ {δ δs}(I : Proto δs)(l : Doms'.[ δ ]∈ δs) → Proto δs
-(I ,[ Δ ]) / Doms'.here    = I ,[ Δ /* ]
-(I ,[ Δ ]) / Doms'.there l = I / l ,[ Δ ]
+infixl 6 _/Ds_
+_/Ds_ : ∀ {δ δs}(I : Proto δs)(l : Doms'.[ δ ]∈ δs) → Proto δs
+(I ,[ Δ ]) /Ds here    = I ,[ Δ /* ]
+(I ,[ Δ ]) /Ds there l = I /Ds l ,[ Δ ]
+
+_/_ : ∀ {δ δs}(I : Proto δs){E : Env δ}(l : [ E ]∈ I) → Proto δs
+I / l = I /Ds forget l
+
+_[/]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S ]∈ I) → Proto δs
+I [/] l = I / lI
+  where open [↦]∈ l
+
+_[/…]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈ I) → Proto δs
+I [/…] l = I / lI
+  where open [↦…]∈ l
 
 All : (Pred : ∀ {δ} → Env δ → Set) → ∀ {δs} → Proto δs → Set
 All Pred · = 𝟙

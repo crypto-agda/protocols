@@ -17,13 +17,17 @@ open import partensor.Shallow.Map as Map public
 Env : Dom → Set₁
 Env = Map Session
 
-module _ {δ d S}(Δ : Env δ) where
-  _/_ : d ↦ S ∈ Δ → Env δ
-  _/_ l = Δ [ l ]≔ end
+module _ {δ c}(E : Env δ) where
+  infixl 4 _/_ _/D_
+  _/D_ :  c Dom'.∈ δ → Env δ
+  _/D_ l = E [ l ]≔' end
 
-module _ {δ d c M S}(Δ : Env δ) where
-  _[_≔_] : d ↦ act (com c {M} S) ∈ Δ → M → Env δ
-  _[_≔_] l m = Δ [ l ]≔ S m
+  _/_ : ∀ {S} → c ↦ S ∈ E → Env δ
+  _/_ l = _/D_ (forget l)
+
+module _ {δ d c M S}(E : Env δ) where
+  _[_≔_] : d ↦ act (com c {M} S) ∈ E → M → Env δ
+  _[_≔_] l m = E [ l ]≔ S m
 
 infixr 4 _♦Env_
 _♦Env_ : ∀ {D₀ D₁} → Env D₀ → Env D₁ → Env (D₀ ♦Dom D₁)
@@ -31,7 +35,7 @@ _♦Env_ = _♦Map_
 
 open With-end {_} {Session} end public
 
-Ended : ∀ {δ} (Δ : Env δ) → Set
+Ended : ∀ {δ} (E : Env δ) → Set
 Ended = Map.All (λ _ → Session.Ended)
 
 {-

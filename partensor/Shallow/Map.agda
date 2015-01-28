@@ -26,7 +26,7 @@ data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : Map A → Set₁ where
 
 data Map {a} (A : Set a) : Dom → Set a where
   ε     : Map A ε
-  _,_↦_ : ∀ {δ} (E : Map A δ) c (v : A) → Map A (δ , c)
+  _,_↦_ : ∀ {δ} (E : Map A δ) c (v : A) → Map A (δ , c ↦*)
 
 data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : ∀ {δ} → Map A δ → Set₁ where
   here  : ∀ {δ} {M : Map A δ} → d ↦ S ∈ (M , d ↦ S)
@@ -34,10 +34,19 @@ data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : ∀ {δ} → Map A δ → Set₁
           → d ↦ S ∈ M
           → d ↦ S ∈ (M , d' ↦ S')
 
-module _ {a}{A : Set a}{d v} where
-  _[_]≔_ : ∀ {δ} (M : Map A δ) → d ↦ v ∈ M → A → Map A δ
-  ._ [ here  {M = M}         ]≔ v' = M , d ↦ v'
-  ._ [ there {d' = d'}{S'} l ]≔ v' = _ [ l ]≔ v' , d' ↦ S'
+
+module _ {a}{A : Set a}{d} where
+
+  forget : ∀ {δ}{M : Map A δ}{v} → d ↦ v ∈ M → d Dom'.∈ δ
+  forget here = here
+  forget (there p) = there (forget p)
+
+  _[_]≔'_ : ∀ {δ} (M : Map A δ) → d Dom'.∈ δ → A → Map A δ
+  (M , .d ↦ _) [ here    ]≔' v' = M , d ↦ v'
+  (M , c ↦  v) [ there l ]≔' v' = M [ l ]≔' v' , c ↦ v
+
+  _[_]≔_ : ∀ {δ} (M : Map A δ){v} → d ↦ v ∈ M → A → Map A δ
+  M [ l ]≔ v' = M [ forget l ]≔' v'
 
 module _ {a} {A : Set a} where
     All : ∀ {δ}(Pred : URI → A → Set) → Map A δ → Set
@@ -86,3 +95,8 @@ module With-end {a}{A : Set a}(end : A) where
 
     [_is_⋎_] : ∀ {δ} → T δ → T δ → T δ → Set₁
     [_is_⋎_] = Zip
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
