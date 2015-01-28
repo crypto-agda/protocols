@@ -35,8 +35,12 @@ _♦Env_ = _♦Map_
 
 open With-end {_} {Session} end public
 
-Ended : ∀ {δ} (E : Env δ) → Set
+Ended : ∀ {δ}(E : Env δ) → Set
 Ended = Map.All (λ _ → Session.Ended)
+
+Ended-/* : ∀ {δ}(E : Env δ) → Ended (E /*)
+Ended-/* ε = _
+Ended-/* (E , c ↦ v) = Ended-/* E , _
 
 {-
 _[_+=_]η : ∀{d S δ δ'}(η : Env δ)(l : d ↦ S ∈ η) → Env δ' → Env {!!}

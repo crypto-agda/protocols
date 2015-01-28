@@ -34,7 +34,6 @@ data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : ∀ {δ} → Map A δ → Set₁
           → d ↦ S ∈ M
           → d ↦ S ∈ (M , d' ↦ S')
 
-
 module _ {a}{A : Set a}{d} where
 
   forget : ∀ {δ}{M : Map A δ}{v} → d ↦ v ∈ M → d Dom'.∈ δ

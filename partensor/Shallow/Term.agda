@@ -22,7 +22,7 @@ import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; _/_; Ended)
-open Proto   hiding () renaming (Selection to Selections)
+open Proto   hiding ()
 open import partensor.Shallow.Equiv
 
 module partensor.Shallow.Term where
@@ -120,13 +120,11 @@ module Translation
           F = E Env./ lE , c0 ↦ S₀ , c1 ↦ S₁
           J = I / lI ,[ F ]
           G = F /D there here /D here , c ↦ S₀ ⊗ S₁
-          FG : E ∼ G
-          FG = {!!}
           K = J / here ,[ G ]
           rPP : T⟨ K ⟩
           rPP = T-⊗-reorg here (there here) here (go (P c0 c1))
           e : K ≈ I
-          e = ≈-trans (≈,[] {!!} {!∼,↦!}) (≈-sym (thmA (mk lI lE)))
+          e = ≈-trans (≈,[] (≈,[end] (Ended-/* F)) (∼,↦ (∼-trans ∼,↦end ∼,↦end))) (≈-sym (thmA (mk lI lE)))
   {-
           PP  : ⟨ J ⟩
           PP  = P c0 c1

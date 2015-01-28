@@ -1,13 +1,16 @@
-open import Data.Product
+open import Data.Product hiding (zip)
+                         renaming (_,_ to ⟨_,_⟩; proj₁ to fst; proj₂ to snd;
+                                   map to ×map)
 open import Data.Zero
 open import Data.One
 open import Data.Two
 open import Data.Nat
+open import Relation.Nullary
 
 open import partensor.Shallow.Dom
-open import partensor.Shallow.Session hiding (Ended)
-open import partensor.Shallow.Map as Map using (Map; ε; _,_↦_; SelectionAll≡)
-open import partensor.Shallow.Env as Env using (Env; _/*)
+open import partensor.Shallow.Session as Session hiding (Ended)
+open import partensor.Shallow.Map as Map using (Map; ε; _,_↦_; _↦_∈_; SelectionAll≡)
+open import partensor.Shallow.Env as Env using (Env; _/*; here; there)
 
 module partensor.Shallow.Proto where
 
@@ -36,18 +39,18 @@ data Maps {a}(A : Set a) : Doms → Set a where
   · : Maps A ·
   _,[_] : ∀ {δs δ}(I : Maps A δs)(Δ : Map A δ) → Maps A (δs ,[ δ ])
 
-Proto     = Maps Session
-Selection = Maps 𝟚
+Proto      = Maps Session
+Selections = Maps 𝟚
 
 infix 5 _,[_↦_]
 _,[_↦_] : ∀{a}{A : Set a}{δs}(I : Maps A δs)(c : URI)(v : A) → Maps A (δs ,[ ε , c ↦* ])
 I ,[ c ↦ v ] = I ,[ (ε , c ↦ v) ]
 
-zipWith : ∀ {δs} (f : ∀ {δ} → Env δ → Sel δ → Env δ) → Proto δs → Selection δs → Proto δs
+zipWith : ∀ {δs}(f : ∀ {δ} → Env δ → Sel δ → Env δ) → Proto δs → Selections δs → Proto δs
 zipWith f · · = ·
 zipWith f (I ,[ Δ ]) (σs ,[ σ ]) = zipWith f I σs ,[ f Δ σ ]
 
-module SelProj = Env.With-end {_} {Session} end -- Selection
+module SelProj = Env.With-end {_} {Session} end
 {-
 module SelProj where
     _/₀_ : ∀ {δ} → Env δ → Sel δ → Env δ
@@ -61,7 +64,7 @@ module SelProj where
     I /₁ ₘ σ = I Env./₁ σ
 -}
 
-module _ {δs} (I : Proto δs) (σs : Selection δs) where
+module _ {δs}(I : Proto δs)(σs : Selections δs) where
         infixl 6 _/₀_ _/₁_
         _/₀_ : Proto δs
         _/₀_ = zipWith SelProj._/₀_ I σs
@@ -80,7 +83,7 @@ data SelAtMost (n : ℕ){δ : Dom}(σ : Sel δ) : ℕ → Set where
         e.g. σ [ c₀ ]= 0₂ and σ [ c₁ ]= 1₂ -}
       SelAtMost n σ (suc n)
 
-data AtMost : ℕ → ∀ {δs} → Selection δs → Set where
+data AtMost : ℕ → ∀ {δs} → Selections δs → Set where
   · : ∀ {n} → AtMost n ·
   _,[_] : ∀ {n m δ δs}{I σ} → AtMost n {δs} I → SelAtMost n {δ} σ m → AtMost m (I ,[ σ ])
 
@@ -112,13 +115,13 @@ _♦Proto_ : ∀ {δs δs'} → Proto δs → Proto δs' → Proto (δs ♦Doms 
 {-
 data Point : ∀ {δs} → Proto δs → Set₁ where
   here  : ∀ {δs I}   → Point {δs} I
-  there : ∀ {δs I δ} {Δ : Env δ} → Point {δs} I → Point (I ,[ Δ ])
+  there : ∀ {δs I δ}{Δ : Env δ} → Point {δs} I → Point (I ,[ Δ ])
 -}
 
 infix 3 [_]∈_
 data [_]∈_ {a}{A : Set a}{δ}(Δ : Map A δ) : ∀ {δs} → Maps A δs → Set a where
   here  : ∀ {δs}{I : Maps A δs} → [ Δ ]∈ I ,[ Δ ]
-  there : ∀ {δs δ}{I : Maps A δs} {Δ' : Map A δ} → [ Δ ]∈ I → [ Δ ]∈ I ,[ Δ' ]
+  there : ∀ {δs δ}{I : Maps A δs}{Δ' : Map A δ} → [ Δ ]∈ I → [ Δ ]∈ I ,[ Δ' ]
 
 {-
 data Mode : Set where
@@ -138,6 +141,7 @@ record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   field
 -}
 
+infix 0 [_↦_…]∈_ [_↦_]∈_
 record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   constructor mk
   field
@@ -149,6 +153,23 @@ record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   E/ = E Env./ lE
 module [↦…]∈ = [_↦_…]∈_
 open [↦…]∈ using (E/) public
+
+there… : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
+            [ c ↦ S …]∈ J → [ c ↦ S …]∈ J ,[ E ]
+there… (mk l l') = mk (there l) l'
+
+not-there : ∀ {δE c S}{E : Env δE}
+              (NES : ¬(Session.Ended S))
+              (EE : Env.Ended E)
+            → ¬(c ↦ S ∈ E)
+not-there NES EE here = NES (snd EE)
+not-there NES EE (there l) = not-there NES (fst EE) l
+
+unthere… : ∀ {δE δJ}{J : Proto δJ}{c S}(NES : ¬(Session.Ended S))
+             {E : Env δE}(EE : Env.Ended E) →
+           [ c ↦ S …]∈ J ,[ E ] → [ c ↦ S …]∈ J
+unthere… NES EE (mk here lE) = 𝟘-elim (not-there NES EE lE)
+unthere… NES EE (mk (there lI) lE) = mk lI lE
 
 record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   field
