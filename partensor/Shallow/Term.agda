@@ -55,7 +55,7 @@ data ⟨_⟩ {δI}(I : Proto δI) : Set₁ where
   nu :
     ∀ {S₀ S₁}
       (D : Dual S₀ S₁)
-      (P : ∀ c₀ c₁ → ⟨ I ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
+      (P : ∀ c₀ c₁ → ⟨ I ,[ ε , c₀ ↦ S₀ , c₁ ↦ S₁ ] ⟩)
     → ⟨ I ⟩
 
 
