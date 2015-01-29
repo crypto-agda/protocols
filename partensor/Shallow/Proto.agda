@@ -1,3 +1,4 @@
+open import Function
 open import Data.Product hiding (zip)
                          renaming (_,_ to ⟨_,_⟩; proj₁ to fst; proj₂ to snd;
                                    map to ×map)
@@ -39,8 +40,20 @@ data Maps {a}(A : Set a) : Doms → Set a where
   · : Maps A ·
   _,[_] : ∀ {δs δ}(I : Maps A δs)(Δ : Map A δ) → Maps A (δs ,[ δ ])
 
+pure : ∀ {a}{A : Set a}(δs : Doms)(f : URI → A) → Maps A δs
+pure ·           f = ·
+pure (δs ,[ δ ]) f = pure δs f ,[ Map.pure δ f ]
+
+constMaps : ∀ {a}{A : Set a}(δs : Doms)(v : A) → Maps A δs
+constMaps δs v = pure δs (const v)
+
 Proto      = Maps Session
 Selections = Maps 𝟚
+
+sel₀ : (δs : Doms) → Selections δs
+sel₁ : (δs : Doms) → Selections δs
+sel₀ δs = constMaps δs 0₂
+sel₁ δs = constMaps δs 1₂
 
 infix 5 _,[_↦_]
 _,[_↦_] : ∀{a}{A : Set a}{δs}(I : Maps A δs)(c : URI)(v : A) → Maps A (δs ,[ ε , c ↦* ])
@@ -154,6 +167,10 @@ record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
 module [↦…]∈ = [_↦_…]∈_
 open [↦…]∈ using (E/) public
 
+here… : ∀ {δJ}{J : Proto δJ}{c S} →
+          [ c ↦ S …]∈ J ,[ c ↦ S ]
+here… = mk here here
+
 there… : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
             [ c ↦ S …]∈ J → [ c ↦ S …]∈ J ,[ E ]
 there… (mk l l') = mk (there l) l'
@@ -180,6 +197,10 @@ record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
     E/c : Env.Ended (E Env./ lE)
   open [↦…]∈ l… public
 module [↦]∈ = [_↦_]∈_
+
+here[] : ∀ {δJ}{J : Proto δJ}{c S} →
+         [ c ↦ S ]∈ J ,[ c ↦ S ]
+here[] = mk here… _
 
 there[] : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
             [ c ↦ S ]∈ J → [ c ↦ S ]∈ J ,[ E ]
