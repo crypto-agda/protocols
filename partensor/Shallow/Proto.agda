@@ -181,6 +181,10 @@ record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   open [↦…]∈ l… public
 module [↦]∈ = [_↦_]∈_
 
+there[] : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
+            [ c ↦ S ]∈ J → [ c ↦ S ]∈ J ,[ E ]
+there[] (mk l l') = mk (there… l) l'
+
 {-
 module DomsFun where
   insert : (δs : Doms){P : Proto δs} → Point P → Doms → Doms
