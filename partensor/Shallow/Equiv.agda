@@ -129,6 +129,37 @@ record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
         → I ,[ E ] ≈ I
 ≈,[end] EE = ⟨ ⊆,[end] EE , ⊆s-there ⟩
 
+⊆,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ⊆s I ,[ F ] ,[ E ]
+un-⊆s ⊆,[swap] c S NES (mk here lE) = ⟨ (mk (there here) lE) , ∼-refl ⟩
+un-⊆s ⊆,[swap] c S NES (mk (there here) lE) = ⟨ (mk here lE) , ∼-refl ⟩
+un-⊆s ⊆,[swap] c S NES (mk (there (there lI)) lE) = ⟨ (mk (there (there lI)) lE) , ∼-refl ⟩
+
+≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
+_≈_.get-⊆s ≈,[swap] = ⊆,[swap]
+_≈_.get-⊇s ≈,[swap] = ⊆,[swap]
+
+♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto (B ♦Proto C) ≈ (A ♦Proto B) ♦Proto C
+♦-assoc {C = ·} = ≈-refl
+♦-assoc {C = C ,[ Δ ]} = ≈,[] (♦-assoc {C = C}) ∼-refl
+
+♦-com, : ∀ {δa δ δb}{A : Proto δa}{B : Proto δb}{E : Env δ} → (A ,[ E ]) ♦Proto B ≈ (A ♦Proto B),[ E ]
+♦-com, {B = ·} = ≈-refl
+♦-com, {B = B ,[ Δ ]} = ≈-trans (≈,[] (♦-com, {B = B}) ∼-refl) ≈,[swap]
+
+♦-com· : ∀ {δa}{A : Proto δa} → · ♦Proto A ≈ A
+♦-com· {A = ·} = ≈-refl
+♦-com· {A = A ,[ Δ ]} = ≈,[] ♦-com· ∼-refl
+
+♦-com : ∀ {δa δb}{A : Proto δa}{B : Proto δb} → (A ♦Proto B) ≈ (B ♦Proto A)
+♦-com {A = ·} = ♦-com·
+♦-com {A = A ,[ Δ ]}{B} = ≈-trans (♦-com, {A = A}{B}) (≈,[] (♦-com {A = A}) ∼-refl)
+
+/Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : Doms'.[ δ ]∈ δs)(l' : Doms'.[ δ' ]∈ δs)
+    → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
+/Ds-com Doms'.here Doms'.here = ≈-refl
+/Ds-com {I = I ,[ Δ ]} Doms'.here (Doms'.there l') = ≈-refl
+/Ds-com {I = I ,[ Δ ]} (Doms'.there l) Doms'.here = ≈-refl
+/Ds-com {I = I ,[ Δ ]} (Doms'.there l) (Doms'.there l') = ≈,[] (/Ds-com l l') ∼-refl
 {-
 foo :
   ∀ {δE δF}{E : Env δE}{F : Env δF}

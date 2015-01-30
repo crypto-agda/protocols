@@ -144,7 +144,6 @@ data TC⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (P₁ : TC⟨ I /₁ σs ⟩)
     → TC⟨ I ⟩
 
-
 {-
 cut : ∀ {δI}{I : Proto δI} → T⟨ I ⟩ → TC⟨ I ⟩
 cut (T-⊗-out l σs σE A0 P₀ P₁) = TC-⊗-out l σs σE A0 (λ c₀ → cut (P₀ c₀)) (λ c₁ → cut (P₁ c₁))

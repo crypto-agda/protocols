@@ -24,7 +24,7 @@ import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; _/_; Ended)
 open Proto   hiding ()
-open import partensor.Shallow.Equiv
+open import partensor.Shallow.Equiv hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
 open import partensor.Shallow.Term
 
 module partensor.Shallow.Cut where
@@ -88,6 +88,8 @@ postulate
   ∈♦₀… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₀ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
   ∈♦₁… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₁ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
 
+  /Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : Doms'.[ δ ]∈ δs)(l' : Doms'.[ δ' ]∈ δs)
+    → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
 
 
   move… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I) → DifferentVars… l l'
@@ -113,6 +115,93 @@ move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]�
           → [ d ↦ B ]∈ (I [/] l)
 move (mk l X) (mk l' Y) df = mk (move… l l' (Diff… df)) {!!}
 
+{-
+-- selection style
+record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
+  field
+    NES : ¬ (Session.Ended A)
+    cont-⅋ : ∀ {S T} → A ≡ S ⅋ T → ∀ {d e δJ}{J : Proto δJ}(σ : Selections δJ)
+      → K ≈ J /₁ σ →
+      (l : [ d ↦ S ]∈ J /₀ σ)(l' : [ e ↦ T ]∈ J /₀ σ)
+      → DifferentVars l l' → TC⟨ J /₀ σ ⟩ → TC⟨ J /₁ σ ⟩
+      → TC⟨ (J /Ds Proto.forget ([↦]∈.lI l) /Ds Proto.forget ([↦]∈.lI l')) ⟩
+open TC-Split
+
+TC-∈Split : ∀ {δI c A}{I : Proto δI}(σ : Selections δI) → TC-Split A (I /₁ σ) → (l : [ c ↦ A ]∈ I /₀ σ)
+  → TC⟨ I /₀ σ ⟩ → TC⟨ I /Ds Proto.forget ([↦]∈.lI l) ⟩
+TC-∈Split σ cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) = {!!}
+TC-∈Split σ cont l (TC-⅋-inp l₁ P) with sameVar? ([↦]∈.l… l) ([↦]∈.l… l₁)
+TC-∈Split σ cont (mk l X) (TC-⅋-inp (mk .l X₁) P) | same =
+  let X = cont-⅋ cont refl {c₀}{c₁} ((σ ,[ ε , _ ↦ 0₂ ]) ,[ ε , _ ↦ 0₂ ])
+          (≈-sym (≈-trans (≈,[end] _) (≈-trans (≈,[end] _) {!!})))
+          (there[] (mk (mk here here) {!!})) (mk (mk here here) {!!}) {!!} (TC-conv {!≈-refl!} (P c₀ c₁)) {!!}
+   in TC-conv (≈-trans (≈,[end] _) (≈,[end] _)) X
+   where postulate c₀ c₁ : _
+TC-∈Split σ cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp {!l₁!} {!!}
+TC-∈Split σ cont l (TC-end E) = {!!}
+TC-∈Split σ cont l (TC-split σs A1 P P₁) = {!!}
+-}
+
+record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
+  field
+    NES : ¬ (Session.Ended A)
+    cont-⅋ : ∀ {S T} → A ≡ S ⅋ T → ∀ {d e δJ}{J : Proto δJ}(l : [ d ↦ S ]∈ J)(l' : [ e ↦ T ]∈ J)
+      → DifferentVars l l' → TC⟨ J ⟩ → TC⟨ (J / [↦]∈.lI l /Ds Proto.forget ([↦]∈.lI l')) ♦Proto' K ⟩
+    cont-⊗ : ∀ {S T} → A ≡ S ⊗ T → ∀ {d e δ₀ δ₁}{J₀ : Proto δ₀}{J₁ : Proto δ₁}(l : [ d ↦ S ]∈ J₀)(l' : [ e ↦ T ]∈ J₁)
+      → TC⟨ J₀ ⟩ → TC⟨ J₁ ⟩ → TC⟨ (J₀ / [↦]∈.lI l ♦Proto' J₁ / ([↦]∈.lI l')) ♦Proto' K ⟩
+open TC-Split
+
+{-
+-- need to add that the erasure of the result is the same
+postulate
+  ∈-selections : ∀ {c A δI}{I : Proto δI}(σ : Selections δI)(l : [ c ↦ A ]∈ I)
+    → (c ↦ A ∈ (([↦]∈.E l) Env./₀ σ))
+    ⊎ ([ c ↦ A ]∈ I /₁ σ)
+-}
+
+data ∈-select {c A}{δI}{I : Proto δI}:(σ : Selections δI) → [ c ↦ A ]∈ I → Set where
+
+postulate
+  End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₀ σ)
+  End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₁ σ)
+  Sel♦ : ∀ {δs}{I : Proto δs}(σ : Selections δs) → I /₀ σ ♦Proto' I /₁ σ ≈ I
+
+--need continuation for ⊗
+TC-∈Split : ∀ {δI δK c A}{I : Proto δI}{K : Proto δK} → TC-Split A K → (l : [ c ↦ A ]∈ I)
+  → TC⟨ I ⟩ → TC⟨ I [/] l ♦Proto' K ⟩
+TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) with sameVar? ([↦]∈.l… l) l₁
+TC-∈Split cont (mk l X) (TC-⊗-out .l σs σE A0 P₀ P₁) | same = TC-conv
+  (♦-cong₂ (≈-trans (♦-cong₂ (≈,[end] ⟨ mapAll _ _ , _ ⟩) (≈,[end] ⟨ mapAll _ _ , _ ⟩))
+  (Sel♦ σs))
+  ≈-refl)
+  (cont-⊗ cont refl (mk (mk here here) E₀) (mk (mk here here) ⟨ End/₁ σE X , _ ⟩) (P₀ c₀) (P₁ c₁))
+  where postulate c₀ c₁ : _
+        E₀ = ⟨ End/₀ σE X , _ ⟩
+TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) | diff x = {!!}
+TC-∈Split cont l (TC-⅋-inp l₁ P) with sameVar? ([↦]∈.l… l) ([↦]∈.l… l₁)
+TC-∈Split cont (mk l X) (TC-⅋-inp (mk .l Y) P) | same = TC-conv
+  (♦-cong₂ (≈-trans (≈,[end] _) (≈,[end] _)) ≈-refl)
+  (cont-⅋ cont refl (there[] (mk (mk here here) _)) (mk (mk here here) _) {!!} (P c₀ c₁))
+  -- postulate for channels.. grr
+  where postulate c₀ c₁ : _
+TC-∈Split cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp (∈♦₀ (move l l₁ (mk x))) λ c₀ c₁ →
+  TC-conv (≈-trans ♦-com,
+          (≈,[] (≈-trans ♦-com, (≈,[]
+           (≈-sym (≈-trans (∈♦₀-compute (move l l₁ (mk x)))
+           (♦-cong₂ (≈-trans (move-compute… _ _ _)
+           (≈-trans (/Ds-com (Proto.forget ([↦]∈.lI l)) (Proto.forget ([↦]∈.lI l₁)))
+           (≈-sym (move-compute… _ _ _))))
+           ≈-refl)))
+           ∼-refl))
+           ∼-refl))
+  (TC-∈Split cont (there[] (there[] (move l₁ l (Diff-sym (mk x))))) (P c₀ c₁))
+TC-∈Split cont l (TC-end E) = 𝟘-elim (NES cont (Map.All∈ (Proto.All∈ E ([↦]∈.lI l)) ([↦]∈.lE l)))
+TC-∈Split cont l (TC-split σs A1 P P₁) = {!!}
+{-with ∈-selections σs l
+TC-∈Split {δK = δK} cont l (TC-split σs A1 P P₁) | inj₁ x = TC-split (allLeft δK σs) {!!} (TC-conv {!!} (TC-∈Split cont x P)) (TC-conv {!!} P₁)
+TC-∈Split cont l (TC-split σs A1 P P₁) | inj₂ y = {!!}
+
+{-
 
 TC-∈⅋ : ∀ {δI δK c A B}{I : Proto δI}{K : Proto δK}(l : [ c ↦ A ⅋ B ]∈ I)
   → (∀ {d e δJ}{J : Proto δJ} (l : [ d ↦ A ]∈ J)(l' : [ e ↦  B ]∈ J) → DifferentVars l l' → TC⟨ J ⟩
@@ -127,7 +216,7 @@ TC-∈⅋ (mk l y) cont (TC-⅋-inp (mk .l x) P) | same = TC-conv (♦-cong₂ (
       c₀ c₁ : _
 TC-∈⅋ l cont (TC-⅋-inp l₁ P) | diff l/=l₁ = TC-⅋-inp (∈♦₀ (move  l l₁ (mk l/=l₁))) (λ c₀ c₁ →
    TC-conv (≈-trans ♦-com, (≈,[] (≈-trans ♦-com, (≈,[] (≈-sym (≈-trans (∈♦₀-compute (move l l₁ (mk l/=l₁)))
-           (♦-cong₂ (≈-trans (move-compute… ([↦]∈.l… l) ([↦]∈.l… l₁) l/=l₁) 
+           (♦-cong₂ (≈-trans (move-compute… ([↦]∈.l… l) ([↦]∈.l… l₁) l/=l₁)
            (≈-trans {!!}
             (≈-sym (move-compute… _ _ _)))) ≈-refl))) ∼-refl)) ∼-refl))
   (TC-∈⅋ (there[] (there[] (move l₁ l (Diff-sym (mk l/=l₁))))) cont (P c₀ c₁)))
@@ -166,6 +255,16 @@ TC-cut (⅋⊗ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = TC-conv ≈-refl
           (TC-cut D₃ e' (∈♦₁ (move d e d/=e)) b X))
    P₁)) P₀)
 
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
 -- -}
 -- -}
 -- -}

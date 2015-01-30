@@ -52,6 +52,11 @@ module _ {a} {A : Set a} where
     All Pred ε = 𝟙
     All Pred (M , d ↦ p) = All Pred M × Pred d p
 
+    All∈ : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈ M → Pred c x
+    All∈ all here = Data.Product.proj₂ all
+    All∈ all (there l) = All∈ (Data.Product.proj₁ all) l
+
+
 infixr 4 _♦Map_
 _♦Map_ : ∀ {a}{A : Set a}{D₀ D₁} → Map A D₀ → Map A D₁ → Map A (D₀ ♦Dom D₁)
 M ♦Map ε = M
@@ -61,6 +66,12 @@ map : ∀ {a b} {A : Set a} {B : Set b} {δ}
         (f : A → B) (m : Map A δ) → Map B δ
 map f ε = ε
 map f (m , c ↦ v) = map f m , c ↦ f v
+
+
+mapAll : ∀ {a b δ}{A : Set a}{B : Set b}{P : URI → B → Set}{f : A → B}
+  (PF : ∀ {c} x → P c (f x))(M : Map A δ) → All P (map f M)
+mapAll PF ε = 0₁
+mapAll PF (M , c ↦ v) = mapAll PF M Data.Product., PF v
 
 zipWith : ∀ {a b c} {A : Set a} {B : Set b} {C : Set c} {δ}
             (f : A → B → C) (mA : Map A δ) (mB : Map B δ) → Map C δ

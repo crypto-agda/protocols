@@ -230,6 +230,7 @@ _[/]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S ]∈ I) → Proto δs
 I [/] l = I / lI
   where open [↦]∈ l
 
+-- nuke everything in the tensor group c is found in
 _[/…]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈ I) → Proto δs
 I [/…] l = I / lI
   where open [↦…]∈ l
@@ -237,6 +238,10 @@ I [/…] l = I / lI
 All : (Pred : ∀ {δ} → Env δ → Set) → ∀ {δs} → Proto δs → Set
 All Pred · = 𝟙
 All Pred (Δ ,[ E ]) = All Pred Δ × Pred E
+
+All∈ : ∀ {Pred : ∀ {δ} → Env δ → Set}{δs δ}{I : Proto δs}{E : Env δ} → All Pred I → [ E ]∈ I → Pred E
+All∈ ⟨ APE , PE ⟩ here = PE
+All∈ ⟨ APE , PE ⟩ (there l) = All∈ APE l
 
 Ended : ∀ {δs} → Proto δs → Set
 Ended = All Env.Ended
