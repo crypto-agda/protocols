@@ -6,16 +6,7 @@ open import Data.Product hiding (zip)
 open import Data.Zero
 open import Data.One
 open import Data.Two
-open import Data.Sum
-open import Data.Nat
-{-
-open import Data.Vec
-open import Data.Fin
--}
--- open import Data.List
 
-open import Relation.Nullary
-open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
 open import partensor.Shallow.Dom
 import partensor.Shallow.Session as Session
 import partensor.Shallow.Map as Map
@@ -52,6 +43,14 @@ module Translation
       (E : Ended I)
     → T⟨ I ⟩)
 
+ (T-split :
+    ∀ {δI}{I : Proto δI}
+      (σs : Selections δI)
+      (A1 : AtMost 1 σs)
+      (P₀ : T⟨ I /₀ σs ⟩)
+      (P₁ : T⟨ I /₁ σs ⟩)
+    → T⟨ I ⟩)
+
  (T-cut :
     ∀ {δI}{I : Proto δI}{S₀ S₁}
       (D : Dual S₀ S₁)
@@ -69,25 +68,28 @@ module Translation
       (P : T⟨ J ⟩)
     → T⟨ J / l ,[ (E Env./ l₀ /D (Env.forget l₁) , c ↦ S₀ ⊗ S₁) ] ⟩)
 
- -- (_≈T_ : ∀ {I J} → T⟨ I ⟩ → T⟨ J ⟩ → Set)
  (T-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → T⟨ I ⟩ → T⟨ J ⟩)
 
-
-{-
-      Σ (Selections
-        T⟨ I /₀ σs ⟩
-      × T⟨ I /₁ σs ⟩
--}
-
--- (T-gc : T⟨ I ⟩ → 
-
   where
+
+  T-fwd : ∀ {S₀ S₁} (S : Dual S₀ S₁) c₀ c₁ → T⟨ · ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩
+  T-fwd end c₀ c₁ = T-end _
+  T-fwd (⊗⅋ S₀ S₁ S₂ S₃) c₀ c₁ =
+    T-⅋-inp here[] λ c₂ c₃ →
+      T-⊗-out (there… (there… (there… here…)))
+              ((((· ,[ (ε , c₀ ↦ 0₂) ]) ,[ (ε , c₁ ↦ 0₂) ]) ,[ (ε , c₂ ↦ 0₂) ]) ,[ (ε , c₃ ↦ 1₂) ])
+              (ε , c₀ ↦ 0₂)
+              ((((· ,[ {!!} ]) ,[ {!!} ]) ,[ {!!} ]) ,[ {!!} ])
+              (λ c₄ → T-conv (≈,[] (≈-! {!≈,[]!}) (∼,↦ (∼-! ∼,↦end))) (T-fwd S₁ c₃ c₄))
+              (λ c₄ → T-conv (≈,[] (≈,[] (≈-! (≈,[end] _ ≈-∙ (≈,[end] _ ≈-∙ ≈,[end] _))) ∼-refl) (∼,↦ (∼-! ∼,↦end))) (T-fwd S₃ c₃ c₄))
+  T-fwd (⅋⊗ S S₁ S₂ S₃) c₀ c₁ = {!!}
 
   go : ∀ {δI}{I : Proto δI} → ⟨ I ⟩ → T⟨ I ⟩
   go (end x) = T-end x
   go (⅋-inp l P) = T-⅋-inp l (λ c₀ c₁ → go (P c₀ c₁))
-  go {δI}{I}(⊗-out {c} {S₀} {S₁} (mk {δE} {E} lI lE) P) = T-conv e rPP
+  go {I = I}(⊗-out {c} {S₀} {S₁} l P) = T-conv e rPP
     where postulate c0 c1 : URI
+          open [↦…]∈ l
           F = E Env./ lE , c0 ↦ S₀ , c1 ↦ S₁
           J = I / lI ,[ F ]
           G = F /D there here /D here , c ↦ S₀ ⊗ S₁
@@ -95,15 +97,27 @@ module Translation
           rPP : T⟨ K ⟩
           rPP = T-⊗-reorg here (there here) here (go (P c0 c1))
           e : K ≈ I
-          e = ≈-trans (≈,[] (≈,[end] (Ended-/* F)) (∼,↦ (∼-trans ∼,↦end ∼,↦end))) (≈-sym (thmA (mk lI lE)))
-  {-
-          PP  : ⟨ J ⟩
-          PP  = P c0 c1
-          gPP : T⟨ J ⟩
-          gPP = go PP
-          SP = ⊗-split {!!} here PP λ {J} σ P₀ P₁ →
-                 {!⊗-split ? here P₀ λ {J'} σ' P₀' P₁' →
-                     ?!}
-   -}
-  go (split Z A P₀ P₁) = {!!}
-  go (nu D P) = {!!}
+          e = ≈,[] (≈,[end] (Ended-/* F)) (∼,↦ (∼,↦end ∼-∙ ∼,↦end)) ≈-∙ (≈-! (thmA l))
+  go {I = I}(nu {S₀} {S₁} D P) = T-conv {!!} (T-cut {I = I'} D (sel₀ _ ,[ (ε , c ↦ 0₂) ] ,[ (ε , c' ↦ 1₂) ]) {!!} (λ c₀' → {!cPP!}) (λ c₁' → {!T-fwd!}))
+    where postulate c c' c0 c1 : URI
+          E   = ε , c0 ↦ S₀  , c1 ↦ S₁
+          E/* = ε , c0 ↦ end , c1 ↦ end
+          J = I ,[ E ]
+          -- K = J / here ,[ E/* , c ↦ S₀ ⊗ S₁ ]
+          K = I ,[ E/* ] ,[ E/* , c ↦ S₀ ⊗ S₁ ]
+          gP : T⟨ J ⟩
+          gP = go (P c0 c1)
+          rPP : T⟨ K ⟩
+          rPP = T-⊗-reorg {c = c} here (there here) here gP
+          e : K ≈ I ,[ c ↦ S₀ ⊗ S₁ ]
+          e = ≈,[] (≈,[end] _) (∼,↦ (∼,↦end ∼-∙ ∼,↦end))
+          cPP : T⟨ I ,[ c ↦ S₀ ⊗ S₁ ] ⟩
+          cPP = T-conv e rPP
+          I' = I ,[ c ↦ S₀ ⊗ S₁ ] ,[ c' ↦ {!!} ]
+  go (split σs A P₀ P₁) = T-split σs A (go P₀) (go P₁)
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}

@@ -51,9 +51,13 @@ open _∼_ public
 ∼-sym : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
 ∼-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
 
+∼-! = ∼-sym
+
 ∼-trans : ∀ {δE δF δG}{E : Env δE}{F : Env δF}{G : Env δG}
           → E ∼ F → F ∼ G → E ∼ G
 ∼-trans ⟨ p , q ⟩ ⟨ r , s ⟩ = ⟨ ⊆-trans p r , ⊆-trans s q ⟩
+
+_∼-∙_ = ∼-trans
 
 ∼,↦ : ∀ {δE δF}{E : Env δE}{F : Env δF}{c S}
        → E ∼ F → E , c ↦ S ∼ F , c ↦ S
@@ -74,9 +78,7 @@ record _⊆s_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
   constructor mk
   field
     un-⊆s : ∀ c S (NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈ I)
-           →
-            Σ ([ c ↦ S …]∈ J) λ l' →
-              [↦…]∈.E l ∼ [↦…]∈.E l'
+            → Σ ([ c ↦ S …]∈ J) λ l' → [↦…]∈.E l ∼ [↦…]∈.E l'
 open _⊆s_ public
 
 ⊆s-there : ∀ {δE δJ}{E : Env δE}{J : Proto δJ} → J ⊆s J ,[ E ]
@@ -117,9 +119,13 @@ record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
         → I ≈ J → J ≈ I
 ≈-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
 
+≈-! = ≈-sym
+
 ≈-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
           → I ≈ J → J ≈ K → I ≈ K
 ≈-trans ⟨ p , q ⟩ ⟨ r , s ⟩ = ⟨ ⊆s-trans p r , ⊆s-trans s q ⟩
+
+_≈-∙_ = ≈-trans
 
 ≈,[] : ∀ {δE δF δI δJ}{E : Env δE}{F : Env δF}{I : Proto δI}{J : Proto δJ}
        → I ≈ J → E ∼ F → I ,[ E ] ≈ J ,[ F ]

@@ -1,3 +1,4 @@
+open import Function
 open import Data.One
 open import Data.Two
 open import Data.Product using (_×_)
@@ -61,6 +62,13 @@ infixr 4 _♦Map_
 _♦Map_ : ∀ {a}{A : Set a}{D₀ D₁} → Map A D₀ → Map A D₁ → Map A (D₀ ♦Dom D₁)
 M ♦Map ε = M
 M ♦Map (M' , d ↦ P) = (M ♦Map M') , d ↦ P
+
+pure : ∀ {a}{A : Set a}(δ : Dom)(f : URI → A) → Map A δ
+pure ε          f = ε
+pure (δ , c ↦*) f = pure δ f , c ↦ f c
+
+constMap : ∀ {a}{A : Set a}(δ : Dom)(v : A) → Map A δ
+constMap δ v = pure δ (const v)
 
 map : ∀ {a b} {A : Set a} {B : Set b} {δ}
         (f : A → B) (m : Map A δ) → Map B δ
