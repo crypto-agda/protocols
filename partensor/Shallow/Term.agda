@@ -144,6 +144,32 @@ data TC⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (P₁ : TC⟨ I /₁ σs ⟩)
     → TC⟨ I ⟩
 
+data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
+ TC-⊗-out :
+    ∀ {c S₀ S₁}
+      (l : [ c ↦ S₀ ⊗ S₁ …]∈' I)
+      (σs : Selections δI)
+      (σE : Selection ([↦…]∈'.δE l))
+      (A0 : AtMost 0 σs)
+      (P₀ : ∀ c₀ → TC'⟨ I [/…]' l /₀ σs ,[ E/' l Env./₀ σE , c₀ ↦ S₀ ] ⟩)
+      (P₁ : ∀ c₁ → TC'⟨ I [/…]' l /₁ σs ,[ E/' l Env./₁ σE , c₁ ↦ S₁ ] ⟩)
+    → TC'⟨ I ⟩
+
+ TC-⅋-inp :
+    ∀ {c S₀ S₁}
+      (l : [ c ↦ S₀ ⅋ S₁ ]∈' I)
+      (P : ∀ c₀ c₁ → TC'⟨ I [/]' l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
+    → TC'⟨ I ⟩
+
+ TC-end : ∀ (E : Ended I) → TC'⟨ I ⟩
+
+ TC-split :
+      (σs : Selections δI)
+      (A1 : AtMost 1 σs)
+      (P₀ : TC'⟨ I /₀ σs ⟩)
+      (P₁ : TC'⟨ I /₁ σs ⟩)
+    → TC'⟨ I ⟩
+
 {-
 cut : ∀ {δI}{I : Proto δI} → T⟨ I ⟩ → TC⟨ I ⟩
 cut (T-⊗-out l σs σE A0 P₀ P₁) = TC-⊗-out l σs σE A0 (λ c₀ → cut (P₀ c₀)) (λ c₁ → cut (P₁ c₁))

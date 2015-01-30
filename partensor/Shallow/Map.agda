@@ -29,11 +29,30 @@ data Map {a} (A : Set a) : Dom → Set a where
   ε     : Map A ε
   _,_↦_ : ∀ {δ} (E : Map A δ) c (v : A) → Map A (δ , c ↦*)
 
+
+
 data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : ∀ {δ} → Map A δ → Set₁ where
   here  : ∀ {δ} {M : Map A δ} → d ↦ S ∈ (M , d ↦ S)
   there : ∀ {δ} {M : Map A δ} {d' S'}
           → d ↦ S ∈ M
           → d ↦ S ∈ (M , d' ↦ S')
+
+lookup : ∀ {a}{A : Set a}{c δ} → Map A δ → c Dom'.∈ δ → A
+lookup (M , c ↦ v) here = v
+lookup (M , c₁ ↦ v) (there l) = lookup M l
+
+-- middle-ground between above and: Map A δ ≈ ∀ {c} → c ∈ δ → A
+record _↦_∈'_ {a}{A : Set a}(d : URI)(S : A){δ}(M : Map A δ) : Set a where
+  constructor mk
+  field
+    lA : d Dom'.∈ δ
+    ↦A : lookup M lA ≡ S
+module ↦∈' = _↦_∈'_
+
+there' : ∀ {a}{A : Set a}{d S δ} {M : Map A δ} {d' S'}
+          → d ↦ S ∈' M
+          → d ↦ S ∈' (M , d' ↦ S')
+there' l = mk (there (↦∈'.lA l)) (↦∈'.↦A l)
 
 module _ {a}{A : Set a}{d} where
 

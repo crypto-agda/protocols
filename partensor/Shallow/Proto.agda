@@ -7,10 +7,12 @@ open import Data.One
 open import Data.Two
 open import Data.Nat
 open import Relation.Nullary
+open import Relation.Binary.PropositionalEquality
 
 open import partensor.Shallow.Dom
 open import partensor.Shallow.Session as Session hiding (Ended)
-open import partensor.Shallow.Map as Map using (Map; ε; _,_↦_; _↦_∈_; SelectionAll≡)
+import partensor.Shallow.Map as Map
+open Map using (Map; ε; _,_↦_; _↦_∈_; _↦_∈'_; SelectionAll≡)
 open import partensor.Shallow.Env as Env using (Env; _/*; here; there)
 
 module partensor.Shallow.Proto where
@@ -39,6 +41,10 @@ open Doms' using (here; there)
 data Maps {a}(A : Set a) : Doms → Set a where
   · : Maps A ·
   _,[_] : ∀ {δs δ}(I : Maps A δs)(Δ : Map A δ) → Maps A (δs ,[ δ ])
+
+lookup : ∀ {a δs δ}{A : Set a} → Maps A δs → Doms'.[ δ ]∈ δs → Map A δ
+lookup (M ,[ Δ ]) here = Δ
+lookup (M ,[ Δ ]) (there l) = lookup M l
 
 pure : ∀ {a}{A : Set a}(δs : Doms)(f : URI → A) → Maps A δs
 pure ·           f = ·
@@ -131,10 +137,17 @@ data Point : ∀ {δs} → Proto δs → Set₁ where
   there : ∀ {δs I δ}{Δ : Env δ} → Point {δs} I → Point (I ,[ Δ ])
 -}
 
-infix 3 [_]∈_
+infix 3 [_]∈_ [_]∈'_
 data [_]∈_ {a}{A : Set a}{δ}(Δ : Map A δ) : ∀ {δs} → Maps A δs → Set a where
   here  : ∀ {δs}{I : Maps A δs} → [ Δ ]∈ I ,[ Δ ]
   there : ∀ {δs δ}{I : Maps A δs}{Δ' : Map A δ} → [ Δ ]∈ I → [ Δ ]∈ I ,[ Δ' ]
+
+record [_]∈'_ {a}{A : Set a}{δ}(Δ : Map A δ){δs}(M : Maps A δs) : Set a where
+  constructor mk
+  field
+    lΔ : Doms'.[ δ ]∈ δs
+    ↦Δ : lookup M lΔ ≡ Δ
+
 
 {-
 data Mode : Set where
@@ -167,13 +180,36 @@ record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
 module [↦…]∈ = [_↦_…]∈_
 open [↦…]∈ using (E/) public
 
+infix 0 [_↦_…]∈'_ [_↦_]∈'_
+record [_↦_…]∈'_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  constructor mk
+  field
+    {δE} : Dom
+    {E}  : Env δE
+    lI   : [ E ]∈' I
+    lE   : c Env.↦ S ∈' E
+  open [_]∈'_ lI public
+  open Env._↦_∈'_ lE public
+  E/' : Env δE
+  E/' = E Env./' lE
+module [↦…]∈' = [_↦_…]∈'_
+open [↦…]∈' using (E/') public
+
 here… : ∀ {δJ}{J : Proto δJ}{c S} →
           [ c ↦ S …]∈ J ,[ c ↦ S ]
 here… = mk here here
 
+here…' : ∀ {δJ}{J : Proto δJ}{c S} →
+          [ c ↦ S …]∈' J ,[ c ↦ S ]
+here…' = mk (mk here refl) (Map.mk here refl)
+
 there… : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
             [ c ↦ S …]∈ J → [ c ↦ S …]∈ J ,[ E ]
 there… (mk l l') = mk (there l) l'
+
+there…' : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
+            [ c ↦ S …]∈' J → [ c ↦ S …]∈' J ,[ E ]
+there…' (mk (mk l X) l') = mk (mk (there l) X) l'
 
 not-there : ∀ {δE c S}{E : Env δE}
               (NES : ¬(Session.Ended S))
@@ -182,11 +218,24 @@ not-there : ∀ {δE c S}{E : Env δE}
 not-there NES EE here = NES (snd EE)
 not-there NES EE (there l) = not-there NES (fst EE) l
 
+not-there' : ∀ {δE c S}{E : Env δE}
+              (NES : ¬(Session.Ended S))
+              (EE : Env.Ended E)
+            → ¬(c ↦ S ∈' E)
+not-there' {E = E , ._ ↦ ._} NES EE (Map.mk here refl) = NES (snd EE)
+not-there' {E = E , c₁ ↦ v} NES EE (Map.mk (there lA) ↦A) = not-there' NES (fst EE) (Map.mk lA ↦A)
+
 unthere… : ∀ {δE δJ}{J : Proto δJ}{c S}(NES : ¬(Session.Ended S))
              {E : Env δE}(EE : Env.Ended E) →
            [ c ↦ S …]∈ J ,[ E ] → [ c ↦ S …]∈ J
 unthere… NES EE (mk here lE) = 𝟘-elim (not-there NES EE lE)
 unthere… NES EE (mk (there lI) lE) = mk lI lE
+
+unthere…' : ∀ {δE δJ}{J : Proto δJ}{c S}(NES : ¬(Session.Ended S))
+             {E : Env δE}(EE : Env.Ended E) →
+           [ c ↦ S …]∈' J ,[ E ] → [ c ↦ S …]∈' J
+unthere…' NES EE (mk (mk here refl) lE) = 𝟘-elim (not-there' NES EE lE)
+unthere…' NES EE (mk (mk (there lΔ) ↦Δ) lE) = mk (mk lΔ ↦Δ) lE
 
 record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   constructor mk
@@ -198,13 +247,31 @@ record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   open [↦…]∈ l… public
 module [↦]∈ = [_↦_]∈_
 
+record [_↦_]∈'_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
+  constructor mk
+  field
+    l…  : [ c ↦ S …]∈' I
+  open [↦…]∈' l…
+  field
+    E/c : Env.Ended (E Env./' lE)
+  open [↦…]∈' l… public
+module [↦]∈' = [_↦_]∈'_
+
 here[] : ∀ {δJ}{J : Proto δJ}{c S} →
          [ c ↦ S ]∈ J ,[ c ↦ S ]
 here[] = mk here… _
 
+here[]' : ∀ {δJ}{J : Proto δJ}{c S} →
+         [ c ↦ S ]∈' J ,[ c ↦ S ]
+here[]' = mk here…' _
+
 there[] : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
             [ c ↦ S ]∈ J → [ c ↦ S ]∈ J ,[ E ]
 there[] (mk l l') = mk (there… l) l'
+
+there[]' : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
+            [ c ↦ S ]∈' J → [ c ↦ S ]∈' J ,[ E ]
+there[]' (mk l l') = mk (there…' l) l'
 
 {-
 module DomsFun where
@@ -247,14 +314,26 @@ _/Ds_ : ∀ {δ δs}(I : Proto δs)(l : Doms'.[ δ ]∈ δs) → Proto δs
 _/_ : ∀ {δ δs}(I : Proto δs){E : Env δ}(l : [ E ]∈ I) → Proto δs
 I / l = I /Ds forget l
 
+_/'_ : ∀ {δ δs}(I : Proto δs){E : Env δ}(l : [ E ]∈' I) → Proto δs
+I /' l = I /Ds [_]∈'_.lΔ l
+
 _[/]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S ]∈ I) → Proto δs
 I [/] l = I / lI
   where open [↦]∈ l
+
+_[/]'_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S ]∈' I) → Proto δs
+I [/]' l = I /Ds lΔ
+  where open [↦]∈' l
 
 -- nuke everything in the tensor group c is found in
 _[/…]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈ I) → Proto δs
 I [/…] l = I / lI
   where open [↦…]∈ l
+
+-- nuke everything in the tensor group c is found in
+_[/…]'_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈' I) → Proto δs
+I [/…]' l = I /Ds lΔ
+  where open [↦…]∈' l
 
 All : (Pred : ∀ {δ} → Env δ → Set) → ∀ {δs} → Proto δs → Set
 All Pred · = 𝟙

@@ -24,7 +24,7 @@ import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; _/_; Ended)
 open Proto   hiding ()
-open import partensor.Shallow.Equiv hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
+open import partensor.Shallow.Equiv' hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
 open import partensor.Shallow.Term
 
 module partensor.Shallow.Cut where
@@ -52,68 +52,119 @@ data DifferentVarsDoms : ∀ {δI c d} → Doms'.[ c ]∈ δI → Doms'.[ d ]∈
 DifferentVars : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A ]∈ I → [ d ↦ B ]∈ I → Set
 DifferentVars l l' = DifferentVarsDoms (Proto.forget ([↦]∈.lI l)) (Proto.forget ([↦]∈.lI l'))
 -}
+
+
 postulate
-  DifferentVars… : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A …]∈ I → [ d ↦ B …]∈ I → Set
-  Diff-sym… : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A …]∈ I}{l' : [ d ↦ B …]∈ I}
+  DifferentVars… : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A …]∈' I → [ d ↦ B …]∈' I → Set
+  Diff-sym… : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A …]∈' I}{l' : [ d ↦ B …]∈' I}
     → DifferentVars… l l' → DifferentVars… l' l
 
-record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) : Set where
+record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈' I)(l' : [ d ↦ B ]∈' I) : Set where
   constructor mk
   field
-    Diff… : DifferentVars… ([↦]∈.l… l) ([↦]∈.l… l')
+    Diff… : DifferentVars… ([↦]∈'.l… l) ([↦]∈'.l… l')
 open DifferentVars
 
-Diff-sym : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A ]∈ I}{l' : [ d ↦ B ]∈ I}
+Diff-sym : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A ]∈' I}{l' : [ d ↦ B ]∈' I}
     → DifferentVars l l' → DifferentVars l' l
 Diff… (Diff-sym df) = Diff-sym… (Diff… df)
 
-data SameVar? {δI}{I : Proto δI} : ∀ {c c' A A'} → [ c ↦ A …]∈ I → [ c' ↦ A' …]∈ I → Set₁ where
-  same : ∀ {c A}{l : [ c ↦ A …]∈ I} → SameVar? l l
-  diff : ∀ {c c' A B}{l : [ c ↦ A …]∈ I}{l' : [ c' ↦ B …]∈ I} → DifferentVars… l l' → SameVar? l l'
+data SameVar? {δI}{I : Proto δI} : ∀ {c c' A A'} → [ c ↦ A …]∈' I → [ c' ↦ A' …]∈' I → Set₁ where
+  same : ∀ {c A}{l : [ c ↦ A …]∈' I} → SameVar? l l
+  diff : ∀ {c c' A B}{l : [ c ↦ A …]∈' I}{l' : [ c' ↦ B …]∈' I} → DifferentVars… l l' → SameVar? l l'
 
 postulate
-  sameVar? : ∀ {δI}{I : Proto δI}{c c' A A'}(l : [ c ↦ A …]∈ I)(l' : [ c' ↦ A' …]∈ I) → SameVar? l l'
+  sameVar? : ∀ {δI}{I : Proto δI}{c c' A A'}(l : [ c ↦ A …]∈' I)(l' : [ c' ↦ A' …]∈' I) → SameVar? l l'
 
 postulate
   TC-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
-    → I ≈ J → TC⟨ I ⟩ → TC⟨ J ⟩
+    → I ≈ J → TC'⟨ I ⟩ → TC'⟨ J ⟩
 
   ♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto' (B ♦Proto' C) ≈ (A ♦Proto' B) ♦Proto' C
   ♦-com : ∀ {δa δb}{A : Proto δa}{B : Proto δb} → (A ♦Proto' B) ≈ (B ♦Proto' A)
   ♦-cong₂ : ∀ {δa δb δc δd}{A : Proto δa}{B : Proto δb}{C : Proto δc}{D : Proto δd}
           → A ≈ B → C ≈ D → A ♦Proto' C ≈ B ♦Proto' D
   ♦-com, : ∀ {δa δ δb}{A : Proto δa}{B : Proto δb}{E : Env δ} → (A ,[ E ]) ♦Proto' B ≈ (A ♦Proto' B),[ E ]
-
-
-  ∈♦₀… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₀ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
-  ∈♦₁… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₁ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
+  ∈♦₀… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈' I₀ → [ c ↦ A …]∈' (I₀ ♦Proto' I₁)
+  ∈♦₁… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈' I₁ → [ c ↦ A …]∈' (I₀ ♦Proto' I₁)
 
   /Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : Doms'.[ δ ]∈ δs)(l' : Doms'.[ δ' ]∈ δs)
     → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
 
 
-  move… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I) → DifferentVars… l l'
-          → [ d ↦ B …]∈ (I [/…] l)
-  move-compute… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I)(l/=l' : DifferentVars… l l')
-    → (I [/…] l) [/…] move… l l' l/=l' ≈ (I [/…] l) /Ds Proto.forget ([↦…]∈.lI l')
+  move… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈' I)(l' : [ d ↦ B …]∈' I) → DifferentVars… l l'
+          → [ d ↦ B …]∈' (I [/…]' l)
+  move-compute… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈' I)(l' : [ d ↦ B …]∈' I)(l/=l' : DifferentVars… l l')
+    → (I [/…]' l) [/…]' move… l l' l/=l' ≈ (I [/…]' l) /Ds [↦…]∈'.lΔ l'
 
-∈♦₀ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈ I₀ → [ c ↦ A ]∈ (I₀ ♦Proto' I₁)
+∈♦₀ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈' I₀ → [ c ↦ A ]∈' (I₀ ♦Proto' I₁)
 ∈♦₀ (mk l… E/c) = mk (∈♦₀… l…) {!!}
 
-∈♦₁ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈ I₁ → [ c ↦ A ]∈ (I₀ ♦Proto' I₁)
+∈♦₁ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈' I₁ → [ c ↦ A ]∈' (I₀ ♦Proto' I₁)
 ∈♦₁ (mk l… E/c) = {!!}
 
-∈♦₀-compute : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈ I₀) →
-          (I₀ ♦Proto' I₁) [/] (∈♦₀ l) ≈ (I₀ [/] l) ♦Proto' I₁
+∈♦₀-compute : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈' I₀) →
+          (I₀ ♦Proto' I₁) [/]' (∈♦₀ l) ≈ (I₀ [/]' l) ♦Proto' I₁
 ∈♦₀-compute = {!!}
 
-∈♦₁-compute : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈ I₁) →
-          (I₀ ♦Proto' I₁) [/] (∈♦₁ l) ≈ I₀ ♦Proto' (I₁ [/] l)
+∈♦₁-compute : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈' I₁) →
+          (I₀ ♦Proto' I₁) [/]' (∈♦₁ l) ≈ I₀ ♦Proto' (I₁ [/]' l)
 ∈♦₁-compute = {!!}
 
-move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) → DifferentVars l l'
-          → [ d ↦ B ]∈ (I [/] l)
+move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈' I)(l' : [ d ↦ B ]∈' I) → DifferentVars l l'
+          → [ d ↦ B ]∈' (I [/]' l)
 move (mk l X) (mk l' Y) df = mk (move… l l' (Diff… df)) {!!}
+
+record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
+  field
+    NES : ¬ (Session.Ended A)
+    cont-⅋ : ∀ {S T} → A ≡ S ⅋ T → ∀ {d e δJ}{J : Proto δJ}(l : [ d ↦ S ]∈' J)(l' : [ e ↦ T ]∈' J)
+      → DifferentVars l l' → TC'⟨ J ⟩ → TC'⟨ (J /Ds [↦]∈'.lΔ l /Ds [↦]∈'.lΔ l') ♦Proto' K ⟩
+    cont-⊗ : ∀ {S T} → A ≡ S ⊗ T → ∀ {d e δ₀ δ₁}{J₀ : Proto δ₀}{J₁ : Proto δ₁}(l : [ d ↦ S ]∈' J₀)(l' : [ e ↦ T ]∈' J₁)
+      → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩ → TC'⟨ (J₀ Proto./' [↦]∈'.lI l ♦Proto' J₁ Proto./' ([↦]∈'.lI l')) ♦Proto' K ⟩
+open TC-Split
+
+postulate
+  End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₀ σ)
+  End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₁ σ)
+  Sel♦ : ∀ {δs}{I : Proto δs}(σ : Selections δs) → I /₀ σ ♦Proto' I /₁ σ ≈ I
+
+postulate
+  select : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : Doms'.[ δE ]∈ δI)(lA : c Dom'.∈ δE)
+    → Map.lookup (Proto.lookup I lΔ) lA ≡ Map.lookup (Proto.lookup (I /₀ σ) lΔ) lA
+    ⊎ Map.lookup (Proto.lookup I lΔ) lA ≡ Map.lookup (Proto.lookup (I /₁ σ) lΔ) lA
+
+--need continuation for ⊗
+TC-∈Split : ∀ {δI δK c A}{I : Proto δI}{K : Proto δK} → TC-Split A K → (l : [ c ↦ A ]∈' I)
+  → TC'⟨ I ⟩ → TC'⟨ I [/]' l ♦Proto' K ⟩
+TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) = {!!}
+TC-∈Split cont l (TC-⅋-inp l₁ P) with sameVar? ([↦]∈'.l… l) ([↦]∈'.l… l₁)
+TC-∈Split cont (mk l… E/c) (TC-⅋-inp (mk .l… E/c₁) P) | same = TC-conv
+  (♦-cong₂ (≈-trans (≈,[end] _) (≈,[end] _)) ≈-refl)
+  (cont-⅋ cont refl (mk (mk (mk (Doms'.there Doms'.here) refl) (mk here refl)) _)
+                    (mk (mk (mk Doms'.here refl) (mk here refl)) _)
+                    {!!} (P c₀ c₁))
+  -- postulate for channels.. grr
+  where postulate c₀ c₁ : _
+TC-∈Split cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp (∈♦₀ (move l l₁ (mk x))) λ c₀ c₁ →
+  TC-conv (≈-trans ♦-com,
+          (≈,[] (≈-trans ♦-com, (≈,[]
+           (≈-sym (≈-trans (∈♦₀-compute (move l l₁ (mk x)))
+           (♦-cong₂ (≈-trans (move-compute… _ _ _)
+           (≈-trans (/Ds-com ([↦]∈'.lΔ l) ([↦]∈'.lΔ l₁))
+           (≈-sym (move-compute… _ _ _))))
+           ≈-refl)))
+           ∼-refl))
+           ∼-refl))
+  (TC-∈Split cont (there[]' (there[]' (move l₁ l (Diff-sym (mk x))))) (P c₀ c₁))
+TC-∈Split cont l (TC-end E) = {!!}
+TC-∈Split {I = I} cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁) with select {I = I} σs lΔ lA
+TC-∈Split cont (mk (mk (mk lΔ refl) (mk lA refl)) E/c) (TC-split σs A1 P P₁)
+  | inj₁ x = TC-split {!!} {!!}
+  (TC-conv {!!} (TC-∈Split cont (mk (mk (mk lΔ refl) (mk lA (! x))) {!!}) P))
+  {!!}
+TC-∈Split cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁)
+  | inj₂ y = {!!}
 
 {-
 -- selection style
@@ -141,6 +192,10 @@ TC-∈Split σ cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp {!l₁!} {!!}
 TC-∈Split σ cont l (TC-end E) = {!!}
 TC-∈Split σ cont l (TC-split σs A1 P P₁) = {!!}
 -}
+
+-- OLD ATTEMPT
+{-
+
 
 record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
   field
@@ -197,9 +252,46 @@ TC-∈Split cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp (∈♦₀ (move l 
   (TC-∈Split cont (there[] (there[] (move l₁ l (Diff-sym (mk x))))) (P c₀ c₁))
 TC-∈Split cont l (TC-end E) = 𝟘-elim (NES cont (Map.All∈ (Proto.All∈ E ([↦]∈.lI l)) ([↦]∈.lE l)))
 TC-∈Split cont l (TC-split σs A1 P P₁) = {!!}
+
 {-with ∈-selections σs l
 TC-∈Split {δK = δK} cont l (TC-split σs A1 P P₁) | inj₁ x = TC-split (allLeft δK σs) {!!} (TC-conv {!!} (TC-∈Split cont x P)) (TC-conv {!!} P₁)
 TC-∈Split cont l (TC-split σs A1 P P₁) | inj₂ y = {!!}
+
+-}
+-}
+{-
+TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) with sameVar? ([↦]∈.l… l) l₁
+TC-∈Split cont (mk l X) (TC-⊗-out .l σs σE A0 P₀ P₁) | same = TC-conv
+  (♦-cong₂ (≈-trans (♦-cong₂ (≈,[end] ⟨ mapAll _ _ , _ ⟩) (≈,[end] ⟨ mapAll _ _ , _ ⟩))
+  (Sel♦ σs))
+  ≈-refl)
+  (cont-⊗ cont refl (mk (mk here here) E₀) (mk (mk here here) ⟨ End/₁ σE X , _ ⟩) (P₀ c₀) (P₁ c₁))
+  where postulate c₀ c₁ : _
+        E₀ = ⟨ End/₀ σE X , _ ⟩
+TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) | diff x = {!!}
+TC-∈Split cont l (TC-⅋-inp l₁ P) with sameVar? ([↦]∈.l… l) ([↦]∈.l… l₁)
+TC-∈Split cont (mk l X) (TC-⅋-inp (mk .l Y) P) | same = TC-conv
+  (♦-cong₂ (≈-trans (≈,[end] _) (≈,[end] _)) ≈-refl)
+  (cont-⅋ cont refl (there[] (mk (mk here here) _)) (mk (mk here here) _) {!!} (P c₀ c₁))
+  -- postulate for channels.. grr
+  where postulate c₀ c₁ : _
+TC-∈Split cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp (∈♦₀ (move l l₁ (mk x))) λ c₀ c₁ →
+  TC-conv (≈-trans ♦-com,
+          (≈,[] (≈-trans ♦-com, (≈,[]
+           (≈-sym (≈-trans (∈♦₀-compute (move l l₁ (mk x)))
+           (♦-cong₂ (≈-trans (move-compute… _ _ _)
+           (≈-trans (/Ds-com (Proto.forget ([↦]∈.lI l)) (Proto.forget ([↦]∈.lI l₁)))
+           (≈-sym (move-compute… _ _ _))))
+           ≈-refl)))
+           ∼-refl))
+           ∼-refl))
+  (TC-∈Split cont (there[] (there[] (move l₁ l (Diff-sym (mk x))))) (P c₀ c₁))
+TC-∈Split cont l (TC-end E) = 𝟘-elim (NES cont (Map.All∈ (Proto.All∈ E ([↦]∈.lI l)) ([↦]∈.lE l)))
+TC-∈Split cont l (TC-split σs A1 P P₁) = {!!}
+-}
+
+
+
 
 {-
 

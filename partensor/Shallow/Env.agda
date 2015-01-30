@@ -25,6 +25,9 @@ module _ {δ c}(E : Env δ) where
   _/_ : ∀ {S} → c ↦ S ∈ E → Env δ
   _/_ l = _/D_ (forget l)
 
+  _/'_ : ∀ {S} → c ↦ S ∈' E → Env δ
+  _/'_ l = _/D_ (_↦_∈'_.lA l)
+
 module _ {δ d c M S}(E : Env δ) where
   _[_≔_] : d ↦ act (com c {M} S) ∈ E → M → Env δ
   _[_≔_] l m = E [ l ]≔ S m
