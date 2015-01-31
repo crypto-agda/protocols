@@ -22,7 +22,7 @@ import partensor.Shallow.Map as Map
 import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
-open Env     hiding (_/₀_; _/₁_; _/_; Ended)
+open Env     hiding (_/₀_; _/₁_; _/[_]_; _/_; Ended)
 open Proto   hiding ()
 open import partensor.Shallow.Equiv' hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
 open import partensor.Shallow.Term
@@ -127,14 +127,48 @@ open TC-Split
 postulate
   End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₀ σ)
   End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₁ σ)
+  End/[b] : ∀ {δ}{E : Env δ}(b : 𝟚)(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./[ b ] σ)
   Sel♦ : ∀ {δs}{I : Proto δs}(σ : Selections δs) → I /₀ σ ♦Proto' I /₁ σ ≈ I
 
 postulate
   select : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : Doms'.[ δE ]∈ δI)(lA : c Dom'.∈ δE)
-    → Map.lookup (Proto.lookup I lΔ) lA ≡ Map.lookup (Proto.lookup (I /₀ σ) lΔ) lA
-    ⊎ Map.lookup (Proto.lookup I lΔ) lA ≡ Map.lookup (Proto.lookup (I /₁ σ) lΔ) lA
+    → Env.Ended (Proto.lookup I lΔ Env./D lA)
+    → Proto.lookup I lΔ
+    ≡ Proto.lookup (I /[ Map.lookup (Proto.lookup σ lΔ) lA ] σ) lΔ
 
---need continuation for ⊗
+module _ {δI}(b : 𝟚)(σ : Selections δI) where
+  Selections♦ : ∀ δK → Selections (δI ♦Doms δK)
+  Selections♦ · = σ
+  Selections♦ (δK ,[ x ]) = Selections♦ δK ,[ constMap x b ]
+
+  atMost♦ : ∀ {n} δK → AtMost n σ → AtMost n (Selections♦ δK)
+  atMost♦ · A = A
+  atMost♦ (δK ,[ x ]) A = atMost♦ δK A ,[ (₀₁ b (pureAll x (λ _ → refl))) ]
+
+postulate
+  Selections♦/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
+    → (I ♦Proto' K) /[ b ] (Selections♦ b σ δK) ≈ (I /[ b ] σ) ♦Proto' K
+
+  Selections♦/not : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
+    → (I ♦Proto' K) /[ b ] (Selections♦ (not b) σ δK) ≈ I /[ b ] σ
+
+  /[]-/Ds : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : Doms'.[ δE ]∈ δI)
+    → (I /Ds l) /[ b ] σ ≈ (I /[ b ] σ) /Ds l
+
+/*-End : ∀ {δE}(E : Env δE) → Env.Ended (E /*)
+/*-End ε = _
+/*-End (E , c ↦ v) = ⟨ (/*-End E) , _ ⟩
+
+/Ds-/[] : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(lΔ : Doms'.[ δE ]∈ δI)(σ : Selections δI)
+  → Env.Ended (Proto.lookup I lΔ Env./[ b ] Proto.lookup σ lΔ)
+  → (I /Ds lΔ) /[ b ] σ ≈ I /[ b ] σ
+/Ds-/[] b (I ,[ Δ ]) Doms'.here (σ ,[ Δ₁ ]) En = ≈,[] ≈-refl (End/[b] b Δ₁ (/*-End Δ) ∼-End En)
+/Ds-/[] b (I ,[ Δ ]) (Doms'.there lΔ) (σ ,[ Δ₁ ]) En = ≈,[] (/Ds-/[] b I lΔ σ En) ∼-refl
+
+End// : ∀ {δE}(E : Env δE)(σ : Selection δE) → Env.Ended ((E Env./₀ σ) Env./₁ σ)
+End// ε ε = {!!}
+End// (E , c ↦ v) (σ , .c ↦ v₁) = {!!}
+
 TC-∈Split : ∀ {δI δK c A}{I : Proto δI}{K : Proto δK} → TC-Split A K → (l : [ c ↦ A ]∈' I)
   → TC'⟨ I ⟩ → TC'⟨ I [/]' l ♦Proto' K ⟩
 TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) = {!!}
@@ -157,12 +191,36 @@ TC-∈Split cont l (TC-⅋-inp l₁ P) | diff x = TC-⅋-inp (∈♦₀ (move l 
            ∼-refl))
            ∼-refl))
   (TC-∈Split cont (there[]' (there[]' (move l₁ l (Diff-sym (mk x))))) (P c₀ c₁))
-TC-∈Split cont l (TC-end E) = {!!}
-TC-∈Split {I = I} cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁) with select {I = I} σs lΔ lA
-TC-∈Split cont (mk (mk (mk lΔ refl) (mk lA refl)) E/c) (TC-split σs A1 P P₁)
-  | inj₁ x = TC-split {!!} {!!}
-  (TC-conv {!!} (TC-∈Split cont (mk (mk (mk lΔ refl) (mk lA (! x))) {!!}) P))
+TC-∈Split cont l (TC-end E) = 𝟘-elim (NES cont (Map.All∈' (Proto.All∈' E ([↦]∈'.lI l)) ([↦]∈'.lE l)))
+TC-∈Split {I = I} cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁)
+    with Map.lookup (Proto.lookup σs lΔ) lA
+    | select {I = I} σs lΔ lA
+TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk (mk lΔ refl) (mk lA refl)) E/c) (TC-split σs A1 P P₁)
+  | 0₂ | x  = TC-split (Selections♦ 0₂ σs δK) (atMost♦ 0₂ σs δK A1)
+  (TC-conv (≈-sym (≈-trans (Selections♦/same {I = I /Ds lΔ} {K} 0₂ σs)
+                  (♦-cong₂ (/[]-/Ds 0₂ I σs lΔ) ≈-refl)))
+           (TC-∈Split cont (mk (mk (mk lΔ refl) (mk lA (! ap (λ M → Map.lookup M lA) (x E/c))))
+                      (tr Env.Ended (ap (λ M → M [ lA ]≔' end) (x E/c)) E/c)) P))
+  (TC-conv (≈-sym (≈-trans (Selections♦/not {I = I /Ds lΔ} {K} 1₂ σs)
+             (/Ds-/[] 1₂ I lΔ σs (let X = x E/c ∙ lookup/zipWith _ I σs lΔ
+               in tr Env.Ended (ap (flip Env._/₁_ (Proto.lookup σs lΔ)) (! X))
+                               (End// (Proto.lookup I lΔ) (Proto.lookup σs lΔ))))))
+           P₁)
+TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁)
+  | 1₂ | x = TC-split (Selections♦ 1₂ σs δK) (atMost♦ 1₂ σs δK A1)
   {!!}
+  {!!}
+
+
+{-
+TC-∈Split {I = I} cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁) with select {I = I} σs lΔ lA
+TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk (mk lΔ refl) (mk lA refl)) E/c) (TC-split σs A1 P P₁)
+  | inj₁ x = TC-split (Selections♦ 0₂ σs δK) (atMost♦ 0₂ σs δK A1)
+  (TC-conv (≈-sym (≈-trans (Selections♦/same {I = I /Ds lΔ} {K} 0₂ σs)
+                  (♦-cong₂ (/[]-/Ds 0₂ I σs lΔ) ≈-refl)))
+           (TC-∈Split cont (mk (mk (mk lΔ refl) (mk lA (! x))) {!!}) P))
+  (TC-conv (≈-sym (≈-trans (Selections♦/not {I = I /Ds lΔ} {K} 1₂ σs) {!!}))
+           P₁)
 TC-∈Split cont (mk (mk (mk lΔ ↦Δ) (mk lA ↦A)) E/c) (TC-split σs A1 P P₁)
   | inj₂ y = {!!}
 

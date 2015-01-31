@@ -69,6 +69,11 @@ zipWith : ∀ {δs}(f : ∀ {δ} → Env δ → Sel δ → Env δ) → Proto δs
 zipWith f · · = ·
 zipWith f (I ,[ Δ ]) (σs ,[ σ ]) = zipWith f I σs ,[ f Δ σ ]
 
+lookup/zipWith : ∀ {δs δE}(f : ∀ {δ} → Env δ → Sel δ → Env δ)(I : Proto δs)(σ : Selections δs)
+  (l : Doms'.[ δE ]∈ δs) → lookup (zipWith f I σ) l ≡ f (lookup I l) (lookup σ l)
+lookup/zipWith f (I ,[ Δ ]) (σ ,[ Δ₁ ]) here = refl
+lookup/zipWith f (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) = lookup/zipWith f I σ l
+
 module SelProj = Env.With-end {_} {Session} end
 {-
 module SelProj where
@@ -83,12 +88,17 @@ module SelProj where
     I /₁ ₘ σ = I Env./₁ σ
 -}
 
+infixl 6 _/[_]_
+
+_/[_]_ : ∀ {δs}(I : Proto δs)(b : 𝟚)(σs : Selections δs) → Proto δs
+I /[ b ] σs = zipWith (λ E σ → E SelProj./[ b ] σ) I σs
+
 module _ {δs}(I : Proto δs)(σs : Selections δs) where
         infixl 6 _/₀_ _/₁_
         _/₀_ : Proto δs
-        _/₀_ = zipWith SelProj._/₀_ I σs
+        _/₀_ = I /[ 0₂ ] σs --zipWith SelProj._/₀_ I σs
         _/₁_ : Proto δs
-        _/₁_ = zipWith SelProj._/₁_ I σs
+        _/₁_ = I /[ 1₂ ] σs --zipWith SelProj._/₁_ I σs
 
 {-
 data SelAtMost (n : ℕ){δ : Dom} : Sel δ → ℕ → Set where
@@ -342,6 +352,10 @@ All Pred (Δ ,[ E ]) = All Pred Δ × Pred E
 All∈ : ∀ {Pred : ∀ {δ} → Env δ → Set}{δs δ}{I : Proto δs}{E : Env δ} → All Pred I → [ E ]∈ I → Pred E
 All∈ ⟨ APE , PE ⟩ here = PE
 All∈ ⟨ APE , PE ⟩ (there l) = All∈ APE l
+
+All∈' : ∀ {Pred : ∀ {δ} → Env δ → Set}{δs δ}{I : Proto δs}{E : Env δ} → All Pred I → [ E ]∈' I → Pred E
+All∈' {I = I ,[ Δ ]} X (mk here refl) = snd X
+All∈' {I = I ,[ Δ ]} X (mk (there lΔ) ↦Δ) = All∈' (fst X) (mk lΔ ↦Δ)
 
 Ended : ∀ {δs} → Proto δs → Set
 Ended = All Env.Ended

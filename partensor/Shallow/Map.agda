@@ -1,7 +1,7 @@
 open import Function
 open import Data.One
 open import Data.Two
-open import Data.Product using (_×_)
+open import Data.Product using (_×_) renaming (proj₁ to fst; proj₂ to snd)
 open import Relation.Binary.PropositionalEquality
 open import partensor.Shallow.Dom
 
@@ -73,9 +73,12 @@ module _ {a} {A : Set a} where
     All Pred (M , d ↦ p) = All Pred M × Pred d p
 
     All∈ : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈ M → Pred c x
-    All∈ all here = Data.Product.proj₂ all
-    All∈ all (there l) = All∈ (Data.Product.proj₁ all) l
+    All∈ all here = snd all
+    All∈ all (there l) = All∈ (fst all) l
 
+    All∈' : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈' M → Pred c x
+    All∈' {M = M , ._ ↦ ._} all (mk here refl) = snd all
+    All∈' {M = M , _ ↦ _} all (mk (there lA) ↦A) = All∈' (fst all) (mk lA ↦A)
 
 infixr 4 _♦Map_
 _♦Map_ : ∀ {a}{A : Set a}{D₀ D₁} → Map A D₀ → Map A D₁ → Map A (D₀ ♦Dom D₁)
@@ -88,6 +91,11 @@ pure (δ , c ↦*) f = pure δ f , c ↦ f c
 
 constMap : ∀ {a}{A : Set a}(δ : Dom)(v : A) → Map A δ
 constMap δ v = pure δ (const v)
+
+pureAll : ∀ {a}{A : Set a}{P : URI → A → Set}{f : URI → A}
+  (δ : Dom) (PF : ∀ c → P c (f c)) → All P (pure δ f)
+pureAll ε PF = 0₁
+pureAll (δ₁ , c ↦*) PF = pureAll δ₁ PF Data.Product., PF c
 
 map : ∀ {a b} {A : Set a} {B : Set b} {δ}
         (f : A → B) (m : Map A δ) → Map B δ
@@ -118,12 +126,19 @@ module With-end {a}{A : Set a}(end : A) where
         _/* : T δ
         _/* = map (λ _ → end) Δ
 
+    selectProj : 𝟚 → (A → (𝟚 → A))
+    selectProj 0₂ v = [0: v 1: end ]
+    selectProj 1₂ v = [0: end 1: v ]
+
+    _/[_]_ : ∀ {δ}(Δ : T δ)(b : 𝟚)(σ : Selection δ) → T δ
+    Δ /[ b ] σ = zipWith (selectProj b) Δ σ
+
     module _ {δ}(Δ : T δ)(σ : Selection δ) where
         _/₀_ : T δ
-        _/₀_ = zipWith (λ v → [0: v 1: end ]) Δ σ
+        _/₀_ = Δ /[ 0₂ ] σ
 
         _/₁_ : T δ
-        _/₁_ = zipWith (λ v → [0: end 1: v ]) Δ σ
+        _/₁_ = Δ /[ 1₂ ] σ
 
     data Zip : ∀ {δ} → T δ → T δ → T δ → Set₁ where
       ε : Zip ε ε ε

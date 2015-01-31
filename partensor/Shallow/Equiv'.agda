@@ -69,6 +69,16 @@ _∼-∙_ = ∼-trans
 ∼,↦end : ∀ {δE}{E : Env δE}{c} → E , c ↦ end ∼ E
 ∼,↦end = ⟨ ⊆,↦end , ⊆-there ⟩
 
+∼-Ended : ∀ {δE}{E : Env δE} → Env.Ended E → ε ∼ E
+∼-Ended {E = ε} EE = ∼-refl
+∼-Ended {E = E , c ↦ act x} ⟨ proj₁ , () ⟩
+∼-Ended {E = E , c ↦ v ⅋ v₁} ⟨ proj₁ , () ⟩
+∼-Ended {E = E , c ↦ v ⊗ v₁} ⟨ proj₁ , () ⟩
+∼-Ended {E = E , c ↦ end} ⟨ proj₁ , proj₂ ⟩ = ∼-trans (∼-Ended proj₁)  (∼-sym ∼,↦end)
+
+_∼-End_ : ∀ {δE δF}{E : Env δE}{F : Env δF} → Env.Ended E → Env.Ended F → E ∼ F
+EE ∼-End EF = ∼-trans (∼-sym (∼-Ended EE)) (∼-Ended EF)
+
 ∼-cancel-unthere… : ∀ {δI}{I : Proto δI}
         {δE}{E : Env δE}(EE : Env.Ended E)
         {c S}(NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈' I ,[ E ])
