@@ -53,6 +53,8 @@ pure (δs ,[ δ ]) f = pure δs f ,[ Map.pure δ f ]
 constMaps : ∀ {a}{A : Set a}(δs : Doms)(v : A) → Maps A δs
 constMaps δs v = pure δs (const v)
 
+
+
 Proto      = Maps Session
 Selections = Maps 𝟚
 
