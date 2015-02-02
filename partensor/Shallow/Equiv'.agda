@@ -149,14 +149,23 @@ _≈-∙_ = ≈-trans
         → I ,[ E ] ≈ I
 ≈,[end] EE = ⟨ ⊆,[end] EE , ⊆s-there ⟩
 
-⊆,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ⊆s I ,[ F ] ,[ E ]
-un-⊆s ⊆,[swap] c S NES (mk (mk Doms'.here refl) lE) = ⟨ (mk (mk (Doms'.there Doms'.here) refl) lE) , ∼-refl ⟩
-un-⊆s ⊆,[swap] c S NES (mk (mk (Doms'.there Doms'.here) refl) lE) = ⟨ (mk (mk Doms'.here refl) lE) , ∼-refl ⟩
-un-⊆s ⊆,[swap] c S NES (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) = ⟨ (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) , ∼-refl ⟩
+⊆,[swap] : ∀ {δE c d A B}{E : Env δE} → E , c ↦ A , d ↦ B ⊆ E , d ↦ B , c ↦ A
+un-⊆ ⊆,[swap] d B NES (mk Dom.here refl) = mk (Dom.there Dom.here) refl
+un-⊆ ⊆,[swap] c A NES (mk (Dom.there Dom.here) refl) = mk Dom.here refl
+un-⊆ ⊆,[swap] c₁ S NES (mk (Dom.there (Dom.there lA)) ↦A) = mk (Dom.there (Dom.there lA)) ↦A
+
+∼,[swap] : ∀ {δE c d A B}{E : Env δE} → E , c ↦ A , d ↦ B ∼ E , d ↦ B , c ↦ A
+get-⊆ ∼,[swap] = ⊆,[swap]
+get-⊇ ∼,[swap] = ⊆,[swap]
+
+⊆s,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ⊆s I ,[ F ] ,[ E ]
+un-⊆s ⊆s,[swap] c S NES (mk (mk Doms'.here refl) lE) = ⟨ (mk (mk (Doms'.there Doms'.here) refl) lE) , ∼-refl ⟩
+un-⊆s ⊆s,[swap] c S NES (mk (mk (Doms'.there Doms'.here) refl) lE) = ⟨ (mk (mk Doms'.here refl) lE) , ∼-refl ⟩
+un-⊆s ⊆s,[swap] c S NES (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) = ⟨ (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) , ∼-refl ⟩
 
 ≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
-_≈_.get-⊆s ≈,[swap] = ⊆,[swap]
-_≈_.get-⊇s ≈,[swap] = ⊆,[swap]
+_≈_.get-⊆s ≈,[swap] = ⊆s,[swap]
+_≈_.get-⊇s ≈,[swap] = ⊆s,[swap]
 
 ♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto (B ♦Proto C) ≈ (A ♦Proto B) ♦Proto C
 ♦-assoc {C = ·} = ≈-refl
@@ -179,7 +188,7 @@ _≈_.get-⊇s ≈,[swap] = ⊆,[swap]
 /Ds-com Doms'.here Doms'.here = ≈-refl
 /Ds-com {I = I ,[ Δ ]} Doms'.here (Doms'.there l') = ≈-refl
 /Ds-com {I = I ,[ Δ ]} (Doms'.there l) Doms'.here = ≈-refl
-/Ds-com {I = I ,[ Δ ]} (Doms'.there l) (Doms'.there l') = ≈,[] (/Ds-com l l') ∼-refl
+/Ds-com {I = I ,[ Δ ]} (Doms'.there l) (Doms'.there l') = ≈,[] (/Ds-com {I = I} l l') ∼-refl
 {-
 foo :
   ∀ {δE δF}{E : Env δE}{F : Env δF}
@@ -218,9 +227,16 @@ bar : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈ I) → I ⊆s (I [/…
 bar l = {!!}
 
 -}
-postulate
-  thmA : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈' I)
+
+∼-thmA : ∀ {c δE}(E : Env δE)(l : c Dom.Dom'.∈ δE)
+  → E ∼ E [ l ]≔' end , c ↦ Env.lookup E l
+∼-thmA (E , c ↦ v) Dom.here = ∼,↦ (∼-sym ∼,↦end)
+∼-thmA (E , c₁ ↦ v) (Dom.there l) = ∼-trans (∼,↦ (∼-thmA E l)) ∼,[swap]
+
+thmA : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈' I)
          → I ≈ (I [/…]' l ,[ E/' l , c ↦ S ])
+thmA {I = I ,[ Δ ]} (mk (mk Doms'.here refl) (mk lA refl)) = ≈,[] (≈-sym (≈,[end] (mapAll _ _))) (∼-thmA Δ lA)
+thmA {I = I ,[ Δ ]} (mk (mk (Doms'.there lΔ) ↦Δ) lE) = ≈-trans (≈,[] (thmA {I = I} (mk (mk lΔ ↦Δ) lE)) ∼-refl) ≈,[swap]
 -- thmA l = {!!}
 -- -}
 -- -}
