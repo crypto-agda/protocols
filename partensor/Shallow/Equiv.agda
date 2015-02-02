@@ -165,7 +165,7 @@ _≈_.get-⊇s ≈,[swap] = ⊆,[swap]
 /Ds-com Doms'.here Doms'.here = ≈-refl
 /Ds-com {I = I ,[ Δ ]} Doms'.here (Doms'.there l') = ≈-refl
 /Ds-com {I = I ,[ Δ ]} (Doms'.there l) Doms'.here = ≈-refl
-/Ds-com {I = I ,[ Δ ]} (Doms'.there l) (Doms'.there l') = ≈,[] (/Ds-com l l') ∼-refl
+/Ds-com {I = I ,[ Δ ]} (Doms'.there l) (Doms'.there l') = ≈,[] (/Ds-com {I = I} l l') ∼-refl
 {-
 foo :
   ∀ {δE δF}{E : Env δE}{F : Env δF}

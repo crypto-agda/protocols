@@ -54,6 +54,10 @@ constMaps : ∀ {a}{A : Set a}(δs : Doms)(v : A) → Maps A δs
 constMaps δs v = pure δs (const v)
 
 
+_[_≔_] : ∀ {a}{A : Set a}{δ δs}(I : Maps A δs)(l : Doms'.[ δ ]∈ δs) → (Map A δ → Map A δ) → Maps A δs
+· [ () ≔ f ]
+(I ,[ Δ ]) [ here ≔ f ] = I ,[ f Δ ]
+(I ,[ Δ ]) [ there l ≔ f ] = I [ l ≔ f ] ,[ Δ ]
 
 Proto      = Maps Session
 Selections = Maps 𝟚
@@ -320,8 +324,14 @@ forget (there l) = there (forget l)
 
 infixl 6 _/Ds_
 _/Ds_ : ∀ {δ δs}(I : Proto δs)(l : Doms'.[ δ ]∈ δs) → Proto δs
+I /Ds l = I [ l ≔ _/* ]
+{-
 (I ,[ Δ ]) /Ds here    = I ,[ Δ /* ]
 (I ,[ Δ ]) /Ds there l = I /Ds l ,[ Δ ]
+-}
+
+_/D[_>>_] : ∀ {c δ δs}(I : Proto δs)(l : Doms'.[ δ ]∈ δs)(l' : c Dom'.∈ δ) → Proto δs
+I /D[ l >> l' ] = I [ l ≔ (λ E → E Env.[ l' ]≔' end) ]
 
 _/_ : ∀ {δ δs}(I : Proto δs){E : Env δ}(l : [ E ]∈ I) → Proto δs
 I / l = I /Ds forget l
@@ -345,6 +355,11 @@ I [/…] l = I / lI
 -- nuke everything in the tensor group c is found in
 _[/…]'_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈' I) → Proto δs
 I [/…]' l = I /Ds lΔ
+  where open [↦…]∈' l
+
+-- nuke only one guy
+_/…'_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈' I) → Proto δs
+I /…' l = I /D[ lΔ >> lA ]
   where open [↦…]∈' l
 
 All : (Pred : ∀ {δ} → Env δ → Set) → ∀ {δs} → Proto δs → Set
