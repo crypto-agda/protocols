@@ -13,9 +13,9 @@ import partensor.Shallow.Map as Map
 import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
-open Env     hiding (_/₀_; _/₁_; _/_; Ended)
+open Env     hiding (_/₀_; _/₁_; Ended)
 open Proto   hiding ()
-open import partensor.Shallow.Equiv
+open import partensor.Shallow.Equiv'
 open import partensor.Shallow.Term
 
 module partensor.Shallow.Translation where
@@ -24,18 +24,18 @@ module Translation
  (T⟨_⟩ : ∀ {δI} → Proto δI → Set t)
  (T-⊗-out :
     ∀ {δI I c S₀ S₁}
-      (l : [ c ↦ S₀ ⊗ S₁ …]∈ I)
+      (l : [ c ↦ S₀ ⊗ S₁ …]∈' I)
       (σs : Selections δI)
-      (σE : Selection ([↦…]∈.δE l))
+      (σE : Selection ([↦…]∈'.δE l))
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → T⟨ I [/…] l /₀ σs ,[ E/ l Env./₀ σE , c₀ ↦ S₀ ] ⟩)
-      (P₁ : ∀ c₁ → T⟨ I [/…] l /₁ σs ,[ E/ l Env./₁ σE , c₁ ↦ S₁ ] ⟩)
+      (P₀ : ∀ c₀ → T⟨ I [/…]' l /₀ σs ,[ E/' l Env./₀ σE , c₀ ↦ S₀ ] ⟩)
+      (P₁ : ∀ c₁ → T⟨ I [/…]' l /₁ σs ,[ E/' l Env./₁ σE , c₁ ↦ S₁ ] ⟩)
     → T⟨ I ⟩)
 
  (T-⅋-inp :
     ∀ {δI}{I : Proto δI}{c S₀ S₁}
-      (l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
-      (P : ∀ c₀ c₁ → T⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
+      (l : [ c ↦ S₀ ⅋ S₁ ]∈' I)
+      (P : ∀ c₀ c₁ → T⟨ I [/]' l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
     → T⟨ I ⟩)
 
  (T-end :
@@ -62,11 +62,11 @@ module Translation
 
  (T-⊗-reorg :
     ∀ {δI δE c c₀ c₁ S₀ S₁}{J : Proto δI}{E : Env δE}
-      (l  : [ E ]∈ J)
-      (l₀ : c₀ ↦ S₀ ∈ E)
-      (l₁ : c₁ ↦ S₁ ∈ E)
+      (l  : [ E ]∈' J)
+      (l₀ : c₀ ↦ S₀ ∈' E)
+      (l₁ : c₁ ↦ S₁ ∈' E)
       (P : T⟨ J ⟩)
-    → T⟨ J / l ,[ (E Env./ l₀ /D (Env.forget l₁) , c ↦ S₀ ⊗ S₁) ] ⟩)
+    → T⟨ J Proto./' l ,[ (E Env./' l₀ /D (↦∈'.lA l₁) , c ↦ S₀ ⊗ S₁) ] ⟩)
 
  (T-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → T⟨ I ⟩ → T⟨ J ⟩)
 
@@ -75,8 +75,8 @@ module Translation
   T-fwd : ∀ {S₀ S₁} (S : Dual S₀ S₁) c₀ c₁ → T⟨ · ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩
   T-fwd end c₀ c₁ = T-end _
   T-fwd (⊗⅋ S₀ S₁ S₂ S₃) c₀ c₁ =
-    T-⅋-inp here[] λ c₂ c₃ →
-      T-⊗-out (there… (there… (there… here…)))
+    T-⅋-inp here[]' λ c₂ c₃ →
+      T-⊗-out (there…' (there…' (there…' here…')))
               ((((· ,[ (ε , c₀ ↦ 0₂) ]) ,[ (ε , c₁ ↦ 0₂) ]) ,[ (ε , c₂ ↦ 0₂) ]) ,[ (ε , c₃ ↦ 1₂) ])
               (ε , c₀ ↦ 0₂)
               ((((· ,[ {!!} ]) ,[ {!!} ]) ,[ {!!} ]) ,[ {!!} ])
@@ -89,11 +89,11 @@ module Translation
   go (⅋-inp l P) = T-⅋-inp l (λ c₀ c₁ → go (P c₀ c₁))
   go {I = I}(⊗-out {c} {S₀} {S₁} l P) = T-conv e rPP
     where postulate c0 c1 : URI
-          open [↦…]∈ l
-          F = E Env./ lE , c0 ↦ S₀ , c1 ↦ S₁
-          J = I / lI ,[ F ]
+          open [↦…]∈' l
+          F = E Env./' lE , c0 ↦ S₀ , c1 ↦ S₁
+          J = I Proto./' lI ,[ F ]
           G = F /D there here /D here , c ↦ S₀ ⊗ S₁
-          K = J / here ,[ G ]
+          K = J Proto./' here ,[ G ]
           rPP : T⟨ K ⟩
           rPP = T-⊗-reorg here (there here) here (go (P c0 c1))
           e : K ≈ I

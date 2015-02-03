@@ -22,7 +22,7 @@ import partensor.Shallow.Map as Map
 import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
-open Env     hiding (_/₀_; _/₁_; _/[_]_; _/_; Ended)
+open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
 open Proto   hiding ()
 open import partensor.Shallow.Equiv' hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
 open import partensor.Shallow.Term

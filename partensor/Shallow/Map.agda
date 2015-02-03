@@ -29,14 +29,6 @@ data Map {a} (A : Set a) : Dom → Set a where
   ε     : Map A ε
   _,_↦_ : ∀ {δ} (E : Map A δ) c (v : A) → Map A (δ , c ↦*)
 
-
-
-data _↦_∈_ {a}{A : Set a}(d : URI)(S : A) : ∀ {δ} → Map A δ → Set₁ where
-  here  : ∀ {δ} {M : Map A δ} → d ↦ S ∈ (M , d ↦ S)
-  there : ∀ {δ} {M : Map A δ} {d' S'}
-          → d ↦ S ∈ M
-          → d ↦ S ∈ (M , d' ↦ S')
-
 lookup : ∀ {a}{A : Set a}{c δ} → Map A δ → c Dom'.∈ δ → A
 lookup (M , c ↦ v) here = v
 lookup (M , c₁ ↦ v) (there l) = lookup M l
@@ -56,25 +48,14 @@ there' l = mk (there (↦∈'.lA l)) (↦∈'.↦A l)
 
 module _ {a}{A : Set a}{d} where
 
-  forget : ∀ {δ}{M : Map A δ}{v} → d ↦ v ∈ M → d Dom'.∈ δ
-  forget here = here
-  forget (there p) = there (forget p)
-
   _[_]≔'_ : ∀ {δ} (M : Map A δ) → d Dom'.∈ δ → A → Map A δ
   (M , .d ↦ _) [ here    ]≔' v' = M , d ↦ v'
   (M , c ↦  v) [ there l ]≔' v' = M [ l ]≔' v' , c ↦ v
-
-  _[_]≔_ : ∀ {δ} (M : Map A δ){v} → d ↦ v ∈ M → A → Map A δ
-  M [ l ]≔ v' = M [ forget l ]≔' v'
 
 module _ {a} {A : Set a} where
     All : ∀ {δ}(Pred : URI → A → Set) → Map A δ → Set
     All Pred ε = 𝟙
     All Pred (M , d ↦ p) = All Pred M × Pred d p
-
-    All∈ : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈ M → Pred c x
-    All∈ all here = snd all
-    All∈ all (there l) = All∈ (fst all) l
 
     All∈' : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈' M → Pred c x
     All∈' {M = M , ._ ↦ ._} all (mk here refl) = snd all

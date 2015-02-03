@@ -18,19 +18,12 @@ Env : Dom → Set₁
 Env = Map Session
 
 module _ {δ c}(E : Env δ) where
-  infixl 4 _/_ _/D_
+  infixl 4 _/'_ _/D_
   _/D_ :  c Dom'.∈ δ → Env δ
   _/D_ l = E [ l ]≔' end
 
-  _/_ : ∀ {S} → c ↦ S ∈ E → Env δ
-  _/_ l = _/D_ (forget l)
-
   _/'_ : ∀ {S} → c ↦ S ∈' E → Env δ
   _/'_ l = _/D_ (_↦_∈'_.lA l)
-
-module _ {δ d c M S}(E : Env δ) where
-  _[_≔_] : d ↦ act (com c {M} S) ∈ E → M → Env δ
-  _[_≔_] l m = E [ l ]≔ S m
 
 infixr 4 _♦Env_
 _♦Env_ : ∀ {D₀ D₁} → Env D₀ → Env D₁ → Env (D₀ ♦Dom D₁)
