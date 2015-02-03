@@ -18,7 +18,7 @@ infix 0 _⊆_
 record _⊆_ {δE δF}(E : Env δE)(F : Env δF) : Set₁ where
   constructor mk
   field
-    un-⊆ : ∀ c S (NES : ¬(Session.Ended S))(l : c ↦ S ∈' E) → c ↦ S ∈' F
+    un-⊆ : ∀ c S (NES : ¬(Session.Ended S))(l : c ↦ S ∈ E) → c ↦ S ∈ F
 open _⊆_ public
 
 ⊆-refl : ∀ {δE}{E : Env δE} → E ⊆ E
@@ -84,8 +84,8 @@ EE ∼-End EF = ∼-trans (∼-sym (∼-Ended EE)) (∼-Ended EF)
 
 ∼-cancel-unthere… : ∀ {δI}{I : Proto δI}
         {δE}{E : Env δE}(EE : Env.Ended E)
-        {c S}(NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈' I ,[ E ])
-        → [_↦_…]∈'_.E l ∼ [_↦_…]∈'_.E (unthere…' NES EE l)
+        {c S}(NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈ I ,[ E ])
+        → [_↦_…]∈_.E l ∼ [_↦_…]∈_.E (unthere…' NES EE l)
 ∼-cancel-unthere… EE NES (mk (mk Doms'.here refl) lE) = 𝟘-elim (not-there' NES EE lE)
 ∼-cancel-unthere… EE NES (mk (mk (Doms'.there lΔ) ↦Δ) lE) = ∼-refl
 
@@ -93,8 +93,8 @@ infix 0 _⊆s_
 record _⊆s_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
   constructor mk
   field
-    un-⊆s : ∀ c S (NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈' I)
-            → Σ ([ c ↦ S …]∈' J) λ l' → [↦…]∈'.E l ∼ [↦…]∈'.E l'
+    un-⊆s : ∀ c S (NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈ I)
+            → Σ ([ c ↦ S …]∈ J) λ l' → [↦…]∈.E l ∼ [↦…]∈.E l'
 open _⊆s_ public
 
 ⊆s-there : ∀ {δE δJ}{E : Env δE}{J : Proto δJ} → J ⊆s J ,[ E ]
@@ -239,8 +239,8 @@ bar l = {!!}
 ∼-thmA (E , c ↦ v) Dom.here = ∼,↦ (∼-sym ∼,↦end)
 ∼-thmA (E , c₁ ↦ v) (Dom.there l) = ∼-trans (∼,↦ (∼-thmA E l)) ∼,[swap]
 
-thmA : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈' I)
-         → I ≈ (I [/…]' l ,[ E/' l , c ↦ S ])
+thmA : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈ I)
+         → I ≈ (I [/…] l ,[ E/ l , c ↦ S ])
 thmA {I = I ,[ Δ ]} (mk (mk Doms'.here refl) (mk lA refl)) = ≈,[] (≈-sym (≈,[end] (mapAll _ _))) (∼-thmA Δ lA)
 thmA {I = I ,[ Δ ]} (mk (mk (Doms'.there lΔ) ↦Δ) lE) = ≈-trans (≈,[] (thmA {I = I} (mk (mk lΔ ↦Δ) lE)) ∼-refl) ≈,[swap]
 -- thmA l = {!!}

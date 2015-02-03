@@ -34,17 +34,17 @@ lookup (M , c ↦ v) here = v
 lookup (M , c₁ ↦ v) (there l) = lookup M l
 
 -- middle-ground between above and: Map A δ ≈ ∀ {c} → c ∈ δ → A
-record _↦_∈'_ {a}{A : Set a}(d : URI)(S : A){δ}(M : Map A δ) : Set a where
+record _↦_∈_ {a}{A : Set a}(d : URI)(S : A){δ}(M : Map A δ) : Set a where
   constructor mk
   field
     lA : d Dom'.∈ δ
     ↦A : lookup M lA ≡ S
-module ↦∈' = _↦_∈'_
+module ↦∈ = _↦_∈_
 
 there' : ∀ {a}{A : Set a}{d S δ} {M : Map A δ} {d' S'}
-          → d ↦ S ∈' M
-          → d ↦ S ∈' (M , d' ↦ S')
-there' l = mk (there (↦∈'.lA l)) (↦∈'.↦A l)
+          → d ↦ S ∈ M
+          → d ↦ S ∈ (M , d' ↦ S')
+there' l = mk (there (↦∈.lA l)) (↦∈.↦A l)
 
 module _ {a}{A : Set a}{d} where
 
@@ -57,7 +57,7 @@ module _ {a} {A : Set a} where
     All Pred ε = 𝟙
     All Pred (M , d ↦ p) = All Pred M × Pred d p
 
-    All∈' : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈' M → Pred c x
+    All∈' : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈ M → Pred c x
     All∈' {M = M , ._ ↦ ._} all (mk here refl) = snd all
     All∈' {M = M , _ ↦ _} all (mk (there lA) ↦A) = All∈' (fst all) (mk lA ↦A)
 

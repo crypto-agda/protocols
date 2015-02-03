@@ -22,8 +22,8 @@ module _ {δ c}(E : Env δ) where
   _/D_ :  c Dom'.∈ δ → Env δ
   _/D_ l = E [ l ]≔' end
 
-  _/'_ : ∀ {S} → c ↦ S ∈' E → Env δ
-  _/'_ l = _/D_ (_↦_∈'_.lA l)
+  _/'_ : ∀ {S} → c ↦ S ∈ E → Env δ
+  _/'_ l = _/D_ (_↦_∈_.lA l)
 
 infixr 4 _♦Env_
 _♦Env_ : ∀ {D₀ D₁} → Env D₀ → Env D₁ → Env (D₀ ♦Dom D₁)
