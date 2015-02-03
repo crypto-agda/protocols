@@ -1,21 +1,54 @@
 {-# OPTIONS --without-K #-}
 open import Function.NP
+open import Level.NP
 open import Type
 open import Type.Identities
 open import Data.Product.NP using (_×_; _,_; fst; snd)
-open import Data.Zero using (𝟘)
+open import Data.Zero using (𝟘;𝟘-elim)
 open import Data.Sum renaming (inj₁ to inl; inj₂ to inr; [_,_] to [inl:_,inr:_]) hiding ([_,_]′)
 open import Data.One using (𝟙)
 open import Data.LR
-open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; ap)
+open import Relation.Binary.PropositionalEquality.NP using (_≡_; !_; _∙_; refl; ap; coe)
 open import Function.Extensionality
 open import HoTT
 open Equivalences
 open import Type.Identities
 
-open import Control.Protocol.Core
+import Control.Protocol.Universal
 
-module Control.Protocol.Additive where
+module Control.Protocol.Additive
+  {-
+  {ℓ}{U : ★_(ₛ ℓ)}(U⟦_⟧ : U → ★_ ℓ)
+  (U𝟘 : U)
+  (U⟦U𝟘⟧ : U⟦ U𝟘 ⟧ ≡ Lift 𝟘)
+  (LR : U)
+  (`L `R : U⟦ LR ⟧)
+  ([L:_R:_] : ∀ {ℓ}{C : U⟦ LR ⟧ → ★_ ℓ}(l : C `L)(r : C `R)(lr : U⟦ LR ⟧) → C lr)
+  where
+
+open Control.Protocol.Universal U⟦_⟧
+
+module send/recv-𝟘 (P : U⟦ U𝟘 ⟧ → Proto) where
+    P⊤ : Proto
+    P⊤ = recvE U𝟘 P
+
+    P0 : Proto
+    P0 = sendE U𝟘 P
+
+    module _ {{_ : FunExt}}{{_ : UA}} where
+        elim : ∀ {ℓ} {P : U⟦ U𝟘 ⟧ → ★_ ℓ} → Π (U⟦ U𝟘 ⟧) P
+        elim = 𝟘-elim ∘ lower ∘ coe U⟦U𝟘⟧
+        elim′ : ∀ {ℓ} {A : ★_ ℓ} → U⟦ U𝟘 ⟧ → A
+        elim′ = 𝟘-elim ∘ lower ∘ coe U⟦U𝟘⟧
+        P0-empty : ⟦ P0 ⟧ ≡ Lift 𝟘 -- U⟦ U𝟘 ⟧
+        P0-empty = {!Σ= ? ? · Σ𝟘-lift∘fst!} -- ua (equiv fst elim elim (elim′ ∘ fst))
+
+        P⊤-uniq : ⟦ P⊤ ⟧ ≡ Lift 𝟙
+        P⊤-uniq = {!{!!} ∙ Π𝟘-uniq _!}
+   -}
+   where
+
+open import Control.Protocol.Core
 
 module send/recv-𝟘 (P : 𝟘 → Proto) where
     P⊤ : Proto
@@ -26,7 +59,7 @@ module send/recv-𝟘 (P : 𝟘 → Proto) where
 
     module _ {{_ : FunExt}}{{_ : UA}} where
         P0-empty : ⟦ P0 ⟧ ≡ 𝟘
-        P0-empty = ua (equiv fst (λ()) (λ()) (λ { (() , _) }))
+        P0-empty = Σ𝟘-fst
 
         P⊤-uniq : ⟦ P⊤ ⟧ ≡ 𝟙
         P⊤-uniq = Π𝟘-uniq₀ _
@@ -120,3 +153,7 @@ module _ P Q R {{_ : FunExt}}{{_ : UA}} where
 
     ⊕-assoc : ⟦ P ⊕ (Q ⊕ R) ⟧ ≡ ⟦ (P ⊕ Q) ⊕ R ⟧
     ⊕-assoc = ⊕≡⊎ ∙ (ap (_⊎_ ⟦ P ⟧) ⊕≡⊎ ∙ ⊎-assoc ∙ ap (flip _⊎_ ⟦ R ⟧) (! ⊕≡⊎)) ∙ ! ⊕≡⊎
+-- -}
+-- -}
+-- -}
+-- -}

@@ -14,6 +14,7 @@ open Equivalences
 open import Type.Identities
 
 open import Control.Protocol.Core
+open import Control.Protocol.InOut
 open import Control.Protocol.End
 open import Control.Protocol.Additive
 open import Control.Protocol.Sequence
@@ -35,6 +36,51 @@ P      ⊗ end    = P
 P      ⊗ send Q = send λ m → P ⊗ Q m
 recv P ⊗ recv Q = recv [inl: (λ m → P m ⊗ recv Q)
                        ,inr: (λ n → recv P ⊗ Q n) ]
+
+{-
+_OL_ : Proto → Proto → Proto
+end     OL Q       = Q
+P       OL end     = P
+com _ P OL com _ Q = send [inl: (λ m → P m OL send Q)
+                          ,inr: (λ n → send P OL Q n) ]
+
+L = source-of
+
+B P = P ⊗ (dual P)
+
+B P ≤ L P ≤ ⊥
+
+B (P ⅋ Q) ≡ (P ⅋ Q) ⊗ dual (P ⅋ Q)
+          ≡ (P ⅋ Q) ⊗ dual P ⊗ dual Q
+          ≡ (P ⅋ Q) ⊗ dual Q ⊗ dual P
+	  → (P ⅋ (Q ⊗ dual Q)) ⊗ dual P
+	  ≡ (P ⅋ B Q) ⊗ dual P
+	  ≡ (B Q ⅋ P) ⊗ dual P
+	  → B Q ⅋ (P ⊗ dual P)
+	  ≡ B Q ⅋ B P
+-}
+{-
+module _ {{_ : UA}} {{_ : FunExt}} where
+    foo : {P Q : Proto} → ⟦ L P ⅋ L Q ⟧ ≡ ⟦ L (P OL Q) ⟧
+    foo {end} = refl
+    foo {com io P} {end} = refl
+    foo {com io P} {com io₁ P₁} = Σ=′ _ [inl: (λ m → foo {P m} {com Out P₁}) ,inr: (λ n → foo {com Out P} {P₁ n}) ]
+
+
+
+--foo : {P Q : Proto} → ⟦ L P ⊗ Q ⟧ ≡ L P >> Q
+
+Log-⊗ : ∀ {P Q} → Log (P ⊗ Q) → ⟦ L P ⊗ L Q ⟧
+Log-⊗ {end} p = p
+Log-⊗ {send P} (m , p) = m , Log-⊗ {P m} p
+Log-⊗ {recv P} {end} (m , p) = m , {!!}
+Log-⊗ {recv P} {recv Q} p = {!!}
+Log-⊗ {recv P} {send Q} (m , p) = {!m , Log-⊗ {?} {?} p!}
+
+module _ {P Q R S : Proto} {{_ : UA}} {{_ : FunExt}} where
+  dist-⅋-⊕′ : (P ⊕ Q) ⅋ (R ⊕ S) ≡ send {!!} -- (P ⅋ (R ⊕ S) ) ⊕ (R ⅋ P)
+  dist-⅋-⊕′ = ap send (λ= [inl: [L: {!!} R: {!!} ] ,inr: {!!} ])
+-}
 
 module _ {{_ : FunExt}}{{_ : UA}} where
   -- absorption
