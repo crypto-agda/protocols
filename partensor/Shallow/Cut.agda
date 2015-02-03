@@ -30,8 +30,6 @@ open import partensor.Shallow.Vars
 
 module partensor.Shallow.Cut where
 
-
-
 record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
   field
     NES : ¬ (Session.Ended A)
@@ -70,10 +68,10 @@ TC-∈Split cont l (TC-⅋-inp (mk .l E/c₁) P) | same = TC-conv
   ((♦-cong₂ (≈-trans (≈,[end] _) (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈'.lI l) (/*-End _ ∼-End E/c₁)))) ≈-refl))
   (cont-⅋ cont refl (mk (mk (Doms'.there Doms'.here) refl) (mk here refl))
                     (mk (mk Doms'.here refl) (mk here refl))
-                    {!!} (P c₀ c₁))
+                    (diff-ten (t/h _)) (P c₀ c₁))
   -- postulate for channels.. grr
   where postulate c₀ c₁ : _
-TC-∈Split {I = I} cont l (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (mk (∈♦₀… (move… l l₁ x)) X) λ c₀ c₁ →
+TC-∈Split {I = I}{K} cont l (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (mk (∈♦₀… {I₁ = K} (move… l l₁ x)) X) λ c₀ c₁ →
   TC-conv
          (≈-trans ♦-com,
          (≈,[] (≈-trans ♦-com,
@@ -84,6 +82,29 @@ TC-∈Split {I = I} cont l (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (mk 
          ∼-refl))
   (TC-∈Split cont (there…' (there…' (move[…] l₁ l (Diff-sym… x)))) (P c₀ c₁))
 TC-∈Split cont l (TC-end E) = 𝟘-elim (NES cont (Map.All∈' (Proto.All∈' E ([↦…]∈'.lI l)) ([↦…]∈'.lE l)))
+TC-∈Split cont l (TC-mix lF lG lF/=lG P) with sameDoms? ([↦…]∈'.lΔ l) ([]∈'.lΔ lF) | sameDoms? ([↦…]∈'.lΔ l) ([]∈'.lΔ lG)
+TC-∈Split {δK = δK}{I = I}{K = K}cont (mk (mk lΔ refl) (mk lA refl)) (TC-mix {δG = δG}{G = G} (mk .lΔ refl) lG lF/=lG P) | inj₂ ⟨ refl , refl ⟩ | Y
+  = TC-mix (mk ([]∈♦₀ {δF = δK}lΔ) (lookup-[]∈♦'₀ _ K lΔ))
+           (mk ([]∈♦₀ {δF = δK} ([]∈'.lΔ lG)) (lookup-[]∈♦'₀ _ K ([]∈'.lΔ lG) ∙ lookup-diff _ _ _ _ lF/=lG ∙ []∈'.↦Δ lG))
+    ([]∈♦₀-diff {δF = δK} lF/=lG)
+   (TC-conv (≈-trans ♦-com, (≈,[] (≈-reflexive lemma₀)
+               (∼-reflexive ([∈♦₀]≔' (Proto.lookup I lΔ) G lA end ∙ ap (flip _♦Map_ G) (! lookup/D[>>] I lΔ lA )))))
+   (TC-∈Split cont (mk (mk Doms'.here refl) (mk (∈♦₀ {F = δG} lA) (lookup-∈♦₀ _ G lA))) P))
+   where
+     lemma₀ : (I /Ds lΔ) /Ds  ([]∈'.lΔ lG) ♦Proto' K
+         ≡ (I /D[ lΔ >> lA ] ♦Proto' K) /Ds []∈♦₀ {δF = δK} lΔ /Ds ([]∈♦₀ {δF = δK} ([_]∈'_.lΔ lG))
+     lemma₀ rewrite ! /Ds>>-red I lΔ lA
+                  | /Ds-[]∈♦'₀ {I = I /D[ lΔ >> lA ] /Ds lΔ} ([]∈'.lΔ lG) K
+                  | /Ds-[]∈♦'₀ {I = I /D[ lΔ >> lA ]} lΔ K = refl
+
+TC-∈Split cont l (TC-mix lF lG lF/=lG P) | inj₁ x | inj₂ y = {!!}
+TC-∈Split cont l (TC-mix lF lG lF/=lG P) | inj₁ x | inj₁ x₁ = {!!}
+
+{- 
+TC-mix {!!} {!!} {!!}
+   (TC-conv {!!}
+     (TC-∈Split cont {!!} P))
+-}
 TC-∈Split {I = I} cont (mk (mk lΔ ↦Δ) (mk lA ↦A)) (TC-split σs A1 P P₁)
     with Map.lookup (Proto.lookup σs lΔ) lA
     | select {I = I} σs lΔ lA

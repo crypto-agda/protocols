@@ -16,7 +16,7 @@ open import Data.Fin
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
-open import partensor.Shallow.Dom
+open import partensor.Shallow.Dom as Dom
 import partensor.Shallow.Session as Session
 import partensor.Shallow.Map as Map
 import partensor.Shallow.Env as Env
@@ -29,9 +29,22 @@ open import partensor.Shallow.Term
 
 module partensor.Shallow.Vars where
 
+
 infixl 4 _♦Proto'_
-postulate
+abstract
   _♦Proto'_ : ∀ {δa δb}(A : Proto δa)(B : Proto δb) → Proto (δa ♦Doms δb)
+  _♦Proto'_ = _♦Proto_
+
+  lookup-[]∈♦'₀ : ∀ {δ δE δF}(E : Proto δE)(F : Proto δF)(l : Doms'.[ δ ]∈ δE)
+    → Proto.lookup (E ♦Proto' F) ([]∈♦₀ {δF = δF} l) ≡ Proto.lookup E l
+  lookup-[]∈♦'₀ = lookup-[]∈♦₀
+
+  /Ds-[]∈♦'₀ : ∀ {δ δI δK}{I : Proto δI}(l : Doms'.[ δ ]∈ δI)(K : Proto δK)
+     → (I /Ds l) ♦Proto' K ≡ (I ♦Proto' K) /Ds ([]∈♦₀ {δF = δK} l)
+  /Ds-[]∈♦'₀ l = /Ds-[]∈♦₀ l
+
+[∈]♦₀ : ∀ {δ₀ δ₁ δE}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ E ]∈' I₀ → [ E ]∈' (I₀ ♦Proto' I₁)
+[∈]♦₀ {δ₁ = δ₁}{I₁ = F}(mk lΔ ↦Δ) = mk ([]∈♦₀ {δF = δ₁} lΔ ) (lookup-[]∈♦'₀ _ F lΔ ∙ ↦Δ)
 
 {-
 data DifferentVarsDoms : ∀ {δI c d} → Doms'.[ c ]∈ δI → Doms'.[ d ]∈ δI → Set where
@@ -47,12 +60,21 @@ DifferentVars : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A ]∈ I → [ d �
 DifferentVars l l' = DifferentVarsDoms (Proto.forget ([↦]∈.lI l)) (Proto.forget ([↦]∈.lI l'))
 -}
 
+data DifferentVars… {δI}{I : Proto δI}{c d A B} : (lA : [ c ↦ A …]∈' I)(lB : [ d ↦ B …]∈' I) → Set₁ where
+  diff-ten : ∀ {δF δG}{F : Env δF}{G : Env δG}{lA : Doms'.[ δF ]∈ δI}{lB : Doms'.[ δG ]∈ δI}
+    {↦A : Proto.lookup I lA ≡ F}{c↦ : c ↦ A ∈' F} {↦B : Proto.lookup I lB ≡ G}{d↦ : d ↦ B ∈' G}
+    → DiffDoms' lA lB → DifferentVars… (mk (mk lA ↦A) c↦) (mk (mk lB ↦B) d↦)
+  diff-in-ten : ∀ {δF}{F : Env δF}{lF : Doms'.[ δF ]∈ δI}{↦F : Proto.lookup I lF ≡ F}
+     {c∈ : c Dom'.∈ δF}{↦c : Map.lookup F c∈ ≡ A}{d∈ : d Dom'.∈ δF}{↦d : Map.lookup F d∈ ≡ B}
+    → DiffDom' c∈ d∈
+    → DifferentVars… (mk (mk lF ↦F) (mk c∈ ↦c)) (mk (mk lF ↦F) (mk d∈ ↦d))
 
 postulate
-  DifferentVars… : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A …]∈' I → [ d ↦ B …]∈' I → Set
+  -- DifferentVars… : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A …]∈' I → [ d ↦ B …]∈' I → Set
   Diff-sym… : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A …]∈' I}{l' : [ d ↦ B …]∈' I}
     → DifferentVars… l l' → DifferentVars… l' l
 
+{-
 record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈' I)(l' : [ d ↦ B ]∈' I) : Set where
   constructor mk
   field
@@ -62,18 +84,24 @@ open DifferentVars
 Diff-sym : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A ]∈' I}{l' : [ d ↦ B ]∈' I}
     → DifferentVars l l' → DifferentVars l' l
 Diff… (Diff-sym df) = Diff-sym… (Diff… df)
+-}
 
 data SameVar? {δI}{I : Proto δI} : ∀ {c c' A A'} → [ c ↦ A …]∈' I → [ c' ↦ A' …]∈' I → Set₁ where
   same : ∀ {c A}{l : [ c ↦ A …]∈' I} → SameVar? l l
   diff : ∀ {c c' A B}{l : [ c ↦ A …]∈' I}{l' : [ c' ↦ B …]∈' I} → DifferentVars… l l' → SameVar? l l'
 
-postulate
-  sameVar? : ∀ {δI}{I : Proto δI}{c c' A A'}(l : [ c ↦ A …]∈' I)(l' : [ c' ↦ A' …]∈' I) → SameVar? l l'
+sameVar? : ∀ {δI}{I : Proto δI}{c c' A A'}(l : [ c ↦ A …]∈' I)(l' : [ c' ↦ A' …]∈' I) → SameVar? l l'
+sameVar? (mk (mk lΔ ↦Δ) lE) (mk (mk lΔ₁ ↦Δ₁) lE₁) with sameDoms? lΔ lΔ₁
+sameVar? (mk (mk lΔ ↦Δ) lE) (mk (mk lΔ₁ ↦Δ₁) lE₁) | inj₁ x = diff (diff-ten x)
+sameVar? (mk (mk lΔ refl) (mk lA ↦A)) (mk (mk .lΔ ↦Δ₁) (mk lA₁ ↦A₁)) | inj₂ ⟨ refl , refl ⟩
+  with sameDom? lA lA₁
+sameVar? (mk (mk lΔ refl) (mk lA ↦A)) (mk (mk .lΔ refl) (mk lA₁ ↦A₁)) | inj₂ ⟨ refl , refl ⟩ | inj₁ x
+  = diff (diff-in-ten x)
+sameVar? (mk (mk lΔ refl) (mk lA refl)) (mk (mk .lΔ refl) (mk .lA refl)) | inj₂ ⟨ refl , refl ⟩ | inj₂ ⟨ refl , refl ⟩ = same
 
-postulate
-  [∈]♦₀ : ∀ {δ₀ δ₁ δE}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ E ]∈' I₀ → [ E ]∈' (I₀ ♦Proto' I₁)
+
 ∈♦₀… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈' I₀ → [ c ↦ A …]∈' (I₀ ♦Proto' I₁)
-∈♦₀… (mk lI lE) = mk ([∈]♦₀ lI) lE --mk {!!} {!!}
+∈♦₀… {I₁ = I₁} (mk lI lE) = mk ([∈]♦₀ {I₁ = I₁} lI) lE --mk {!!} {!!}
 
 postulate
   TC-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
@@ -86,9 +114,9 @@ postulate
   ♦-com, : ∀ {δa δ δb}{A : Proto δa}{B : Proto δb}{E : Env δ} → (A ,[ E ]) ♦Proto' B ≈ (A ♦Proto' B),[ E ]
   ∈♦₁… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈' I₁ → [ c ↦ A …]∈' (I₀ ♦Proto' I₁)
   ∈♦₀-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈' I₀) →
-          (I₀ ♦Proto' I₁) /…' (∈♦₀… l) ≈ (I₀ /…' l) ♦Proto' I₁
+          (I₀ ♦Proto' I₁) /…' (∈♦₀… {I₁ = I₁} l) ≈ (I₀ /…' l) ♦Proto' I₁
   ∈♦₀-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈' I₀) →
-          (I₀ ♦Proto' I₁) [/…]' (∈♦₀… l) ≈ (I₀ [/…]' l) ♦Proto' I₁
+          (I₀ ♦Proto' I₁) [/…]' (∈♦₀… {I₁ = I₁}l) ≈ (I₀ [/…]' l) ♦Proto' I₁
   ∈♦₁-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈' I₁) →
           (I₀ ♦Proto' I₁) /…' (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ /…' l)
   ∈♦₁-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈' I₁) →

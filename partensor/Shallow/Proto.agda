@@ -6,8 +6,9 @@ open import Data.Zero
 open import Data.One
 open import Data.Two
 open import Data.Nat
+open import Data.Sum
 open import Relation.Nullary
-open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.PropositionalEquality.NP
 
 open import partensor.Shallow.Dom
 open import partensor.Shallow.Session as Session hiding (Ended)
@@ -38,6 +39,22 @@ module Doms' where
       there : ∀ {δs δ'} → [ δ ]∈ δs → [ δ ]∈ δs ,[ δ' ]
 open Doms' using (here; there)
 
+data DiffDoms' : ∀ {δ δ' δs} → Doms'.[ δ ]∈ δs → Doms'.[ δ' ]∈ δs → Set where
+  h/t : ∀ {δ δ' δs}(l : Doms'.[ δ' ]∈ δs) → DiffDoms' (here {δ}{δs}) (there l)
+  t/h : ∀ {δ δ' δs}(l : Doms'.[ δ' ]∈ δs) → DiffDoms' (there l) (here {δ}{δs})
+  t/t : ∀ {δ δ' δj δs}{l : Doms'.[ δ ]∈ δs}{l' : Doms'.[ δ' ]∈ δs} → DiffDoms' l l'
+    → DiffDoms' {δs = δs ,[ δj ]} (there l) (there l')
+
+sameDoms? : ∀ {δ δ' δs}(l : Doms'.[ δ ]∈ δs)(l' : Doms'.[ δ' ]∈ δs)
+  → DiffDoms' l l' ⊎ (∃ λ (δ'=δ : δ' ≡ δ) → l ≡ tr (λ δ → Doms'.[ δ ]∈ δs) δ'=δ l')
+sameDoms? here here = inj₂ ⟨ refl , refl ⟩
+sameDoms? here (there l') = inj₁ (h/t l')
+sameDoms? (there l) here = inj₁ (t/h l)
+sameDoms? (there l) (there l') with sameDoms? l l'
+sameDoms? (there l) (there l') | inj₁ x = inj₁ (t/t x)
+sameDoms? (there l) (there .l) | inj₂ ⟨ refl , refl ⟩ = inj₂ ⟨ refl , refl ⟩
+
+
 data Maps {a}(A : Set a) : Doms → Set a where
   · : Maps A ·
   _,[_] : ∀ {δs δ}(I : Maps A δs)(Δ : Map A δ) → Maps A (δs ,[ δ ])
@@ -58,6 +75,13 @@ _[_≔_] : ∀ {a}{A : Set a}{δ δs}(I : Maps A δs)(l : Doms'.[ δ ]∈ δs) �
 · [ () ≔ f ]
 (I ,[ Δ ]) [ here ≔ f ] = I ,[ f Δ ]
 (I ,[ Δ ]) [ there l ≔ f ] = I [ l ≔ f ] ,[ Δ ]
+
+lookup-diff : ∀ {a}{A : Set a}{δ δ' δs}(M : Maps A δs)(l : Doms'.[ δ ]∈ δs)(l' : Doms'.[ δ' ]∈ δs)(f : Map A δ → Map A δ)
+  → DiffDoms' l l'
+  → lookup (M [ l ≔ f ]) l' ≡ lookup M l'
+lookup-diff (M ,[ Δ ]) .here .(there l) f (h/t l) = refl
+lookup-diff (M ,[ Δ ]) .(there l) .here f (t/h l) = refl
+lookup-diff (M ,[ Δ ]) ._ ._ f (t/t diff) = lookup-diff M _ _ f diff
 
 Proto      = Maps Session
 Selections = Maps 𝟚
@@ -163,25 +187,21 @@ record [_]∈'_ {a}{A : Set a}{δ}(Δ : Map A δ){δs}(M : Maps A δs) : Set a w
   field
     lΔ : Doms'.[ δ ]∈ δs
     ↦Δ : lookup M lΔ ≡ Δ
+module []∈' = [_]∈'_
 
+[]∈♦₀ : ∀ {δ δE δF} → Doms'.[ δ ]∈ δE → Doms'.[ δ ]∈ (δE ♦Doms δF)
+[]∈♦₀ {δF = ·} l = l
+[]∈♦₀ {δF = δF ,[ x ]} l = there ([]∈♦₀ {δF = δF} l)
 
-{-
-data Mode : Set where
-  ended :
-  open  : 
+lookup-[]∈♦₀ : ∀ {δ δE δF}(E : Proto δE)(F : Proto δF)(l : Doms'.[ δ ]∈ δE)
+  → lookup (E ♦Proto F) ([]∈♦₀ {δF = δF} l) ≡ lookup E l
+lookup-[]∈♦₀ E · l = refl
+lookup-[]∈♦₀ E (F ,[ Δ ]) l = lookup-[]∈♦₀ E F l
 
-record [_,_↦_]∈_ (m : Mode){δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
-  field
-    δE  : Dom
-    E   : Env δE
-    lM  : [ E ]∈ I
-    lE  : c Env.↦ S ∈ E
-    E/c : Env.Ended (E Env./ lE)
-module [↦]∈ = [_↦_]∈_
-
-record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
-  field
--}
+[]∈♦₀-diff : ∀ {δ δ' δE δF}{l : Doms'.[ δ ]∈ δE}{l' : Doms'.[ δ' ]∈ δE} → DiffDoms' l l'
+  → DiffDoms' ([]∈♦₀ {δF = δF} l) ([]∈♦₀ {δF = δF} l')
+[]∈♦₀-diff {δF = ·} diff = diff
+[]∈♦₀-diff {δF = δF ,[ x ]} diff = t/t ([]∈♦₀-diff {δF = δF} diff)
 
 infix 0 [_↦_…]∈_ [_↦_]∈_
 record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
@@ -376,6 +396,28 @@ All∈' {I = I ,[ Δ ]} X (mk (there lΔ) ↦Δ) = All∈' (fst X) (mk lΔ ↦Δ
 
 Ended : ∀ {δs} → Proto δs → Set
 Ended = All Env.Ended
+
+module _ {v : Session} where
+  constMap≡ : ∀ {δ}(E F : Env δ) → Map.map (const v) E ≡ Map.map (const v) F
+  constMap≡ ε ε = refl
+  constMap≡ (E , c ↦ v₁) (F , .c ↦ v₂) rewrite constMap≡ E F = refl
+
+/Ds>>-red : ∀ {c δ δs}(I : Proto δs)(lΔ : Doms'.[ δ ]∈ δs)(lA : c Dom'.∈ δ)
+  → I /D[ lΔ >> lA ] /Ds lΔ ≡ I /Ds lΔ
+/Ds>>-red (I ,[ Δ ]) here lA = ap (_,[_] I) (constMap≡ _ _)
+/Ds>>-red (I ,[ Δ ]) (there lΔ) lA = ap (λ X → X ,[ Δ ]) (/Ds>>-red I lΔ lA)
+
+module _ {δ δI}{I : Proto δI}(l : Doms'.[ δ ]∈ δI) where
+  /Ds-[]∈♦₀ : ∀ {δK}(K : Proto δK)
+     → (I /Ds l) ♦Proto K ≡ (I ♦Proto K) /Ds ([]∈♦₀ {δF = δK} l)
+  /Ds-[]∈♦₀ · = refl
+  /Ds-[]∈♦₀ (K ,[ Δ ]) rewrite /Ds-[]∈♦₀ K = refl
+
+
+lookup/D[>>] : ∀ {δI δE c}(I : Proto δI)(lΔ : Doms'.[ δE ]∈ δI)(lA : c Dom'.∈ δE)
+  → lookup (I /D[ lΔ >> lA ]) lΔ ≡ lookup I lΔ Env.[ lA ]≔' end
+lookup/D[>>] (I ,[ Δ ]) here lA = refl
+lookup/D[>>] (I ,[ Δ ]) (there lΔ) lA = lookup/D[>>] I lΔ lA
 -- -}
 -- -}
 -- -}

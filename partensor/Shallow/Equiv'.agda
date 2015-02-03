@@ -51,6 +51,9 @@ open _∼_ public
 ∼-refl : ∀ {δE}{E : Env δE} → E ∼ E
 ∼-refl = ⟨ ⊆-refl , ⊆-refl ⟩
 
+∼-reflexive : ∀ {δE}{E F : Env δE} → E ≡ F → E ∼ F
+∼-reflexive refl = ∼-refl
+
 ∼-sym : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
 ∼-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
 
@@ -128,6 +131,9 @@ record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
 
 ≈-refl : ∀ {δI}{I : Proto δI} → I ≈ I
 ≈-refl = ⟨ ⊆s-refl , ⊆s-refl ⟩
+
+≈-reflexive : ∀ {δI}{I J : Proto δI} → I ≡ J → I ≈ J
+≈-reflexive refl = ≈-refl
 
 ≈-sym : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
         → I ≈ J → J ≈ I

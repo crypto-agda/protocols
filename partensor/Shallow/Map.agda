@@ -147,6 +147,17 @@ module With-end {a}{A : Set a}(end : A) where
 
     [_is_⋎_] : ∀ {δ} → T δ → T δ → T δ → Set₁
     [_is_⋎_] = Zip
+
+lookup-∈♦₀ : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(l : c Dom'.∈ δE)
+  → lookup (E ♦Map F) (∈♦₀ {F = δF} l) ≡ lookup E l
+lookup-∈♦₀ E ε l = refl
+lookup-∈♦₀ E (F , c₁ ↦ v) l = lookup-∈♦₀ E F l
+
+[∈♦₀]≔' : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(lA : c Dom'.∈ δE)(v : A)
+  → (E ♦Map F) [ ∈♦₀ {F = δF} lA ]≔' v ≡ E [ lA ]≔' v ♦Map F
+[∈♦₀]≔' E ε l v = refl
+[∈♦₀]≔' E (F , c₁ ↦ v) l v₁ rewrite [∈♦₀]≔' E F l v₁ = refl
+
 -- -}
 -- -}
 -- -}
