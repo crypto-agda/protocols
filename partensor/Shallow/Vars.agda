@@ -15,7 +15,7 @@ open import Data.Fin
 -- open import Data.List
 
 open import Relation.Nullary
-open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
+open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J) renaming (proof-irrelevance to UIP)
 open import partensor.Shallow.Dom as Dom
 import partensor.Shallow.Session as Session
 import partensor.Shallow.Map as Map
@@ -62,10 +62,10 @@ DifferentVars l l' = DifferentVarsDoms (Proto.forget ([↦]∈.lI l)) (Proto.for
 
 data DifferentVars… {δI}{I : Proto δI}{c d A B} : (lA : [ c ↦ A …]∈ I)(lB : [ d ↦ B …]∈ I) → Set₁ where
   diff-ten : ∀ {δF δG}{F : Env δF}{G : Env δG}{lA : Doms'.[ δF ]∈ δI}{lB : Doms'.[ δG ]∈ δI}
-    {↦A : Proto.lookup I lA ≡ F}{c↦ : c ↦ A ∈ F} {↦B : Proto.lookup I lB ≡ G}{d↦ : d ↦ B ∈ G}
+    {↦A : Proto.lookup I lA ≡ F}{c↦ : c ↦ « A » ∈ F} {↦B : Proto.lookup I lB ≡ G}{d↦ : d ↦ « B » ∈ G}
     → DiffDoms' lA lB → DifferentVars… (mk (mk lA ↦A) c↦) (mk (mk lB ↦B) d↦)
   diff-in-ten : ∀ {δF}{F : Env δF}{lF : Doms'.[ δF ]∈ δI}{↦F : Proto.lookup I lF ≡ F}
-     {c∈ : c Dom'.∈ δF}{↦c : Map.lookup F c∈ ≡ A}{d∈ : d Dom'.∈ δF}{↦d : Map.lookup F d∈ ≡ B}
+     {c∈ : c Dom'.∈ δF}{↦c : Map.lookup F c∈ ≡ « A »}{d∈ : d Dom'.∈ δF}{↦d : Map.lookup F d∈ ≡ « B »}
     → DiffDom' c∈ d∈
     → DifferentVars… (mk (mk lF ↦F) (mk c∈ ↦c)) (mk (mk lF ↦F) (mk d∈ ↦d))
 
@@ -97,8 +97,10 @@ sameVar? (mk (mk lΔ refl) (mk lA ↦A)) (mk (mk .lΔ ↦Δ₁) (mk lA₁ ↦A�
   with sameDom? lA lA₁
 sameVar? (mk (mk lΔ refl) (mk lA ↦A)) (mk (mk .lΔ refl) (mk lA₁ ↦A₁)) | inj₂ ⟨ refl , refl ⟩ | inj₁ x
   = diff (diff-in-ten x)
-sameVar? (mk (mk lΔ refl) (mk lA refl)) (mk (mk .lΔ refl) (mk .lA refl)) | inj₂ ⟨ refl , refl ⟩ | inj₂ ⟨ refl , refl ⟩ = same
-
+sameVar? (mk (mk lΔ refl) (mk lA ↦A)) (mk (mk .lΔ refl) (mk .lA ↦A₁)) | inj₂ ⟨ refl , refl ⟩ | inj₂ ⟨ refl , refl ⟩
+  with ! ↦A ∙ ↦A₁
+sameVar? (mk (mk lΔ refl) (mk lA ↦A)) (mk (mk .lΔ refl) (mk .lA ↦A₁)) | inj₂ ⟨ refl , refl ⟩ | inj₂ ⟨ refl , refl ⟩ | refl
+  rewrite UIP ↦A ↦A₁ = same
 
 ∈♦₀… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₀ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
 ∈♦₀… {I₁ = I₁} (mk lI lE) = mk ([∈]♦₀ {I₁ = I₁} lI) lE --mk {!!} {!!}
@@ -134,8 +136,8 @@ postulate
   move…-lemma : ∀ {δI} {I : Proto δI} {c d A B δE} {E : Env δE}
                 {lΔ : Doms'.[ δE ]∈ δI} {↦Δ : Proto.lookup I lΔ ≡ E} {δE₁}
                 {E₁ : Env δE₁} {lΔ₁ : Doms'.[ δE₁ ]∈ δI}
-                {↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁} {lE₁ : d ↦ B ∈ E₁}
-                (lΔ₂ : Doms'.[ δE ]∈ δI) (lE : c ↦ A ∈ E) →
+                {↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁} {lE₁ : d ↦ « B » ∈ E₁}
+                (lΔ₂ : Doms'.[ δE ]∈ δI) (lE : c ↦ « A » ∈ E) →
               DifferentVars… (mk (mk lΔ ↦Δ) lE) (mk (mk lΔ₁ ↦Δ₁) lE₁) →
               Proto.lookup (I Proto.[ lΔ₂ ≔ (λ E₂ → E₂ [ _↦_∈_.lA lE ]≔' end) ])
               lΔ₁
@@ -143,8 +145,8 @@ postulate
   move[…]-lemma : ∀ {δI} {I : Proto δI} {c d A B δE} {E : Env δE}
                   {lΔ : Doms'.[ δE ]∈ δI} {↦Δ : Proto.lookup I lΔ ≡ E} {δE₁}
                   {E₁ : Env δE₁} {lΔ₁ : Doms'.[ δE₁ ]∈ δI}
-                  {↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁} {lE₁ : d ↦ B ∈ E₁}
-                  (lΔ₂ : Doms'.[ δE ]∈ δI) (lE : c ↦ A ∈ E) →
+                  {↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁} {lE₁ : d ↦ « B » ∈ E₁}
+                  (lΔ₂ : Doms'.[ δE ]∈ δI) (lE : c ↦ « A » ∈ E) →
                 DifferentVars… (mk (mk lΔ ↦Δ) lE) (mk (mk lΔ₁ ↦Δ₁) lE₁) →
                 Proto.lookup (I Proto.[ lΔ₂ ≔ Map.map (λ _ → end) ]) lΔ₁ ≡ E₁
 
@@ -286,7 +288,7 @@ End≔end (E , c₁ ↦ v) (there l) EE = ⟨ (End≔end E l (fst EE)) , (snd EE
 /Ds-/[] b (I ,[ Δ ]) (Doms'.there lΔ) (σ ,[ Δ₁ ]) En = ≈,[] (/Ds-/[] b I lΔ σ En) ∼-refl
 
 -- Really clever proof yay!
-SEnd// :(b : 𝟚)(S : Session)(σ : 𝟚) → Session.Ended (Env.selectProj (not b) (Env.selectProj b S σ) σ)
+SEnd// :(b : 𝟚)(S : MSession)(σ : 𝟚) → Session.Ended (Env.selectProj (not b) (Env.selectProj b S σ) σ)
 SEnd// 1₂ S 1₂ = 0₁
 SEnd// 1₂ S 0₂ = 0₁
 SEnd// 0₂ S 1₂ = 0₁
@@ -300,3 +302,10 @@ End// b (E , c ↦ v) (σ , .c ↦ v₁) = ⟨ (End// b E σ) , SEnd// b v v₁ 
   → I Proto.[ [_]∈_.lΔ l ≔ f ] ≈ I Proto.[ [_]∈_.lΔ l ≔ g ]
 [≔]-ext (I ,[ Δ ]) (mk Doms'.here refl) pf = ≈,[] ≈-refl pf
 [≔]-ext (I ,[ Δ ]) (mk (Doms'.there lΔ) ↦Δ) pf = ≈,[] ([≔]-ext I (mk lΔ ↦Δ) pf) ∼-refl
+
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}
+-- -}

@@ -83,7 +83,7 @@ lookup-diff (M ,[ Δ ]) .here .(there l) f (h/t l) = refl
 lookup-diff (M ,[ Δ ]) .(there l) .here f (t/h l) = refl
 lookup-diff (M ,[ Δ ]) ._ ._ f (t/t diff) = lookup-diff M _ _ f diff
 
-Proto      = Maps Session
+Proto      = Maps MSession
 Selections = Maps 𝟚
 
 sel₀ : (δs : Doms) → Selections δs
@@ -104,7 +104,7 @@ lookup/zipWith : ∀ {δs δE}(f : ∀ {δ} → Env δ → Sel δ → Env δ)(I 
 lookup/zipWith f (I ,[ Δ ]) (σ ,[ Δ₁ ]) here = refl
 lookup/zipWith f (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) = lookup/zipWith f I σ l
 
-module SelProj = Env.With-end {_} {Session} end
+module SelProj = Env.With-end {_} {MSession} end
 {-
 module SelProj where
     _/₀_ : ∀ {δ} → Env δ → Sel δ → Env δ
@@ -207,7 +207,7 @@ record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
     {δE} : Dom
     {E}  : Env δE
     lI   : [ E ]∈ I
-    lE   : c Env.↦ S ∈ E
+    lE   : c Env.↦ « S » ∈ E
   open [_]∈_ lI public
   open Env._↦_∈_ lE public
   E/ : Env δE
@@ -216,7 +216,7 @@ module [↦…]∈ = [_↦_…]∈_
 open [↦…]∈ using (E/) public
 
 here…' : ∀ {δJ}{J : Proto δJ}{c S} →
-          [ c ↦ S …]∈ J ,[ c ↦ S ]
+          [ c ↦ S …]∈ J ,[ c ↦ « S » ]
 here…' = mk (mk here refl) (Map.mk here refl)
 
 there…' : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
@@ -230,11 +230,11 @@ not-there' : ∀ {δE c S}{E : Env δE}
 not-there' {E = E , ._ ↦ ._} NES EE (Map.mk here refl) = NES (snd EE)
 not-there' {E = E , c₁ ↦ v} NES EE (Map.mk (there lA) ↦A) = not-there' NES (fst EE) (Map.mk lA ↦A)
 
-unthere…' : ∀ {δE δJ}{J : Proto δJ}{c S}(NES : ¬(Session.Ended S))
+unthere…' : ∀ {δE δJ}{J : Proto δJ}{c S}
              {E : Env δE}(EE : Env.Ended E) →
            [ c ↦ S …]∈ J ,[ E ] → [ c ↦ S …]∈ J
-unthere…' NES EE (mk (mk here refl) lE) = 𝟘-elim (not-there' NES EE lE)
-unthere…' NES EE (mk (mk (there lΔ) ↦Δ) lE) = mk (mk lΔ ↦Δ) lE
+unthere…' EE (mk (mk here refl) lE) = 𝟘-elim (not-there' id EE lE)
+unthere…' EE (mk (mk (there lΔ) ↦Δ) lE) = mk (mk lΔ ↦Δ) lE
 
 record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   constructor mk
@@ -247,7 +247,7 @@ record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
 module [↦]∈ = [_↦_]∈_
 
 here[]' : ∀ {δJ}{J : Proto δJ}{c S} →
-         [ c ↦ S ]∈ J ,[ c ↦ S ]
+         [ c ↦ S ]∈ J ,[ c ↦ « S » ]
 here[]' = mk here…' _
 
 there[]' : ∀ {δE δJ}{E : Env δE}{J : Proto δJ}{c S} →
@@ -322,7 +322,7 @@ All∈' {I = I ,[ Δ ]} X (mk (there lΔ) ↦Δ) = All∈' (fst X) (mk lΔ ↦Δ
 Ended : ∀ {δs} → Proto δs → Set
 Ended = All Env.Ended
 
-module _ {v : Session} where
+module _ {a}{A : Set a}{v : A} where
   constMap≡ : ∀ {δ}(E F : Env δ) → Map.map (const v) E ≡ Map.map (const v) F
   constMap≡ ε ε = refl
   constMap≡ (E , c ↦ v₁) (F , .c ↦ v₂) rewrite constMap≡ E F = refl

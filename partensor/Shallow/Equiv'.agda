@@ -5,7 +5,7 @@ open import Data.Zero
 open import Data.Product renaming (_,_ to ⟨_,_⟩; proj₁ to fst; proj₂ to snd;
                                    map to ×map)
 
-open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.PropositionalEquality.NP
 open import Relation.Nullary
 open import partensor.Shallow.Session as Session
 open import partensor.Shallow.Env as Env
@@ -74,9 +74,7 @@ _∼-∙_ = ∼-trans
 
 ∼-Ended : ∀ {δE}{E : Env δE} → Env.Ended E → ε ∼ E
 ∼-Ended {E = ε} EE = ∼-refl
-∼-Ended {E = E , c ↦ act x} ⟨ proj₁ , () ⟩
-∼-Ended {E = E , c ↦ v ⅋ v₁} ⟨ proj₁ , () ⟩
-∼-Ended {E = E , c ↦ v ⊗ v₁} ⟨ proj₁ , () ⟩
+∼-Ended {E = E , c ↦ « _ »} ⟨ proj₁ , () ⟩
 ∼-Ended {E = E , c ↦ end} ⟨ proj₁ , proj₂ ⟩ = ∼-trans (∼-Ended proj₁)  (∼-sym ∼,↦end)
 
 _∼-End_ : ∀ {δE δF}{E : Env δE}{F : Env δF} → Env.Ended E → Env.Ended F → E ∼ F
@@ -84,43 +82,43 @@ EE ∼-End EF = ∼-trans (∼-sym (∼-Ended EE)) (∼-Ended EF)
 
 ∼-cancel-unthere… : ∀ {δI}{I : Proto δI}
         {δE}{E : Env δE}(EE : Env.Ended E)
-        {c S}(NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈ I ,[ E ])
-        → [_↦_…]∈_.E l ∼ [_↦_…]∈_.E (unthere…' NES EE l)
-∼-cancel-unthere… EE NES (mk (mk Doms'.here refl) lE) = 𝟘-elim (not-there' NES EE lE)
-∼-cancel-unthere… EE NES (mk (mk (Doms'.there lΔ) ↦Δ) lE) = ∼-refl
+        {c S}(l : [ c ↦ S …]∈ I ,[ E ])
+        → [_↦_…]∈_.E l ∼ [_↦_…]∈_.E (unthere…' EE l)
+∼-cancel-unthere… EE (mk (mk Doms'.here refl) lE) = 𝟘-elim (not-there' id EE lE)
+∼-cancel-unthere… EE (mk (mk (Doms'.there lΔ) ↦Δ) lE) = ∼-refl
 
 infix 0 _⊆s_
 record _⊆s_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
   constructor mk
   field
-    un-⊆s : ∀ c S (NES : ¬(Session.Ended S))(l : [ c ↦ S …]∈ I)
+    un-⊆s : ∀ c S (l : [ c ↦ S …]∈ I)
             → Σ ([ c ↦ S …]∈ J) λ l' → [↦…]∈.E l ∼ [↦…]∈.E l'
 open _⊆s_ public
 
 ⊆s-there : ∀ {δE δJ}{E : Env δE}{J : Proto δJ} → J ⊆s J ,[ E ]
-un-⊆s ⊆s-there c S NES l = ⟨ there…' l , ∼-refl ⟩
+un-⊆s ⊆s-there c S l = ⟨ there…' l , ∼-refl ⟩
 
 ⊆s-refl : ∀ {δI}{I : Proto δI} → I ⊆s I
-⊆s-refl = mk λ c S NES l → ⟨ l , ∼-refl ⟩
+⊆s-refl = mk λ c S l → ⟨ l , ∼-refl ⟩
 
 ⊆s-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
            → I ⊆s J → J ⊆s K → I ⊆s K
-un-⊆s (⊆s-trans (mk p) (mk q)) c S NES l =
-  let p' = p c S NES l
-      q' = q c S NES (fst p')
+un-⊆s (⊆s-trans (mk p) (mk q)) c S l =
+  let p' = p c S l
+      q' = q c S (fst p')
   in ⟨ fst q' , ∼-trans (snd p') (snd q') ⟩
 
 ⊆,[] : ∀ {δF₀ δF₁ δI δJ}{F₀ : Env δF₀}{F₁ : Env δF₁}{I : Proto δI}{J : Proto δJ}
        → I ⊆s J → F₀ ∼ F₁ → I ,[ F₀ ] ⊆s J ,[ F₁ ]
-un-⊆s (⊆,[] I⊆J F₀F₁) c S NES (mk (mk Doms'.here refl) lE)
-  = ⟨ (mk (mk Doms'.here refl) (un-⊆ (get-⊆ F₀F₁) c S NES lE)) , F₀F₁ ⟩
-un-⊆s (⊆,[] I⊆J F₀F₁) c S NES (mk (mk (Doms'.there lΔ) ↦Δ) lE)
-  = ×map there…' id (un-⊆s I⊆J c S NES (mk (mk lΔ ↦Δ) lE))
+un-⊆s (⊆,[] I⊆J F₀F₁) c S (mk (mk Doms'.here refl) lE)
+  =  ⟨ (mk (mk Doms'.here refl) (un-⊆ (get-⊆ F₀F₁) c « S » id lE)) , F₀F₁ ⟩
+un-⊆s (⊆,[] I⊆J F₀F₁) c S (mk (mk (Doms'.there lΔ) ↦Δ) lE)
+  = ×map there…' id (un-⊆s I⊆J c S (mk (mk lΔ ↦Δ) lE))
 
 
 ⊆,[end] : ∀ {δE δI}{E : Env δE}{I : Proto δI}(EE : Env.Ended E)
         → I ,[ E ] ⊆s I
-un-⊆s (⊆,[end] EE) c S NES l = ⟨ unthere…' NES EE l , ∼-cancel-unthere… EE NES l ⟩
+un-⊆s (⊆,[end] EE) c S l = ⟨ unthere…' EE l , ∼-cancel-unthere… EE l ⟩
 
 infix 0 _≈_
 record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
@@ -165,9 +163,9 @@ get-⊆ ∼,[swap] = ⊆,[swap]
 get-⊇ ∼,[swap] = ⊆,[swap]
 
 ⊆s,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ⊆s I ,[ F ] ,[ E ]
-un-⊆s ⊆s,[swap] c S NES (mk (mk Doms'.here refl) lE) = ⟨ (mk (mk (Doms'.there Doms'.here) refl) lE) , ∼-refl ⟩
-un-⊆s ⊆s,[swap] c S NES (mk (mk (Doms'.there Doms'.here) refl) lE) = ⟨ (mk (mk Doms'.here refl) lE) , ∼-refl ⟩
-un-⊆s ⊆s,[swap] c S NES (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) = ⟨ (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) , ∼-refl ⟩
+un-⊆s ⊆s,[swap] c S (mk (mk Doms'.here refl) lE) = ⟨ (mk (mk (Doms'.there Doms'.here) refl) lE) , ∼-refl ⟩
+un-⊆s ⊆s,[swap] c S (mk (mk (Doms'.there Doms'.here) refl) lE) = ⟨ (mk (mk Doms'.here refl) lE) , ∼-refl ⟩
+un-⊆s ⊆s,[swap] c S (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) = ⟨ (mk (mk (Doms'.there (Doms'.there lΔ)) ↦Δ) lE) , ∼-refl ⟩
 
 ≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
 _≈_.get-⊆s ≈,[swap] = ⊆s,[swap]
@@ -240,8 +238,8 @@ bar l = {!!}
 ∼-thmA (E , c₁ ↦ v) (Dom.there l) = ∼-trans (∼,↦ (∼-thmA E l)) ∼,[swap]
 
 thmA : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈ I)
-         → I ≈ (I [/…] l ,[ E/ l , c ↦ S ])
-thmA {I = I ,[ Δ ]} (mk (mk Doms'.here refl) (mk lA refl)) = ≈,[] (≈-sym (≈,[end] (mapAll _ _))) (∼-thmA Δ lA)
+         → I ≈ (I [/…] l ,[ E/ l , c ↦ « S » ])
+thmA {I = I ,[ Δ ]} (mk (mk Doms'.here refl) (mk lA eq)) rewrite ! eq = ≈,[] (≈-sym (≈,[end] (mapAll _ _))) (∼-thmA Δ lA)
 thmA {I = I ,[ Δ ]} (mk (mk (Doms'.there lΔ) ↦Δ) lE) = ≈-trans (≈,[] (thmA {I = I} (mk (mk lΔ ↦Δ) lE)) ∼-refl) ≈,[swap]
 -- thmA l = {!!}
 -- -}

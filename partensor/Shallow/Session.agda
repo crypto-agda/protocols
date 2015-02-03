@@ -15,7 +15,7 @@ mutual
   data Session : Set₁ where
     act : Action → Session
     _⅋_ _⊗_ : Session → Session → Session
-    end : Session
+    𝟙' ⊥' : Session
 
 pattern send {M} P = com OUT {M} P
 pattern recv {M} P = com IN {M} P
@@ -32,7 +32,9 @@ mutual
        → DualS (send F) (recv G)
 
   data Dual : (P Q : Session) → Set₁ where
-    end : Dual end end
+    -- end : Dual end end
+    𝟙⊥ : Dual 𝟙' ⊥'
+    ⊥𝟙 : Dual ⊥' 𝟙'
     --act : ∀ {P Q}
     --    → DualS P Q → Dual (act P) (act Q)
     ⊗⅋ : ∀ {A A' B B'}
@@ -49,19 +51,22 @@ symDualS (?! x x₁) = !? x₁ x
 symDualS (!? x x₁) = ?! x₁ x
 
 symDual : ∀ {P Q} → Dual P Q → Dual Q P
-symDual end = end
+symDual 𝟙⊥ = ⊥𝟙
+symDual ⊥𝟙 = 𝟙⊥
 -- symDual (act p) = act (symDualS p)
 symDual (⊗⅋ x x₁ x₂ x₃) = ⅋⊗ x₁ x x₃ x₂
 symDual (⅋⊗ x x₁ x₂ x₃) = ⊗⅋ x₁ x x₃ x₂
 
-Ended : Session → Set
+data MSession : Set₁ where
+  «_» : (S : Session) → MSession
+  end : MSession
+
+Ended : MSession → Set
 Ended end = 𝟙
 Ended _   = 𝟘
 
 Ended-≡end : ∀ {P} → Ended P → P ≡ end
-Ended-≡end {act x} ()
-Ended-≡end {P ⅋ P₁} ()
-Ended-≡end {P ⊗ P₁} ()
+Ended-≡end {« _ »} ()
 Ended-≡end {end} p = refl
 
 {-

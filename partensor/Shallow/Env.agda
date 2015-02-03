@@ -15,7 +15,7 @@ module partensor.Shallow.Env where
 open import partensor.Shallow.Map as Map public
 
 Env : Dom → Set₁
-Env = Map Session
+Env = Map MSession
 
 module _ {δ c}(E : Env δ) where
   infixl 4 _/'_ _/D_
@@ -29,7 +29,7 @@ infixr 4 _♦Env_
 _♦Env_ : ∀ {D₀ D₁} → Env D₀ → Env D₁ → Env (D₀ ♦Dom D₁)
 _♦Env_ = _♦Map_
 
-open With-end {_} {Session} end public
+open With-end {_} {MSession} end public
 
 Ended : ∀ {δ}(E : Env δ) → Set
 Ended = Map.All (λ _ → Session.Ended)

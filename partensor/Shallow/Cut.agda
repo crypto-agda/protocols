@@ -32,7 +32,6 @@ module partensor.Shallow.Cut where
 
 record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
   field
-    NES : ¬ (Session.Ended A)
     cont-⅋ : ∀ {S T} → A ≡ S ⅋ T → ∀ {d e δJ}{J : Proto δJ}(l : [ d ↦ S …]∈ J)(l' : [ e ↦ T …]∈ J)
       → DifferentVars… l l' → TC'⟨ J ⟩
       → TC'⟨ (J /D[ [↦…]∈.lΔ l >> [↦…]∈.lA l ] /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]) ♦Proto' K ⟩
@@ -81,15 +80,15 @@ TC-∈Split {I = I}{K} cont l (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (
          ∼-refl))
          ∼-refl))
   (TC-∈Split cont (there…' (there…' (move[…] l₁ l (Diff-sym… x)))) (P c₀ c₁))
-TC-∈Split cont l (TC-end E) = 𝟘-elim (NES cont (Map.All∈' (Proto.All∈' E ([↦…]∈.lI l)) ([↦…]∈.lE l)))
+TC-∈Split cont l (TC-end E) =  {!!} -- 𝟘-elim (NES cont (Map.All∈' (Proto.All∈' E ([↦…]∈.lI l)) ([↦…]∈.lE l)))
 TC-∈Split cont l (TC-mix lF lG lF/=lG P) with sameDoms? ([↦…]∈.lΔ l) ([]∈.lΔ lF) | sameDoms? ([↦…]∈.lΔ l) ([]∈.lΔ lG)
-TC-∈Split {δK = δK}{I = I}{K = K}cont (mk (mk lΔ refl) (mk lA refl)) (TC-mix {δG = δG}{G = G} (mk .lΔ refl) lG lF/=lG P) | inj₂ ⟨ refl , refl ⟩ | Y
+TC-∈Split {δK = δK}{I = I}{K = K}cont (mk (mk lΔ refl) (mk lA ↦A)) (TC-mix {δG = δG}{G = G} (mk .lΔ refl) lG lF/=lG P) | inj₂ ⟨ refl , refl ⟩ | Y
   = TC-mix (mk ([]∈♦₀ {δF = δK}lΔ) (lookup-[]∈♦'₀ _ K lΔ))
            (mk ([]∈♦₀ {δF = δK} ([]∈.lΔ lG)) (lookup-[]∈♦'₀ _ K ([]∈.lΔ lG) ∙ lookup-diff _ _ _ _ lF/=lG ∙ []∈.↦Δ lG))
     ([]∈♦₀-diff {δF = δK} lF/=lG)
    (TC-conv (≈-trans ♦-com, (≈,[] (≈-reflexive lemma₀)
                (∼-reflexive ([∈♦₀]≔' (Proto.lookup I lΔ) G lA end ∙ ap (flip _♦Map_ G) (! lookup/D[>>] I lΔ lA )))))
-   (TC-∈Split cont (mk (mk Doms'.here refl) (mk (∈♦₀ {F = δG} lA) (lookup-∈♦₀ _ G lA))) P))
+   (TC-∈Split cont (mk (mk Doms'.here refl) (mk (∈♦₀ {F = δG} lA) (lookup-∈♦₀ _ G lA ∙ ↦A))) P))
    where
      lemma₀ : (I /Ds lΔ) /Ds  ([]∈.lΔ lG) ♦Proto' K
          ≡ (I /D[ lΔ >> lA ] ♦Proto' K) /Ds []∈♦₀ {δF = δK} lΔ /Ds ([]∈♦₀ {δF = δK} ([_]∈_.lΔ lG))
@@ -109,18 +108,18 @@ TC-∈Split {I = I} cont (mk (mk lΔ ↦Δ) (mk lA ↦A)) (TC-split σs A1 P P�
     with Map.lookup (Proto.lookup σs lΔ) lA
     | select {I = I} σs lΔ lA
     | select-com {I = I} σs lΔ lA
-TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk lΔ refl) (mk lA refl)) (TC-split σs A1 P P₁)
+TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk lΔ refl) (mk lA ↦A)) (TC-split σs A1 P P₁)
   | 0₂ | x | y = TC-split (Selections♦ 0₂ σs δK) (atMost♦ 0₂ σs δK A1)
   (TC-conv (≈-trans (♦-cong₂ (≈-sym (/[]-/D[>>] 0₂ I σs lΔ lA)) ≈-refl)
                     (≈-sym (Selections♦'/same {I = I /D[ lΔ >> lA ]}{K} 0₂ σs)))
-           (TC-∈Split cont ((mk (mk lΔ refl) (mk lA (! x)))) P))
+           (TC-∈Split cont ((mk (mk lΔ refl) (mk lA (! x ∙ ↦A)))) P))
   (TC-conv (≈-trans y (≈-sym (Selections♦'/not {I = I /D[ lΔ >> lA ]} {K} 1₂ σs))) P₁)
-TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk lΔ refl) (mk lA refl)) (TC-split σs A1 P P₁)
+TC-∈Split {δK = δK}{I = I}{K} cont (mk (mk lΔ refl) (mk lA ↦A)) (TC-split σs A1 P P₁)
   | 1₂ | x | y = TC-split (Selections♦ 1₂ σs δK) (atMost♦ 1₂ σs δK A1)
   (TC-conv (≈-trans y (≈-sym (Selections♦'/not {I = I /D[ lΔ >> lA ]}{K} 0₂ σs))) P)
   (TC-conv (≈-trans (♦-cong₂ (≈-sym (/[]-/D[>>] 1₂ I σs lΔ lA)) ≈-refl)
                     (≈-sym (Selections♦'/same {I = I /D[ lΔ >> lA ]}{K} 1₂ σs)))
-           (TC-∈Split cont ((mk (mk lΔ refl) (mk lA (! x)))) P₁))
+           (TC-∈Split cont ((mk (mk lΔ refl) (mk lA (! x ∙ ↦A)))) P₁))
 
 
 TC-∈⅋ : ∀ {δI δK c A B}{I : Proto δI}{K : Proto δK}(l : [ c ↦ A ⅋ B …]∈ I)
@@ -151,7 +150,8 @@ TC-cut :
       (l₀ : [ c₀ ↦ S₀ …]∈ I₀)(l₁ : [ c₁ ↦ S₁ …]∈ I₁)
       (P₀ : TC'⟨ I₀ ⟩) (P₁ : TC'⟨ I₁ ⟩)
     → TC'⟨ (I₀ /… l₀) ♦Proto' (I₁ /… l₁) ⟩
-TC-cut end l₀ l₁ P₀ P₁ = {!!}
+TC-cut 𝟙⊥ l₀ l₁ P₀ P₁ = {!!}
+TC-cut ⊥𝟙 l₀ l₁ P₀ P₁ = {!!}
 TC-cut (⊗⅋ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = {!!}
 TC-cut (⅋⊗ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = TC-∈⅋ l₀ P₀ λ d e d/=e ab →
   TC-conv ♦-com
