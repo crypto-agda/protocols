@@ -1,11 +1,6 @@
 open import Data.One
-open import Data.Product
-{-
-open import Data.Zero
-open import Data.Sum
-open import Data.Nat
-
--}
+open import Data.Product renaming (proj₁ to fst; proj₂ to snd)
+open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP
 open import partensor.Shallow.Dom as Dom
 open import partensor.Shallow.Session as Session hiding (Ended)
@@ -19,7 +14,7 @@ Env = Map MSession
 
 module _ {δ c}(E : Env δ) where
   infixl 4 _/'_ _/D_
-  _/D_ :  c Dom'.∈ δ → Env δ
+  _/D_ :  c ∈D δ → Env δ
   _/D_ l = E [ l ]≔' end
 
   _/'_ : ∀ {S} → c ↦ S ∈ E → Env δ
@@ -38,46 +33,18 @@ Ended-/* : ∀ {δ}(E : Env δ) → Ended (E /*)
 Ended-/* ε = _
 Ended-/* (E , c ↦ v) = Ended-/* E , _
 
-{-
-_[_+=_]η : ∀{d S δ δ'}(η : Env δ)(l : d ↦ S ∈ η) → Env δ' → Env {!!}
-(η , d ↦ S) [ here    += η' ]η = {!η ♦Env η'!}
-(η , d ↦ S) [ there l += η' ]η = η [ l += η' ]η , d ↦ S
--}
+Ended-∈D : ∀ {δE c}{E : Env δE} (l : c ∈D δE) → Ended E → Session.Ended (lookup E l)
+Ended-∈D {E = _ , _ ↦ _} here      EE = snd EE
+Ended-∈D {E = _ , _ ↦ _} (there l) EE = Ended-∈D l (fst EE)
+
+Ended-↦∈ : ∀ {δE c S}{E : Env δE} (l : c ↦ S ∈ E) (EE : Ended E) → Session.Ended S
+Ended-↦∈ ⟨ l R⟩ = Ended-∈D l
 
 {-
-postulate
-  URI : Set
-
-infixl 5 _,_↦_
-data Env : Set₁ where
-  ε : Env
-  _,_↦_ : (Δ : Env)(d : URI)(S : Session) → Env
-
-data _↦_∈_ (d : URI)(P : Session) : Env → Set₁ where
-  here  : ∀ {Δ} → d ↦ P ∈ (Δ , d ↦ P)
-  there : ∀ {Δ d' P'} → d ↦ P ∈ Δ
-                      → d ↦ P ∈ (Δ , d' ↦ P')
-
-module _ {d P} where
-  _[_≔_↦_] : ∀ Δ → d ↦ P ∈ Δ → URI → Session → Env
-  ._ [ here {Δ} ≔ c ↦ Q ] = Δ , c ↦ Q
-  ._ [ there {d' = d'}{P'} l ≔ c ↦ Q ] = _ [ l ≔ c ↦ Q ] , d' ↦ P'
-
-module _ {d c M} {P} where
-  _[_≔_] : (Δ : Env) → d ↦ act (com c {M} P) ∈ Δ → M → Env
-  Δ [ l ≔ m ] = Δ [ l ≔ d ↦ P m ]
-
-All : (Pred : URI → Session → Set) → Env → Set
-All Pred ε = 𝟙
-All Pred (Δ , d ↦ p) = All Pred Δ × Pred d p
-
 ZipAll : ∀ {S Δ₀ Δ₁ Δ} → [ Δ is Δ₀ ⋎ Δ₁ ] → All S Δ₀ → All S Δ₁ → All S Δ
 ZipAll ε A₀ A₁ = 0₁
 ZipAll (Z , d ↦₀ P₁) (A₀ , p₀) (A₁ , p₁) = ZipAll Z A₀ A₁ , p₀
 ZipAll (Z , d ↦₁ P₁) (A₀ , p₀) (A₁ , p₁) = ZipAll Z A₀ A₁ , p₁
-
-Ended : Env → Set
-Ended = All λ _ → Session.Ended
 
 ZipEnded : ∀ {Δ₀ Δ₁ Δ} → [ Δ is Δ₀ ⋎ Δ₁ ] → Ended Δ₀ → Ended Δ₁ → Ended Δ
 ZipEnded = ZipAll
@@ -116,9 +83,8 @@ module _ {d io M} {P : M → Session} where
                (l : d ↦ act (com io P) ∈ Δ₁) {m : M} (Δₛ : [ Δ is Δ₀ ⋎ Δ₁ ]) →
              [ Δ [ Zip-com∈₁ Δₛ l ≔ m ] is Δ₀ ⋎ Δ₁ [ l ≔ m ] ]
     Zip-≔₁ l Δₛ = Zip-comm (Zip-≔₀ l (Zip-comm Δₛ))
-
-infixr 4 _,,_
-_,,_ : Env → Env → Env
-Δ ,, ε = Δ
-Δ ,, (Δ' , d ↦ P) = (Δ ,, Δ') , d ↦ P
+-- -}
+-- -}
+-- -}
+-- -}
 -- -}

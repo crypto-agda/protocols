@@ -5,14 +5,6 @@ open import Data.Product hiding (zip)
                                    map to ×map)
 open import Data.Zero
 open import Data.One
-open import Data.Two
-open import Data.Sum
-open import Data.Nat
-{-
-open import Data.Vec
-open import Data.Fin
--}
--- open import Data.List
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
@@ -23,8 +15,8 @@ import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; Ended)
-open Proto   hiding ()
-open import partensor.Shallow.Equiv'
+open Proto
+-- open import partensor.Shallow.Equiv
 
 module partensor.Shallow.Term where
 
@@ -36,7 +28,7 @@ data ⟨_⟩ {δI}(I : Proto δI) : Set₁ where
   ⅋-inp :
     ∀ {c S₀ S₁}
       (l : [ c ↦ S₀ ⅋ S₁ ]∈ I )
-      (P : ∀ c₀ c₁ → ⟨ I [/] l ,[ c₀ ↦ « S₀ » ] ,[ c₁ ↦ « S₁ » ] ⟩)
+      (P : ∀ c₀ c₁ → ⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
     → ⟨ I ⟩
 
   ⊗-out :
@@ -97,7 +89,7 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
  T-⅋-inp :
     ∀ {c S₀ S₁}
       (l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
-      (P : ∀ c₀ c₁ → T⟨ I [/] l ,[ c₀ ↦ « S₀ » ] ,[ c₁ ↦ « S₁ » ] ⟩)
+      (P : ∀ c₀ c₁ → T⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
     → T⟨ I ⟩
 
  T-end : ∀ (E : Ended I) → T⟨ I ⟩
@@ -107,8 +99,8 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (D : Dual S₀ S₁)
       (σs : Selections δI)
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → T⟨ I /₀ σs ,[ c₀ ↦ « S₀ » ] ⟩)
-      (P₁ : ∀ c₁ → T⟨ I /₁ σs ,[ c₁ ↦ « S₁ » ] ⟩)
+      (P₀ : ∀ c₀ → T⟨ I /₀ σs ,[ c₀ ↦ S₀ ] ⟩)
+      (P₁ : ∀ c₁ → T⟨ I /₁ σs ,[ c₁ ↦ S₁ ] ⟩)
     → T⟨ I ⟩
 
  T-split :
@@ -132,13 +124,13 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
  TC-⅋-inp :
     ∀ {c S₀ S₁}
       (l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
-      (P : ∀ c₀ c₁ → TC'⟨ I [/] l ,[ c₀ ↦ « S₀ » ] ,[ c₁ ↦ « S₁ » ] ⟩)
+      (P : ∀ c₀ c₁ → TC'⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
     → TC'⟨ I ⟩
 
  TC-end : ∀ (E : Ended I) → TC'⟨ I ⟩
 
  TC-mix : ∀ {δF δG}{F : Env δF}{G : Env δG}(lF : [ F ]∈ I)(lG : [ G ]∈ I)
-     (lF/=lG : DiffDoms' ([]∈.lΔ lF) ([]∈.lΔ lG))
+     (lF/=lG : DiffDoms ([]∈.lΔ lF) ([]∈.lΔ lG))
      (P : TC'⟨ ((I Proto./ lF) /Ds []∈.lΔ lG),[ F ♦Env G ] ⟩)
      → TC'⟨ I ⟩
 

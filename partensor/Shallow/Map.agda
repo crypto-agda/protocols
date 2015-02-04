@@ -1,7 +1,7 @@
 open import Function
 open import Data.One
 open import Data.Two
-open import Data.Product using (_×_) renaming (proj₁ to fst; proj₂ to snd)
+open import Data.Product using (_×_) renaming (proj₁ to fst; proj₂ to snd; _,_ to ⟨_,_⟩)
 open import Relation.Binary.PropositionalEquality
 open import partensor.Shallow.Dom
 
@@ -29,26 +29,30 @@ data Map {a} (A : Set a) : Dom → Set a where
   ε     : Map A ε
   _,_↦_ : ∀ {δ} (E : Map A δ) c (v : A) → Map A (δ , c ↦*)
 
-lookup : ∀ {a}{A : Set a}{c δ} → Map A δ → c Dom'.∈ δ → A
+lookup : ∀ {a}{A : Set a}{c δ} → Map A δ → c ∈D δ → A
 lookup (M , c ↦ v) here = v
 lookup (M , c₁ ↦ v) (there l) = lookup M l
 
 -- middle-ground between above and: Map A δ ≈ ∀ {c} → c ∈ δ → A
 record _↦_∈_ {a}{A : Set a}(d : URI)(S : A){δ}(M : Map A δ) : Set a where
-  constructor mk
+  constructor ⟨_,_⟩
   field
-    lA : d Dom'.∈ δ
+    lA : d ∈D δ
     ↦A : lookup M lA ≡ S
 module ↦∈ = _↦_∈_
+
+pattern ⟨_R⟩ p  = ⟨ p       , refl ⟩
+pattern heRe    = ⟨ here    R⟩
+pattern theRe p = ⟨ there p R⟩
 
 there' : ∀ {a}{A : Set a}{d S δ} {M : Map A δ} {d' S'}
           → d ↦ S ∈ M
           → d ↦ S ∈ (M , d' ↦ S')
-there' l = mk (there (↦∈.lA l)) (↦∈.↦A l)
+there' l = ⟨ there (↦∈.lA l) , ↦∈.↦A l ⟩
 
 module _ {a}{A : Set a}{d} where
 
-  _[_]≔'_ : ∀ {δ} (M : Map A δ) → d Dom'.∈ δ → A → Map A δ
+  _[_]≔'_ : ∀ {δ} (M : Map A δ) → d ∈D δ → A → Map A δ
   (M , .d ↦ _) [ here    ]≔' v' = M , d ↦ v'
   (M , c ↦  v) [ there l ]≔' v' = M [ l ]≔' v' , c ↦ v
 
@@ -57,9 +61,12 @@ module _ {a} {A : Set a} where
     All Pred ε = 𝟙
     All Pred (M , d ↦ p) = All Pred M × Pred d p
 
+    All∈D : ∀ {δ}{Pred : URI → A → Set}{c}{M : Map A δ} → All Pred M → (l : c ∈D δ) → Pred c (lookup M l)
+    All∈D {M = M , ._ ↦ _} all here = snd all
+    All∈D {M = M ,  _ ↦ _} all (there lA) = All∈D (fst all) lA
+
     All∈' : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈ M → Pred c x
-    All∈' {M = M , ._ ↦ ._} all (mk here refl) = snd all
-    All∈' {M = M , _ ↦ _} all (mk (there lA) ↦A) = All∈' (fst all) (mk lA ↦A)
+    All∈' all ⟨ p R⟩ = All∈D all p
 
 infixr 4 _♦Map_
 _♦Map_ : ∀ {a}{A : Set a}{D₀ D₁} → Map A D₀ → Map A D₁ → Map A (D₀ ♦Dom D₁)
@@ -74,20 +81,19 @@ constMap : ∀ {a}{A : Set a}(δ : Dom)(v : A) → Map A δ
 constMap δ v = pure δ (const v)
 
 pureAll : ∀ {a}{A : Set a}{P : URI → A → Set}{f : URI → A}
-  (δ : Dom) (PF : ∀ c → P c (f c)) → All P (pure δ f)
-pureAll ε PF = 0₁
-pureAll (δ₁ , c ↦*) PF = pureAll δ₁ PF Data.Product., PF c
+            (δ : Dom) (PF : ∀ c → P c (f c)) → All P (pure δ f)
+pureAll ε PF = _
+pureAll (δ , c ↦*) PF = ⟨ pureAll δ PF , PF c ⟩
 
 map : ∀ {a b} {A : Set a} {B : Set b} {δ}
         (f : A → B) (m : Map A δ) → Map B δ
 map f ε = ε
 map f (m , c ↦ v) = map f m , c ↦ f v
 
-
 mapAll : ∀ {a b δ}{A : Set a}{B : Set b}{P : URI → B → Set}{f : A → B}
   (PF : ∀ {c} x → P c (f x))(M : Map A δ) → All P (map f M)
-mapAll PF ε = 0₁
-mapAll PF (M , c ↦ v) = mapAll PF M Data.Product., PF v
+mapAll PF ε = _
+mapAll PF (M , c ↦ v) = ⟨ mapAll PF M , PF v ⟩
 
 zipWith : ∀ {a b c} {A : Set a} {B : Set b} {C : Set c} {δ}
             (f : A → B → C) (mA : Map A δ) (mB : Map B δ) → Map C δ
@@ -129,12 +135,12 @@ module With-end {a}{A : Set a}(end : A) where
     [_is_⋎_] : ∀ {δ} → T δ → T δ → T δ → Set₁
     [_is_⋎_] = Zip
 
-lookup-∈♦₀ : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(l : c Dom'.∈ δE)
+lookup-∈♦₀ : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(l : c ∈D δE)
   → lookup (E ♦Map F) (∈♦₀ {F = δF} l) ≡ lookup E l
 lookup-∈♦₀ E ε l = refl
 lookup-∈♦₀ E (F , c₁ ↦ v) l = lookup-∈♦₀ E F l
 
-[∈♦₀]≔' : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(lA : c Dom'.∈ δE)(v : A)
+[∈♦₀]≔' : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(lA : c ∈D δE)(v : A)
   → (E ♦Map F) [ ∈♦₀ {F = δF} lA ]≔' v ≡ E [ lA ]≔' v ♦Map F
 [∈♦₀]≔' E ε l v = refl
 [∈♦₀]≔' E (F , c₁ ↦ v) l v₁ rewrite [∈♦₀]≔' E F l v₁ = refl
