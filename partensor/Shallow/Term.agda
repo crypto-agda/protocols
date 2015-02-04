@@ -135,6 +135,18 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (P : ∀ c₀ c₁ → TC'⟨ I [/] l ,[ c₀ ↦ « S₀ » ] ,[ c₁ ↦ « S₁ » ] ⟩)
     → TC'⟨ I ⟩
 
+ TC-?-inp :
+    ∀ {c A S₁}
+      (l : [ c ↦ act (recv {A} S₁) ]∈ I)
+      (P : (m : A) → TC'⟨ I [/] l ,[ c ↦  « S₁ m » ] ⟩)
+    → TC'⟨ I ⟩
+
+ TC-!-out :
+    ∀ {c A S₁}
+      (l : [ c ↦ act (send {A} S₁) ]∈ I)
+      (m : A)(P : TC'⟨ I [/] l ,[ c ↦  « S₁ m » ] ⟩)
+    → TC'⟨ I ⟩
+
  TC-end : ∀ (E : Ended I) → TC'⟨ I ⟩
 
  TC-mix : ∀ {δF δG}{F : Env δF}{G : Env δG}(lF : [ F ]∈ I)(lG : [ G ]∈ I)

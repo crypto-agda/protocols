@@ -139,6 +139,21 @@ lookup-∈♦₀ E (F , c₁ ↦ v) l = lookup-∈♦₀ E F l
 [∈♦₀]≔' E ε l v = refl
 [∈♦₀]≔' E (F , c₁ ↦ v) l v₁ rewrite [∈♦₀]≔' E F l v₁ = refl
 
+[]≔-lookup : ∀ {a}{A : Set a}{c δE}(E : Map A δE)(l : c Dom'.∈ δE)
+  → E [ l ]≔' lookup E l ≡ E
+[]≔-lookup (E , c ↦ v) here = refl
+[]≔-lookup (E , c₁ ↦ v) (there l) rewrite []≔-lookup E l = refl
+
+lookup-[]≔ : ∀ {a}{A : Set a}{c δE x}(E : Map A δE)(l : c Dom'.∈ δE)
+  → lookup (E [ l ]≔' x) l ≡ x
+lookup-[]≔ (E , c ↦ v) here = refl
+lookup-[]≔ (E , c₁ ↦ v) (there l) = lookup-[]≔ E l
+
+module _{a}{A: Set a}{x y : A} where
+  []≔-red : ∀ {c δE}(E : Map A δE)(l : c Dom'.∈ δE)
+    → (E [ l ]≔' y) [ l ]≔' x ≡ E [ l ]≔' x
+  []≔-red (E , c ↦ v) here = refl
+  []≔-red (E , c₁ ↦ v) (there l) rewrite []≔-red E l = {!!}
 -- -}
 -- -}
 -- -}

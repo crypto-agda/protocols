@@ -17,6 +17,7 @@ open Env     hiding (_/₀_; _/₁_; Ended)
 open Proto   hiding ()
 open import partensor.Shallow.Equiv'
 open import partensor.Shallow.Term
+open import Relation.Binary.PropositionalEquality.NP hiding (J)
 
 module partensor.Shallow.Translation where
 module Translation
@@ -24,18 +25,18 @@ module Translation
  (T⟨_⟩ : ∀ {δI} → Proto δI → Set t)
  (T-⊗-out :
     ∀ {δI I c S₀ S₁}
-      (l : [ c ↦ S₀ ⊗ S₁ …]∈' I)
+      (l : [ c ↦ S₀ ⊗ S₁ …]∈ I)
       (σs : Selections δI)
-      (σE : Selection ([↦…]∈'.δE l))
+      (σE : Selection ([↦…]∈.δE l))
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → T⟨ I [/…]' l /₀ σs ,[ E/' l Env./₀ σE , c₀ ↦ S₀ ] ⟩)
-      (P₁ : ∀ c₁ → T⟨ I [/…]' l /₁ σs ,[ E/' l Env./₁ σE , c₁ ↦ S₁ ] ⟩)
+      (P₀ : ∀ c₀ → T⟨ I [/…] l /₀ σs ,[ E/ l Env./₀ σE , c₀ ↦ « S₀ » ] ⟩)
+      (P₁ : ∀ c₁ → T⟨ I [/…] l /₁ σs ,[ E/ l Env./₁ σE , c₁ ↦ « S₁ » ] ⟩)
     → T⟨ I ⟩)
 
  (T-⅋-inp :
     ∀ {δI}{I : Proto δI}{c S₀ S₁}
-      (l : [ c ↦ S₀ ⅋ S₁ ]∈' I)
-      (P : ∀ c₀ c₁ → T⟨ I [/]' l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
+      (l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
+      (P : ∀ c₀ c₁ → T⟨ I [/] l ,[ c₀ ↦ « S₀ » ] ,[ c₁ ↦ « S₁ » ] ⟩)
     → T⟨ I ⟩)
 
  (T-end :
@@ -56,24 +57,25 @@ module Translation
       (D : Dual S₀ S₁)
       (σs : Selections δI)
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → T⟨ I /₀ σs ,[ c₀ ↦ S₀ ] ⟩)
-      (P₁ : ∀ c₁ → T⟨ I /₁ σs ,[ c₁ ↦ S₁ ] ⟩)
+      (P₀ : ∀ c₀ → T⟨ I /₀ σs ,[ c₀ ↦ « S₀ » ] ⟩)
+      (P₁ : ∀ c₁ → T⟨ I /₁ σs ,[ c₁ ↦ « S₁ » ] ⟩)
     → T⟨ I ⟩)
 
  (T-⊗-reorg :
     ∀ {δI δE c c₀ c₁ S₀ S₁}{J : Proto δI}{E : Env δE}
-      (l  : [ E ]∈' J)
-      (l₀ : c₀ ↦ S₀ ∈' E)
-      (l₁ : c₁ ↦ S₁ ∈' E)
+      (l  : [ E ]∈ J)
+      (l₀ : c₀ ↦ « S₀ » ∈ E)
+      (l₁ : c₁ ↦ « S₁ » ∈ E)
       (P : T⟨ J ⟩)
-    → T⟨ J Proto./' l ,[ (E Env./' l₀ /D (↦∈'.lA l₁) , c ↦ S₀ ⊗ S₁) ] ⟩)
+    → T⟨ J Proto./ l ,[ (E Env./' l₀ /D (↦∈.lA l₁) , c ↦ « S₀ ⊗ S₁ ») ] ⟩)
 
  (T-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → T⟨ I ⟩ → T⟨ J ⟩)
 
   where
 
-  T-fwd : ∀ {S₀ S₁} (S : Dual S₀ S₁) c₀ c₁ → T⟨ · ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩
-  T-fwd end c₀ c₁ = T-end _
+  T-fwd : ∀ {S₀ S₁} (S : Dual S₀ S₁) c₀ c₁ → T⟨ · ,[ c₀ ↦ « S₀ » ] ,[ c₁ ↦ « S₁ » ] ⟩
+  T-fwd 𝟙⊥ c₀ c₁ = {!!}
+  T-fwd ⊥𝟙 c₀ c₁ = {!!}
   T-fwd (⊗⅋ S₀ S₁ S₂ S₃) c₀ c₁ =
     T-⅋-inp here[]' λ c₂ c₃ →
       T-⊗-out (there…' (there…' (there…' here…')))
@@ -89,31 +91,31 @@ module Translation
   go (⅋-inp l P) = T-⅋-inp l (λ c₀ c₁ → go (P c₀ c₁))
   go {I = I}(⊗-out {c} {S₀} {S₁} l P) = T-conv e rPP
     where postulate c0 c1 : URI
-          open [↦…]∈' l
-          F = E Env./' lE , c0 ↦ S₀ , c1 ↦ S₁
-          J = I Proto./' lI ,[ F ]
-          G = F /D there here /D here , c ↦ S₀ ⊗ S₁
-          K = J Proto./' here ,[ G ]
+          open [↦…]∈ l
+          F = E Env./' lE , c0 ↦ « S₀ » , c1 ↦ « S₁ »
+          J = I Proto./ lI ,[ F ]
+          G = F /D there here /D here , c ↦ « S₀ ⊗ S₁ »
+          K = J Proto./ mk Doms'.here refl ,[ G ]
           rPP : T⟨ K ⟩
-          rPP = T-⊗-reorg here (there here) here (go (P c0 c1))
+          rPP =  T-⊗-reorg (mk Doms'.here refl) (mk (there here) refl) (mk here refl) (go (P c0 c1))
           e : K ≈ I
           e = ≈,[] (≈,[end] (Ended-/* F)) (∼,↦ (∼,↦end ∼-∙ ∼,↦end)) ≈-∙ (≈-! (thmA l))
   go {I = I}(nu {S₀} {S₁} D P) = T-conv {!!} (T-cut {I = I'} D (sel₀ _ ,[ (ε , c ↦ 0₂) ] ,[ (ε , c' ↦ 1₂) ]) {!!} (λ c₀' → {!cPP!}) (λ c₁' → {!T-fwd!}))
     where postulate c c' c0 c1 : URI
-          E   = ε , c0 ↦ S₀  , c1 ↦ S₁
+          E   = ε , c0 ↦ « S₀ »  , c1 ↦ « S₁ »
           E/* = ε , c0 ↦ end , c1 ↦ end
           J = I ,[ E ]
           -- K = J / here ,[ E/* , c ↦ S₀ ⊗ S₁ ]
-          K = I ,[ E/* ] ,[ E/* , c ↦ S₀ ⊗ S₁ ]
+          K = I ,[ E/* ] ,[ E/* , c ↦ « S₀ ⊗ S₁ » ]
           gP : T⟨ J ⟩
           gP = go (P c0 c1)
           rPP : T⟨ K ⟩
-          rPP = T-⊗-reorg {c = c} here (there here) here gP
-          e : K ≈ I ,[ c ↦ S₀ ⊗ S₁ ]
+          rPP = T-⊗-reorg {c = c} (mk Doms'.here refl) (mk (there here) refl) (mk here refl) gP
+          e : K ≈ I ,[ c ↦ « S₀ ⊗ S₁ » ]
           e = ≈,[] (≈,[end] _) (∼,↦ (∼,↦end ∼-∙ ∼,↦end))
-          cPP : T⟨ I ,[ c ↦ S₀ ⊗ S₁ ] ⟩
+          cPP : T⟨ I ,[ c ↦ « S₀ ⊗ S₁ » ] ⟩
           cPP = T-conv e rPP
-          I' = I ,[ c ↦ S₀ ⊗ S₁ ] ,[ c' ↦ {!!} ]
+          I' = I ,[ c ↦ « S₀ ⊗ S₁ » ] ,[ c' ↦ {!!} ]
   go (split σs A P₀ P₁) = T-split σs A (go P₀) (go P₁)
 -- -}
 -- -}
