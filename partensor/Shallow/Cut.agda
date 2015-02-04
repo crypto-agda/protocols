@@ -127,6 +127,9 @@ TC-mix {!!} {!!} {!!}
    (TC-conv {!!}
      (TC-∈Split cont {!!} P))
 -}
+
+{-
+-- move logic to ⊗
 TC-∈Split {I = I} cont (mk4 lΔ ↦Δ lA ↦A) (TC-split σs A1 P P₁)
     with Map.lookup (Proto.lookup σs lΔ) lA
     | select {I = I} σs lΔ lA
@@ -143,6 +146,7 @@ TC-∈Split {δK = δK}{I = I}{K} cont (mk4 lΔ refl lA ↦A) (TC-split σs A1 P
   (TC-conv (≈-trans (♦-cong₂ (≈-sym (/[]-/D[>>] 1₂ I σs lΔ lA)) ≈-refl)
                     (≈-sym (Selections♦'/same {I = I /D[ lΔ >> lA ]}{K} 1₂ σs)))
            (TC-∈Split cont (mk4 lΔ refl lA (! x ∙ ↦A)) P₁))
+-}
 
 TC-∈! : ∀ {δI δK c A S}{I : Proto δI}{K : Proto δK}(l : [ c ↦ act (send {A} S) …]∈ I)
   → TC'⟨ I ⟩

@@ -5,7 +5,7 @@ open import Data.Product hiding (zip)
 open import Data.Zero
 open import Data.One
 open import Data.Two
-open import Data.Nat.Base
+open import Data.Nat
 open import Data.Sum renaming (inj₁ to inl; inj₂ to inr)
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP

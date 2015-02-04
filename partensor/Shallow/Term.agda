@@ -110,6 +110,7 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (P₁ : T⟨ I /₁ σs ⟩)
     → T⟨ I ⟩
 
+
 data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
  TC-⊗-out :
     ∀ {c S₀ S₁}
@@ -146,12 +147,16 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
      (P : TC'⟨ ((I Proto./ lF) /Ds []∈.lΔ lG),[ F ♦Env G ] ⟩)
      → TC'⟨ I ⟩
 
- TC-split :
+
+data S⟨_⟩ {δI}(I : Proto δI) : Set₁ where
+ S-split :
       (σs : Selections δI)
       (A1 : AtMost 1 σs)
-      (P₀ : TC'⟨ I /₀ σs ⟩)
-      (P₁ : TC'⟨ I /₁ σs ⟩)
-    → TC'⟨ I ⟩
+      (P₀ : S⟨ I /₀ σs ⟩)
+      (P₁ : S⟨ I /₁ σs ⟩)
+    → S⟨ I ⟩
+ S-T : TC'⟨ I ⟩ → S⟨ I ⟩
+
 
 {-
 cut : ∀ {δI}{I : Proto δI} → T⟨ I ⟩ → TC⟨ I ⟩
