@@ -37,6 +37,10 @@ record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
       → TC'⟨ (J /D[ [↦…]∈.lΔ l >> [↦…]∈.lA l ] /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]) ♦Proto' K ⟩
     cont-⊗ : ∀ {S T} → A ≡ S ⊗ T → ∀ {d e δ₀ δ₁}{J₀ : Proto δ₀}{J₁ : Proto δ₁}(l : [ d ↦ S …]∈ J₀)(l' : [ e ↦ T …]∈ J₁)
       → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩ → TC'⟨ (J₀ /… l ♦Proto' J₁ /… l') ♦Proto' K ⟩
+    cont-! : ∀ {M S} → A ≡ act (send {M} S) → ∀ {d δI}{I : Proto δI}(m : M)(l : [ d ↦ S m …]∈ I) → TC'⟨ I ⟩ → TC'⟨ I /… l ♦Proto' K ⟩
+    cont-? : ∀ {M S} → A ≡ act (recv {M} S) → ∀ {d δE δI}{I : Proto δI}{E : Env δE}
+      (lI : [ E ]∈ I)(lA : d ∈D δE)(C : (m : M) → TC'⟨ I [ []∈.lΔ lI >> lA ]≔ « S m » ⟩)
+      → TC'⟨ I /D[ []∈.lΔ lI >> lA ] ♦Proto' K ⟩
 open TC-Split
 
 
@@ -62,6 +66,25 @@ TC-∈Split {I = I} cont l (TC-⊗-out .l σs σE A0 P₀ P₁) | same = TC-conv
                     (P₀ c₀) (P₁ c₁))
   where postulate c₀ c₁ : _
 TC-∈Split cont l (TC-⊗-out l₁ σs σE A0 P₀ P₁) | diff x = {!!}
+TC-∈Split cont l (TC-?-inp (mk l₁ E/c) P) with sameVar? l l₁
+TC-∈Split {I = I} cont l (TC-?-inp {c} (mk .l E/c) P) | same = TC-conv
+  ((♦-cong₂ (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈.lI l) (/*-End _ ∼-End E/c))) ≈-refl))
+  (cont-? cont refl {I = I [/…] l ,[ c ↦end]} heRe[] here (λ m → P m ))
+TC-∈Split cont l (TC-?-inp (mk l₁ E/c) P) | diff x = {!!}
+TC-∈Split cont l (TC-!-out (mk l₁ E/c) m P) with sameVar? l l₁
+TC-∈Split cont l (TC-!-out (mk .l E/c) m P) | same = TC-conv
+  (♦-cong₂ (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈.lI l) (/*-End _ ∼-End E/c))) ≈-refl)
+ (cont-! cont refl m (mk heRe[] heRe)  P )
+--TC-∈Split cont l (TC-!-out (mk .l E/c) m P) | same = TC-conv
+--  (♦-cong₂ {!!} ≈-refl)
+-- (cont-! cont refl m (mk heRe (mk here refl))  (TC-conv {!!} P) )
+TC-∈Split {I = I}{K} cont l (TC-!-out (mk l₁ E/c) m P) | diff x = TC-!-out (mk (∈♦₀… {I₁ = K} (move… l l₁ x)) E/c) m
+  (TC-conv (≈-trans ♦-com,
+           (≈,[] (≈-sym (≈-trans (∈♦₀-compute[…] (move… l l₁ x))
+           (♦-cong₂ ([/]-/D[>>] I ([↦…]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦…]∈.lA l))
+           ≈-refl)))
+           ∼-refl))
+    (TC-∈Split cont (there…' (move[…] l₁ l (Diff-sym… x))) P))
 TC-∈Split cont l (TC-⅋-inp l₁ P) with sameVar? l ([↦]∈.l… l₁)
 TC-∈Split cont l (TC-⅋-inp (mk .l E/c₁) P) | same = TC-conv
   ((♦-cong₂ (≈-trans (≈,[end] _) (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈.lI l) (/*-End _ ∼-End E/c₁)))) ≈-refl))
@@ -92,7 +115,7 @@ TC-∈Split {δK = δK}{I = I}{K = K}cont (mk ⟨ lΔ R[]⟩ ⟨ lA , ↦A ⟩) 
    where
      lemma₀ : (I /Ds lΔ) /Ds  ([]∈.lΔ lG) ♦Proto' K
          ≡ (I /D[ lΔ >> lA ] ♦Proto' K) /Ds []∈♦₀ {δF = δK} lΔ /Ds ([]∈♦₀ {δF = δK} ([_]∈_.lΔ lG))
-     lemma₀ rewrite ! /Ds>>-red I lΔ lA
+     lemma₀ rewrite ! /Ds>>-red {x = end} I lΔ lA
                   | /Ds-[]∈♦'₀ {I = I /D[ lΔ >> lA ] /Ds lΔ} ([]∈.lΔ lG) K
                   | /Ds-[]∈♦'₀ {I = I /D[ lΔ >> lA ]} lΔ K = refl
 
@@ -121,6 +144,22 @@ TC-∈Split {δK = δK}{I = I}{K} cont (mk4 lΔ refl lA ↦A) (TC-split σs A1 P
                     (≈-sym (Selections♦'/same {I = I /D[ lΔ >> lA ]}{K} 1₂ σs)))
            (TC-∈Split cont (mk4 lΔ refl lA (! x ∙ ↦A)) P₁))
 
+TC-∈! : ∀ {δI δK c A S}{I : Proto δI}{K : Proto δK}(l : [ c ↦ act (send {A} S) …]∈ I)
+  → TC'⟨ I ⟩
+  → (∀ {d δI}{I : Proto δI}(m : A)(l : [ d ↦ S m …]∈ I) → TC'⟨ I ⟩ → TC'⟨ I /… l ♦Proto' K ⟩)
+  → TC'⟨ I /… l ♦Proto' K ⟩
+TC-∈! = {!!}
+
+TC-∈? : ∀ {δI δK c A S}{I : Proto δI}{K : Proto δK}(l : [ c ↦ act (recv {A} S) …]∈ I)
+  → TC'⟨ I ⟩
+  → (∀ {d δE δI}{I : Proto δI}{E : Env δE}
+      (lI : [ E ]∈ I)(lA : d ∈D δE)(C : (m : A) → TC'⟨ I [ []∈.lΔ lI >> lA ]≔ « S m » ⟩)
+      → TC'⟨ I /D[ []∈.lΔ lI >> lA ] ♦Proto' K ⟩)
+  → TC'⟨ I /… l ♦Proto' K ⟩
+TC-∈? = {!!}
+
+{-
+-}
 
 TC-∈⅋ : ∀ {δI δK c A B}{I : Proto δI}{K : Proto δK}(l : [ c ↦ A ⅋ B …]∈ I)
   → TC'⟨ I ⟩
@@ -152,6 +191,12 @@ TC-cut :
     → TC'⟨ (I₀ /… l₀) ♦Proto' (I₁ /… l₁) ⟩
 TC-cut 𝟙⊥ l₀ l₁ P₀ P₁ = {!!}
 TC-cut ⊥𝟙 l₀ l₁ P₀ P₁ = {!!}
+TC-cut (act (?! D D₁)) l₀ l₁ P₀ P₁ = TC-∈? l₀ P₀ λ {_}{_}{_}{I} lI lA C →
+  TC-conv ♦-com
+  (TC-∈! l₁ P₁ (λ m l x → TC-conv (≈-trans ♦-com (♦-cong₂ ≈-refl (≈-reflexive {!!})))
+  (let X = C m in TC-cut (D m) (mk ⟨ []∈.lΔ lI R[]⟩
+   ⟨ lA , ap (flip Map.lookup lA) (lookup/D[>>] I ([]∈.lΔ lI) lA) ∙ Env.lookup-[]≔ _ lA ⟩) l (C m) x)))
+TC-cut (act (!? D D₁)) l₀ l₁ P₀ P₁ = {!!}
 TC-cut (⊗⅋ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = {!!}
 TC-cut (⅋⊗ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = TC-∈⅋ l₀ P₀ λ d e d/=e ab →
   TC-conv ♦-com

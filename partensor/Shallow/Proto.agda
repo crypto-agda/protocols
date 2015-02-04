@@ -70,6 +70,9 @@ _[_≔_] : ∀ {a}{A : Set a}{δ δs}(I : Maps A δs)(l : [ δ ]∈D δs) → (M
 (I ,[ Δ ]) [ here ≔ f ] = I ,[ f Δ ]
 (I ,[ Δ ]) [ there l ≔ f ] = I [ l ≔ f ] ,[ Δ ]
 
+_[_>>_]≔_ : ∀ {a}{A : Set a}{c δ δs}(I : Maps A δs)(l : [ δ ]∈D δs)(l' : c ∈D δ) → A → Maps A δs
+I [ lΔ >> lA ]≔ v = I [ lΔ ≔ (λ Δ → Δ Env.[ lA ]≔' v) ]
+
 lookup-diff : ∀ {a}{A : Set a}{δ δ' δs}(M : Maps A δs)(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)(f : Map A δ → Map A δ)
   → DiffDoms l l'
   → lookup (M [ l ≔ f ]) l' ≡ lookup M l'
@@ -251,7 +254,7 @@ _/Ds_ : ∀ {δ δs}(I : Proto δs)(l : [ δ ]∈D δs) → Proto δs
 I /Ds l = I [ l ≔ _/* ]
 
 _/D[_>>_] : ∀ {c δ δs}(I : Proto δs)(l : [ δ ]∈D δs)(l' : c ∈D δ) → Proto δs
-I /D[ l >> l' ] = I [ l ≔ (λ E → E Env.[ l' ]≔' end) ]
+I /D[ l >> l' ] = I [ l >> l' ]≔ end
 
 _/_ : ∀ {δ δs}(I : Proto δs){E : Env δ}(l : [ E ]∈ I) → Proto δs
 I / l = I /Ds [_]∈_.lΔ l
@@ -290,10 +293,15 @@ module _ {a}{A : Set a}{v : A} where
   constMap≡ ε ε = refl
   constMap≡ (E , c ↦ v₁) (F , .c ↦ v₂) rewrite constMap≡ E F = refl
 
-/Ds>>-red : ∀ {c δ δs}(I : Proto δs)(lΔ : [ δ ]∈D δs)(lA : c ∈D δ)
-  → I /D[ lΔ >> lA ] /Ds lΔ ≡ I /Ds lΔ
+/Ds>>-red : ∀ {c δ δs x}(I : Proto δs)(lΔ : [ δ ]∈D δs)(lA : c ∈D δ)
+  → I [ lΔ >> lA ]≔ x /Ds lΔ ≡ I /Ds lΔ
 /Ds>>-red (I ,[ Δ ]) here lA = ap (_,[_] I) (constMap≡ _ _)
 /Ds>>-red (I ,[ Δ ]) (there lΔ) lA = ap (λ X → X ,[ Δ ]) (/Ds>>-red I lΔ lA)
+
+D[>>][>>]-red : ∀ {c δ δs x y}(I : Proto δs)(lΔ : [ δ ]∈D δs)(lA : c ∈D δ)
+  → (I [ lΔ >> lA ]≔ y) [ lΔ >> lA ]≔ x ≡ I [ lΔ >> lA ]≔ x
+D[>>][>>]-red (I ,[ Δ ]) here lA = ap (_,[_] I) (Map.[]≔-red Δ lA)
+D[>>][>>]-red (I ,[ Δ ]) (there lΔ) lA = ap₂ _,[_] (D[>>][>>]-red I lΔ lA) refl
 
 module _ {δ δI}{I : Proto δI}(l : [ δ ]∈D δI) where
   /Ds-[]∈♦₀ : ∀ {δK}(K : Proto δK)
@@ -301,10 +309,15 @@ module _ {δ δI}{I : Proto δI}(l : [ δ ]∈D δI) where
   /Ds-[]∈♦₀ · = refl
   /Ds-[]∈♦₀ (K ,[ Δ ]) rewrite /Ds-[]∈♦₀ K = refl
 
-lookup/D[>>] : ∀ {δI δE c}(I : Proto δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
-  → lookup (I /D[ lΔ >> lA ]) lΔ ≡ lookup I lΔ Env.[ lA ]≔' end
+lookup/D[>>] : ∀ {δI δE c v}(I : Proto δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
+  → lookup (I [ lΔ >> lA ]≔ v) lΔ ≡ lookup I lΔ Env.[ lA ]≔' v
 lookup/D[>>] (I ,[ Δ ]) here lA = refl
 lookup/D[>>] (I ,[ Δ ]) (there lΔ) lA = lookup/D[>>] I lΔ lA
+
+D[>>]≔-lookup : ∀ {δI δE c}(I : Proto δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
+  → I [ lΔ >> lA ]≔ (Env.lookup (lookup I lΔ) lA) ≡ I
+D[>>]≔-lookup (I ,[ Δ ]) here lA rewrite Env.[]≔-lookup Δ lA = refl
+D[>>]≔-lookup (I ,[ Δ ]) (there lΔ) lA rewrite D[>>]≔-lookup I lΔ lA = refl
 -- -}
 -- -}
 -- -}

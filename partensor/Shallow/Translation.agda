@@ -17,6 +17,7 @@ open Env     hiding (_/₀_; _/₁_; Ended)
 open Proto   hiding ()
 open import partensor.Shallow.Equiv
 open import partensor.Shallow.Term
+open import Relation.Binary.PropositionalEquality.NP hiding (J)
 
 module partensor.Shallow.Translation where
 module Translation
@@ -75,6 +76,8 @@ module Translation
   T-fwd : ∀ {S₀ S₁} (S : Dual S₀ S₁) c₀ c₁ → T⟨ · ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩
   T-fwd 𝟙⊥ c₀ c₁ = {!!}
   T-fwd ⊥𝟙 c₀ c₁ = {!!}
+  T-fwd (act (?! S S₁)) c₀ c₁ = {!!}
+  T-fwd (act (!? S S₁)) c₀ c₁ = {!!}
   T-fwd (⊗⅋ S₀ S₁ S₂ S₃) c₀ c₁ =
     T-⅋-inp here[]' λ c₂ c₃ →
       T-⊗-out (there…' (there…' (there…' here…')))

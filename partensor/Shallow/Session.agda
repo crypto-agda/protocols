@@ -35,8 +35,8 @@ mutual
     -- end : Dual end end
     𝟙⊥ : Dual 𝟙' ⊥'
     ⊥𝟙 : Dual ⊥' 𝟙'
-    --act : ∀ {P Q}
-    --    → DualS P Q → Dual (act P) (act Q)
+    act : ∀ {P Q}
+        → DualS P Q → Dual (act P) (act Q)
     ⊗⅋ : ∀ {A A' B B'}
        → Dual A A' → Dual A' A
        → Dual B B' → Dual B' B
@@ -53,7 +53,7 @@ symDualS (!? x x₁) = ?! x₁ x
 symDual : ∀ {P Q} → Dual P Q → Dual Q P
 symDual 𝟙⊥ = ⊥𝟙
 symDual ⊥𝟙 = 𝟙⊥
--- symDual (act p) = act (symDualS p)
+symDual (act p) = act (symDualS p)
 symDual (⊗⅋ x x₁ x₂ x₃) = ⅋⊗ x₁ x x₃ x₂
 symDual (⅋⊗ x x₁ x₂ x₃) = ⊗⅋ x₁ x x₃ x₂
 
