@@ -1,5 +1,6 @@
 open import Data.Zero
 open import Data.One
+open import Data.Two
 open import Relation.Binary.PropositionalEquality.NP
 
 module partensor.Shallow.Session where
@@ -68,6 +69,10 @@ Ended _   = 𝟘
 Ended-≡end : ∀ {P} → Ended P → P ≡ end
 Ended-≡end {« _ »} ()
 Ended-≡end {end} p = refl
+
+selectProj : 𝟚 → (MSession → (𝟚 → MSession))
+selectProj 0₂ v = [0: v 1: end ]
+selectProj 1₂ v = [0: end 1: v ]
 
 {-
 data NotPar : Proto → Set₁ where

@@ -1,3 +1,4 @@
+{-# OPTIONS --copattern #-}
 open import Function
 open import Data.Product hiding (zip)
                          renaming (_,_ to ⟨_,_⟩; proj₁ to fst; proj₂ to snd;
@@ -14,7 +15,7 @@ open import partensor.Shallow.Dom
 open import partensor.Shallow.Session as Session hiding (Ended)
 import partensor.Shallow.Map as Map
 open Map using (Map; ε; _,_↦_; _↦_∈_; SelectionAll≡)
-open import partensor.Shallow.Env as Env using (Env; _/*; Ended-↦∈)
+open import partensor.Shallow.Env as Env hiding (Ended; All; lookup; pure; zipWith)
 
 module partensor.Shallow.Proto where
 
@@ -107,7 +108,7 @@ lookup/zipWith : ∀ {δs δE}(f : ∀ {δ} → Env δ → Sel δ → Env δ)(I 
 lookup/zipWith f (I ,[ Δ ]) (σ ,[ Δ₁ ]) here = refl
 lookup/zipWith f (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) = lookup/zipWith f I σ l
 
-module SelProj = Env.With-end {_} {MSession} end
+-- module SelProj = Env.With-end {_} {MSession} end
 {-
 module SelProj where
     _/₀_ : ∀ {δ} → Env δ → Sel δ → Env δ
@@ -121,17 +122,18 @@ module SelProj where
     I /₁ ₘ σ = I Env./₁ σ
 -}
 
-infixl 6 _/[_]_
+infixl 6 _[]/[_]_
 
-_/[_]_ : ∀ {δs}(I : Proto δs)(b : 𝟚)(σs : Selections δs) → Proto δs
-I /[ b ] σs = zipWith (λ E σ → E SelProj./[ b ] σ) I σs
+abstract
+    _[]/[_]_ : ∀ {δs}(I : Proto δs)(b : 𝟚)(σs : Selections δs) → Proto δs
+    I []/[ b ] σs = zipWith (λ E σ → E /[ b ] σ) I σs
 
 module _ {δs}(I : Proto δs)(σs : Selections δs) where
-        infixl 6 _/₀_ _/₁_
-        _/₀_ : Proto δs
-        _/₀_ = I /[ 0₂ ] σs --zipWith SelProj._/₀_ I σs
-        _/₁_ : Proto δs
-        _/₁_ = I /[ 1₂ ] σs --zipWith SelProj._/₁_ I σs
+    infixl 6 _[]/₀_ _[]/₁_
+    _[]/₀_ : Proto δs
+    _[]/₀_ = I []/[ 0₂ ] σs
+    _[]/₁_ : Proto δs
+    _[]/₁_ = I []/[ 1₂ ] σs
 
 {-
 data SelAtMost (n : ℕ){δ : Dom} : Sel δ → ℕ → Set where
@@ -232,6 +234,13 @@ unthere…' : ∀ {δE δJ}{J : Proto δJ}{c S}
 unthere…' EE (mk heRe[] lE) = 𝟘-elim (Ended-↦∈ lE EE)
 unthere…' EE (mk (theRe[] lΔ) lE) = mk ⟨ lΔ R[]⟩ lE
 
+∼-cancel-unthere… : ∀ {δI}{I : Proto δI}
+        {δE}{E : Env δE}(EE : Env.Ended E)
+        {c S}(l : [ c ↦ S …]∈ I ,[ E ])
+        → [_↦_…]∈_.E l ∼ [_↦_…]∈_.E (unthere…' EE l)
+∼-cancel-unthere… EE (mk heRe[] lE) = 𝟘-elim (Ended-↦∈ lE EE)
+∼-cancel-unthere… EE (mk (theRe[] lΔ) lE) = ∼-refl
+
 record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   constructor mk
   field
@@ -318,6 +327,159 @@ D[>>]≔-lookup : ∀ {δI δE c}(I : Proto δI)(lΔ : [ δE ]∈D δI)(lA : c �
   → I [ lΔ >> lA ]≔ (Env.lookup (lookup I lΔ) lA) ≡ I
 D[>>]≔-lookup (I ,[ Δ ]) here lA rewrite Env.[]≔-lookup Δ lA = refl
 D[>>]≔-lookup (I ,[ Δ ]) (there lΔ) lA rewrite D[>>]≔-lookup I lΔ lA = refl
+
+infix 0 _⊆s_
+record _⊆s_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
+  constructor mk
+  field
+    un-⊆s : ∀ {c S} (l : [ c ↦ S …]∈ I)
+            → Σ ([ c ↦ S …]∈ J) λ l' → [↦…]∈.E l ∼ [↦…]∈.E l'
+open _⊆s_ public
+
+⊆s-there : ∀ {δE δJ}{E : Env δE}{J : Proto δJ} → J ⊆s J ,[ E ]
+un-⊆s ⊆s-there l = ⟨ there…' l , ∼-refl ⟩
+
+⊆s-refl : ∀ {δI}{I : Proto δI} → I ⊆s I
+un-⊆s ⊆s-refl l = ⟨ l , ∼-refl ⟩
+
+⊆s-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
+           → I ⊆s J → J ⊆s K → I ⊆s K
+un-⊆s (⊆s-trans (mk p) (mk q)) l =
+  let p' = p l
+      q' = q (fst p')
+  in ⟨ fst q' , snd p' ∼-∙ snd q' ⟩
+
+⊆,[] : ∀ {δF₀ δF₁ δI δJ}{F₀ : Env δF₀}{F₁ : Env δF₁}{I : Proto δI}{J : Proto δJ}
+       → I ⊆s J → F₀ ∼ F₁ → I ,[ F₀ ] ⊆s J ,[ F₁ ]
+un-⊆s (⊆,[] I⊆J F₀F₁) (mk heRe[] lE)
+  =  ⟨ (mk heRe[] (un-⊆ (get-⊆ F₀F₁) id lE)) , F₀F₁ ⟩
+un-⊆s (⊆,[] I⊆J F₀F₁) (mk (theRe[] lΔ) lE)
+  = ×map there…' id (un-⊆s I⊆J (mk ⟨ lΔ R[]⟩ lE))
+
+⊆,[end] : ∀ {δE δI}{E : Env δE}{I : Proto δI}(EE : Env.Ended E)
+        → I ,[ E ] ⊆s I
+un-⊆s (⊆,[end] EE) l = ⟨ unthere…' EE l , ∼-cancel-unthere… EE l ⟩
+
+infix 0 _≈_
+record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
+  constructor ⟨_,_⟩
+  field
+    get-⊆s : I ⊆s J
+    get-⊇s : J ⊆s I
+
+≈-refl : ∀ {δI}{I : Proto δI} → I ≈ I
+≈-refl = ⟨ ⊆s-refl , ⊆s-refl ⟩
+
+≈-reflexive : ∀ {δI}{I J : Proto δI} → I ≡ J → I ≈ J
+≈-reflexive refl = ≈-refl
+
+≈-sym : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
+        → I ≈ J → J ≈ I
+≈-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
+
+≈-! = ≈-sym
+
+≈-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
+          → I ≈ J → J ≈ K → I ≈ K
+≈-trans ⟨ p , q ⟩ ⟨ r , s ⟩ = ⟨ ⊆s-trans p r , ⊆s-trans s q ⟩
+
+_≈-∙_ = ≈-trans
+
+≈,[] : ∀ {δE δF δI δJ}{E : Env δE}{F : Env δF}{I : Proto δI}{J : Proto δJ}
+       → I ≈ J → E ∼ F → I ,[ E ] ≈ J ,[ F ]
+≈,[] ⟨ I⊆J , J⊆I ⟩ E∼F = ⟨ ⊆,[] I⊆J E∼F , ⊆,[] J⊆I (∼-sym E∼F) ⟩
+
+≈,[end] : ∀ {δE δI}{E : Env δE}{I : Proto δI}(EE : Env.Ended E)
+        → I ,[ E ] ≈ I
+≈,[end] EE = ⟨ ⊆,[end] EE , ⊆s-there ⟩
+
+⊆,[swap] : ∀ {δE c d A B}{E : Env δE} → E , c ↦ A , d ↦ B ⊆ E , d ↦ B , c ↦ A
+un-⊆ ⊆,[swap] NES heRe = theRe here
+un-⊆ ⊆,[swap] NES (theRe here) = heRe
+un-⊆ ⊆,[swap] NES (theRe (there lA)) = theRe (there lA)
+
+∼,[swap] : ∀ {δE c d A B}{E : Env δE} → E , c ↦ A , d ↦ B ∼ E , d ↦ B , c ↦ A
+get-⊆ ∼,[swap] = ⊆,[swap]
+get-⊇ ∼,[swap] = ⊆,[swap]
+
+⊆s,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ⊆s I ,[ F ] ,[ E ]
+un-⊆s ⊆s,[swap] (mk heRe[] lE) = ⟨ mk (theRe[] here) lE , ∼-refl ⟩
+un-⊆s ⊆s,[swap] (mk (theRe[] here) lE) = ⟨ mk heRe[] lE , ∼-refl ⟩
+un-⊆s ⊆s,[swap] (mk (theRe[] (there l)) lE) = ⟨ mk (theRe[] (there l)) lE , ∼-refl ⟩
+
+≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
+_≈_.get-⊆s ≈,[swap] = ⊆s,[swap]
+_≈_.get-⊇s ≈,[swap] = ⊆s,[swap]
+
+♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto (B ♦Proto C) ≈ (A ♦Proto B) ♦Proto C
+♦-assoc {C = ·} = ≈-refl
+♦-assoc {C = C ,[ Δ ]} = ≈,[] (♦-assoc {C = C}) ∼-refl
+
+♦-com, : ∀ {δa δ δb}{A : Proto δa}{B : Proto δb}{E : Env δ} → (A ,[ E ]) ♦Proto B ≈ (A ♦Proto B),[ E ]
+♦-com, {B = ·} = ≈-refl
+♦-com, {B = B ,[ Δ ]} = ≈,[] (♦-com, {B = B}) ∼-refl ≈-∙ ≈,[swap]
+
+♦-com· : ∀ {δa}{A : Proto δa} → · ♦Proto A ≈ A
+♦-com· {A = ·} = ≈-refl
+♦-com· {A = A ,[ Δ ]} = ≈,[] ♦-com· ∼-refl
+
+♦-com : ∀ {δa δb}{A : Proto δa}{B : Proto δb} → (A ♦Proto B) ≈ (B ♦Proto A)
+♦-com {A = ·} = ♦-com·
+♦-com {A = A ,[ Δ ]}{B} = ♦-com, {B = B} ≈-∙ (≈,[] (♦-com {A = A}) ∼-refl)
+
+/Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)
+    → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
+/Ds-com here here = ≈-refl
+/Ds-com {I = I ,[ Δ ]} here      (there l') = ≈-refl
+/Ds-com {I = I ,[ Δ ]} (there l) here       = ≈-refl
+/Ds-com {I = I ,[ Δ ]} (there l) (there l') = ≈,[] (/Ds-com {I = I} l l') ∼-refl
+
+∼-/D,↦lookup : ∀ {c δE}{E : Env δE}(l : c ∈D δE)
+                 → E ∼ E /D l , c ↦ E ‼ l
+∼-/D,↦lookup {E = _ , _ ↦ _} here      = ∼,↦ (∼-! ∼,↦end)
+∼-/D,↦lookup {E = _ , _ ↦ _} (there l) = ∼,↦ (∼-/D,↦lookup l) ∼-∙ ∼,[swap]
+
+≈-/…,[…] : ∀ {δI}{I : Proto δI}{c S}(l : [ c ↦ S …]∈ I)
+       → I ≈ (I [/…] l ,[ E/ l , c ↦ « S » ])
+≈-/…,[…] {I = I ,[ Δ ]} (mk heRe[] ⟨ lA , eq ⟩) rewrite ! eq = ≈,[] (≈-! (≈,[end] (mapAll _ _))) (∼-/D,↦lookup lA)
+≈-/…,[…] {I = I ,[ Δ ]} (mk (theRe[] lΔ) lE) = ≈,[] (≈-/…,[…] {I = I} (mk ⟨ lΔ R[]⟩ lE)) ∼-refl ≈-∙ ≈,[swap]
+
+module _ {δI}(b : 𝟚)(σ : Selections δI) where
+  Selections♦ : ∀ δK → Selections (δI ♦Doms δK)
+  Selections♦ · = σ
+  Selections♦ (δK ,[ x ]) = Selections♦ δK ,[ constMap x b ]
+
+  atMost♦ : ∀ {n} δK → AtMost n σ → AtMost n (Selections♦ δK)
+  atMost♦ · A = A
+  atMost♦ (δK ,[ x ]) A = atMost♦ δK A ,[ (₀₁ b (pureAll x (λ _ → refl))) ]
+
+abstract
+    Selections♦/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
+        → (I ♦Proto K) []/[ b ] (Selections♦ b σ δK) ≈ (I []/[ b ] σ) ♦Proto K
+    Selections♦/same {K = ·} b σ = ≈-refl
+    Selections♦/same {K = K ,[ Δ ]} b σ = ≈,[] (Selections♦/same {K = K} b σ ) (Selection/[]same Δ b)
+
+    Selections♦/not : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
+        → (I ♦Proto K) []/[ b ] (Selections♦ (not b) σ δK) ≈ I []/[ b ] σ
+    Selections♦/not {K = ·} b σ = ≈-refl
+    Selections♦/not {K = K ,[ Δ ]} b σ = ≈-trans (≈,[end] (Selection/[]not Δ b)) (Selections♦/not {K = K}b σ)
+
+    /[]-/D[>>] : ∀ {c δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)(l' : c ∈D δE)
+        → (I /D[ l >> l' ]) []/[ b ] σ ≈ (I []/[ b ] σ) /D[ l >> l' ]
+    /[]-/D[>>] b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here l' = ≈,[] ≈-refl (/D/[] Δ l' b Δ₁)
+    /[]-/D[>>] b (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) l' = ≈,[] (/[]-/D[>>] b I σ l l') ∼-refl
+
+    /Ds-/[] : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(lΔ : [ δE ]∈D δI)(σ : Selections δI)
+      → Env.Ended (lookup I lΔ /[ b ] lookup σ lΔ)
+      → (I /Ds lΔ) []/[ b ] σ ≈ I []/[ b ] σ
+    /Ds-/[] b (I ,[ Δ ]) here (σ ,[ Δ₁ ]) En = ≈,[] ≈-refl (End/[ b ] Δ₁ (/*-End Δ) ∼-End En)
+    /Ds-/[] b (I ,[ Δ ]) (there lΔ) (σ ,[ Δ₁ ]) En = ≈,[] (/Ds-/[] b I lΔ σ En) ∼-refl
+
+    select-com : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
+        → let b = not (lookup σ lΔ ‼ lA)
+        in I []/[ b ] σ ≈ (I /D[ lΔ >> lA ]) []/[ b ] σ
+    select-com {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) here lA = ≈,[] ≈-refl (∼-select-com Δ Δ₁ lA)
+    select-com {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) (there lΔ) lA = ≈,[] (select-com σ lΔ lA) ∼-refl
 -- -}
 -- -}
 -- -}

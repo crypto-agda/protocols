@@ -29,16 +29,19 @@ data Map {a} (A : Set a) : Dom → Set a where
   ε     : Map A ε
   _,_↦_ : ∀ {δ} (E : Map A δ) c (v : A) → Map A (δ , c ↦*)
 
-lookup : ∀ {a}{A : Set a}{c δ} → Map A δ → c ∈D δ → A
-lookup (M , c ↦ v) here = v
-lookup (M , c₁ ↦ v) (there l) = lookup M l
+infix 7 _‼_
+_‼_ : ∀ {a}{A : Set a}{c δ} → Map A δ → c ∈D δ → A
+_‼_ (M , c ↦ v) here = v
+_‼_ (M , c₁ ↦ v) (there l) = _‼_ M l
+
+lookup = _‼_
 
 -- middle-ground between above and: Map A δ ≈ ∀ {c} → c ∈ δ → A
 record _↦_∈_ {a}{A : Set a}(d : URI)(S : A){δ}(M : Map A δ) : Set a where
   constructor ⟨_,_⟩
   field
     lA : d ∈D δ
-    ↦A : lookup M lA ≡ S
+    ↦A : M ‼ lA ≡ S
 module ↦∈ = _↦_∈_
 
 pattern ⟨_R⟩ p  = ⟨ p       , refl ⟩
@@ -52,6 +55,7 @@ there' l = ⟨ there (↦∈.lA l) , ↦∈.↦A l ⟩
 
 module _ {a}{A : Set a}{d} where
 
+  infix 5 _[_]≔'_
   _[_]≔'_ : ∀ {δ} (M : Map A δ) → d ∈D δ → A → Map A δ
   (M , .d ↦ _) [ here    ]≔' v' = M , d ↦ v'
   (M , c ↦  v) [ there l ]≔' v' = M [ l ]≔' v' , c ↦ v
@@ -61,14 +65,14 @@ module _ {a} {A : Set a} where
     All Pred ε = 𝟙
     All Pred (M , d ↦ p) = All Pred M × Pred d p
 
-    All∈D : ∀ {δ}{Pred : URI → A → Set}{c}{M : Map A δ} → All Pred M → (l : c ∈D δ) → Pred c (lookup M l)
+    All∈D : ∀ {δ}{Pred : URI → A → Set}{c}{M : Map A δ} → All Pred M → (l : c ∈D δ) → Pred c (M ‼ l)
     All∈D {M = M , ._ ↦ _} all here = snd all
     All∈D {M = M ,  _ ↦ _} all (there lA) = All∈D (fst all) lA
 
     All∈' : ∀ {δ}{Pred : URI → A → Set}{c x}{M : Map A δ} → All Pred M → c ↦ x ∈ M → Pred c x
     All∈' all ⟨ p R⟩ = All∈D all p
 
-infixr 4 _♦Map_
+infixr 6 _♦Map_
 _♦Map_ : ∀ {a}{A : Set a}{D₀ D₁} → Map A D₀ → Map A D₁ → Map A (D₀ ♦Dom D₁)
 M ♦Map ε = M
 M ♦Map (M' , d ↦ P) = (M ♦Map M') , d ↦ P
@@ -106,52 +110,23 @@ Selection = Map 𝟚
 SelectionAll≡ : 𝟚 → ∀ {δ} → Selection δ → Set
 SelectionAll≡ b = All λ _ → _≡_ b
 
-module With-end {a}{A : Set a}(end : A) where
-    T = Map A
-
-    module _ {δ}(Δ : T δ) where
-        _/* : T δ
-        _/* = map (λ _ → end) Δ
-
-    selectProj : 𝟚 → (A → (𝟚 → A))
-    selectProj 0₂ v = [0: v 1: end ]
-    selectProj 1₂ v = [0: end 1: v ]
-
-    _/[_]_ : ∀ {δ}(Δ : T δ)(b : 𝟚)(σ : Selection δ) → T δ
-    Δ /[ b ] σ = zipWith (selectProj b) Δ σ
-
-    module _ {δ}(Δ : T δ)(σ : Selection δ) where
-        _/₀_ : T δ
-        _/₀_ = Δ /[ 0₂ ] σ
-
-        _/₁_ : T δ
-        _/₁_ = Δ /[ 1₂ ] σ
-
-    data Zip : ∀ {δ} → T δ → T δ → T δ → Set₁ where
-      ε : Zip ε ε ε
-      _,_↦₀_ : ∀ {δ Δ₀ Δ₁} {Δ : T δ}(Z : Zip Δ Δ₀ Δ₁) d S → Zip (Δ , d ↦ S) (Δ₀ , d ↦ S)   (Δ₁ , d ↦ end)
-      _,_↦₁_ : ∀ {δ Δ₀ Δ₁} {Δ : T δ}(Z : Zip Δ Δ₀ Δ₁) d S → Zip (Δ , d ↦ S) (Δ₀ , d ↦ end) (Δ₁ , d ↦ S)
-
-    [_is_⋎_] : ∀ {δ} → T δ → T δ → T δ → Set₁
-    [_is_⋎_] = Zip
-
 lookup-∈♦₀ : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(l : c ∈D δE)
-  → lookup (E ♦Map F) (∈♦₀ {F = δF} l) ≡ lookup E l
+  → (E ♦Map F) ‼ ∈♦₀ {F = δF} l ≡ E ‼ l
 lookup-∈♦₀ E ε l = refl
 lookup-∈♦₀ E (F , c₁ ↦ v) l = lookup-∈♦₀ E F l
 
 [∈♦₀]≔' : ∀ {a}{A : Set a}{c δE δF}(E : Map A δE)(F : Map A δF)(lA : c ∈D δE)(v : A)
-  → (E ♦Map F) [ ∈♦₀ {F = δF} lA ]≔' v ≡ E [ lA ]≔' v ♦Map F
+  → (E ♦Map F) [ ∈♦₀ {F = δF} lA ]≔' v ≡ (E [ lA ]≔' v) ♦Map F
 [∈♦₀]≔' E ε l v = refl
 [∈♦₀]≔' E (F , c₁ ↦ v) l v₁ rewrite [∈♦₀]≔' E F l v₁ = refl
 
 []≔-lookup : ∀ {a}{A : Set a}{c δE}(E : Map A δE)(l : c ∈D δE)
-  → E [ l ]≔' lookup E l ≡ E
+  → E [ l ]≔' E ‼ l ≡ E
 []≔-lookup (E , c ↦ v) here = refl
 []≔-lookup (E , c₁ ↦ v) (there l) rewrite []≔-lookup E l = refl
 
 lookup-[]≔ : ∀ {a}{A : Set a}{c δE x}(E : Map A δE)(l : c ∈D δE)
-  → lookup (E [ l ]≔' x) l ≡ x
+  → (E [ l ]≔' x) ‼ l ≡ x
 lookup-[]≔ (E , c ↦ v) here = refl
 lookup-[]≔ (E , c₁ ↦ v) (there l) = lookup-[]≔ E l
 

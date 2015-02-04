@@ -16,9 +16,9 @@ import partensor.Shallow.Map as Map
 import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
-open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
-open Proto
-open import partensor.Shallow.Equiv hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
+open Env     hiding (_/[_]_; Ended)
+open Proto hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
+-- open import partensor.Shallow.Equiv
 open import partensor.Shallow.Term
 
 module partensor.Shallow.Vars where
@@ -178,116 +178,29 @@ move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈' I)(l' : [ d ↦ B ]
 move (mk l X) (mk l' Y) df = mk (move… l l' (Diff… df)) {!!}
 -}
 postulate
-  End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₀ σ)
-  End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./₁ σ)
-  End/[b] : ∀ {δ}{E : Env δ}(b : 𝟚)(σ : Selection δ) → Env.Ended E → Env.Ended (E Env./[ b ] σ)
-  Sel♦ : ∀ {δs}{I : Proto δs}(σ : Selections δs) → I /₀ σ ♦Proto' I /₁ σ ≈ I
+  Sel♦ : ∀ {δs}{I : Proto δs}(σ : Selections δs) → I []/₀ σ ♦Proto' I []/₁ σ ≈ I
 
 postulate
   select : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
     → Map.lookup (Proto.lookup I lΔ) lA
-    ≡ Map.lookup (Proto.lookup (I /[ Map.lookup (Proto.lookup σ lΔ) lA ] σ) lΔ) lA
-
-eselect-com : ∀ {c δE}(E : Env δE)(σ : Selection δE)(lA : c ∈D δE)
-  → let b = not (Map.lookup σ lA)
-  in E Env./[ b ] σ ∼ (E Env.[ lA ]≔' end) Env./[ b ] σ
-eselect-com (E , c ↦ v) (σ , .c ↦ 1₂) here = ∼-refl
-eselect-com (E , c ↦ v) (σ , .c ↦ 0₂) here = ∼-refl
-eselect-com (E , c₁ ↦ v) (σ , .c₁ ↦ v₁) (there lA) = ∼,↦ (eselect-com E σ lA)
-
-select-com : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
-    → let b = not (Map.lookup (Proto.lookup σ lΔ) lA)
-    in I /[ b ] σ ≈ (I /D[ lΔ >> lA ]) /[ b ] σ
-select-com {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) here lA = ≈,[] ≈-refl (eselect-com Δ Δ₁ lA)
-select-com {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) (there lΔ) lA = ≈,[] (select-com σ lΔ lA) ∼-refl
-
-module _ {δI}(b : 𝟚)(σ : Selections δI) where
-  Selections♦ : ∀ δK → Selections (δI ♦Doms δK)
-  Selections♦ · = σ
-  Selections♦ (δK ,[ x ]) = Selections♦ δK ,[ constMap x b ]
-
-  atMost♦ : ∀ {n} δK → AtMost n σ → AtMost n (Selections♦ δK)
-  atMost♦ · A = A
-  atMost♦ (δK ,[ x ]) A = atMost♦ δK A ,[ (₀₁ b (pureAll x (λ _ → refl))) ]
-
-Selection/[]same : ∀ {δ}(Δ : Env δ)(b : 𝟚)
-  → Δ Env./[ b ] (constMap δ b) ∼ Δ
-Selection/[]same ε b = ∼-refl
-Selection/[]same (Δ , c ↦ v) 1₂ = ∼,↦ (Selection/[]same Δ 1₂)
-Selection/[]same (Δ , c ↦ v) 0₂ = ∼,↦ (Selection/[]same Δ 0₂)
-
-Selections♦/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
-    → (I ♦Proto K) /[ b ] (Selections♦ b σ δK) ≈ (I /[ b ] σ) ♦Proto K
-Selections♦/same {K = ·} b σ = ≈-refl
-Selections♦/same {K = K ,[ Δ ]} b σ = ≈,[] (Selections♦/same {K = K} b σ ) (Selection/[]same Δ b)
-
-Selection/[]not : ∀ {δ}(Δ : Env δ)(b : 𝟚)
-  → Env.Ended (Δ Env./[ b ] (constMap δ (not b)))
-Selection/[]not ε b = _
-Selection/[]not (Δ , c ↦ v) 1₂ = ⟨ (Selection/[]not Δ 1₂) , _ ⟩
-Selection/[]not (Δ , c ↦ v) 0₂ = ⟨ (Selection/[]not Δ 0₂) , _ ⟩
-
-Selections♦/not : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
-    → (I ♦Proto K) /[ b ] (Selections♦ (not b) σ δK) ≈ I /[ b ] σ
-Selections♦/not {K = ·} b σ = ≈-refl
-Selections♦/not {K = K ,[ Δ ]} b σ = ≈-trans (≈,[end] (Selection/[]not Δ b)) (Selections♦/not {K = K}b σ)
+    ≡ Map.lookup (Proto.lookup (I []/[ (Proto.lookup σ lΔ) ‼ lA ] σ) lΔ) lA
 
 postulate
   Selections♦'/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
-    → (I ♦Proto' K) /[ b ] (Selections♦ b σ δK) ≈ (I /[ b ] σ) ♦Proto' K
+    → (I ♦Proto' K) []/[ b ] (Selections♦ b σ δK) ≈ (I []/[ b ] σ) ♦Proto' K
 
   Selections♦'/not : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
-    → (I ♦Proto' K) /[ b ] (Selections♦ (not b) σ δK) ≈ I /[ b ] σ
+    → (I ♦Proto' K) []/[ b ] (Selections♦ (not b) σ δK) ≈ I []/[ b ] σ
 
   /[]-/Ds : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)
-    → (I /Ds l) /[ b ] σ ≈ (I /[ b ] σ) /Ds l
-
--- Really clever proof yay!
-[]≔end/[] : ∀ {c δE}(E : Env δE)(l : c ∈D δE)(b : 𝟚)(σ : Selection δE)
-  → (E [ l ]≔' end) Env./[ b ] σ ∼ (E Env./[ b ] σ) [ l ]≔' end
-[]≔end/[] (E , c ↦ v) here 1₂ (σ , .c ↦ 1₂) = ∼-refl
-[]≔end/[] (E , c ↦ v) here 1₂ (σ , .c ↦ 0₂) = ∼-refl
-[]≔end/[] (E , c ↦ v) here 0₂ (σ , .c ↦ 1₂) = ∼-refl
-[]≔end/[] (E , c ↦ v) here 0₂ (σ , .c ↦ 0₂) = ∼-refl
-[]≔end/[] (E , c₁ ↦ v) (there l) b (σ , .c₁ ↦ v₁) = ∼,↦ ([]≔end/[] E l b σ)
-
-/[]-/D[>>] : ∀ {c δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)(l' : c ∈D δE)
-    → (I /D[ l >> l' ]) /[ b ] σ ≈ (I /[ b ] σ) /D[ l >> l' ]
-/[]-/D[>>] b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here l' = ≈,[] ≈-refl ([]≔end/[] Δ l' b Δ₁)
-/[]-/D[>>] b (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) l' = ≈,[] (/[]-/D[>>] b I σ l l') ∼-refl
-
-
-/*-End : ∀ {δE}(E : Env δE) → Env.Ended (E /*)
-/*-End E = mapAll (λ _ → _) E
-
-End≔end : ∀ {c δE}(E : Env δE)(l : c ∈D δE) → Env.Ended E → Env.Ended (E [ l ]≔' end)
-End≔end (E , c ↦ v) here EE = ⟨ (fst EE) , _ ⟩
-End≔end (E , c₁ ↦ v) (there l) EE = ⟨ (End≔end E l (fst EE)) , (snd EE) ⟩
+    → (I /Ds l) []/[ b ] σ ≈ (I []/[ b ] σ) /Ds l
 
 [/]-/D[>>] : ∀ {c δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)
     → (I /D[ l >> lc ]) /Ds l' ≈ (I /Ds l') /D[ l >> lc ]
-[/]-/D[>>] (I ,[ Δ ]) here here lc = ≈,[] ≈-refl (/*-End _ ∼-End End≔end _ lc (/*-End Δ))
+[/]-/D[>>] (I ,[ Δ ]) here here lc = ≈,[] ≈-refl (/*-End _ ∼-End End/D _ lc (/*-End Δ))
 [/]-/D[>>] (I ,[ Δ ]) (there l) here lc = ≈-refl
 [/]-/D[>>] (I ,[ Δ ]) here (there l') lc = ≈-refl
 [/]-/D[>>] (I ,[ Δ ]) (there l) (there l') lc = ≈,[] ([/]-/D[>>] I l l' lc) ∼-refl
-
-
-/Ds-/[] : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(lΔ : [ δE ]∈D δI)(σ : Selections δI)
-  → Env.Ended (Proto.lookup I lΔ Env./[ b ] Proto.lookup σ lΔ)
-  → (I /Ds lΔ) /[ b ] σ ≈ I /[ b ] σ
-/Ds-/[] b (I ,[ Δ ]) here (σ ,[ Δ₁ ]) En = ≈,[] ≈-refl (End/[b] b Δ₁ (/*-End Δ) ∼-End En)
-/Ds-/[] b (I ,[ Δ ]) (there lΔ) (σ ,[ Δ₁ ]) En = ≈,[] (/Ds-/[] b I lΔ σ En) ∼-refl
-
--- Really clever proof yay!
-SEnd// :(b : 𝟚)(S : MSession)(σ : 𝟚) → Session.Ended (Env.selectProj (not b) (Env.selectProj b S σ) σ)
-SEnd// 1₂ S 1₂ = 0₁
-SEnd// 1₂ S 0₂ = 0₁
-SEnd// 0₂ S 1₂ = 0₁
-SEnd// 0₂ S 0₂ = 0₁
-
-End// : ∀ {δE}(b : 𝟚)(E : Env δE)(σ : Selection δE) → Env.Ended ((E Env./[ b ] σ) Env./[ not b ] σ)
-End// b ε ε = _
-End// b (E , c ↦ v) (σ , .c ↦ v₁) = ⟨ (End// b E σ) , SEnd// b v v₁ ⟩
 
 [≔]-ext : ∀ {δI δE}{E : Env δE}(I : Proto δI)(l : [ E ]∈ I){f g : Env δE → Env δE}(PF : f E ∼ g E)
   → I Proto.[ [_]∈_.lΔ l ≔ f ] ≈ I Proto.[ [_]∈_.lΔ l ≔ g ]

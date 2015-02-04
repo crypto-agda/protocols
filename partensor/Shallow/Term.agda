@@ -14,7 +14,7 @@ import partensor.Shallow.Map as Map
 import partensor.Shallow.Env as Env
 import partensor.Shallow.Proto as Proto
 open Session hiding (Ended)
-open Env     hiding (_/₀_; _/₁_; Ended)
+open Env     hiding (Ended)
 open Proto
 -- open import partensor.Shallow.Equiv
 
@@ -40,8 +40,8 @@ data ⟨_⟩ {δI}(I : Proto δI) : Set₁ where
   split :
       (σs : Selections δI)
       (A1 : AtMost 1 σs)
-      (P₀ : ⟨ I /₀ σs ⟩)
-      (P₁ : ⟨ I /₁ σs ⟩)
+      (P₀ : ⟨ I []/₀ σs ⟩)
+      (P₁ : ⟨ I []/₁ σs ⟩)
     → ⟨ I ⟩
 
   nu :
@@ -82,8 +82,8 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (σs : Selections δI)
       (σE : Selection ([↦…]∈.δE l))
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → T⟨ I [/…] l /₀ σs ,[ E/ l Env./₀ σE , c₀ ↦ « S₀ » ] ⟩)
-      (P₁ : ∀ c₁ → T⟨ I [/…] l /₁ σs ,[ E/ l Env./₁ σE , c₁ ↦ « S₁ » ] ⟩)
+      (P₀ : ∀ c₀ → T⟨ I [/…] l []/₀ σs ,[ E/ l /₀ σE , c₀ ↦ « S₀ » ] ⟩)
+      (P₁ : ∀ c₁ → T⟨ I [/…] l []/₁ σs ,[ E/ l /₁ σE , c₁ ↦ « S₁ » ] ⟩)
     → T⟨ I ⟩
 
  T-⅋-inp :
@@ -99,15 +99,15 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (D : Dual S₀ S₁)
       (σs : Selections δI)
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → T⟨ I /₀ σs ,[ c₀ ↦ S₀ ] ⟩)
-      (P₁ : ∀ c₁ → T⟨ I /₁ σs ,[ c₁ ↦ S₁ ] ⟩)
+      (P₀ : ∀ c₀ → T⟨ I []/₀ σs ,[ c₀ ↦ S₀ ] ⟩)
+      (P₁ : ∀ c₁ → T⟨ I []/₁ σs ,[ c₁ ↦ S₁ ] ⟩)
     → T⟨ I ⟩
 
  T-split :
       (σs : Selections δI)
       (A1 : AtMost 1 σs)
-      (P₀ : T⟨ I /₀ σs ⟩)
-      (P₁ : T⟨ I /₁ σs ⟩)
+      (P₀ : T⟨ I []/₀ σs ⟩)
+      (P₁ : T⟨ I []/₁ σs ⟩)
     → T⟨ I ⟩
 
 
@@ -118,8 +118,8 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (σs : Selections δI)
       (σE : Selection ([↦…]∈.δE l))
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → TC'⟨ I [/…] l /₀ σs ,[ E/ l Env./₀ σE , c₀ ↦ « S₀ » ] ⟩)
-      (P₁ : ∀ c₁ → TC'⟨ I [/…] l /₁ σs ,[ E/ l Env./₁ σE , c₁ ↦ « S₁ » ] ⟩)
+      (P₀ : ∀ c₀ → TC'⟨ I [/…] l []/₀ σs ,[ E/ l Env./₀ σE , c₀ ↦ « S₀ » ] ⟩)
+      (P₁ : ∀ c₁ → TC'⟨ I [/…] l []/₁ σs ,[ E/ l Env./₁ σE , c₁ ↦ « S₁ » ] ⟩)
     → TC'⟨ I ⟩
 
  TC-⅋-inp :
@@ -152,8 +152,8 @@ data S⟨_⟩ {δI}(I : Proto δI) : Set₁ where
  S-split :
       (σs : Selections δI)
       (A1 : AtMost 1 σs)
-      (P₀ : S⟨ I /₀ σs ⟩)
-      (P₁ : S⟨ I /₁ σs ⟩)
+      (P₀ : S⟨ I []/₀ σs ⟩)
+      (P₁ : S⟨ I []/₁ σs ⟩)
     → S⟨ I ⟩
  S-T : TC'⟨ I ⟩ → S⟨ I ⟩
 
