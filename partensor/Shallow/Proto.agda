@@ -193,15 +193,30 @@ pattern theRe[] p = ⟨ thereDs p , refl ⟩
 []∈♦₀ {δF = ·} l = l
 []∈♦₀ {δF = δF ,[ x ]} l = there ([]∈♦₀ {δF = δF} l)
 
+[]∈♦₁ : ∀ {δ δE δF} → [ δ ]∈D δF → [ δ ]∈D (δE ♦Doms δF)
+[]∈♦₁ here = here
+[]∈♦₁ (there l) = there ([]∈♦₁ l)
+
 lookup-[]∈♦₀ : ∀ {δ δE δF}(E : Proto δE)(F : Proto δF)(l : [ δ ]∈D δE)
   → lookup (E ♦Proto F) ([]∈♦₀ {δF = δF} l) ≡ lookup E l
 lookup-[]∈♦₀ E · l = refl
 lookup-[]∈♦₀ E (F ,[ Δ ]) l = lookup-[]∈♦₀ E F l
 
+lookup-[]∈♦₁ : ∀ {δ δE δF}(E : Proto δE)(F : Proto δF)(l : [ δ ]∈D δF)
+  → lookup (E ♦Proto F) ([]∈♦₁ {δF = δF} l) ≡ lookup F l
+lookup-[]∈♦₁ E (F ,[ Δ ]) here = refl
+lookup-[]∈♦₁ E (F ,[ Δ ]) (there l) = lookup-[]∈♦₁ E F l
+
 []∈♦₀-diff : ∀ {δ δ' δE δF}{l : [ δ ]∈D δE}{l' : [ δ' ]∈D δE} → DiffDoms l l'
   → DiffDoms ([]∈♦₀ {δF = δF} l) ([]∈♦₀ {δF = δF} l')
 []∈♦₀-diff {δF = ·} diff = diff
 []∈♦₀-diff {δF = δF ,[ x ]} diff = t/t ([]∈♦₀-diff {δF = δF} diff)
+
+module _ {δ₀ δE}{I₀ : Proto δ₀}{f : Env δE → Env δE} where
+  ≔[]∈♦₁ : ∀ {δ₁}{I₁ : Proto δ₁}(l : [ δE ]∈D δ₁)
+    → (I₀ ♦Proto I₁) [ []∈♦₁ {δE = δ₀} l ≔ f ] ≡ I₀ ♦Proto I₁ [ l ≔ f ]
+  ≔[]∈♦₁ {I₁ = I₁ ,[ Δ ]} here = refl
+  ≔[]∈♦₁ {I₁ = I₁ ,[ Δ ]} (there l) rewrite ≔[]∈♦₁ {I₁ = I₁} l = refl
 
 infix 0 [_↦_…]∈_ [_↦_]∈_
 record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
@@ -251,6 +266,7 @@ record [_↦_]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   open [↦…]∈ l… public
 module [↦]∈ = [_↦_]∈_
 
+pattern mk5 a b c d e = mk (mk4 a b c d) e
 -- here[]' : ∀ {δJ}{J : Proto δJ}{c S} → [ c ↦ S ]∈ J ,[ c ↦ S ]
 pattern here[]' = mk here…' _
 
@@ -377,12 +393,13 @@ record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
         → I ≈ J → J ≈ I
 ≈-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
 
-≈-! = ≈-sym
+≈-!_ = ≈-sym
 
 ≈-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
           → I ≈ J → J ≈ K → I ≈ K
 ≈-trans ⟨ p , q ⟩ ⟨ r , s ⟩ = ⟨ ⊆s-trans p r , ⊆s-trans s q ⟩
 
+infixr 8 _≈-∙_
 _≈-∙_ = ≈-trans
 
 ≈,[] : ∀ {δE δF δI δJ}{E : Env δE}{F : Env δF}{I : Proto δI}{J : Proto δJ}
