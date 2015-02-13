@@ -207,6 +207,10 @@ postulate
 [≔]-ext (I ,[ Δ ]) heRe[] pf = ≈,[] ≈-refl pf
 [≔]-ext (I ,[ Δ ]) (theRe[] lΔ) pf = ≈,[] ([≔]-ext I ⟨ lΔ R[]⟩ pf) ∼-refl
 
+
+postulate
+  TC-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
+    → I ≈ J → TC'⟨ I ⟩ → TC'⟨ J ⟩
 -- -}
 -- -}
 -- -}

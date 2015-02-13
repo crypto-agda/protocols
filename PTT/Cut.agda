@@ -159,7 +159,13 @@ TC-∈? : ∀ {δI δK c A S}{I : Proto δI}{K : Proto δK}(l : [ c ↦ act (rec
       (lI : [ E ]∈ I)(lA : d ∈D δE)(C : (m : A) → TC'⟨ I [ []∈.lΔ lI >> lA ]≔ « S m » ⟩)
       → TC'⟨ I /D[ []∈.lΔ lI >> lA ] ♦Proto' K ⟩)
   → TC'⟨ I /… l ♦Proto' K ⟩
-TC-∈? = {!!}
+TC-∈? {S = S}{K = K} l p cont = TC-∈Split cont' l p
+  where
+    cont' : TC-Split (act (com IN S)) K
+    cont-⅋ cont' () l₁ l' x₁ x₂
+    cont-⊗ cont' () l₁ l' x₁ x₂
+    cont-! cont' () m l₁ x₁
+    cont-? cont' refl lI lA C = {!cont lI lA C!}
 
 {-
 -}
@@ -169,7 +175,13 @@ TC-∈⅋ : ∀ {δI δK c A B}{I : Proto δI}{K : Proto δK}(l : [ c ↦ A ⅋ 
   → (∀ {d e δJ}{J : Proto δJ} (l : [ d ↦ A …]∈ J)(l' : [ e ↦  B …]∈ J) → DifferentVars… l l' → TC'⟨ J ⟩
      → TC'⟨ ((J /… l) /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]) ♦Proto' K ⟩)
   →  TC'⟨ I /… l ♦Proto' K ⟩
-TC-∈⅋ = {!!}
+TC-∈⅋ {A = A}{B}{K = K} l p cont = TC-∈Split cont' l p
+  where
+    cont' : TC-Split (A ⅋ B) K
+    cont-⅋ cont' refl l₁ l' x₁ x₂ = cont l₁ l' x₁ x₂
+    cont-⊗ cont' () l₁ l' x₁ x₂
+    cont-! cont' () m l₁ x₁
+    cont-? cont' () lI lA C
 
 TC-∈⊗ : ∀ {δI δK c A B}{I : Proto δI}{K : Proto δK}(l : [ c ↦ A ⊗ B …]∈ I)
   → TC'⟨ I ⟩
@@ -177,14 +189,13 @@ TC-∈⊗ : ∀ {δI δK c A B}{I : Proto δI}{K : Proto δK}(l : [ c ↦ A ⊗ 
        (l₀ : [ d ↦ A …]∈ J₀)(l₁ : [ e ↦ B …]∈ J₁) → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩
         → TC'⟨ (J₀ /… l₀ ♦Proto' J₁ /… l₁) ♦Proto' K ⟩)
   → TC'⟨ I /… l ♦Proto' K ⟩
-TC-∈⊗ {A = A}{B}{K = K} l cont = {!!} -- TC-∈Split cont' (mk l ?)
-{-
+TC-∈⊗ {A = A}{B}{K = K} l p cont = TC-∈Split cont' l p
   where
-     cont' : TC-Split (A ⊗ B) K
-     NES cont' x = x
-     cont-⅋ cont' () l₁ l' x₁ x₂
-     cont-⊗ cont' refl = cont -- l₁ l' x₁ x₂ = {!!}
-     -}
+    cont' : TC-Split (A ⊗ B) K
+    cont-⅋ cont' () l₁ l' x₁ x₂
+    cont-⊗ cont' refl l₁ l' x₁ x₂ = cont l₁ l' x₁ x₂
+    cont-! cont' () m l₁ x₁
+    cont-? cont' () lI lA C
 
 TC-cut :
     ∀ {c₀ c₁ S₀ S₁ δ₀ δ₁}{I₀ : Proto δ₀}{I₁ : Proto δ₁}
