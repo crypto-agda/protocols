@@ -1,10 +1,10 @@
-open import partensor.Terms-merge renaming (conv to conv')
+open import DeepParTensor.Terms-merge renaming (conv to conv')
 open import Data.Zero
 open import Data.Product
 open import Data.Sum
 open import Relation.Binary.PropositionalEquality.NP
 
-module partensor.TermsAssoc where
+module DeepParTensor.TermsAssoc where
 
 module _ {C} where
   ⊗-split' : ∀ {Γ A B}(l : A ⊗ B ∈' Γ) → ⟪ Γ ⟫

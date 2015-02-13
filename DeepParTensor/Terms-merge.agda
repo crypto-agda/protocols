@@ -13,11 +13,9 @@ open import Size
 
 open import Relation.Binary.PropositionalEquality.NP using (_≡_ ; refl ; !_ ; ap ; tr ; _∙_ ; _≢_)
 
-module partensor.Terms-merge where
+module DeepParTensor.Terms-merge where
 
 data Com : Set where IN OUT : Com
-
-
 
 infix 5 _⅋_ _⊗_
 
@@ -418,11 +416,6 @@ mix (input l x) q = input (left l) λ m → mix (x m) q
 mix (output l m p) q = output (left l) m (mix p q)
 mix (pair (⊆-in l) x p p₁) q = pair (⊆-in (left l)) (⅋-congₗ x · ⅋-assoc)
   p (conv (⅋-assoc · ⅋'-congᵣ ⅋-comm · !' ⅋-assoc) (mix p₁ q))
-
-end' : ∀ {Δ} → PEnded' Δ → ⟪ Δ ⟫
-end' ε = end ε
-end' (P⅋ p p₁) = mix (end' p) (end' p₁)
-end' (P⊗ p p₁) = pair (⊆-in here) ⅋ε' (conv (⅋ε' · ⅋-comm) (end' p)) (conv (⅋ε' · ⅋-comm) (end' p₁))
 
 ∈⅋-fst : ∀ {P Q R} → (P ⅋ Q) ∈' R → P ∈' R
 ∈⅋-fst here = left here
