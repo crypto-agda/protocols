@@ -212,11 +212,16 @@ lookup-[]∈♦₁ E (F ,[ Δ ]) (there l) = lookup-[]∈♦₁ E F l
 []∈♦₀-diff {δF = ·} diff = diff
 []∈♦₀-diff {δF = δF ,[ x ]} diff = t/t ([]∈♦₀-diff {δF = δF} diff)
 
+module _ {δ₀ δE}{I₀ : Proto δ₀}{f : Env δE → Env δE}(l : [ δE ]∈D δ₀)where
+  ≔[]∈♦₀ : ∀ {δ₁}(I₁ : Proto δ₁) → (I₀ ♦Proto I₁) [ []∈♦₀ {δF = δ₁} l ≔ f ] ≡ I₀ [ l ≔ f ] ♦Proto I₁
+  ≔[]∈♦₀ · = refl
+  ≔[]∈♦₀ (I₁ ,[ Δ ]) rewrite ≔[]∈♦₀ I₁ = refl
+
 module _ {δ₀ δE}{I₀ : Proto δ₀}{f : Env δE → Env δE} where
-  ≔[]∈♦₁ : ∀ {δ₁}{I₁ : Proto δ₁}(l : [ δE ]∈D δ₁)
+  ≔[]∈♦₁ : ∀ {δ₁}(l : [ δE ]∈D δ₁)(I₁ : Proto δ₁)
     → (I₀ ♦Proto I₁) [ []∈♦₁ {δE = δ₀} l ≔ f ] ≡ I₀ ♦Proto I₁ [ l ≔ f ]
-  ≔[]∈♦₁ {I₁ = I₁ ,[ Δ ]} here = refl
-  ≔[]∈♦₁ {I₁ = I₁ ,[ Δ ]} (there l) rewrite ≔[]∈♦₁ {I₁ = I₁} l = refl
+  ≔[]∈♦₁ here (I₁ ,[ Δ ])= refl
+  ≔[]∈♦₁ (there l) (I₁ ,[ Δ ]) rewrite ≔[]∈♦₁ l I₁ = refl
 
 infix 0 [_↦_…]∈_ [_↦_]∈_
 record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where

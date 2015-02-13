@@ -138,6 +138,12 @@ _∼-∙_ = ∼-trans
 _∼-End_ : ∀ {δE δF}{E : Env δE}{F : Env δF} → Ended E → Ended F → E ∼ F
 EE ∼-End EF = ∼-! (∼-Ended EE) ∼-∙ ∼-Ended EF
 
+_≡-End_ : ∀ {δE}{E F : Env δE} → Ended E → Ended F → E ≡ F
+_≡-End_ {E = ε} {ε} 0₁ 0₁ = refl
+_≡-End_ {E = E , c ↦ v} {F , .c ↦ v₁} ⟨ EE , x ⟩ ⟨ EF , y ⟩
+  rewrite EE ≡-End EF
+  | Ended-≡end x
+  | Ended-≡end y = refl
 
 postulate
   End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₀ σ)

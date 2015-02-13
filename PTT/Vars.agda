@@ -47,9 +47,13 @@ abstract
   [∈]♦₁ : ∀ {δ₀ δ₁ δE}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ E ]∈ I₁ → [ E ]∈ (I₀ ♦Proto' I₁)
   [∈]♦₁ {δ₁ = δ₁}{I₁ = F} ⟨ lΔ , ↦Δ ⟩ = ⟨ []∈♦₁ {δF = δ₁} lΔ , lookup-[]∈♦'₁ _ F lΔ ∙ ↦Δ ⟩
 
+  ≔[∈]♦₀ : ∀ {δE δ₀ δ₁}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁}{f : Env δE → Env δE}(l : [ E ]∈ I₀)
+      → (I₀ ♦Proto' I₁) [ []∈.lΔ ([∈]♦₀ {I₁ = I₁} l) ≔ f ] ≡ I₀ [ []∈.lΔ l ≔ f ] ♦Proto' I₁
+  ≔[∈]♦₀ {I₁ = I₁} ⟨ lΔ , ↦Δ ⟩ = ≔[]∈♦₀ lΔ I₁
+
   ≔[∈]♦₁ : ∀ {δE δ₀ δ₁}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁}{f : Env δE → Env δE}(l : [ E ]∈ I₁)
       → (I₀ ♦Proto' I₁) [ []∈.lΔ ([∈]♦₁ {I₀ = I₀} l) ≔ f ] ≡ I₀ ♦Proto' I₁ [ []∈.lΔ l ≔ f ]
-  ≔[∈]♦₁ {δE}{I₀ = I₀}{I₁}{f} ⟨ lΔ , ↦Δ ⟩ =  ≔[]∈♦₁ {I₀ = I₀}{f = f}{I₁ = I₁} lΔ
+  ≔[∈]♦₁ {I₁ = I₁} ⟨ lΔ , ↦Δ ⟩ =  ≔[]∈♦₁ lΔ I₁
 
 
 
@@ -91,13 +95,13 @@ postulate
   Diff-sym… : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A …]∈ I}{l' : [ d ↦ B …]∈ I}
     → DifferentVars… l l' → DifferentVars… l' l
 
-{-
-record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈' I)(l' : [ d ↦ B ]∈' I) : Set where
+record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) : Set₁ where
   constructor mk
   field
-    Diff… : DifferentVars… ([↦]∈'.l… l) ([↦]∈'.l… l')
+    Diff… : DifferentVars… ([↦]∈.l… l) ([↦]∈.l… l')
 open DifferentVars
 
+{-
 Diff-sym : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A ]∈' I}{l' : [ d ↦ B ]∈' I}
     → DifferentVars l l' → DifferentVars l' l
 Diff… (Diff-sym df) = Diff-sym… (Diff… df)
@@ -132,6 +136,10 @@ sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , ref
 ∈♦₁ (mk l… E/c) = mk (∈♦₁… l…) E/c
 
 
+∈♦₀-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
+          (I₀ ♦Proto' I₁) [/…] (∈♦₀… l) ≈ (I₀ [/…] l) ♦Proto' I₁
+∈♦₀-compute[…] (mk lI lE) = ≈-reflexive (≔[∈]♦₀ lI)
+
 ∈♦₁-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
           (I₀ ♦Proto' I₁) [/…] (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ [/…] l)
 ∈♦₁-compute[…] (mk lI lE) = ≈-reflexive (≔[∈]♦₁ lI)
@@ -145,8 +153,6 @@ postulate
   ·♦ :  ∀ {δI}{I : Proto δI} → · ♦Proto' I ≈ I
   ∈♦₀-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
           (I₀ ♦Proto' I₁) /… (∈♦₀… {I₁ = I₁} l) ≈ (I₀ /… l) ♦Proto' I₁
-  ∈♦₀-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
-          (I₀ ♦Proto' I₁) [/…] (∈♦₀… {I₁ = I₁}l) ≈ (I₀ [/…] l) ♦Proto' I₁
   ∈♦₁-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
           (I₀ ♦Proto' I₁) /… (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ /… l)
 
@@ -184,6 +190,14 @@ move… (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) l/=l' = mk3 lΔ₁ (move�
 move[…] : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I) → DifferentVars… l l'
           → [ d ↦ B …]∈ (I [/…] l)
 move[…] (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) l/=l' = mk3 lΔ₁ (move[…]-lemma lΔ lE l/=l' ) lE₁
+
+move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) → DifferentVars l l'
+          → [ d ↦ B ]∈ (I /… [↦]∈.l… l)
+move (mk l… E/c) (mk l…₁ E/c₁) df = mk (move… l… l…₁ (Diff… df)) E/c₁
+
+move[] : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) → DifferentVars l l'
+          → [ d ↦ B ]∈ (I [/…] [↦]∈.l… l)
+move[] (mk l… E/c) (mk l…₁ E/c₁) (mk Diff…) = mk (move[…] l… l…₁ Diff…) E/c₁
 
 move-compute… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I)(l/=l' : DifferentVars… l l')
     → (I /… l) /… move… l l' l/=l' ≈ (I /… l) /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]
@@ -248,10 +262,25 @@ postulate
 [≔]D-ext (I ,[ Δ ]) here pf = ≈,[] ≈-refl pf
 [≔]D-ext (I ,[ Δ ]) (there l) pf = ≈,[] ([≔]D-ext I l pf) ∼-refl
 
+[≔]D-ext≡ : ∀ {δI δE}(I : Proto δI)(l : [ δE ]∈D δI){f g : Env δE → Env δE}
+  (PF : f (Proto.lookup I l) ≡ g (Proto.lookup I l))
+  → I Proto.[ l ≔ f ] ≡ I Proto.[ l ≔ g ]
+[≔]D-ext≡ (I ,[ Δ ]) here pf = ap (_,[_] I) pf
+[≔]D-ext≡ (I ,[ Δ ]) (there l) pf = ap (flip _,[_] Δ) ([≔]D-ext≡ I l pf)
+
 [≔]-ext : ∀ {δI δE}{E : Env δE}(I : Proto δI)(l : [ E ]∈ I){f g : Env δE → Env δE}(PF : f E ∼ g E)
   → I Proto.[ [_]∈_.lΔ l ≔ f ] ≈ I Proto.[ [_]∈_.lΔ l ≔ g ]
 [≔]-ext I ⟨ lΔ , ↦Δ ⟩{f}{g} pf = [≔]D-ext I lΔ (∼-reflexive (ap f ↦Δ) ∼-∙ (pf ∼-∙ ∼-reflexive (! (ap g ↦Δ))))
 
+[≔]-ext≡ : ∀ {δI δE}{E : Env δE}(I : Proto δI)(l : [ E ]∈ I){f g : Env δE → Env δE}(PF : f E ≡ g E)
+  → I Proto.[ [_]∈_.lΔ l ≔ f ] ≡ I Proto.[ [_]∈_.lΔ l ≔ g ]
+[≔]-ext≡ I ⟨ lΔ , ↦Δ ⟩{f}{g} pf = [≔]D-ext≡ I lΔ (ap f ↦Δ ∙ (pf ∙ ! (ap g ↦Δ)))
+
+/…-uniq : ∀ {δI c A}{I : Proto δI}(l : [ c ↦ A ]∈ I) → I /… [↦]∈.l… l ≈ I [/] l
+/…-uniq {I = I} (mk (mk ⟨ lΔ , refl ⟩ lE) E/c) = [≔]D-ext I lΔ (E/c ∼-End Ended-/* _)
+
+/…-uniq≡ : ∀ {δI c A}{I : Proto δI}(l : [ c ↦ A ]∈ I) → I /… [↦]∈.l… l ≡ I [/] l
+/…-uniq≡ {I = I} (mk (mk ⟨ lΔ , refl ⟩ lE) E/c) = [≔]D-ext≡ I lΔ (E/c ≡-End Ended-/* _)
 
 {-
 [≔]-ext (I ,[ Δ ]) heRe[] pf = ≈,[] ≈-refl pf
