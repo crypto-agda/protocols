@@ -114,12 +114,11 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
 data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
  TC-⊗-out :
     ∀ {c S₀ S₁}
-      (l : [ c ↦ S₀ ⊗ S₁ …]∈ I)
+      (l : [ c ↦ S₀ ⊗ S₁ ]∈ I)
       (σs : Selections δI)
-      (σE : Selection ([↦…]∈.δE l))
       (A0 : AtMost 0 σs)
-      (P₀ : ∀ c₀ → TC'⟨ I [/…] l []/₀ σs ,[ E/ l Env./₀ σE , c₀ ↦ « S₀ » ] ⟩)
-      (P₁ : ∀ c₁ → TC'⟨ I [/…] l []/₁ σs ,[ E/ l Env./₁ σE , c₁ ↦ « S₁ » ] ⟩)
+      (P₀ : ∀ c₀ → TC'⟨ I [/] l []/₀ σs ,[ c₀ ↦ S₀ ] ⟩)
+      (P₁ : ∀ c₁ → TC'⟨ I [/] l []/₁ σs ,[ c₁ ↦ S₁ ] ⟩)
     → TC'⟨ I ⟩
 
  TC-⅋-inp :
@@ -142,11 +141,20 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
 
  TC-end : ∀ (E : Ended I) → TC'⟨ I ⟩
 
+ TC-split :
+      (σs : Selections δI)
+      (A1 : AtMost 1 σs)
+      (P₀ : TC'⟨ I []/₀ σs ⟩)
+      (P₁ : TC'⟨ I []/₁ σs ⟩)
+    → TC'⟨ I ⟩
+{-
  TC-mix : ∀ {δF δG}{F : Env δF}{G : Env δG}(lF : [ F ]∈ I)(lG : [ G ]∈ I)
      (lF/=lG : DiffDoms ([]∈.lΔ lF) ([]∈.lΔ lG))
      (P : TC'⟨ ((I Proto./ lF) /Ds []∈.lΔ lG),[ F ♦Env G ] ⟩)
      → TC'⟨ I ⟩
+-}
 
+{-
 
 data S⟨_⟩ {δI}(I : Proto δI) : Set₁ where
  S-split :
@@ -154,6 +162,17 @@ data S⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (A1 : AtMost 1 σs)
       (P₀ : S⟨ I []/₀ σs ⟩)
       (P₁ : S⟨ I []/₁ σs ⟩)
+    → S⟨ I ⟩
+ TC-⅋-inp :
+    ∀ {c S₀ S₁}
+      (l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
+      (P : ∀ c₀ c₁ → S⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
+    → S⟨ I ⟩
+
+ TC-?-inp :
+    ∀ {c A S₁}
+      (l : [ c ↦ act (recv {A} S₁) ]∈ I)
+      (P : (m : A) → S⟨ I [/] l ,[ c ↦ S₁ m ] ⟩)
     → S⟨ I ⟩
  S-T : TC'⟨ I ⟩ → S⟨ I ⟩
 

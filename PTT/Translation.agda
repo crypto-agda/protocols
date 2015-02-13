@@ -1,4 +1,3 @@
-
 open import Function
 open import Data.Product hiding (zip)
                          renaming (_,_ to ⟨_,_⟩; proj₁ to fst; proj₂ to snd;
@@ -15,10 +14,23 @@ import PTT.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; Ended)
 open Proto   hiding ()
-open import PTT.Equiv
 open import PTT.Term
+open import PTT.Split
 open import Relation.Binary.PropositionalEquality.NP hiding (J)
 
+S-⅋-inp : ∀ {c c₀ c₁ δI S₀ S₁}{I : Proto δI}(l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
+  → S⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩ → S⟨ I ⟩
+S-⅋-inp l P = {!!}
+
+translate : ∀ {δI}{I : Proto δI} → ⟨ I ⟩ → S⟨ I ⟩
+translate (end x) = S-T (TC-end x)
+translate (⅋-inp l P) = S-⅋-inp l (translate (P c₀ c₁))
+  where postulate c₀ c₁ : URI
+translate (⊗-out l P) = {!!}
+translate (split σs A1 P P₁) = {!!}
+translate (nu D P) = {!!}
+
+{-
 module PTT.Translation where
 module Translation
  {t}
@@ -121,6 +133,7 @@ module Translation
           cPP = T-conv e rPP
           I' = I ,[ c ↦ S₀ ⊗ S₁ ] ,[ c' ↦ {!!} ]
   go (split σs A P₀ P₁) = T-split σs A (go P₀) (go P₁)
+-}
 -- -}
 -- -}
 -- -}

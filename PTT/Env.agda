@@ -138,6 +138,7 @@ _∼-∙_ = ∼-trans
 _∼-End_ : ∀ {δE δF}{E : Env δE}{F : Env δF} → Ended E → Ended F → E ∼ F
 EE ∼-End EF = ∼-! (∼-Ended EE) ∼-∙ ∼-Ended EF
 
+
 postulate
   End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₀ σ)
   End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₁ σ)

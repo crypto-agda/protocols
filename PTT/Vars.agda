@@ -10,7 +10,7 @@ open import Data.Sum renaming (inj₁ to inl; inj₂ to inr)
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J) renaming (proof-irrelevance to UIP)
-open import PTT.Dom as Dom
+open import PTT.Dom as Dom hiding (∈♦₀)
 import PTT.Session as Session
 import PTT.Map as Map
 import PTT.Env as Env
@@ -24,7 +24,7 @@ open import PTT.Term
 module PTT.Vars where
 
 
-infixl 4 _♦Proto'_
+infixl 4 _♦Proto'_ -- _♦Env'_
 abstract
   _♦Proto'_ : ∀ {δa δb}(A : Proto δa)(B : Proto δb) → Proto (δa ♦Doms δb)
   _♦Proto'_ = _♦Proto_
@@ -33,13 +33,36 @@ abstract
     → Proto.lookup (E ♦Proto' F) ([]∈♦₀ {δF = δF} l) ≡ Proto.lookup E l
   lookup-[]∈♦'₀ = lookup-[]∈♦₀
 
+  lookup-[]∈♦'₁ : ∀ {δ δE δF}(E : Proto δE)(F : Proto δF)(l : [ δ ]∈D δF)
+    → Proto.lookup (E ♦Proto' F) ([]∈♦₁ {δF = δF} l) ≡ Proto.lookup F l
+  lookup-[]∈♦'₁ = lookup-[]∈♦₁
+
   /Ds-[]∈♦'₀ : ∀ {δ δI δK}{I : Proto δI}(l : [ δ ]∈D δI)(K : Proto δK)
      → (I /Ds l) ♦Proto' K ≡ (I ♦Proto' K) /Ds ([]∈♦₀ {δF = δK} l)
   /Ds-[]∈♦'₀ l = /Ds-[]∈♦₀ l
 
-[∈]♦₀ : ∀ {δ₀ δ₁ δE}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ E ]∈ I₀ → [ E ]∈ (I₀ ♦Proto' I₁)
-[∈]♦₀ {δ₁ = δ₁}{I₁ = F} ⟨ lΔ , ↦Δ ⟩ = ⟨ []∈♦₀ {δF = δ₁} lΔ , lookup-[]∈♦'₀ _ F lΔ ∙ ↦Δ ⟩
+  [∈]♦₀ : ∀ {δ₀ δ₁ δE}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ E ]∈ I₀ → [ E ]∈ (I₀ ♦Proto' I₁)
+  [∈]♦₀ {δ₁ = δ₁}{I₁ = F} ⟨ lΔ , ↦Δ ⟩ = ⟨ []∈♦₀ {δF = δ₁} lΔ , lookup-[]∈♦'₀ _ F lΔ ∙ ↦Δ ⟩
 
+  [∈]♦₁ : ∀ {δ₀ δ₁ δE}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ E ]∈ I₁ → [ E ]∈ (I₀ ♦Proto' I₁)
+  [∈]♦₁ {δ₁ = δ₁}{I₁ = F} ⟨ lΔ , ↦Δ ⟩ = ⟨ []∈♦₁ {δF = δ₁} lΔ , lookup-[]∈♦'₁ _ F lΔ ∙ ↦Δ ⟩
+
+  ≔[∈]♦₁ : ∀ {δE δ₀ δ₁}{E : Env δE}{I₀ : Proto δ₀}{I₁ : Proto δ₁}{f : Env δE → Env δE}(l : [ E ]∈ I₁)
+      → (I₀ ♦Proto' I₁) [ []∈.lΔ ([∈]♦₁ {I₀ = I₀} l) ≔ f ] ≡ I₀ ♦Proto' I₁ [ []∈.lΔ l ≔ f ]
+  ≔[∈]♦₁ {δE}{I₀ = I₀}{I₁}{f} ⟨ lΔ , ↦Δ ⟩ =  ≔[]∈♦₁ {I₀ = I₀}{f = f}{I₁ = I₁} lΔ
+
+
+
+{-
+abstract
+  _♦Env'_ : ∀{δa δb}(A : Env δa)(B : Env δb) → Env (δa ♦Dom δb)
+  _♦Env'_ = _♦Env_
+
+
+postulate
+  ♦E-cong₂ : ∀ {δE δE' δF δF'}{E : Env δE}{E' : Env δE'}{F : Env δF}{F' : Env δF'}
+    → E ∼ E' → F ∼ F' → E ♦Env F ∼ E' ♦Env F'
+-}
 {-
 data DifferentVarsDoms : ∀ {δI c d} → [ c ]∈D δI → Doms'.[ d ]∈ δI → Set where
   h/t : ∀ {a b Db l}
@@ -99,21 +122,33 @@ sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , ref
 ∈♦₀… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₀ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
 ∈♦₀… {I₁ = I₁} (mk lI lE) = mk ([∈]♦₀ {I₁ = I₁} lI) lE --mk {!!} {!!}
 
+∈♦₀ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈ I₀ → [ c ↦ A ]∈ (I₀ ♦Proto' I₁)
+∈♦₀ (mk l… E/c) = mk (∈♦₀… l…) E/c
+
+∈♦₁… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₁ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
+∈♦₁… {I₁ = I₁} (mk lI lE) = mk ([∈]♦₁ lI) lE --mk {!!} {!!}
+
+∈♦₁ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈ I₁ → [ c ↦ A ]∈ (I₀ ♦Proto' I₁)
+∈♦₁ (mk l… E/c) = mk (∈♦₁… l…) E/c
+
+
+∈♦₁-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
+          (I₀ ♦Proto' I₁) [/…] (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ [/…] l)
+∈♦₁-compute[…] (mk lI lE) = ≈-reflexive (≔[∈]♦₁ lI)
+
 postulate
   ♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto' (B ♦Proto' C) ≈ (A ♦Proto' B) ♦Proto' C
   ♦-com : ∀ {δa δb}{A : Proto δa}{B : Proto δb} → (A ♦Proto' B) ≈ (B ♦Proto' A)
   ♦-cong₂ : ∀ {δa δb δc δd}{A : Proto δa}{B : Proto δb}{C : Proto δc}{D : Proto δd}
           → A ≈ B → C ≈ D → A ♦Proto' C ≈ B ♦Proto' D
   ♦-com, : ∀ {δa δ δb}{A : Proto δa}{B : Proto δb}{E : Env δ} → (A ,[ E ]) ♦Proto' B ≈ (A ♦Proto' B),[ E ]
-  ∈♦₁… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A …]∈ I₁ → [ c ↦ A …]∈ (I₀ ♦Proto' I₁)
+  ·♦ :  ∀ {δI}{I : Proto δI} → · ♦Proto' I ≈ I
   ∈♦₀-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
           (I₀ ♦Proto' I₁) /… (∈♦₀… {I₁ = I₁} l) ≈ (I₀ /… l) ♦Proto' I₁
   ∈♦₀-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
           (I₀ ♦Proto' I₁) [/…] (∈♦₀… {I₁ = I₁}l) ≈ (I₀ [/…] l) ♦Proto' I₁
   ∈♦₁-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
           (I₀ ♦Proto' I₁) /… (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ /… l)
-  ∈♦₁-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
-          (I₀ ♦Proto' I₁) [/…] (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ [/…] l)
 
   /Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)
     → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
@@ -179,6 +214,7 @@ move (mk l X) (mk l' Y) df = mk (move… l l' (Diff… df)) {!!}
 -}
 postulate
   Sel♦ : ∀ {δs}{I : Proto δs}(σ : Selections δs) → I []/₀ σ ♦Proto' I []/₁ σ ≈ I
+  Sel¬ : ∀ (b : 𝟚){δs}{I : Proto δs}(σ : Selections δs) → I []/[ b ] σ []/[ not b ] σ ≈ ·
 
 postulate
   select : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
@@ -192,8 +228,11 @@ postulate
   Selections♦'/not : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
     → (I ♦Proto' K) []/[ b ] (Selections♦ (not b) σ δK) ≈ I []/[ b ] σ
 
+  Selections/red : ∀ {δI}{I : Proto δI}(b : 𝟚)(σs : Selections δI) → I []/[ b ] σs []/[ b ] σs ≈ I []/[ b ] σs
+
   /[]-/Ds : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)
     → (I /Ds l) []/[ b ] σ ≈ (I []/[ b ] σ) /Ds l
+
 
 [/]-/D[>>] : ∀ {c δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)
     → (I /D[ l >> lc ]) /Ds l' ≈ (I /Ds l') /D[ l >> lc ]
@@ -202,15 +241,23 @@ postulate
 [/]-/D[>>] (I ,[ Δ ]) here (there l') lc = ≈-refl
 [/]-/D[>>] (I ,[ Δ ]) (there l) (there l') lc = ≈,[] ([/]-/D[>>] I l l' lc) ∼-refl
 
+
+[≔]D-ext : ∀ {δI δE}(I : Proto δI)(l : [ δE ]∈D δI){f g : Env δE → Env δE}
+  (PF : f (Proto.lookup I l) ∼ g (Proto.lookup I l))
+  → I Proto.[ l ≔ f ] ≈ I Proto.[ l ≔ g ]
+[≔]D-ext (I ,[ Δ ]) here pf = ≈,[] ≈-refl pf
+[≔]D-ext (I ,[ Δ ]) (there l) pf = ≈,[] ([≔]D-ext I l pf) ∼-refl
+
 [≔]-ext : ∀ {δI δE}{E : Env δE}(I : Proto δI)(l : [ E ]∈ I){f g : Env δE → Env δE}(PF : f E ∼ g E)
   → I Proto.[ [_]∈_.lΔ l ≔ f ] ≈ I Proto.[ [_]∈_.lΔ l ≔ g ]
+[≔]-ext I ⟨ lΔ , ↦Δ ⟩{f}{g} pf = [≔]D-ext I lΔ (∼-reflexive (ap f ↦Δ) ∼-∙ (pf ∼-∙ ∼-reflexive (! (ap g ↦Δ))))
+
+
+{-
 [≔]-ext (I ,[ Δ ]) heRe[] pf = ≈,[] ≈-refl pf
 [≔]-ext (I ,[ Δ ]) (theRe[] lΔ) pf = ≈,[] ([≔]-ext I ⟨ lΔ R[]⟩ pf) ∼-refl
+-}
 
-
-postulate
-  TC-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
-    → I ≈ J → TC'⟨ I ⟩ → TC'⟨ J ⟩
 -- -}
 -- -}
 -- -}
