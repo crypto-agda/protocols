@@ -8,17 +8,17 @@ open import Data.One
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
-open import partensor.Shallow.Dom
-import partensor.Shallow.Session as Session
-import partensor.Shallow.Map as Map
-import partensor.Shallow.Env as Env
-import partensor.Shallow.Proto as Proto
+open import PTT.Dom
+import PTT.Session as Session
+import PTT.Map as Map
+import PTT.Env as Env
+import PTT.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (Ended)
 open Proto
--- open import partensor.Shallow.Equiv
+-- open import PTT.Equiv
 
-module partensor.Shallow.Term where
+module PTT.Term where
 
 data ⟨_⟩ {δI}(I : Proto δI) : Set₁ where
   end :

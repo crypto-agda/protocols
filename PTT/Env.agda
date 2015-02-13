@@ -5,12 +5,12 @@ open import Data.Two
 open import Data.Product renaming (proj₁ to fst; proj₂ to snd; _,_ to ⟨_,_⟩) hiding (map)
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP
-open import partensor.Shallow.Dom as Dom
-open import partensor.Shallow.Session as Session hiding (Ended)
+open import PTT.Dom as Dom
+open import PTT.Session as Session hiding (Ended)
 
-module partensor.Shallow.Env where
+module PTT.Env where
 
-open import partensor.Shallow.Map as Map public
+open import PTT.Map as Map public
 
 private
     M = MSession

@@ -10,18 +10,18 @@ open import Data.Sum renaming (inj₁ to inl; inj₂ to inr)
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J) renaming (proof-irrelevance to UIP)
-open import partensor.Shallow.Dom as Dom
-import partensor.Shallow.Session as Session
-import partensor.Shallow.Map as Map
-import partensor.Shallow.Env as Env
-import partensor.Shallow.Proto as Proto
+open import PTT.Dom as Dom
+import PTT.Session as Session
+import PTT.Map as Map
+import PTT.Env as Env
+import PTT.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/[_]_; Ended)
 open Proto hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
--- open import partensor.Shallow.Equiv
-open import partensor.Shallow.Term
+-- open import PTT.Equiv
+open import PTT.Term
 
-module partensor.Shallow.Vars where
+module PTT.Vars where
 
 
 infixl 4 _♦Proto'_

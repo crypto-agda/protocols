@@ -7,19 +7,19 @@ open import Data.Zero
 open import Data.One
 open import Data.Two
 
-open import partensor.Shallow.Dom
-import partensor.Shallow.Session as Session
-import partensor.Shallow.Map as Map
-import partensor.Shallow.Env as Env
-import partensor.Shallow.Proto as Proto
+open import PTT.Dom
+import PTT.Session as Session
+import PTT.Map as Map
+import PTT.Env as Env
+import PTT.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; Ended)
 open Proto   hiding ()
-open import partensor.Shallow.Equiv
-open import partensor.Shallow.Term
+open import PTT.Equiv
+open import PTT.Term
 open import Relation.Binary.PropositionalEquality.NP hiding (J)
 
-module partensor.Shallow.Translation where
+module PTT.Translation where
 module Translation
  {t}
  (T⟨_⟩ : ∀ {δI} → Proto δI → Set t)

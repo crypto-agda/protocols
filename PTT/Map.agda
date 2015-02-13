@@ -3,9 +3,9 @@ open import Data.One
 open import Data.Two
 open import Data.Product using (_×_) renaming (proj₁ to fst; proj₂ to snd; _,_ to ⟨_,_⟩)
 open import Relation.Binary.PropositionalEquality
-open import partensor.Shallow.Dom
+open import PTT.Dom
 
-module partensor.Shallow.Map where
+module PTT.Map where
 
 infixl 4 _,_↦_
 

@@ -1,4 +1,4 @@
-module partensor.Shallow.Dom where
+module PTT.Dom where
 
 open import Data.Sum renaming (inj₁ to inl; inj₂ to inr)
 open import Data.Product

@@ -11,18 +11,18 @@ open import Data.Nat
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
-open import partensor.Shallow.Dom
-import partensor.Shallow.Session as Session
-import partensor.Shallow.Map as Map
-import partensor.Shallow.Env as Env
-import partensor.Shallow.Proto as Proto
+open import PTT.Dom
+import PTT.Session as Session
+import PTT.Map as Map
+import PTT.Env as Env
+import PTT.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
 open Proto   hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
-open import partensor.Shallow.Term
-open import partensor.Shallow.Vars
+open import PTT.Term
+open import PTT.Vars
 
-module partensor.Shallow.Cut where
+module PTT.Cut where
 
 postulate
   TC-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}

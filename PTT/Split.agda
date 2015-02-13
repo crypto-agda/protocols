@@ -9,17 +9,17 @@ open import Data.Sum renaming (inj₁ to inl; inj₂ to inr)
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP hiding ([_]; J)
-open import partensor.Shallow.Dom
-import partensor.Shallow.Session as Session
-import partensor.Shallow.Map as Map
-import partensor.Shallow.Env as Env
-open import partensor.Shallow.Proto as Proto
-open import partensor.Shallow.Term
-open import partensor.Shallow.Vars
+open import PTT.Dom
+import PTT.Session as Session
+import PTT.Map as Map
+import PTT.Env as Env
+open import PTT.Proto as Proto
+open import PTT.Term
+open import PTT.Vars
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
 
-module partensor.Shallow.Split where
+module PTT.Split where
 
 record Split {δI} c A (I : Proto δI) : Set₁ where
   constructor mk

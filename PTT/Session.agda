@@ -3,7 +3,7 @@ open import Data.One
 open import Data.Two
 open import Relation.Binary.PropositionalEquality.NP
 
-module partensor.Shallow.Session where
+module PTT.Session where
 
 data Com : Set where IN OUT : Com
 

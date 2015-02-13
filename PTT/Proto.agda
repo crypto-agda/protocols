@@ -11,13 +11,13 @@ open import Data.Sum renaming (inj₁ to inl; inj₂ to inr)
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality.NP
 
-open import partensor.Shallow.Dom
-open import partensor.Shallow.Session as Session hiding (Ended)
-import partensor.Shallow.Map as Map
+open import PTT.Dom
+open import PTT.Session as Session hiding (Ended)
+import PTT.Map as Map
 open Map using (Map; ε; _,_↦_; _↦_∈_; SelectionAll≡)
-open import partensor.Shallow.Env as Env hiding (Ended; All; lookup; pure; zipWith)
+open import PTT.Env as Env hiding (Ended; All; lookup; pure; zipWith)
 
-module partensor.Shallow.Proto where
+module PTT.Proto where
 
 Sel = Env.Selection
 
