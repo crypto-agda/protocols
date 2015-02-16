@@ -131,6 +131,12 @@ lookup-[]≔ (E , c ↦ v) here = refl
 lookup-[]≔ (E , c₁ ↦ v) (there l) = lookup-[]≔ E l
 
 module _ {a}{A : Set a}{x y : A} where
+  ≔'≔' : ∀ {d δE}(E : Map A δE)(lA : d ∈D δE)
+    → (E [ lA ]≔' x) [ lA ]≔' y ≡ E [ lA ]≔' y
+  ≔'≔' (E , c ↦ v) here = refl
+  ≔'≔' (E , c ↦ v) (there lA) rewrite ≔'≔' E lA = refl
+
+module _ {a}{A : Set a}{x y : A} where
   []≔-red : ∀ {c δE}(E : Map A δE)(l : c ∈D δE)
     → (E [ l ]≔' y) [ l ]≔' x ≡ E [ l ]≔' x
   []≔-red (E , c ↦ v) here = refl

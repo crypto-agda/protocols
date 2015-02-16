@@ -101,6 +101,36 @@ record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ 
     Diff… : DifferentVars… ([↦]∈.l… l) ([↦]∈.l… l')
 open DifferentVars
 
+module _ {X : Set}{c d : X}{A B} where
+  DiffDom-Ended : ∀ {δE c d}{E : Env δE}(l : c ∈D δE)(l' : d ∈D δE)(df : DiffDom l l')
+    → Env.lookup E l ≡ « A » → Env.lookup E l' ≡ « B »
+    → Env.Ended (E [ l ]≔' end) → Env.Ended (E [ l' ]≔' end) → 𝟘
+  DiffDom-Ended {E = E , ._ ↦ ._} .here .(there l) (h/t l) refl ↦B E/c E/d = snd E/d
+  DiffDom-Ended {E = E , ._ ↦ ._} .(there l) .here (t/h l) ↦A refl E/c E/d = snd E/c
+  DiffDom-Ended {E = E , c₂ ↦ v} ._ ._ (t/t df) ↦A ↦B E/c E/d = DiffDom-Ended _ _ df ↦A ↦B (fst E/c) (fst E/d)
+
+
+module _ {δE δF}{f : Env δF → Env δF} where
+  DiffDoms-lookup : ∀ {δI}(I : Proto δI){lE : [ δE ]∈D δI}{lF : [ δF ]∈D δI} → DiffDoms lE lF
+    → Proto.lookup (I [ lF ≔ f ]) lE ≡ Proto.lookup I lE
+  DiffDoms-lookup (I ,[ Δ ]) (h/t l) = refl
+  DiffDoms-lookup (I ,[ Δ ]) (t/h l) = refl
+  DiffDoms-lookup (I ,[ Δ ]) (t/t df) = DiffDoms-lookup I df
+
+
+module _ {c d A B}{f : ∀ {δE} → Env δE → Env δE} where
+  diff-lookup : ∀ {δI}{I : Proto δI}{l : [ c ↦ A ]∈ I}{l' : [ d ↦ B ]∈ I} → DifferentVars l l'
+    → Proto.lookup (I [ [↦]∈.lΔ l' ≔ f ]) ([↦]∈.lΔ l) ≡ Proto.lookup I ([↦]∈.lΔ l)
+  diff-lookup {I = I}{l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ lΔ₁ , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-ten x)) = DiffDoms-lookup I x
+  diff-lookup {l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-in-ten x)) = 𝟘-elim (DiffDom-Ended {c = c}{d = d}_ _ x ↦A ↦A₁ E/c E/c₁)
+
+{- -- bug in coveragechecking
+  diff-lookup {I = I ,[ Δ ]} {mk (mk ⟨ .here , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .(there l) , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-ten (h/t l))) = refl
+  diff-lookup {I = I ,[ Δ ]} {mk (mk ⟨ .(there l) , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .here , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-ten (t/h l))) = refl
+  diff-lookup {I = I ,[ Δ ]} {mk (mk ⟨ ._ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ ._ , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-ten (t/t x))) = ?
+  diff-lookup {l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-in-ten x)) = {!!}
+-}
+
 {-
 Diff-sym : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A ]∈' I}{l' : [ d ↦ B ]∈' I}
     → DifferentVars l l' → DifferentVars l' l
@@ -137,8 +167,12 @@ sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , ref
 
 
 ∈♦₀-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
-          (I₀ ♦Proto' I₁) [/…] (∈♦₀… l) ≈ (I₀ [/…] l) ♦Proto' I₁
-∈♦₀-compute[…] (mk lI lE) = ≈-reflexive (≔[∈]♦₀ lI)
+          (I₀ ♦Proto' I₁) [/…] (∈♦₀… l) ≡ (I₀ [/…] l) ♦Proto' I₁
+∈♦₀-compute[…] (mk lI lE) = ≔[∈]♦₀ lI
+
+∈♦₀-compute[] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈ I₀) →
+          (I₀ ♦Proto' I₁) [/] (∈♦₀ l) ≡ (I₀ [/] l) ♦Proto' I₁
+∈♦₀-compute[] (mk lI lE) = ∈♦₀-compute[…] lI
 
 ∈♦₁-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
           (I₀ ♦Proto' I₁) [/…] (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ [/…] l)
@@ -247,14 +281,16 @@ postulate
   /[]-/Ds : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)
     → (I /Ds l) []/[ b ] σ ≈ (I []/[ b ] σ) /Ds l
 
+[/]-/D[>>]≡ : ∀ {c δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)
+    → (I /D[ l >> lc ]) /Ds l' ≡ (I /Ds l') /D[ l >> lc ]
+[/]-/D[>>]≡ (I ,[ Δ ]) here here lc = ap (_,[_] I) (Ended-/* _ ≡-End End/D _ lc (Ended-/* _))
+[/]-/D[>>]≡ (I ,[ Δ ]) (there l) here lc = refl
+[/]-/D[>>]≡ (I ,[ Δ ]) here (there l') lc = refl
+[/]-/D[>>]≡ (I ,[ Δ ]) (there l) (there l') lc = ap (flip _,[_] Δ) ([/]-/D[>>]≡ I l l' lc)
 
 [/]-/D[>>] : ∀ {c δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)
     → (I /D[ l >> lc ]) /Ds l' ≈ (I /Ds l') /D[ l >> lc ]
-[/]-/D[>>] (I ,[ Δ ]) here here lc = ≈,[] ≈-refl (/*-End _ ∼-End End/D _ lc (/*-End Δ))
-[/]-/D[>>] (I ,[ Δ ]) (there l) here lc = ≈-refl
-[/]-/D[>>] (I ,[ Δ ]) here (there l') lc = ≈-refl
-[/]-/D[>>] (I ,[ Δ ]) (there l) (there l') lc = ≈,[] ([/]-/D[>>] I l l' lc) ∼-refl
-
+[/]-/D[>>] I l l' lc = ≈-reflexive ([/]-/D[>>]≡ I l l' lc)
 
 [≔]D-ext : ∀ {δI δE}(I : Proto δI)(l : [ δE ]∈D δI){f g : Env δE → Env δE}
   (PF : f (Proto.lookup I l) ∼ g (Proto.lookup I l))

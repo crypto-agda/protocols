@@ -67,12 +67,22 @@ constMaps δs v = pure δs (const v)
 
 
 _[_≔_] : ∀ {a}{A : Set a}{δ δs}(I : Maps A δs)(l : [ δ ]∈D δs) → (Map A δ → Map A δ) → Maps A δs
-· [ () ≔ f ]
+-- · [ () ≔ f ]
 (I ,[ Δ ]) [ here ≔ f ] = I ,[ f Δ ]
 (I ,[ Δ ]) [ there l ≔ f ] = I [ l ≔ f ] ,[ Δ ]
 
+module _ {a}{A : Set a}{δ}(f g : Map A δ → Map A δ)(fg : ∀ Δ → g (f Δ) ≡ g Δ) where
+  [≔][≔] : ∀ {δs}(I : Maps A δs)(l : [ δ ]∈D δs) → I [ l ≔ f ] [ l ≔ g ] ≡ I [ l ≔ g ]
+  [≔][≔] (I ,[ Δ ]) here rewrite fg Δ = refl
+  [≔][≔] (I ,[ Δ ]) (there l) rewrite [≔][≔] I l = refl
+
 _[_>>_]≔_ : ∀ {a}{A : Set a}{c δ δs}(I : Maps A δs)(l : [ δ ]∈D δs)(l' : c ∈D δ) → A → Maps A δs
 I [ lΔ >> lA ]≔ v = I [ lΔ ≔ (λ Δ → Δ Env.[ lA ]≔' v) ]
+
+lookup-same : ∀ {a}{A : Set a}{δ δs}(M : Maps A δs)(l : [ δ ]∈D δs)(f : Map A δ → Map A δ)
+  → lookup (M [ l ≔ f ]) l ≡ f (lookup M l)
+lookup-same (M ,[ Δ ]) here f = refl
+lookup-same (M ,[ Δ ]) (there l) f = lookup-same M l f
 
 lookup-diff : ∀ {a}{A : Set a}{δ δ' δs}(M : Maps A δs)(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)(f : Map A δ → Map A δ)
   → DiffDoms l l'
@@ -323,6 +333,9 @@ module _ {a}{A : Set a}{v : A} where
   constMap≡ ε ε = refl
   constMap≡ (E , c ↦ v₁) (F , .c ↦ v₂) rewrite constMap≡ E F = refl
 
+
+
+
 /Ds>>-red : ∀ {c δ δs x}(I : Proto δs)(lΔ : [ δ ]∈D δs)(lA : c ∈D δ)
   → I [ lΔ >> lA ]≔ x /Ds lΔ ≡ I /Ds lΔ
 /Ds>>-red (I ,[ Δ ]) here lA = ap (_,[_] I) (constMap≡ _ _)
@@ -348,6 +361,7 @@ D[>>]≔-lookup : ∀ {δI δE c}(I : Proto δI)(lΔ : [ δE ]∈D δI)(lA : c �
   → I [ lΔ >> lA ]≔ (Env.lookup (lookup I lΔ) lA) ≡ I
 D[>>]≔-lookup (I ,[ Δ ]) here lA rewrite Env.[]≔-lookup Δ lA = refl
 D[>>]≔-lookup (I ,[ Δ ]) (there lΔ) lA rewrite D[>>]≔-lookup I lΔ lA = refl
+
 
 infix 0 _⊆s_
 record _⊆s_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
@@ -502,6 +516,16 @@ abstract
         in I []/[ b ] σ ≈ (I /D[ lΔ >> lA ]) []/[ b ] σ
     select-com {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) here lA = ≈,[] ≈-refl (∼-select-com Δ Δ₁ lA)
     select-com {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) (there lΔ) lA = ≈,[] (select-com σ lΔ lA) ∼-refl
+
+    []/[]-lookup : ∀ {δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(lΔ : [ δE ]∈D δI)
+      → lookup (I []/[ b ] σ) lΔ ≡ lookup I lΔ /[ b ] lookup σ lΔ
+    []/[]-lookup b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here = refl
+    []/[]-lookup b (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there lΔ) = []/[]-lookup b I σ lΔ
+
+    /[]-/D[>>]≡ : ∀ {δE δI c}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)(lc : c ∈D δE)
+      → (I /D[ l >> lc ]) []/[ b ] σ ≡ (I []/[ b ] σ) /D[ l >> lc ]
+    /[]-/D[>>]≡ b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here lc = ap (_,[_] (I []/[ b ] σ)) ([]≔/[]≡ b Δ Δ₁ lc)
+    /[]-/D[>>]≡ b (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) lc rewrite /[]-/D[>>]≡ b I σ l lc = refl -- ap (flip _,[_] (Δ /[ b ] Δ₁)) (/[]-/D[>>]≡ b I σ l lc)
 -- -}
 -- -}
 -- -}

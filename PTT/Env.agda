@@ -174,9 +174,26 @@ abstract
     /D/[] (E , c ↦ v) here 0₂ (σ , .c ↦ 0₂) = ∼-refl
     /D/[] (E , c₁ ↦ v) (there l) b (σ , .c₁ ↦ v₁) = ∼,↦ (/D/[] E l b σ)
 
+    []≔/[]≡ : ∀ {δE c} b (Δ : Map MSession δE) (σ : Map 𝟚 δE)
+           (lc : c ∈D δE) →
+         (Δ [ lc ]≔' end) /[ b ] σ ≡ Δ /[ b ] σ [ lc ]≔' end
+    []≔/[]≡ 1₂ (Δ , c ↦ v) (σ , .c ↦ 1₂) here = refl
+    []≔/[]≡ 1₂ (Δ , c ↦ v) (σ , .c ↦ 0₂) here = refl
+    []≔/[]≡ 0₂ (Δ , c ↦ v) (σ , .c ↦ 1₂) here = refl
+    []≔/[]≡ 0₂ (Δ , c ↦ v) (σ , .c ↦ 0₂) here = refl
+    []≔/[]≡ b (Δ , c₁ ↦ v) (σ , .c₁ ↦ v₁) (there lc) rewrite []≔/[]≡ b Δ σ lc = refl
+
+
     End// : ∀ {δE}(b : 𝟚)(E : Env δE)(σ : Selection δE) → Ended ((E /[ b ] σ) /[ not b ] σ)
     End// b ε ε = _
     End// b (E , c ↦ v) (σ , .c ↦ v₁) = ⟨ (End// b E σ) , SEnd// b v v₁ ⟩
+
+    End→/[] : ∀ {δE}(b : 𝟚)(E : Env δE)(σ : Selection δE) → Ended E → Ended (E /[ b ] σ)
+    End→/[] b ε ε EE = _
+    End→/[] 1₂ (E , c ↦ v) (σ , .c ↦ 1₂) ⟨ EE , Ev ⟩ = ⟨ (End→/[] 1₂ E σ EE) , Ev ⟩
+    End→/[] 1₂ (E , c ↦ v) (σ , .c ↦ 0₂) ⟨ EE , Ev ⟩ = ⟨ (End→/[] 1₂ E σ EE) , _ ⟩
+    End→/[] 0₂ (E , c ↦ v) (σ , .c ↦ 1₂) ⟨ EE , Ev ⟩ = ⟨ (End→/[] 0₂ E σ EE) , _ ⟩
+    End→/[] 0₂ (E , c ↦ v) (σ , .c ↦ 0₂) ⟨ EE , Ev ⟩ = ⟨ (End→/[] 0₂ E σ EE) , Ev ⟩
 
     ∼-select-com : ∀ {c δE}(E : Env δE)(σ : Selection δE)(lA : c ∈D δE)
       → let b = not (σ ‼ lA)
