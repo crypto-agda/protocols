@@ -70,6 +70,7 @@ Ended-∈D {E = _ , _ ↦ _} (there l) EE = Ended-∈D l (fst EE)
 Ended-↦∈ : ∀ {δE c S}{E : Env δE} (l : c ↦ S ∈ E) (EE : Ended E) → Session.Ended S
 Ended-↦∈ ⟨ l R⟩ = Ended-∈D l
 
+{-
 infix 0 _⊆_
 record _⊆_ {δE δF}(E : Env δE)(F : Env δF) : Set₁ where
   constructor mk
@@ -109,19 +110,15 @@ open _∼_ public
 ∼-refl : ∀ {δE}{E : Env δE} → E ∼ E
 ∼-refl = ⟨ ⊆-refl , ⊆-refl ⟩
 
-∼-reflexive : ∀ {δE}{E F : Env δE} → E ≡ F → E ∼ F
-∼-reflexive refl = ∼-refl
 
 ∼-sym : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
 ∼-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
 
-∼-! = ∼-sym
 
 ∼-trans : ∀ {δE δF δG}{E : Env δE}{F : Env δF}{G : Env δG}
           → E ∼ F → F ∼ G → E ∼ G
 ∼-trans ⟨ p , q ⟩ ⟨ r , s ⟩ = ⟨ p ⊆-∙ r , s ⊆-∙ q ⟩
 
-_∼-∙_ = ∼-trans
 
 ∼,↦ : ∀ {δE δF}{E : Env δE}{F : Env δF}{c S}
        → E ∼ F → E , c ↦ S ∼ F , c ↦ S
@@ -129,6 +126,28 @@ _∼-∙_ = ∼-trans
 
 ∼,↦end : ∀ {δE}{E : Env δE}{c} → E , c ↦ end ∼ E
 ∼,↦end = ⟨ ⊆,↦end , ⊆-there ⟩
+-}
+
+infix 0 _∼_
+data _∼_ : ∀ {δE δF}(E : Env δE)(F : Env δF) → Set₁ where
+  ∼-refl : ∀ {δE}{E : Env δE} → E ∼ E
+  ∼-sym : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
+  ∼-trans : ∀ {δE δF δG}{E : Env δE}{F : Env δF}{G : Env δG}
+            → E ∼ F → F ∼ G → E ∼ G
+  ∼,↦ : ∀ {δE δF}{E : Env δE}{F : Env δF}{c S}
+         → E ∼ F → E , c ↦ S ∼ F , c ↦ S
+  ∼,↦end : ∀ {δE}{E : Env δE}{c} → E , c ↦ end ∼ E
+  ∼,[swap] : ∀ {δE c d A B}{E : Env δE} → E , c ↦ A , d ↦ B ∼ E , d ↦ B , c ↦ A
+
+∼-reflexive : ∀ {δE}{E F : Env δE} → E ≡ F → E ∼ F
+∼-reflexive refl = ∼-refl
+
+∼-! : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
+∼-! = ∼-sym
+
+_∼-∙_ : ∀ {δE δF δG}{E : Env δE}{F : Env δF}{G : Env δG}
+            → E ∼ F → F ∼ G → E ∼ G
+_∼-∙_ = ∼-trans
 
 ∼-Ended : ∀ {δE}{E : Env δE} → Ended E → ε ∼ E
 ∼-Ended {E = ε} EE = ∼-refl

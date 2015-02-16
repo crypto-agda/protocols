@@ -362,7 +362,7 @@ D[>>]≔-lookup : ∀ {δI δE c}(I : Proto δI)(lΔ : [ δE ]∈D δI)(lA : c �
 D[>>]≔-lookup (I ,[ Δ ]) here lA rewrite Env.[]≔-lookup Δ lA = refl
 D[>>]≔-lookup (I ,[ Δ ]) (there lΔ) lA rewrite D[>>]≔-lookup I lΔ lA = refl
 
-
+{-
 infix 0 _⊆s_
 record _⊆s_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
   constructor mk
@@ -405,21 +405,15 @@ record _≈_ {δI δJ}(I : Proto δI)(J : Proto δJ) : Set₁ where
 ≈-refl : ∀ {δI}{I : Proto δI} → I ≈ I
 ≈-refl = ⟨ ⊆s-refl , ⊆s-refl ⟩
 
-≈-reflexive : ∀ {δI}{I J : Proto δI} → I ≡ J → I ≈ J
-≈-reflexive refl = ≈-refl
-
 ≈-sym : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
         → I ≈ J → J ≈ I
 ≈-sym ⟨ p , q ⟩ = ⟨ q , p ⟩
 
-≈-!_ = ≈-sym
 
 ≈-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
           → I ≈ J → J ≈ K → I ≈ K
 ≈-trans ⟨ p , q ⟩ ⟨ r , s ⟩ = ⟨ ⊆s-trans p r , ⊆s-trans s q ⟩
 
-infixr 8 _≈-∙_
-_≈-∙_ = ≈-trans
 
 ≈,[] : ∀ {δE δF δI δJ}{E : Env δE}{F : Env δF}{I : Proto δI}{J : Proto δJ}
        → I ≈ J → E ∼ F → I ,[ E ] ≈ J ,[ F ]
@@ -446,6 +440,31 @@ un-⊆s ⊆s,[swap] (mk (theRe[] (there l)) lE) = ⟨ mk (theRe[] (there l)) lE 
 ≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
 _≈_.get-⊆s ≈,[swap] = ⊆s,[swap]
 _≈_.get-⊇s ≈,[swap] = ⊆s,[swap]
+-}
+
+infix 0 _≈_
+data _≈_ : ∀{δI δJ}(I : Proto δI)(J : Proto δJ) → Set₁ where
+  ≈-refl : ∀ {δI}{I : Proto δI} → I ≈ I
+  ≈-sym : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
+          → I ≈ J → J ≈ I
+  ≈-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
+            → I ≈ J → J ≈ K → I ≈ K
+  ≈,[] : ∀ {δE δF δI δJ}{E : Env δE}{F : Env δF}{I : Proto δI}{J : Proto δJ}
+         → I ≈ J → E ∼ F → I ,[ E ] ≈ J ,[ F ]
+  ≈,[end] : ∀ {δE δI}{E : Env δE}{I : Proto δI}(EE : Env.Ended E)
+          → I ,[ E ] ≈ I
+  ≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
+
+≈-!_ : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → J ≈ I
+≈-!_ = ≈-sym
+
+infixr 8 _≈-∙_
+
+_≈-∙_ : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK} → I ≈ J → J ≈ K → I ≈ K
+_≈-∙_ = ≈-trans
+
+≈-reflexive : ∀ {δI}{I J : Proto δI} → I ≡ J → I ≈ J
+≈-reflexive refl = ≈-refl
 
 ♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto (B ♦Proto C) ≈ (A ♦Proto B) ♦Proto C
 ♦-assoc {C = ·} = ≈-refl
