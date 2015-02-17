@@ -21,12 +21,9 @@ open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
 open Proto   hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
 open import PTT.Term
 open import PTT.Vars
+open import PTT.Conversion
 
 module PTT.Split where
-
-postulate
-  TC-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
-    → I ≈ J → TC'⟨ I ⟩ → TC'⟨ J ⟩
 
 
 EndItσ : ∀ {c δI δE}(b : 𝟚)(I : Proto δI)(σs : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)

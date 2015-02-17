@@ -41,6 +41,10 @@ abstract
     _/[_]_ : ∀ {δ}(Δ : Env δ)(b : 𝟚)(σ : Selection δ) → Env δ
     Δ /[ b ] σ = zipWith (selectProj b) Δ σ
 
+    /[]-def : ∀ {δ}(Δ : Env δ)(b : 𝟚)(σ : Selection δ)
+      → Δ /[ b ] σ ≡ zipWith (selectProj b) Δ σ
+    /[]-def Δ b σ = refl
+
 module _ {δ}(Δ : Env δ)(σ : Selection δ) where
     _/₀_ : Env δ
     _/₀_ = Δ /[ 0₂ ] σ
@@ -131,16 +135,24 @@ open _∼_ public
 infix 0 _∼_
 data _∼_ : ∀ {δE δF}(E : Env δE)(F : Env δF) → Set₁ where
   ∼-refl : ∀ {δE}{E : Env δE} → E ∼ E
-  ∼-sym : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
   ∼-trans : ∀ {δE δF δG}{E : Env δE}{F : Env δF}{G : Env δG}
             → E ∼ F → F ∼ G → E ∼ G
   ∼,↦ : ∀ {δE δF}{E : Env δE}{F : Env δF}{c S}
          → E ∼ F → E , c ↦ S ∼ F , c ↦ S
   ∼,↦end : ∀ {δE}{E : Env δE}{c} → E , c ↦ end ∼ E
+  ∼,↦end' : ∀ {δE}{E : Env δE}{c} → E ∼ E , c ↦ end
   ∼,[swap] : ∀ {δE c d A B}{E : Env δE} → E , c ↦ A , d ↦ B ∼ E , d ↦ B , c ↦ A
 
 ∼-reflexive : ∀ {δE}{E F : Env δE} → E ≡ F → E ∼ F
 ∼-reflexive refl = ∼-refl
+
+∼-sym : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
+∼-sym ∼-refl = ∼-refl
+∼-sym (∼-trans eq eq₁) = ∼-trans (∼-sym eq₁) (∼-sym eq)
+∼-sym (∼,↦ eq) = ∼,↦ (∼-sym eq)
+∼-sym ∼,↦end = ∼,↦end'
+∼-sym ∼,↦end' = ∼,↦end
+∼-sym ∼,[swap] = ∼,[swap]
 
 ∼-! : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
 ∼-! = ∼-sym

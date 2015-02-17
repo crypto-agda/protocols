@@ -138,6 +138,10 @@ abstract
     _[]/[_]_ : ∀ {δs}(I : Proto δs)(b : 𝟚)(σs : Selections δs) → Proto δs
     I []/[ b ] σs = zipWith (λ E σ → E /[ b ] σ) I σs
 
+    []/[]-def : ∀ {δs}(I : Proto δs)(b : 𝟚)(σs : Selections δs) →
+       I []/[ b ] σs ≡ zipWith (λ E σ → E /[ b ] σ) I σs
+    []/[]-def I b σs = refl
+
 module _ {δs}(I : Proto δs)(σs : Selections δs) where
     infixl 6 _[]/₀_ _[]/₁_
     _[]/₀_ : Proto δs
@@ -151,15 +155,29 @@ data SelAtMost (n : ℕ){δ : Dom} : Sel δ → ℕ → Set where
   ₁ : SelAtMost n ₁ n
   ₘ : ∀ {σ} → SelAtMost n (ₘ σ) (suc n)
 -}
-data SelAtMost (n : ℕ){δ : Dom}(σ : Sel δ) : ℕ → Set where
-  ₀₁ : ∀ b → SelectionAll≡ b σ → SelAtMost n σ n
+
+EnvSelectionAll≡ : ∀ {δ}(b : 𝟚) → Env δ → Selection δ → Set
+EnvSelectionAll≡ b ε ε = 𝟙
+EnvSelectionAll≡ b (E , c ↦ « S ») (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ × b ≡ v₁
+EnvSelectionAll≡ b (E , c ↦ end) (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ
+
+data SelAtMost (n : ℕ){δ : Dom}(E : Env δ)(σ : Sel δ) : ℕ → Set where
+  ₀₁ : ∀ b → EnvSelectionAll≡ b E σ → SelAtMost n E σ n
   ₘ : {-TODO insert relevant negation of SelectionAll≡ b.
         e.g. σ [ c₀ ]= 0₂ and σ [ c₁ ]= 1₂ -}
-      SelAtMost n σ (suc n)
+      SelAtMost n E σ (suc n)
 
-data AtMost : ℕ → ∀ {δs} → Selections δs → Set where
-  · : ∀ {n} → AtMost n ·
-  _,[_] : ∀ {n m δ δs}{I σ} → AtMost n {δs} I → SelAtMost n {δ} σ m → AtMost m (I ,[ σ ])
+SelAtMost-wk : ∀ {n m δ}{E : Env δ}{σ : Sel δ} → SelAtMost n E σ m → SelAtMost (suc n) E σ (suc m)
+SelAtMost-wk (₀₁ b x) = ₀₁ b x
+SelAtMost-wk ₘ = ₘ
+
+data AtMost : ℕ → ∀ {δs} → Proto δs → Selections δs → Set where
+  · : ∀ {n} → AtMost n · ·
+  _,[_] : ∀ {n m δ δs}{E : Env δ}{I : Proto δs}{σs σ} → AtMost n I σs → SelAtMost n E σ m → AtMost m (I ,[ E ]) (σs ,[ σ ])
+
+AtMost-wk : ∀ {n δs}{I : Proto δs}{σs : Selections δs} → AtMost n I σs → AtMost (suc n) I σs
+AtMost-wk · = ·
+AtMost-wk (A ,[ x ]) = (AtMost-wk A) ,[ SelAtMost-wk x ]
 
 {-
 data ZipP : ℕ → Proto → Proto → Proto → Set₁ where
@@ -445,15 +463,26 @@ _≈_.get-⊇s ≈,[swap] = ⊆s,[swap]
 infix 0 _≈_
 data _≈_ : ∀{δI δJ}(I : Proto δI)(J : Proto δJ) → Set₁ where
   ≈-refl : ∀ {δI}{I : Proto δI} → I ≈ I
-  ≈-sym : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
-          → I ≈ J → J ≈ I
   ≈-trans : ∀ {δI δJ δK}{I : Proto δI}{J : Proto δJ}{K : Proto δK}
             → I ≈ J → J ≈ K → I ≈ K
   ≈,[] : ∀ {δE δF δI δJ}{E : Env δE}{F : Env δF}{I : Proto δI}{J : Proto δJ}
          → I ≈ J → E ∼ F → I ,[ E ] ≈ J ,[ F ]
-  ≈,[end] : ∀ {δE δI}{E : Env δE}{I : Proto δI}(EE : Env.Ended E)
-          → I ,[ E ] ≈ I
+  ≈,[ε] : ∀ {δI}{I : Proto δI} → I ,[ ε ] ≈ I
+  ≈,[ε]' : ∀ {δI}{I : Proto δI} → I ≈ I ,[ ε ]
   ≈,[swap] : ∀ {δE δF δI}{I : Proto δI}{E : Env δE}{F : Env δF} → I ,[ E ] ,[ F ] ≈ I ,[ F ] ,[ E ]
+
+≈-sym : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}
+          → I ≈ J → J ≈ I
+≈-sym ≈-refl = ≈-refl
+≈-sym (≈-trans eq eq₁) = ≈-trans (≈-sym eq₁) (≈-sym eq)
+≈-sym (≈,[] eq x) = ≈,[] (≈-sym eq) (∼-sym x)
+≈-sym ≈,[ε] = ≈,[ε]'
+≈-sym ≈,[ε]' = ≈,[ε]
+≈-sym ≈,[swap] = ≈,[swap]
+
+≈,[end] : ∀ {δE δI}{E : Env δE}{I : Proto δI}(EE : Env.Ended E)
+          → I ,[ E ] ≈ I
+≈,[end] EE = ≈-trans (≈,[] ≈-refl (∼-! (∼-Ended EE))) ≈,[ε]
 
 ≈-!_ : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → J ≈ I
 ≈-!_ = ≈-sym
@@ -504,9 +533,11 @@ module _ {δI}(b : 𝟚)(σ : Selections δI) where
   Selections♦ · = σ
   Selections♦ (δK ,[ x ]) = Selections♦ δK ,[ constMap x b ]
 
+{-
   atMost♦ : ∀ {n} δK → AtMost n σ → AtMost n (Selections♦ δK)
   atMost♦ · A = A
   atMost♦ (δK ,[ x ]) A = atMost♦ δK A ,[ (₀₁ b (pureAll x (λ _ → refl))) ]
+-}
 
 abstract
     Selections♦/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)

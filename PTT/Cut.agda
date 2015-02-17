@@ -22,6 +22,7 @@ open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
 open Proto   hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
 open import PTT.Term
 open import PTT.Vars
+open import PTT.Conversion
 open import PTT.Split
 
 module PTT.Cut where

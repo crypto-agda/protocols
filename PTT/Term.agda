@@ -39,7 +39,7 @@ data ⟨_⟩ {δI}(I : Proto δI) : Set₁ where
 
   split :
       (σs : Selections δI)
-      (A1 : AtMost 1 σs)
+      (A1 : AtMost 1 I σs)
       (P₀ : ⟨ I []/₀ σs ⟩)
       (P₁ : ⟨ I []/₁ σs ⟩)
     → ⟨ I ⟩
@@ -81,7 +81,7 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
       (l : [ c ↦ S₀ ⊗ S₁ …]∈ I)
       (σs : Selections δI)
       (σE : Selection ([↦…]∈.δE l))
-      (A0 : AtMost 0 σs)
+      (A0 : AtMost 0 I σs)
       (P₀ : ∀ c₀ → T⟨ I [/…] l []/₀ σs ,[ E/ l /₀ σE , c₀ ↦ « S₀ » ] ⟩)
       (P₁ : ∀ c₁ → T⟨ I [/…] l []/₁ σs ,[ E/ l /₁ σE , c₁ ↦ « S₁ » ] ⟩)
     → T⟨ I ⟩
@@ -98,14 +98,14 @@ data T⟨_⟩ {δI}(I : Proto δI) : Set₁ where
     ∀ {S₀ S₁}
       (D : Dual S₀ S₁)
       (σs : Selections δI)
-      (A0 : AtMost 0 σs)
+      (A0 : AtMost 0 I σs)
       (P₀ : ∀ c₀ → T⟨ I []/₀ σs ,[ c₀ ↦ S₀ ] ⟩)
       (P₁ : ∀ c₁ → T⟨ I []/₁ σs ,[ c₁ ↦ S₁ ] ⟩)
     → T⟨ I ⟩
 
  T-split :
       (σs : Selections δI)
-      (A1 : AtMost 1 σs)
+      (A1 : AtMost 1 I σs)
       (P₀ : T⟨ I []/₀ σs ⟩)
       (P₁ : T⟨ I []/₁ σs ⟩)
     → T⟨ I ⟩
@@ -116,7 +116,7 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
     ∀ {c S₀ S₁}
       (l : [ c ↦ S₀ ⊗ S₁ ]∈ I)
       (σs : Selections δI)
-      (A0 : AtMost 0 σs)
+      (A0 : AtMost 0 (I [/] l) σs)
       (P₀ : ∀ c₀ → TC'⟨ I [/] l []/₀ σs ,[ c₀ ↦ S₀ ] ⟩)
       (P₁ : ∀ c₁ → TC'⟨ I [/] l []/₁ σs ,[ c₁ ↦ S₁ ] ⟩)
     → TC'⟨ I ⟩
@@ -143,7 +143,7 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
 
  TC-split :
       (σs : Selections δI)
-      (A1 : AtMost 1 σs)
+      (A1 : AtMost 1 I σs)
       (P₀ : TC'⟨ I []/₀ σs ⟩)
       (P₁ : TC'⟨ I []/₁ σs ⟩)
     → TC'⟨ I ⟩
