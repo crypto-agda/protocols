@@ -101,8 +101,21 @@ data _≈'_ : Doms → Doms → Set where
 ≈-for-app ≈,[ε]' = refl
 ≈-for-app ≈,[swap] = refl
 
+EEnded-conv : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → Env.Ended E → Env.Ended F
+EEnded-conv ∼-refl EE = EE
+EEnded-conv (∼-trans eq eq₁) EE = EEnded-conv eq₁ (EEnded-conv eq EE)
+EEnded-conv (∼,↦ eq) EE = ⟨ EEnded-conv eq (fst EE) , snd EE ⟩
+EEnded-conv ∼,↦end EE = fst EE
+EEnded-conv ∼,↦end' EE = ⟨ EE , _ ⟩
+EEnded-conv ∼,[swap] EE = ⟨ ⟨ (fst (fst EE)) , (snd EE) ⟩ , (snd (fst EE)) ⟩
+
 Ended-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → Ended I → Ended J
-Ended-conv eq EI = {!!}
+Ended-conv ≈-refl EI = EI
+Ended-conv (≈-trans eq eq₁) EI = Ended-conv eq₁ (Ended-conv eq EI)
+Ended-conv (≈,[] eq x) ⟨ proj₁ , proj₂ ⟩ = ⟨ Ended-conv eq proj₁ , EEnded-conv x proj₂ ⟩
+Ended-conv ≈,[ε] EI = fst EI
+Ended-conv ≈,[ε]' EI = ⟨ EI , _ ⟩
+Ended-conv ≈,[swap] EI = ⟨ ⟨ (fst (fst EI)) , (snd EI) ⟩ , (snd (fst EI)) ⟩
 
 mutual
   ∈D-conv : ∀ {c δE δF A}{E : Env δE}{F : Env δF} → E ∼ F → (l : c ∈D δE) → E ‼ l ≡ « A »
@@ -132,11 +145,25 @@ mutual
   ∈D-conv‼ ∼,[swap] (there here) El = refl
   ∈D-conv‼ ∼,[swap] (there (there l)) El = refl
 
+∈D≔-conv :  ∀ {c δE δF A}{E : Env δE}{F : Env δF}(eq : E ∼ F)(lA : c ∈D δE)(↦A : E ‼ lA ≡ « A »)
+    → E [ lA ]≔' end ∼ F [ ∈D-conv eq lA ↦A ]≔' end
+∈D≔-conv ∼-refl lA ↦A = ∼-refl
+∈D≔-conv (∼-trans eq eq₁) lA ↦A = ∼-trans (∈D≔-conv eq lA ↦A)
+                                    (∈D≔-conv eq₁ (∈D-conv eq lA ↦A) (∈D-conv‼ eq lA ↦A ∙ ↦A))
+∈D≔-conv (∼,↦ eq) here ↦A = ∼,↦ eq
+∈D≔-conv (∼,↦ eq) (there lA) ↦A = ∼,↦ (∈D≔-conv eq lA ↦A)
+∈D≔-conv ∼,↦end here ()
+∈D≔-conv ∼,↦end (there lA) ↦A = ∼,↦end
+∈D≔-conv ∼,↦end' lA ↦A = ∼,↦end'
+∈D≔-conv ∼,[swap] here ↦A = ∼,[swap]
+∈D≔-conv ∼,[swap] (there here) ↦A = ∼,[swap]
+∈D≔-conv ∼,[swap] (there (there lA)) ↦A = ∼,[swap]
+
 [↦]∈-conv : ∀ {c A}{δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → [ c ↦ A ]∈ I → [ c ↦ A ]∈ J
 [↦]∈-conv ≈-refl l = l
 [↦]∈-conv (≈-trans eq eq₁) l = [↦]∈-conv eq₁ ([↦]∈-conv eq l)
 [↦]∈-conv (≈,[] eq x) (mk5 here refl lA ↦A E/c) = mk5 here refl (∈D-conv x lA ↦A)
-      (∈D-conv‼ x lA ↦A ∙ ↦A) {!!}
+      (∈D-conv‼ x lA ↦A ∙ ↦A) (EEnded-conv (∈D≔-conv x lA ↦A) E/c)
 [↦]∈-conv (≈,[] eq x) (mk5 (there lΔ) ↦Δ lA ↦A E/c) = there[]' ([↦]∈-conv eq (mk5 lΔ ↦Δ lA ↦A E/c))
 [↦]∈-conv ≈,[ε] (mk (mk ⟨ here , refl ⟩ ⟨ () , ↦A ⟩) E/c)
 [↦]∈-conv ≈,[ε] (mk (mk ⟨ there lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c) = mk5 lΔ ↦Δ lA ↦A E/c
@@ -145,28 +172,45 @@ mutual
 [↦]∈-conv ≈,[swap] (mk5 (there here) ↦Δ lA ↦A E/c) = mk5 here ↦Δ lA ↦A E/c
 [↦]∈-conv ≈,[swap] (mk5 (there (there lΔ)) ↦Δ lA ↦A E/c) = mk5 (there (there lΔ)) ↦Δ lA ↦A E/c
 
-pickBool : ∀ {δE} → Selection δE → 𝟚
-pickBool _ = 1₂
---pickBool ε = 1₂
---pickBool (Δ , c ↦ v) = v
-
-module _ (b : 𝟚) where
-  Selection-conv' : ∀ {δE δF} → δE ∼' δF → Selection δE → Selection δF
-  Selection-conv' ∼-refl Δ = Δ
-  Selection-conv' (∼-trans eq eq₁) Δ = Selection-conv' eq₁ (Selection-conv' eq Δ)
-  Selection-conv' (∼,↦ eq) (Δ , c ↦ v) = Selection-conv' eq Δ , c ↦ v
-  Selection-conv' ∼,↦end (Δ , c ↦ v) = Δ
-  Selection-conv' ∼,↦end' ε = ε , _ ↦ b --somewhat arbitrary
-  Selection-conv' ∼,↦end' (Δ , c₁ ↦ v) = Δ , c₁ ↦ v , _ ↦ v -- somewhat arbitrary
-  Selection-conv' ∼,[swap] (Δ , c ↦ v , c₁ ↦ v₁) = Δ , c₁ ↦ v₁ , c ↦ v
+Selection-conv' : ∀ {δE δF} → δE ∼' δF → Selection δE → Selection δF
+Selection-conv' ∼-refl Δ = Δ
+Selection-conv' (∼-trans eq eq₁) Δ = Selection-conv' eq₁ (Selection-conv' eq Δ)
+Selection-conv' (∼,↦ eq) (Δ , c ↦ v) = Selection-conv' eq Δ , c ↦ v
+Selection-conv' ∼,↦end (Δ , c ↦ v) = Δ
+Selection-conv' ∼,↦end' Δ = Δ , _ ↦ 1₂ --somewhat arbitrary
+Selection-conv' ∼,[swap] (Δ , c ↦ v , c₁ ↦ v₁) = Δ , c₁ ↦ v₁ , c ↦ v
 
 Selection-conv : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → Selection δE → Selection δF
-Selection-conv eq Δ = Selection-conv' (pickBool Δ) (∼-forget eq) Δ
+Selection-conv eq Δ = Selection-conv' (∼-forget eq) Δ
+
+Selection/[]-conv : ∀ {δE δF}{E : Env δE}{F : Env δF}(eq : E ∼ F)(σ : Selection δE)(b : 𝟚)
+   → E Env./[ b ] σ ∼ F Env./[ b ] Selection-conv eq σ
+Selection/[]-conv ∼-refl σs b = ∼-refl
+Selection/[]-conv (∼-trans eq eq₁) σs b = ∼-trans (Selection/[]-conv eq σs b)
+                                            (Selection/[]-conv eq₁ (Selection-conv eq σs) b)
+Selection/[]-conv {E = E , ._ ↦ S}{F , ._ ↦ .S} (∼,↦ eq) (σs , c ↦ v) b
+  rewrite /[]-def (E , c ↦ S) b (σs , c ↦ v)
+        | /[]-def (F , c ↦ S) b (Selection-conv eq σs , c ↦ v)
+  = ∼,↦ (∼-reflexive (! /[]-def E b σs) ∼-∙ Selection/[]-conv eq σs b ∼-∙ ∼-reflexive (/[]-def F b (Selection-conv eq σs)))
+Selection/[]-conv {E = E , .c ↦ end} ∼,↦end (σs , c ↦ v) b
+  rewrite /[]-def (E , c ↦ end) b (σs , c ↦ v)
+        | /[]-def E b σs
+        | selectProjEnd b v
+  = ∼,↦end
+Selection/[]-conv {E = E}{.E , c ↦ end} ∼,↦end' σs b
+  rewrite /[]-def E b σs
+        | /[]-def (E , c ↦ end) b (σs , c ↦ 1₂)
+        | selectProjEnd b 1₂
+  = ∼,↦end'
+Selection/[]-conv {E = E , c ↦ A , c₁ ↦ B} ∼,[swap] (σs , .c ↦ v , .c₁ ↦ v₁) b
+  rewrite /[]-def (E , c ↦ A , c₁ ↦ B) b (σs , c ↦ v , c₁ ↦ v₁)
+        | /[]-def (E , c₁ ↦ B , c ↦ A) b (σs , c₁ ↦ v₁ , c ↦ v)
+  = ∼,[swap]
 
 Selections-conv' : ∀ {δI δJ} → δI ≈' δJ → Selections δI → Selections δJ
 Selections-conv' ≈-refl σs = σs
 Selections-conv' (≈-trans eq eq₁) σs = Selections-conv' eq₁ (Selections-conv' eq σs)
-Selections-conv' (≈,[] eq x) (σs ,[ Δ ]) = Selections-conv' eq σs ,[ Selection-conv' (pickBool Δ) x Δ ]
+Selections-conv' (≈,[] eq x) (σs ,[ Δ ]) = Selections-conv' eq σs ,[ Selection-conv' x Δ ]
 Selections-conv' ≈,[ε] (σs ,[ Δ ]) = σs
 Selections-conv' ≈,[ε]' σs = σs ,[ ε ]
 Selections-conv' ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) = σs ,[ Δ₁ ] ,[ Δ ]
@@ -174,18 +218,18 @@ Selections-conv' ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) = σs ,[ Δ₁ ] ,[ Δ ]
 Selections-conv : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → Selections δI → Selections δJ
 Selections-conv eq = Selections-conv' (≈-forget eq)
 
+
 EnvSelectionAll-conv : ∀ {δE δF} {E : Env δE} {F : Env δF} b
                          (eq : E ∼ F) (Δ : Map 𝟚 δE) →
                        EnvSelectionAll≡ b E Δ →
-                       EnvSelectionAll≡ b F (Selection-conv' (pickBool Δ) (∼-forget eq) Δ)
+                       EnvSelectionAll≡ b F (Selection-conv' (∼-forget eq) Δ)
 EnvSelectionAll-conv b ∼-refl Δ all = all
 EnvSelectionAll-conv b (∼-trans eq eq₁) Δ all = EnvSelectionAll-conv b eq₁ (Selection-conv eq Δ)
                                                   (EnvSelectionAll-conv b eq Δ all)
 EnvSelectionAll-conv b (∼,↦ {S = « S »} eq) (Δ , c ↦ v) all = ⟨ (EnvSelectionAll-conv b eq Δ (fst all)) , (snd all) ⟩
 EnvSelectionAll-conv b (∼,↦ {S = end} eq) (Δ , c ↦ v) all = EnvSelectionAll-conv b eq Δ all
 EnvSelectionAll-conv b ∼,↦end (Δ , c ↦ v) all = all
-EnvSelectionAll-conv b ∼,↦end' ε all = all
-EnvSelectionAll-conv b ∼,↦end' (Δ , c₁ ↦ v) all = all
+EnvSelectionAll-conv b ∼,↦end' Δ all = all
 EnvSelectionAll-conv b (∼,[swap] {A = « S »} {« S₁ »}) (Δ , c ↦ v , c₁ ↦ v₁) all = ⟨ ⟨ (fst (fst all)) , (snd all) ⟩ , (snd (fst all)) ⟩
 EnvSelectionAll-conv b (∼,[swap] {A = end} {« S »}) (Δ , c ↦ v , c₁ ↦ v₁) all = all
 EnvSelectionAll-conv b (∼,[swap] {A = « S »} {end}) (Δ , c ↦ v , c₁ ↦ v₁) all = all
@@ -210,10 +254,10 @@ AtMost-conv ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) (An ,[ ₘ ] ,[ ₀₁ b x ]) = 
 AtMost-conv ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) (An ,[ ₘ ] ,[ ₘ ]) = An ,[ ₘ ] ,[ ₘ ]
 
 ≈-[/] : ∀ {δI δJ c A}{I : Proto δI}{J : Proto δJ}(eq : I ≈ J)(l : [ c ↦ A ]∈ I)
-  → I [/] l ≈ J [/] [↦]∈-conv eq l
+  → I / l ≈ J / [↦]∈-conv eq l
 ≈-[/] ≈-refl l = ≈-refl
 ≈-[/] (≈-trans eq eq₁) l = ≈-trans (≈-[/] eq l) (≈-[/] eq₁ ([↦]∈-conv eq l))
-≈-[/] (≈,[] eq x) (mk5 here refl lA ↦A E/c) = ≈,[] eq (/*-End _ ∼-End /*-End _) -- (/*-End _ ∼-End /*-End _) --magic
+≈-[/] (≈,[] eq x) (mk5 here refl lA ↦A E/c) = ≈,[] eq (∈D≔-conv x lA ↦A)
 ≈-[/] (≈,[] eq x) (mk5 (there lΔ) ↦Δ lA ↦A E/c) = ≈,[] (≈-[/] eq (mk5 lΔ ↦Δ lA ↦A E/c)) x
 ≈-[/] ≈,[ε] (mk5 here refl () ↦A E/c)
 ≈-[/] ≈,[ε] (mk5 (there lΔ) ↦Δ lA ↦A E/c) = ≈,[ε]
@@ -226,11 +270,11 @@ AtMost-conv ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) (An ,[ ₘ ] ,[ ₘ ]) = An ,[ �
     → I []/[ b ] σs ≈ J []/[ b ] Selections-conv eq σs
 ≈-[]/[] b ≈-refl σs = ≈-refl
 ≈-[]/[] b (≈-trans eq eq₁) σs = ≈-trans (≈-[]/[] b eq σs) (≈-[]/[] b eq₁ (Selections-conv eq σs))
-≈-[]/[] {I = I ,[ E ]}{J ,[ F ]}b (≈,[] eq x) (σs ,[ Δ ])
+≈-[]/[] {I = I ,[ E ]}{J ,[ F ]} b (≈,[] eq x) (σs ,[ Δ ])
   rewrite []/[]-def (I ,[ E ]) b (σs ,[ Δ ])
         | []/[]-def (J ,[ F ]) b (Selections-conv eq σs ,[ Selection-conv x Δ ])
   = ≈,[] (≈-reflexive (! []/[]-def I b σs) ≈-∙ ≈-[]/[] b eq σs ≈-∙ ≈-reflexive ([]/[]-def J b (Selections-conv eq σs)))
-         {!!}
+         (Selection/[]-conv x Δ b)
 ≈-[]/[] {J = I} 0₂ ≈,[ε] (σs ,[ ε ])
   rewrite []/[]-def I 0₂ σs
         | []/[]-def (I ,[ ε ]) 0₂ (σs ,[ ε ])

@@ -157,6 +157,7 @@ data _∼_ : ∀ {δE δF}(E : Env δE)(F : Env δF) → Set₁ where
 ∼-! : ∀ {δE δF}{E : Env δE}{F : Env δF} → E ∼ F → F ∼ E
 ∼-! = ∼-sym
 
+infixr 8 _∼-∙_
 _∼-∙_ : ∀ {δE δF δG}{E : Env δE}{F : Env δF}{G : Env δG}
             → E ∼ F → F ∼ G → E ∼ G
 _∼-∙_ = ∼-trans

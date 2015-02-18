@@ -33,13 +33,13 @@ EndItσ b I σs lΔ lA E/c = tr Env.Ended
    ∙ ! ([]≔/[]≡ b (Proto.lookup I lΔ) (Proto.lookup σs lΔ) lA)))
   (End→/[] b (Proto.lookup I lΔ [ lA ]≔' end) (Proto.lookup σs lΔ) E/c)
 
-EndIt/Ds : ∀ {c δI δE δF}(I : Proto δI)(lΔ' : [ δF ]∈D δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
-  → Env.Ended (Proto.lookup I lΔ [ lA ]≔' end) → Env.Ended (Proto.lookup (I /Ds lΔ') lΔ [ lA ]≔' end)
-EndIt/Ds I lΔ' lΔ lA E/c with Proto.sameDoms? lΔ' lΔ
-EndIt/Ds I lΔ' lΔ lA E/c | inl x = tr Env.Ended (! (ap (λ I₁ → I₁ [ lA ]≔' end) (lookup-diff I lΔ' lΔ _ x))) E/c
-EndIt/Ds I lΔ' .lΔ' lA E/c | inr ⟨ refl , refl ⟩ = tr Env.Ended
-  (! (ap (λ I₁ → I₁ [ lA ]≔' end) (lookup-same I lΔ' (Map.map (const end)))))
-  (End/D _ lA (/*-End _))
+EndIt/Ds : ∀ {c d δI δE δF}(I : Proto δI)(lΔ' : [ δF ]∈D δI)(lA' : d ∈D δF)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
+  → Env.Ended (Proto.lookup I lΔ [ lA ]≔' end) → Env.Ended (Proto.lookup (I /D[ lΔ' >> lA' ]) lΔ [ lA ]≔' end)
+EndIt/Ds I lΔ' lA' lΔ lA E/c with Proto.sameDoms? lΔ' lΔ
+EndIt/Ds I lΔ' lA' lΔ lA E/c | inl x = tr Env.Ended (! (ap (λ I₁ → I₁ [ lA ]≔' end) (lookup-diff I lΔ' lΔ _ x))) E/c
+EndIt/Ds I lΔ' lA' .lΔ' lA E/c | inr ⟨ refl , refl ⟩ = tr Env.Ended
+   (! (ap (λ I → I [ lA ]≔' end) (lookup-same I lΔ' _) ∙ ≔'-com (Proto.lookup I lΔ') lA' lA))
+   (End/D _ lA' E/c)
 
 record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
   field
@@ -47,9 +47,9 @@ record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
       → DifferentVars… ([↦]∈.l… l) ([↦]∈.l… l') → TC'⟨ J ⟩
       → TC'⟨ (J /D[ [↦]∈.lΔ l >> [↦]∈.lA l ] /D[ [↦]∈.lΔ l' >> [↦]∈.lA l' ]) ♦Proto' K ⟩
     cont-⊗ : ∀ {S T} → A ≡ S ⊗ T → ∀ {d e δ₀ δ₁}{J₀ : Proto δ₀}{J₁ : Proto δ₁}(l : [ d ↦ S ]∈ J₀)(l' : [ e ↦ T ]∈ J₁)
-      → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩ → TC'⟨ ((J₀ [/] l ♦Proto' J₁ [/] l')) ♦Proto' K ⟩
+      → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩ → TC'⟨ ((J₀ / l ♦Proto' J₁ / l')) ♦Proto' K ⟩
     cont-! : ∀ {M S} → A ≡ act (send {M} S) → ∀ {d δI}{I : Proto δI}(m : M)(l : [ d ↦ S m ]∈ I) → TC'⟨ I ⟩
-      → TC'⟨ I /… [↦]∈.l… l ♦Proto' K ⟩
+      → TC'⟨ I / l ♦Proto' K ⟩
     cont-? : ∀ {M S} → A ≡ act (recv {M} S) → ∀ {d δE δI}{I : Proto δI}{E : Env δE}
       (lI : [ E ]∈ I)(lA : d ∈D δE)(E/c : Env.Ended (E Env./D lA)) (C : (m : M) → TC'⟨ I [ []∈.lΔ lI >> lA ]≔ « S m » ⟩)
       → TC'⟨ I /D[ []∈.lΔ lI >> lA ] ♦Proto' K ⟩
@@ -60,98 +60,111 @@ TC-∈Split : ∀ {δI δK c A}{I : Proto δI}{K : Proto δK} → TC-Split A K �
   → TC'⟨ I ⟩ → TC'⟨ I /… [↦]∈.l… l ♦Proto' K ⟩
 TC-∈Split cont l (TC-⊗-out l₁ σs A0 P₀ P₁) with sameVar? ([↦]∈.l… l) ([↦]∈.l… l₁)
 TC-∈Split {I = I} cont (mk l Y) (TC-⊗-out (mk .l X) σs A0 P₀ P₁) | same = TC-conv
-  (♦-cong₂ (♦-cong₂ (≈,[end] _) (≈,[end] _) ≈-∙ Sel♦ σs ≈-∙ [≔]-ext I ([↦…]∈.lI l) (Ended-/* _ ∼-End X)) ≈-refl)
+  (♦-cong₂ (♦-cong₂ (≈,[end] _) (≈,[end] _) ≈-∙ Sel♦ σs) ≈-refl)
   (cont-⊗ cont refl (mk (mk heRe[] heRe) _)
                     (mk (mk heRe[] heRe) _)
                     (P₀ c₀) (P₁ c₁))
   where postulate c₀ c₁ : _
 TC-∈Split {δK = δK}{I = I}{K} cont (mk5 lΔ refl lA ↦A E/c) (TC-⊗-out {S₀ = S₀}{S₁} l₁ σs A0 P₀ P₁) | diff l/=l'
   with Map.lookup (Proto.lookup σs lΔ) lA
-  | select {I = I [/] l₁} σs lΔ lA
-  | select-com {I = I [/] l₁} σs lΔ lA
-... | 0₂ | x | y = TC-⊗-out (∈♦₀ (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))) (Selections♦ 0₂ σs δK) (atMost♦ 0₂ σs δK A0)
-    (λ c₀ → TC-conv (♦-cong₂ (≈,[] (≈-sym (/[]-/D[>>] 0₂ (I [/] l₁) σs lΔ lA)) ∼-refl) ≈-refl
-                     ≈-∙ ≈-sym (≈-reflexive (ap (λ I → I []/₀ (Selections♦ 0₂ σs δK) ,[ ε , c₀ ↦ « S₀ » ]) (∈♦₀-compute[] {I₁ = K}(move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
-                     ≈-∙ ≈,[] (Selections♦'/same 0₂ σs) ∼-refl
-                     ≈-∙ ≈-sym ♦-com, ≈-∙ ♦-cong₂ (≈,[] (≈-reflexive (ap (flip _[]/₀_ σs)
-                           ([/]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA  ))) ∼-refl) ≈-refl))
-                    (TC-∈Split cont (mk5 (there lΔ) refl lA
-                          (! x ∙ ap (flip _‼_ lA) (diff-lookup {f = Env.map (const end)} (mk {l = mk _ E/c}{l' = l₁} l/=l')) ∙ ↦A)
-                          (EndItσ 0₂ (I /Ds ([↦]∈.lΔ l₁)) σs lΔ lA (EndIt/Ds I ([↦]∈.lΔ l₁) lΔ lA E/c))) (P₀ c₀)))
-    (λ c₁ → TC-conv (≈,[] (y ≈-∙ ≈-sym (≈-reflexive (ap (flip _[]/₁_ (Selections♦ 0₂ σs δK)) (∈♦₀-compute[] (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
+  | select {I = I / l₁} σs lΔ lA
+  | select-com {I = I / l₁} σs lΔ lA
+... | 0₂ | x | y = TC-⊗-out (∈♦₀ (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))) (Selections♦ 0₂ σs δK)
+    (tr (λ X → AtMost 0 X (Selections♦ 0₂ σs δK))
+        (! (∈♦₀-compute (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l')) ∙ ap (flip _♦Proto'_ K)
+           (/D[>>]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA ([↦]∈.lA l₁))))
+        (atMost♦' 0₂ σs K (atMost/[>>] lΔ lA σs A0)))
+    (λ c₀ → TC-conv (♦-cong₂ (≈,[] (≈-sym (/[]-/D[>>] 0₂ (I / l₁) σs lΔ lA)) ∼-refl) ≈-refl
+                    ≈-∙ ≈-sym (≈-reflexive (ap (λ I → I []/₀ (Selections♦ 0₂ σs δK) ,[ ε , c₀ ↦ « S₀ » ])
+                                           (∈♦₀-compute {I₁ = K} (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
+                    ≈-∙ ≈,[] (Selections♦'/same 0₂ σs) ∼-refl
+                    ≈-∙ ≈-sym ♦-com, ≈-∙ ♦-cong₂ (≈,[] (≈-reflexive (ap (flip _[]/₀_ σs)
+                       (/D[>>]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA ([↦]∈.lA l₁)))) ∼-refl) ≈-refl))
+       (TC-∈Split cont (there[]' (mk5 lΔ refl lA
+           (! x ∙ ap (flip _‼_ lA) (diff-lookup _ (mk {l = mk _ E/c} {l' = l₁} l/=l')) ∙ ↦A)
+           ( EndItσ 0₂ (I / l₁) σs lΔ lA (EndIt/Ds I ([↦]∈.lΔ l₁) ([↦]∈.lA l₁) lΔ lA E/c) )))
+          (P₀ c₀)))
+    (λ c₁ → TC-conv (≈,[] (y ≈-∙ ≈-sym (≈-reflexive (ap (flip _[]/₁_ (Selections♦ 0₂ σs δK))
+                           (∈♦₀-compute (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
                      ≈-∙ Selections♦'/not 1₂ σs
-                     ≈-∙ ≈-reflexive (ap (flip _[]/₁_ σs) ([/]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA)))) ∼-refl)
+                     ≈-∙ ≈-reflexive (ap (flip _[]/₁_ σs) (/D[>>]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA ([↦]∈.lA l₁))))) ∼-refl)
                     (P₁ c₁))
-... | 1₂ | x | y = TC-⊗-out (∈♦₀ (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))) (Selections♦ 1₂ σs δK) (atMost♦ 1₂ σs δK A0)
-    (λ c₀ → TC-conv (≈,[] (y ≈-∙ ≈-sym (≈-reflexive (ap (flip _[]/₀_ (Selections♦ 1₂ σs δK)) (∈♦₀-compute[] (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
+... | 1₂ | x | y = TC-⊗-out (∈♦₀ (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))) (Selections♦ 1₂ σs δK)
+    (tr (λ X → AtMost 0 X (Selections♦ 1₂ σs δK))
+        (! (∈♦₀-compute (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l')) ∙ ap (flip _♦Proto'_ K)
+           (/D[>>]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA ([↦]∈.lA l₁))))
+        (atMost♦' 1₂ σs K (atMost/[>>] lΔ lA σs A0)))
+    (λ c₀ → TC-conv (≈,[] (y ≈-∙ ≈-sym (≈-reflexive (ap (flip _[]/₀_ (Selections♦ 1₂ σs δK)) (∈♦₀-compute (move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
                      ≈-∙ Selections♦'/not 0₂ σs
-                     ≈-∙ ≈-reflexive (ap (flip _[]/₀_ σs) ([/]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA)))) ∼-refl)
+                     ≈-∙ ≈-reflexive (ap (flip _[]/₀_ σs) (/D[>>]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA ([↦]∈.lA l₁))))) ∼-refl)
                     (P₀ c₀))
-    (λ c₁ → TC-conv (♦-cong₂ (≈,[] (≈-sym (/[]-/D[>>] 1₂ (I [/] l₁) σs lΔ lA)) ∼-refl) ≈-refl
-                     ≈-∙ ≈-sym (≈-reflexive (ap (λ I → I []/₁ (Selections♦ 1₂ σs δK) ,[ ε , c₁ ↦ « S₁ » ]) (∈♦₀-compute[] {I₁ = K}(move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
+    (λ c₁ → TC-conv (♦-cong₂ (≈,[] (≈-sym (/[]-/D[>>] 1₂ (I / l₁) σs lΔ lA)) ∼-refl) ≈-refl
+                     ≈-∙ ≈-sym (≈-reflexive (ap (λ I → I []/₁ (Selections♦ 1₂ σs δK) ,[ ε , c₁ ↦ « S₁ » ]) (∈♦₀-compute {I₁ = K}(move (mk5 lΔ refl lA ↦A E/c) l₁ (mk l/=l'))))
                      ≈-∙ ≈,[] (Selections♦'/same 1₂ σs) ∼-refl
                      ≈-∙ ≈-sym ♦-com, ≈-∙ ♦-cong₂ (≈,[] (≈-reflexive (ap (flip _[]/₁_ σs)
-                           ([/]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA  ))) ∼-refl) ≈-refl))
+                           (/D[>>]-/D[>>]≡ I lΔ ([↦]∈.lΔ l₁) lA ([↦]∈.lA l₁)))) ∼-refl) ≈-refl))
                     (TC-∈Split cont (mk5 (there lΔ) refl lA
-                          (! x ∙ ap (flip _‼_ lA) (diff-lookup {f = Env.map (const end)} (mk {l = mk _ E/c}{l' = l₁} l/=l')) ∙ ↦A)
-                          (EndItσ 1₂ (I /Ds ([↦]∈.lΔ l₁)) σs lΔ lA (EndIt/Ds I ([↦]∈.lΔ l₁) lΔ lA E/c))) (P₁ c₁)))
+                          (! x ∙ ap (flip _‼_ lA) (diff-lookup _ (mk {l = mk _ E/c}{l' = l₁} l/=l')) ∙ ↦A)
+                          (EndItσ 1₂ (I / l₁) σs lΔ lA (EndIt/Ds I ([↦]∈.lΔ l₁) ([↦]∈.lA l₁) lΔ lA E/c))) (P₁ c₁)))
 TC-∈Split cont l (TC-?-inp (mk l₁ E/c) P) with sameVar? ([↦]∈.l… l) l₁
 TC-∈Split {I = I} cont (mk l E/c') (TC-?-inp {c} (mk .l E/c) P) | same = TC-conv
-  ((♦-cong₂ (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈.lI l) (/*-End _ ∼-End E/c))) ≈-refl))
-  (cont-? cont refl {I = I [/…] l ,[ c ↦end]} heRe[] here _ (λ m → P m ))
+  ((♦-cong₂ (≈,[end] _) ≈-refl))
+  (cont-? cont refl {I = I /… l ,[ c ↦end]} heRe[] here _ (λ m → P m ))
 TC-∈Split {I = I}{K}cont l (TC-?-inp (mk l₁ E/c) P) | diff x = TC-?-inp (mk (∈♦₀… {I₁ = K} (move… ([↦]∈.l… l) l₁ x)) E/c) λ m →
   TC-conv (≈-trans ♦-com,
-          (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute[…] (move… ([↦]∈.l… l) l₁ x)))
-          (♦-cong₂ ([/]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l))
+          (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute (move l (mk l₁ E/c) (mk x))))
+          (♦-cong₂ (/D[>>]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l) ([↦…]∈.lA l₁))
           ≈-refl)))
           ∼-refl))
-    (TC-∈Split cont (mk (there…' (move[…] l₁ ([↦]∈.l… l) (Diff-sym… x))) ([↦]∈.E/c l)) (P m))
+    (TC-∈Split cont (there[]' (move (mk l₁ E/c) l (mk (Diff-sym… x)))) (P m))
+    -- (TC-∈Split cont (mk (there…' (move[…] l₁ ([↦]∈.l… l) (Diff-sym… x))) ([↦]∈.E/c l)) (P m))
 TC-∈Split cont l (TC-!-out (mk l₁ E/c) m P) with sameVar? ([↦]∈.l… l) l₁
 TC-∈Split cont (mk l E/c') (TC-!-out (mk .l E/c) m P) | same = TC-conv
-  (♦-cong₂ (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈.lI l) (/*-End _ ∼-End E/c))) ≈-refl)
+  (♦-cong₂ (≈,[end] _) ≈-refl)
  (cont-! cont refl m (mk (mk heRe[] heRe) _)  P )
 TC-∈Split {I = I}{K} cont l (TC-!-out (mk l₁ E/c) m P) | diff x = TC-!-out (mk (∈♦₀… {I₁ = K} (move… ([↦]∈.l… l) l₁ x)) E/c) m
   (TC-conv (≈-trans ♦-com,
-           (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute[…] (move… ([↦]∈.l… l) l₁ x)))
-           (♦-cong₂ ([/]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l))
+           (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute… (move… ([↦]∈.l… l) l₁ x)))
+           (♦-cong₂ (/D[>>]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l) ([↦…]∈.lA l₁))
            ≈-refl)))
            ∼-refl))
-    (TC-∈Split cont (mk (there…' (move[…] l₁ ([↦]∈.l… l) (Diff-sym… x))) ([↦]∈.E/c l)) P))
+    (TC-∈Split cont (there[]' (move (mk l₁ E/c) l (mk (Diff-sym… x)))) P))
+    --(TC-∈Split cont {!there[]' {!mk (there…' (move[…] l₁ ([↦]∈.l… l) (Diff-sym… x))) ([↦]∈.E/c l)!} P))
 TC-∈Split cont (mk l E/c) (TC-⅋-inp l₁ P) with sameVar? l ([↦]∈.l… l₁)
 TC-∈Split cont (mk l E/c) (TC-⅋-inp (mk .l E/c₁) P) | same = TC-conv
-  ((♦-cong₂ (≈-trans (≈,[end] _) (≈-trans (≈,[end] _) ([≔]-ext _ ([↦…]∈.lI l) (/*-End _ ∼-End E/c₁)))) ≈-refl))
+  ((♦-cong₂ (≈-trans (≈,[end] _) (≈,[end] _)) ≈-refl))
   (cont-⅋ cont refl (mk (mk (theRe[] here) heRe) _)
                     (mk (mk heRe[] heRe) _)
                     (diff-ten (t/h _)) (P c₀ c₁))
   -- postulate for channels.. grr
   where postulate c₀ c₁ : _
 TC-∈Split {I = I}{K} cont (mk l E/c) (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (mk (∈♦₀… {I₁ = K} (move… l l₁ x)) X) λ c₀ c₁ →
-  TC-conv
-         (≈-trans ♦-com,
+  TC-conv (≈-trans ♦-com,
          (≈,[] (≈-trans ♦-com,
-         (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute[…] (move… l l₁ x)))
-         (♦-cong₂ ([/]-/D[>>] I ([↦…]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦…]∈.lA l))
+         (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute… (move… l l₁ x)))
+         (♦-cong₂ (/D[>>]-/D[>>] I ([↦…]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦…]∈.lA l) ([↦…]∈.lA l₁))
          ≈-refl)))
          ∼-refl))
          ∼-refl))
-  (TC-∈Split cont (mk (there…' (there…' (move[…] l₁ l (Diff-sym… x)))) E/c) (P c₀ c₁))
+  (TC-∈Split cont (there[]' (there[]' (move (mk l₁ X) (mk l E/c) (mk (Diff-sym… x))))) (P c₀ c₁))
 TC-∈Split cont l (TC-end E) = 𝟘-elim (Map.All∈' (Proto.All[]∈ ([↦]∈.lI l) E) ([↦]∈.lE l))
 TC-∈Split {I = I} cont (mk5 lΔ ↦Δ lA ↦A E/c) (TC-split σs A1 P P₁)
     with Map.lookup (Proto.lookup σs lΔ) lA
     | select {I = I} σs lΔ lA
     | select-com {I = I} σs lΔ lA
 TC-∈Split {δK = δK}{I = I}{K} cont (mk5 lΔ refl lA ↦A E/c) (TC-split σs A1 P P₁)
-  | 0₂ | x | y = TC-split (Selections♦ 0₂ σs δK) (atMost♦ 0₂ σs δK A1)
+  | 0₂ | x | y = TC-split (Selections♦ 0₂ σs δK) (atMost♦' 0₂ σs K (atMost/[>>] lΔ lA σs A1))
   (TC-conv (≈-trans (♦-cong₂ (≈-sym (/[]-/D[>>] 0₂ I σs lΔ lA)) ≈-refl)
                     (≈-sym (Selections♦'/same {I = I /D[ lΔ >> lA ]}{K} 0₂ σs)))
            (TC-∈Split cont (mk5 lΔ refl lA (! x ∙ ↦A) (EndItσ 0₂ I σs lΔ lA E/c)) P))
   (TC-conv (≈-trans y (≈-sym (Selections♦'/not {I = I /D[ lΔ >> lA ]} {K} 1₂ σs))) P₁)
 TC-∈Split {δK = δK}{I = I}{K} cont (mk5 lΔ refl lA ↦A E/c) (TC-split σs A1 P P₁)
-  | 1₂ | x | y = TC-split (Selections♦ 1₂ σs δK) (atMost♦ 1₂ σs δK A1)
+  | 1₂ | x | y = TC-split (Selections♦ 1₂ σs δK) (atMost♦' 1₂ σs K (atMost/[>>] lΔ lA σs A1))
   (TC-conv (≈-trans y (≈-sym (Selections♦'/not {I = I /D[ lΔ >> lA ]}{K} 0₂ σs))) P)
   (TC-conv (≈-trans (♦-cong₂ (≈-sym (/[]-/D[>>] 1₂ I σs lΔ lA)) ≈-refl)
                     (≈-sym (Selections♦'/same {I = I /D[ lΔ >> lA ]}{K} 1₂ σs)))
            (TC-∈Split cont (mk5 lΔ refl lA (! x ∙ ↦A) (EndItσ 1₂ I σs lΔ lA E/c)) P₁))
+
 {-
 TC-∈Split cont l (TC-mix lF lG lF/=lG P) with sameDoms? ([↦…]∈.lΔ l) ([]∈.lΔ lF) | sameDoms? ([↦…]∈.lΔ l) ([]∈.lΔ lG)
 TC-∈Split {δK = δK}{I = I}{K = K}cont (mk ⟨ lΔ R[]⟩ ⟨ lA , ↦A ⟩) (TC-mix {δG = δG}{G = G} ⟨ .lΔ R[]⟩ lG lF/=lG P) | inr ⟨ refl , refl ⟩ | Y
@@ -185,14 +198,14 @@ TC-mix {!!} {!!} {!!}
 module _ {δK}{K : Proto δK} where
   TC-∈! : ∀ {δI c A S}{I : Proto δI}(l : [ c ↦ act (send {A} S) ]∈ I)
     → TC'⟨ I ⟩
-    → (∀ {d δI}{I : Proto δI}(m : A)(l : [ d ↦ S m ]∈ I) → TC'⟨ I ⟩ → TC'⟨ I [/] l ♦Proto' K ⟩)
-    → TC'⟨ I [/] l ♦Proto' K  ⟩
-  TC-∈! l p cont = TC-conv (♦-cong₂ (/…-uniq l) ≈-refl) (TC-∈Split cont' l p) -- TC-∈Split cont' (mk l ?)
+    → (∀ {d δI}{I : Proto δI}(m : A)(l : [ d ↦ S m ]∈ I) → TC'⟨ I ⟩ → TC'⟨ I / l ♦Proto' K ⟩)
+    → TC'⟨ I / l ♦Proto' K  ⟩
+  TC-∈! l p cont = TC-∈Split cont' l p -- TC-∈Split cont' (mk l ?)
     where
       cont' : TC-Split _ K
       cont-⅋ cont' () l₁ l' x₁ x₂
       cont-⊗ cont' () l₁ l' x₁ x₂
-      cont-! cont' refl m l₁ x₁ = TC-conv (♦-cong₂ (≈-sym (/…-uniq l₁)) ≈-refl) (cont m l₁ x₁)
+      cont-! cont' refl m l₁ x₁ = cont m l₁ x₁
       cont-? cont' () lI lA E/c C
 
   TC-∈? : ∀ {δI c A S}{I : Proto δI}(l : [ c ↦ act (recv {A} S) ]∈ I)
@@ -200,8 +213,8 @@ module _ {δK}{K : Proto δK} where
     → (∀ {d δE δI}{I : Proto δI}{E : Env δE}
         (lI : [ E ]∈ I)(lA : d ∈D δE)(E : Env.Ended (E Env./D lA))(C : (m : A) → TC'⟨ I [ []∈.lΔ lI >> lA ]≔ « S m » ⟩)
         → TC'⟨ I /D[ []∈.lΔ lI >> lA ] ♦Proto' K ⟩)
-    → TC'⟨ I [/] l ♦Proto' K  ⟩
-  TC-∈? l p cont = TC-conv (♦-cong₂ (/…-uniq l) ≈-refl) (TC-∈Split cont' l p) -- TC-∈Split cont' (mk l ?)
+    → TC'⟨ I / l ♦Proto' K  ⟩
+  TC-∈? l p cont = TC-∈Split cont' l p -- TC-∈Split cont' (mk l ?)
     where
       cont' : TC-Split _ K
       cont-⅋ cont' () l₁ l' x₁ x₂
@@ -213,8 +226,8 @@ module _ {δK}{K : Proto δK} where
     → TC'⟨ I ⟩
     → (∀ {d e δJ}{J : Proto δJ} (l : [ d ↦ A ]∈ J)(l' : [ e ↦  B ]∈ J) → DifferentVars… ([↦]∈.l… l) ([↦]∈.l… l') → TC'⟨ J ⟩
        → TC'⟨ ((J /… [↦]∈.l… l) /D[ [↦]∈.lΔ l' >> [↦]∈.lA l' ]) ♦Proto' K ⟩)
-    → TC'⟨ I [/] l ♦Proto' K  ⟩
-  TC-∈⅋ l p cont = TC-conv (♦-cong₂ (/…-uniq l) ≈-refl) (TC-∈Split cont' l p) -- TC-∈Split cont' (mk l ?)
+    → TC'⟨ I / l ♦Proto' K  ⟩
+  TC-∈⅋ l p cont = TC-∈Split cont' l p -- TC-∈Split cont' (mk l ?)
     where
       cont' : TC-Split _ K
       cont-⅋ cont' refl l₁ l' x₁ x₂ = cont l₁ l' x₁ x₂
@@ -226,9 +239,9 @@ module _ {δK}{K : Proto δK} where
     → TC'⟨ I ⟩
     → (∀ {d e δJ₀ δJ₁}{J₀ : Proto δJ₀}{J₁ : Proto δJ₁}
          (l₀ : [ d ↦ A ]∈ J₀)(l₁ : [ e ↦ B ]∈ J₁) → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩
-          → TC'⟨ (J₀ [/] l₀ ♦Proto' J₁ [/] l₁) ♦Proto' K ⟩)
-    → TC'⟨ I [/] l ♦Proto' K  ⟩
-  TC-∈⊗ l p cont = TC-conv (♦-cong₂ (/…-uniq l) ≈-refl) (TC-∈Split cont' l p) -- TC-∈Split cont' (mk l ?)
+          → TC'⟨ (J₀ / l₀ ♦Proto' J₁ / l₁) ♦Proto' K ⟩)
+    → TC'⟨ I / l ♦Proto' K  ⟩
+  TC-∈⊗ l p cont = TC-∈Split cont' l p -- TC-∈Split cont' (mk l ?)
     where
       cont' : TC-Split _ K
       cont-⅋ cont' () l₁ l' x₁ x₂

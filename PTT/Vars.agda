@@ -55,31 +55,10 @@ abstract
       → (I₀ ♦Proto' I₁) [ []∈.lΔ ([∈]♦₁ {I₀ = I₀} l) ≔ f ] ≡ I₀ ♦Proto' I₁ [ []∈.lΔ l ≔ f ]
   ≔[∈]♦₁ {I₁ = I₁} ⟨ lΔ , ↦Δ ⟩ =  ≔[]∈♦₁ lΔ I₁
 
+  atMost♦' : ∀ {δI}(b : 𝟚)(σ : Selections δI){n}{I : Proto δI}{δK}(K : Proto δK) → AtMost n I σ
+     → AtMost n (I ♦Proto' K) (Selections♦ b σ δK)
+  atMost♦' = atMost♦
 
-
-{-
-abstract
-  _♦Env'_ : ∀{δa δb}(A : Env δa)(B : Env δb) → Env (δa ♦Dom δb)
-  _♦Env'_ = _♦Env_
-
-
-postulate
-  ♦E-cong₂ : ∀ {δE δE' δF δF'}{E : Env δE}{E' : Env δE'}{F : Env δF}{F' : Env δF'}
-    → E ∼ E' → F ∼ F' → E ♦Env F ∼ E' ♦Env F'
--}
-{-
-data DifferentVarsDoms : ∀ {δI c d} → [ c ]∈D δI → Doms'.[ d ]∈ δI → Set where
-  h/t : ∀ {a b Db l}
-   → DifferentVarsDoms {Db ,[ a ]}{a}{b} Doms'.here (Doms'.there l)
-  t/h : ∀ {a b Db l}
-   → DifferentVarsDoms {Db ,[ a ]}{b}{a} (Doms'.there l) Doms'.here
-  t/t : ∀ {a c d D l l'} → DifferentVarsDoms {D ,[ a ]}{c}{d} (Doms'.there l) (Doms'.there l')
-
--- Need to update this, they may point to the same tensor block but different inside it...
--- boring I know!
-DifferentVars : ∀ {δI}{I : Proto δI}{c d A B} → [ c ↦ A ]∈ I → [ d ↦ B ]∈ I → Set
-DifferentVars l l' = DifferentVarsDoms (Proto.forget ([↦]∈.lI l)) (Proto.forget ([↦]∈.lI l'))
--}
 
 data DifferentVars… {δI}{I : Proto δI}{c d A B} : (lA : [ c ↦ A …]∈ I)(lB : [ d ↦ B …]∈ I) → Set₁ where
   diff-ten : ∀ {δF δG}{F : Env δF}{G : Env δG}{lA : [ δF ]∈D δI}{lB : [ δG ]∈D δI}
@@ -118,11 +97,13 @@ module _ {δE δF}{f : Env δF → Env δF} where
   DiffDoms-lookup (I ,[ Δ ]) (t/t df) = DiffDoms-lookup I df
 
 
-module _ {c d A B}{f : ∀ {δE} → Env δE → Env δE} where
-  diff-lookup : ∀ {δI}{I : Proto δI}{l : [ c ↦ A ]∈ I}{l' : [ d ↦ B ]∈ I} → DifferentVars l l'
-    → Proto.lookup (I [ [↦]∈.lΔ l' ≔ f ]) ([↦]∈.lΔ l) ≡ Proto.lookup I ([↦]∈.lΔ l)
-  diff-lookup {I = I}{l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ lΔ₁ , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-ten x)) = DiffDoms-lookup I x
-  diff-lookup {l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-in-ten x)) = 𝟘-elim (DiffDom-Ended {c = c}{d = d}_ _ x ↦A ↦A₁ E/c E/c₁)
+module _ {c d A B} where
+  diff-lookup : ∀ {δI}{I : Proto δI}{l : [ c ↦ A ]∈ I}{l' : [ d ↦ B ]∈ I}(f : Env ([↦]∈.δE l') → Env ([↦]∈.δE l'))
+    → DifferentVars l l' → Proto.lookup (I [ [↦]∈.lΔ l' ≔ f ]) ([↦]∈.lΔ l) ≡ Proto.lookup I ([↦]∈.lΔ l)
+  diff-lookup {I = I}{l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ lΔ₁ , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} f (mk (diff-ten x))
+     = DiffDoms-lookup I x
+  diff-lookup {l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} f (mk (diff-in-ten x))
+     = 𝟘-elim (DiffDom-Ended {c = c}{d = d}_ _ x ↦A ↦A₁ E/c E/c₁)
 
 {- -- bug in coveragechecking
   diff-lookup {I = I ,[ Δ ]} {mk (mk ⟨ .here , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .(there l) , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-ten (h/t l))) = refl
@@ -166,17 +147,21 @@ sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , ref
 ∈♦₁ (mk l… E/c) = mk (∈♦₁… l…) E/c
 
 
-∈♦₀-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
-          (I₀ ♦Proto' I₁) [/…] (∈♦₀… l) ≡ (I₀ [/…] l) ♦Proto' I₁
-∈♦₀-compute[…] (mk lI lE) = ≔[∈]♦₀ lI
+∈♦₀-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
+          (I₀ ♦Proto' I₁) /… (∈♦₀… l) ≡ (I₀ /… l) ♦Proto' I₁
+∈♦₀-compute… (mk lI lE) = ≔[∈]♦₀ lI
 
-∈♦₀-compute[] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈ I₀) →
-          (I₀ ♦Proto' I₁) [/] (∈♦₀ l) ≡ (I₀ [/] l) ♦Proto' I₁
-∈♦₀-compute[] (mk lI lE) = ∈♦₀-compute[…] lI
+∈♦₀-compute : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈ I₀) →
+          (I₀ ♦Proto' I₁) / (∈♦₀ l) ≡ (I₀ / l) ♦Proto' I₁
+∈♦₀-compute (mk lI lE) = ∈♦₀-compute… lI
 
-∈♦₁-compute[…] : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
-          (I₀ ♦Proto' I₁) [/…] (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ [/…] l)
-∈♦₁-compute[…] (mk lI lE) = ≈-reflexive (≔[∈]♦₁ lI)
+∈♦₁-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
+          (I₀ ♦Proto' I₁) /… (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ /… l)
+∈♦₁-compute… (mk lI lE) = ≈-reflexive (≔[∈]♦₁ lI)
+
+∈♦₁-compute : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A ]∈ I₁) →
+          (I₀ ♦Proto' I₁) / (∈♦₁ l) ≈ I₀ ♦Proto' (I₁ / l)
+∈♦₁-compute (mk lI lE) = ∈♦₁-compute… lI
 
 postulate
   ♦-assoc : ∀ {δa δb δc}{A : Proto δa}{B : Proto δb}{C : Proto δc} → A ♦Proto' (B ♦Proto' C) ≈ (A ♦Proto' B) ♦Proto' C
@@ -185,19 +170,8 @@ postulate
           → A ≈ B → C ≈ D → A ♦Proto' C ≈ B ♦Proto' D
   ♦-com, : ∀ {δa δ δb}{A : Proto δa}{B : Proto δb}{E : Env δ} → (A ,[ E ]) ♦Proto' B ≈ (A ♦Proto' B),[ E ]
   ·♦ :  ∀ {δI}{I : Proto δI} → · ♦Proto' I ≈ I
-  ∈♦₀-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₀) →
-          (I₀ ♦Proto' I₁) /… (∈♦₀… {I₁ = I₁} l) ≈ (I₀ /… l) ♦Proto' I₁
-  ∈♦₁-compute… : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁}(l : [ c ↦ A …]∈ I₁) →
-          (I₀ ♦Proto' I₁) /… (∈♦₁… l) ≈ I₀ ♦Proto' (I₁ /… l)
 
-  /Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)
-    → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
-
-  {-
-  /D≔-com : ∀ {δs δ δ'}{I : Proto δs}(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)
-    {f : Env δ → Env δ}{g : Env δ' → Env δ'} → {!!}
-    → I Proto.[ l ≔ f ] Proto.[ l' ≔ g ] ≈ I Proto.[ l' ≔ g ] Proto.[ l ≔ f ]
-  -}
+{-
 postulate
   move…-lemma : ∀ {δI} {I : Proto δI} {c d A B δE} {E : Env δE}
                 {lΔ : [ δE ]∈D δI} {↦Δ : Proto.lookup I lΔ ≡ E} {δE₁}
@@ -208,38 +182,47 @@ postulate
               Proto.lookup (I Proto.[ lΔ₂ ≔ (λ E₂ → E₂ [ _↦_∈_.lA lE ]≔' end) ])
               lΔ₁
               ≡ E₁
+-}
+
+{-
+postulate
   move[…]-lemma : ∀ {δI} {I : Proto δI} {c d A B δE} {E : Env δE}
                   {lΔ : [ δE ]∈D δI} {↦Δ : Proto.lookup I lΔ ≡ E} {δE₁}
                   {E₁ : Env δE₁} {lΔ₁ : [ δE₁ ]∈D δI}
                   {↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁} {lE₁ : d ↦ « B » ∈ E₁}
                   (lΔ₂ : [ δE ]∈D δI) (lE : c ↦ « A » ∈ E) →
                 DifferentVars… (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) →
-                Proto.lookup (I Proto.[ lΔ₂ ≔ Map.map (λ _ → end) ]) lΔ₁ ≡ E₁
+                Proto.lookup (I Proto.[ lΔ₂ ≔ (λ E → E [ {!!} ]≔' end) ]) lΔ₁ ≡ E₁
+-- move[…]-lemma {lE₁ = ⟨ lA , ↦A ⟩} lΔ₂ lE (diff-ten x) = {!!}
+-- move[…]-lemma {lE₁ = ⟨ lA , ↦A ⟩} lΔ₂ ._ (diff-in-ten x) = {!!}
+-}
+
+postulate
+  move…-lemma : ∀ {δI δE δE₁ c d A B}{I : Proto δI}{E : Env δE}{E₁ : Env δE₁}(lΔ : [ δE ]∈D δI)(lΔ₁ : [ δE₁ ]∈D δI)
+     (lE : c ↦ « A » ∈ E)(lE₁ : d ↦ « B » ∈ E₁)
+     (↦Δ : Proto.lookup I lΔ ≡ E)(↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁)
+     (l/=l' : DifferentVars… (mk ⟨ lΔ , ↦Δ ⟩ lE) (mk ⟨ lΔ₁ , ↦Δ₁ ⟩ lE₁))
+    → Proto.lookup (I [ lΔ ≔ (λ Δ → Δ [ ↦∈.lA lE ]≔' end) ]) lΔ₁ ≡ E₁
+-- move[…]-lemma = {!!}
 
 
 move… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I) → DifferentVars… l l'
           → [ d ↦ B …]∈ (I /… l)
-move… (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) l/=l' = mk3 lΔ₁ (move…-lemma lΔ lE l/=l') lE₁
-
-move[…] : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I) → DifferentVars… l l'
-          → [ d ↦ B …]∈ (I [/…] l)
-move[…] (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) l/=l' = mk3 lΔ₁ (move[…]-lemma lΔ lE l/=l' ) lE₁
+move… (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) l/=l' = mk3 lΔ₁ (move…-lemma lΔ lΔ₁ lE lE₁ ↦Δ ↦Δ₁ l/=l') lE₁
 
 move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) → DifferentVars l l'
-          → [ d ↦ B ]∈ (I /… [↦]∈.l… l)
+          → [ d ↦ B ]∈ (I / l)
 move (mk l… E/c) (mk l…₁ E/c₁) df = mk (move… l… l…₁ (Diff… df)) E/c₁
-
-move[] : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) → DifferentVars l l'
-          → [ d ↦ B ]∈ (I [/…] [↦]∈.l… l)
-move[] (mk l… E/c) (mk l…₁ E/c₁) (mk Diff…) = mk (move[…] l… l…₁ Diff…) E/c₁
 
 move-compute… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I)(l/=l' : DifferentVars… l l')
     → (I /… l) /… move… l l' l/=l' ≈ (I /… l) /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]
 move-compute… l l' l/l' = ≈-refl
 
+{-
 move-compute[…] : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I)(l/=l' : DifferentVars… l l')
     → (I [/…] l) /… move[…] l l' l/=l' ≈ (I [/…] l) /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]
 move-compute[…] l l' l/l' = ≈-refl
+-}
 
 {-
 ∈♦₀ : ∀ {δ₀ δ₁ c A}{I₀ : Proto δ₀}{I₁ : Proto δ₁} → [ c ↦ A ]∈' I₀ → [ c ↦ A ]∈' (I₀ ♦Proto' I₁)
@@ -291,6 +274,18 @@ postulate
 [/]-/D[>>] : ∀ {c δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)
     → (I /D[ l >> lc ]) /Ds l' ≈ (I /Ds l') /D[ l >> lc ]
 [/]-/D[>>] I l l' lc = ≈-reflexive ([/]-/D[>>]≡ I l l' lc)
+
+
+/D[>>]-/D[>>]≡ : ∀ {c d δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)(lc' : d ∈D δF)
+    → (I /D[ l >> lc ]) /D[ l' >> lc' ] ≡ (I /D[ l' >> lc' ]) /D[ l >> lc ]
+/D[>>]-/D[>>]≡ (I ,[ Δ ]) here here lc lc' rewrite ≔'-com {x = end} Δ lc lc' = refl
+/D[>>]-/D[>>]≡ (I ,[ Δ ]) here (there l') lc lc' = refl
+/D[>>]-/D[>>]≡ (I ,[ Δ ]) (there l) here lc lc' = refl
+/D[>>]-/D[>>]≡ (I ,[ Δ ]) (there l) (there l') lc lc' = ap (flip _,[_] Δ) (/D[>>]-/D[>>]≡ I l l' lc lc')
+
+/D[>>]-/D[>>] : ∀ {c d δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)(lc' : d ∈D δF)
+    → (I /D[ l >> lc ]) /D[ l' >> lc' ] ≈ (I /D[ l' >> lc' ]) /D[ l >> lc ]
+/D[>>]-/D[>>] I l l' lc lc' = ≈-reflexive (/D[>>]-/D[>>]≡ I l l' lc lc')
 
 [≔]D-ext : ∀ {δI δE}(I : Proto δI)(l : [ δE ]∈D δI){f g : Env δE → Env δE}
   (PF : f (Proto.lookup I l) ∼ g (Proto.lookup I l))

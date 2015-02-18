@@ -130,13 +130,21 @@ lookup-[]≔ : ∀ {a}{A : Set a}{c δE x}(E : Map A δE)(l : c ∈D δE)
 lookup-[]≔ (E , c ↦ v) here = refl
 lookup-[]≔ (E , c₁ ↦ v) (there l) = lookup-[]≔ E l
 
+module _ {a}{A : Set a}{x : A} where
+  ≔'-com : ∀ {c d δE}(E : Map A δE)(lA : c ∈D δE)(lB : d ∈D δE)
+    → (E [ lA ]≔' x) [ lB ]≔' x ≡ (E [ lB ]≔' x) [ lA ]≔' x
+  ≔'-com (E , d ↦ v) here here = refl
+  ≔'-com (E , c ↦ v) here (there lB) = refl
+  ≔'-com (E , d ↦ v) (there lA) here = refl
+  ≔'-com (E , c₁ ↦ v) (there lA) (there lB) rewrite ≔'-com E lA lB = refl
+
+
 module _ {a}{A : Set a}{x y : A} where
   ≔'≔' : ∀ {d δE}(E : Map A δE)(lA : d ∈D δE)
     → (E [ lA ]≔' x) [ lA ]≔' y ≡ E [ lA ]≔' y
   ≔'≔' (E , c ↦ v) here = refl
   ≔'≔' (E , c ↦ v) (there lA) rewrite ≔'≔' E lA = refl
 
-module _ {a}{A : Set a}{x y : A} where
   []≔-red : ∀ {c δE}(E : Map A δE)(l : c ∈D δE)
     → (E [ l ]≔' y) [ l ]≔' x ≡ E [ l ]≔' x
   []≔-red (E , c ↦ v) here = refl

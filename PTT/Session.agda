@@ -74,6 +74,12 @@ selectProj : 𝟚 → (MSession → (𝟚 → MSession))
 selectProj 0₂ v = [0: v 1: end ]
 selectProj 1₂ v = [0: end 1: v ]
 
+selectProjEnd : ∀ b v → selectProj b end v ≡ end
+selectProjEnd 1₂ 1₂ = refl
+selectProjEnd 1₂ 0₂ = refl
+selectProjEnd 0₂ 1₂ = refl
+selectProjEnd 0₂ 0₂ = refl
+
 {-
 data NotPar : Proto → Set₁ where
   act : ∀ {c S} → NotPar (act c S)

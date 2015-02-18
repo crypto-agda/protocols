@@ -116,27 +116,27 @@ data TC'⟨_⟩ {δI}(I : Proto δI) : Set₁ where
     ∀ {c S₀ S₁}
       (l : [ c ↦ S₀ ⊗ S₁ ]∈ I)
       (σs : Selections δI)
-      (A0 : AtMost 0 (I [/] l) σs)
-      (P₀ : ∀ c₀ → TC'⟨ I [/] l []/₀ σs ,[ c₀ ↦ S₀ ] ⟩)
-      (P₁ : ∀ c₁ → TC'⟨ I [/] l []/₁ σs ,[ c₁ ↦ S₁ ] ⟩)
+      (A0 : AtMost 0 (I / l) σs)
+      (P₀ : ∀ c₀ → TC'⟨ I / l []/₀ σs ,[ c₀ ↦ S₀ ] ⟩)
+      (P₁ : ∀ c₁ → TC'⟨ I / l []/₁ σs ,[ c₁ ↦ S₁ ] ⟩)
     → TC'⟨ I ⟩
 
  TC-⅋-inp :
     ∀ {c S₀ S₁}
       (l : [ c ↦ S₀ ⅋ S₁ ]∈ I)
-      (P : ∀ c₀ c₁ → TC'⟨ I [/] l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
+      (P : ∀ c₀ c₁ → TC'⟨ I / l ,[ c₀ ↦ S₀ ] ,[ c₁ ↦ S₁ ] ⟩)
     → TC'⟨ I ⟩
 
  TC-?-inp :
     ∀ {c A S₁}
       (l : [ c ↦ act (recv {A} S₁) ]∈ I)
-      (P : (m : A) → TC'⟨ I [/] l ,[ c ↦ S₁ m ] ⟩)
+      (P : (m : A) → TC'⟨ I / l ,[ c ↦ S₁ m ] ⟩)
     → TC'⟨ I ⟩
 
  TC-!-out :
     ∀ {c A S₁}
       (l : [ c ↦ act (send {A} S₁) ]∈ I)
-      (m : A)(P : TC'⟨ I [/] l ,[ c ↦ S₁ m ] ⟩)
+      (m : A)(P : TC'⟨ I / l ,[ c ↦ S₁ m ] ⟩)
     → TC'⟨ I ⟩
 
  TC-end : ∀ (E : Ended I) → TC'⟨ I ⟩

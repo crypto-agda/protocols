@@ -161,6 +161,12 @@ EnvSelectionAll≡ b ε ε = 𝟙
 EnvSelectionAll≡ b (E , c ↦ « S ») (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ × b ≡ v₁
 EnvSelectionAll≡ b (E , c ↦ end) (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ
 
+pureEnvAll : ∀ {δ}(Δ : Env δ)(b : 𝟚)
+  → EnvSelectionAll≡ b Δ (constMap δ b)
+pureEnvAll ε b = _
+pureEnvAll (Δ , c ↦ « S ») b = ⟨ pureEnvAll Δ b , refl ⟩
+pureEnvAll (Δ , c ↦ end) b = pureEnvAll Δ b
+
 data SelAtMost (n : ℕ){δ : Dom}(E : Env δ)(σ : Sel δ) : ℕ → Set where
   ₀₁ : ∀ b → EnvSelectionAll≡ b E σ → SelAtMost n E σ n
   ₘ : {-TODO insert relevant negation of SelectionAll≡ b.
@@ -314,8 +320,6 @@ I /Ds l = I [ l ≔ _/* ]
 _/D[_>>_] : ∀ {c δ δs}(I : Proto δs)(l : [ δ ]∈D δs)(l' : c ∈D δ) → Proto δs
 I /D[ l >> l' ] = I [ l >> l' ]≔ end
 
-_/_ : ∀ {δ δs}(I : Proto δs){E : Env δ}(l : [ E ]∈ I) → Proto δs
-I / l = I /Ds [_]∈_.lΔ l
 
 _[/]_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S ]∈ I) → Proto δs
 I [/] l = I /Ds lΔ
@@ -330,6 +334,9 @@ I [/…] l = I /Ds lΔ
 _/…_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S …]∈ I) → Proto δs
 I /… l = I /D[ lΔ >> lA ]
   where open [↦…]∈ l
+
+_/_ : ∀ {δs}(I : Proto δs){c S}(l : [ c ↦ S ]∈ I) → Proto δs
+I / l = I /… [↦]∈.l… l
 
 All : (Pred : ∀ {δ} → Env δ → Set) → ∀ {δs} → Proto δs → Set
 All Pred · = 𝟙
@@ -533,11 +540,22 @@ module _ {δI}(b : 𝟚)(σ : Selections δI) where
   Selections♦ · = σ
   Selections♦ (δK ,[ x ]) = Selections♦ δK ,[ constMap x b ]
 
-{-
-  atMost♦ : ∀ {n} δK → AtMost n σ → AtMost n (Selections♦ δK)
+  atMost♦ : ∀ {n}{I : Proto δI}{δK}(K : Proto δK) → AtMost n I σ → AtMost n (I ♦Proto K) (Selections♦ δK)
   atMost♦ · A = A
-  atMost♦ (δK ,[ x ]) A = atMost♦ δK A ,[ (₀₁ b (pureAll x (λ _ → refl))) ]
--}
+  atMost♦ (K ,[ Δ ]) A = atMost♦ K A ,[ ₀₁ b (pureEnvAll Δ b) ]
+
+EnvSelAll≡≔ : ∀ {δE c}(E : Env δE)(lA : c ∈D δE)(Δ : Selection δE)(b : 𝟚)
+  → EnvSelectionAll≡ b E Δ → EnvSelectionAll≡ b (E [ lA ]≔' end) Δ
+EnvSelAll≡≔ (E , c ↦ « S ») here (Δ , .c ↦ v₁) b EA = fst EA
+EnvSelAll≡≔ (E , c ↦ end) here (Δ , .c ↦ v₁) b EA = EA
+EnvSelAll≡≔ (E , c₁ ↦ « S ») (there lA) (Δ , .c₁ ↦ v₁) b EA = ⟨ (EnvSelAll≡≔ E lA Δ b (fst EA)) , (snd EA) ⟩
+EnvSelAll≡≔ (E , c₁ ↦ end) (there lA) (Δ , .c₁ ↦ v₁) b EA = EnvSelAll≡≔ E lA Δ b EA
+
+atMost/[>>] : ∀ {n c δI δE}{I : Proto δI}(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)(σs : Selections δI)
+  → AtMost n I σs → AtMost n (I /D[ lΔ >> lA ]) σs
+atMost/[>>] here lA (σs ,[ Δ ]) (AM ,[ ₀₁ b x ]) = AM ,[ ₀₁ b (EnvSelAll≡≔ _ lA Δ b x) ]
+atMost/[>>] here lA (σs ,[ Δ ]) (AM ,[ ₘ ]) = AM ,[ ₘ ]
+atMost/[>>] (there lΔ) lA (σs ,[ Δ ]) (AM ,[ x ]) = atMost/[>>] lΔ lA σs AM ,[ x ]
 
 abstract
     Selections♦/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)

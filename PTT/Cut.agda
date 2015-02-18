@@ -32,40 +32,35 @@ TC-cut :
       (D : Dual S₀ S₁)
       (l₀ : [ c₀ ↦ S₀ ]∈ I₀)(l₁ : [ c₁ ↦ S₁ ]∈ I₁)
       (P₀ : TC'⟨ I₀ ⟩) (P₁ : TC'⟨ I₁ ⟩)
-    → TC'⟨ (I₀ [/] l₀) ♦Proto' (I₁ [/] l₁) ⟩
+    → TC'⟨ (I₀ / l₀) ♦Proto' (I₁ / l₁) ⟩
 TC-cut 𝟙⊥ l₀ l₁ P₀ P₁ = {!!}
 TC-cut ⊥𝟙 l₀ l₁ P₀ P₁ = {!!}
 TC-cut (act (?! {F = F} x x₁)) l₀ l₁ P₀ P₁ = TC-∈? l₀ P₀ λ {_}{_}{_}{I}{E} lI lA E₁ C →
-  TC-conv (♦-com ≈-∙ ♦-cong₂ (≈-reflexive ([≔]-ext≡ I lI (/*-End _ ≡-End E₁))) ≈-refl)
+  TC-conv ♦-com
     (TC-∈! l₁ P₁ λ m l x₂ →
-      TC-conv (♦-com ≈-∙ ♦-cong₂ ≈-refl (≈-reflexive ([≔][≔] _ _ (λ _ → constMap≡ _ _) I ([]∈.lΔ lI))))
+      TC-conv (♦-com ≈-∙ ♦-cong₂ ≈-refl (≈-reflexive ([≔][≔] _ _ (λ Δ → ≔'≔' Δ lA) I ([]∈.lΔ lI))))
        (TC-cut (x m) (mk (mk ⟨ ([]∈.lΔ lI) , lookup-same I ([]∈.lΔ lI) _ ⟩ ⟨ lA , lookup-[]≔ _ lA ⟩)
                          (tr Env.Ended (! (ap (λ E → E [ lA ]≔' end) (ap (λ E → E [ lA ]≔' « F m ») ([]∈.↦Δ lI)) ∙ ≔'≔' E lA)) E₁))
                l (C m) x₂))
 TC-cut (act (!? {G = G} x x₁)) l₀ l₁ P₀ P₁ = TC-∈! l₀ P₀ λ m l x₂ →
   TC-conv ♦-com
     (TC-∈? l₁ P₁ (λ {_}{_}{_}{I}{E} lI lA E₁ C → TC-conv (♦-com ≈-∙ ♦-cong₂
-                        (≈-reflexive ([≔][≔] _ _ (λ _ → constMap≡ _ _ ) I ([]∈.lΔ lI) ∙ [≔]-ext≡ I lI (/*-End _ ≡-End E₁))) ≈-refl)
+                        (≈-reflexive ([≔][≔] _ _ (λ Δ → ≔'≔' Δ lA ) I ([]∈.lΔ lI))) ≈-refl)
       (TC-cut (x m) l (mk (mk ⟨ ([]∈.lΔ lI) , lookup-same I ([]∈.lΔ lI) _ ⟩ ⟨ lA , lookup-[]≔ _ lA ⟩)
                           (tr Env.Ended (! (ap (λ E → E [ lA ]≔' end) (ap (λ E → E [ lA ]≔' « G m ») ([]∈.↦Δ lI)) ∙ ≔'≔' E lA)) E₁))
                     x₂ (C m))))
 TC-cut (⊗⅋ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = TC-∈⊗ l₀ P₀ λ d' e' a b →
   TC-conv ♦-com
     (TC-∈⅋ l₁ P₁ λ {_}{_}{_}{J} d e d/=e ab →
-      TC-conv (♦-cong₂ ≈-refl (∈♦₁-compute[…] (move[…] ([↦]∈.l… d) ([↦]∈.l… e) d/=e))
-              ≈-∙ ♦-assoc ≈-∙ ♦-com ≈-∙ ♦-cong₂
-               (≈-reflexive (ap (flip _/Ds_ ([↦]∈.lΔ e)) {x = J /Ds [↦]∈.lΔ d}{y = J /D[ [↦]∈.lΔ d >> [↦]∈.lA d ]} (! /…-uniq≡ d)
-                             ∙ ! /…-uniq≡ (move d e (mk d/=e))))
-               ♦-com )
-        (TC-cut D₂ e' (∈♦₁ (move[] d e (mk d/=e))) b (TC-cut D d' d a ab)))
+      TC-conv (♦-cong₂ ≈-refl (∈♦₁-compute… (move… ([↦]∈.l… d) ([↦]∈.l… e) d/=e))
+              ≈-∙ ♦-assoc ≈-∙ ♦-com ≈-∙ ♦-cong₂ ≈-refl ♦-com )
+        (TC-cut D₂ e' (∈♦₁ (move d e (mk d/=e))) b (TC-cut D d' d a ab)))
 TC-cut (⅋⊗ D D₁ D₂ D₃) l₀ l₁ P₀ P₁ = TC-∈⅋ l₀ P₀ λ {_}{_}{_}{J}d e d/=e ab →
- TC-conv (♦-com ≈-∙ ♦-cong₂
-          (≈-reflexive (ap (flip _/Ds_ ([↦]∈.lΔ e)) {x = J /Ds [↦]∈.lΔ d}{y = J /D[ [↦]∈.lΔ d >> [↦]∈.lA d ]} (! /…-uniq≡ d)
-          ∙ ! /…-uniq≡ (move d e (mk d/=e)))) ≈-refl)
+ TC-conv ♦-com
  (TC-∈⊗ l₁ P₁ λ d' e' a b →
-  TC-conv (♦-cong₂ ≈-refl (∈♦₁-compute[…] (move[…] ([↦]∈.l… d) ([↦]∈.l… e) d/=e))
+  TC-conv (♦-cong₂ ≈-refl (∈♦₁-compute (move d e (mk d/=e)))
           ≈-∙ ♦-assoc ≈-∙ ♦-cong₂ ♦-com ≈-refl)
-     (TC-cut D₃ e' (∈♦₁ (move[] d e (mk d/=e))) b (TC-cut D₁ d' d a ab)))
+     (TC-cut D₃ e' (∈♦₁ (move d e (mk d/=e))) b (TC-cut D₁ d' d a ab)))
 
 
 
