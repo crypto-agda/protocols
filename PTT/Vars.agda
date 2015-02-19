@@ -93,14 +93,14 @@ abstract
 
 
 
-data DifferentVars… {δI}{I : Proto δI}{c d A B} : (lA : [ c ↦ A …]∈ I)(lB : [ d ↦ B …]∈ I) → Set₁ where
-  diff-ten : ∀ {δF δG}{F : Env δF}{G : Env δG}{lA : [ δF ]∈D δI}{lB : [ δG ]∈D δI}
-    {↦A : Proto.lookup I lA ≡ F}{c↦ : c ↦ « A » ∈ F} {↦B : Proto.lookup I lB ≡ G}{d↦ : d ↦ « B » ∈ G}
-    → DiffDoms lA lB → DifferentVars… (mk ⟨ lA , ↦A ⟩ c↦) (mk ⟨ lB , ↦B ⟩ d↦)
-  diff-in-ten : ∀ {δF}{F : Env δF}{lF : [ δF ]∈D δI}{↦F : Proto.lookup I lF ≡ F}
-     {c∈ : c ∈D δF}{↦c : Map.lookup F c∈ ≡ « A »}{d∈ : d ∈D δF}{↦d : Map.lookup F d∈ ≡ « B »}
-    → DiffDom c∈ d∈
-    → DifferentVars… (mk4 lF ↦F c∈ ↦c) (mk4 lF ↦F d∈ ↦d)
+data DifferentVars… {δI}{I : Proto δI}{c d A B}(lA : [ c ↦ A …]∈ I)(lB : [ d ↦ B …]∈ I) : Set₁ where
+  diff-ten :{- ∀ {δF δG}{F : Env δF}{G : Env δG}{lA : [ δF ]∈D δI}{lB : [ δG ]∈D δI}
+    {↦A : Proto.lookup I lA ≡ F}{c↦ : c ↦ « A » ∈ F} {↦B : Proto.lookup I lB ≡ G}{d↦ : d ↦ « B » ∈ G} -}
+    DiffDoms ([↦…]∈.lΔ lA) ([↦…]∈.lΔ lB) → DifferentVars… lA lB -- (mk ⟨ lA , ↦A ⟩ c↦) (mk ⟨ lB , ↦B ⟩ d↦)
+  diff-in-ten : {-∀ {δF}{F : Env δF}{lF : [ δF ]∈D δI}{↦F : Proto.lookup I lF ≡ F}
+     {c∈ : c ∈D δF}{↦c : Map.lookup F c∈ ≡ « A »}{d∈ : d ∈D δF}{↦d : Map.lookup F d∈ ≡ « B »} -}
+    (eq : [↦…]∈.[…]∈ lA ≡ [↦…]∈.[…]∈ lB) → DiffDom ([↦…]∈.lA lA) (tr (λ X → d ∈D X) (! ap […]∈.δE eq) ([↦…]∈.lA lB))
+    → DifferentVars… lA lB -- (mk4 lF ↦F c∈ ↦c) (mk4 lF ↦F d∈ ↦d)
 
 DiffDoms-sym : ∀ {δE δF δI}{lE : [ δE ]∈D δI}{lF : [ δF ]∈D δI} → DiffDoms lE lF → DiffDoms lF lE
 DiffDoms-sym (h/t l) = t/h l
@@ -116,7 +116,7 @@ DiffDom-sym (t/t x) = t/t (DiffDom-sym x)
 Diff-sym… : ∀ {δI}{I : Proto δI}{c d A B}{l : [ c ↦ A …]∈ I}{l' : [ d ↦ B …]∈ I}
     → DifferentVars… l l' → DifferentVars… l' l
 Diff-sym… {l = mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩} {mk ⟨ lΔ₁ , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩} (diff-ten x) = diff-ten (DiffDoms-sym x)
-Diff-sym… {l = mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩} {mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩} (diff-in-ten x) = diff-in-ten (DiffDom-sym x)
+Diff-sym… {l = mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩} {mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩} (diff-in-ten refl x) = diff-in-ten refl (DiffDom-sym x)
 
 record DifferentVars {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) : Set₁ where
   constructor mk
@@ -146,7 +146,7 @@ module _ {c d A B} where
     → DifferentVars l l' → Proto.lookup (I [ [↦]∈.lΔ l' ≔ f ]) ([↦]∈.lΔ l) ≡ Proto.lookup I ([↦]∈.lΔ l)
   diff-lookup {I = I}{l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ lΔ₁ , ↦Δ₁ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} f (mk (diff-ten x))
      = DiffDoms-lookup I x
-  diff-lookup {l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} f (mk (diff-in-ten x))
+  diff-lookup {l = mk (mk ⟨ lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .↦Δ ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} f (mk (diff-in-ten refl x))
      = 𝟘-elim (DiffDom-Ended {c = c}{d = d}_ _ x ↦A ↦A₁ E/c E/c₁)
 
 {- -- bug in coveragechecking
@@ -172,7 +172,7 @@ sameVar? (mk4 lΔ ↦Δ _ _) (mk4 lΔ₁ ↦Δ₁ _ _) | inl x = diff (diff-ten 
 sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ ↦Δ₁ lA₁ ↦A₁) | inr ⟨ refl , refl ⟩
   with sameDom? lA lA₁
 sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl lA₁ ↦A₁) | inr ⟨ refl , refl ⟩ | inl x
-  = diff (diff-in-ten x)
+  = diff (diff-in-ten refl x)
 sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , refl ⟩ | inr ⟨ refl , refl ⟩
   with ! ↦A ∙ ↦A₁
 sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , refl ⟩ | inr ⟨ refl , refl ⟩ | refl
@@ -207,42 +207,51 @@ sameVar? (mk4 lΔ refl lA ↦A) (mk4 .lΔ refl .lA ↦A₁) | inr ⟨ refl , ref
           (I₀ ♦Proto' I₁) / (∈♦₁ l) ≈ I₀ ♦Proto' (I₁ / l)
 ∈♦₁-compute (mk lI lE) = ∈♦₁-compute… lI
 
-move…-lemma : ∀ {δI c d A B}{I : Proto δI}{l : [ c ↦ A ]∈ I}{l' : [ d ↦ B ]∈ I}
-  → DifferentVars l l'
-  → Proto.lookup (I / l) ([↦]∈.lΔ l') ≡ [↦]∈.E l'
-move…-lemma {I = I}{mk5 lΔ ↦Δ lA ↦A E/c} {mk5 lΔ₁ refl lA₁ ↦A₁ E/c₁} (mk (diff-ten x))
+module _ {δI c d A B}{I : Proto δI}{l : [ c ↦ A …]∈ I}{l' : [ d ↦ B …]∈ I} where
+   -- need module because buggy Agda
+   Env-move : DifferentVars… l l' → Env ([↦…]∈.δE l')
+   Env-move (diff-ten x) = [↦…]∈.E l'
+   Env-move (diff-in-ten eq x) = [↦…]∈.E l' [ tr (λ X → c ∈D X) (ap […]∈.δE eq) ([↦…]∈.lA l) ]≔' end
+
+
+move-lΔ : ∀ {δI c d A B}{I : Proto δI}{l : [ c ↦ A …]∈ I}{l' : [ d ↦ B …]∈ I}(df : DifferentVars… l l')
+  → Proto.lookup (I /… l) ([↦…]∈.lΔ l') ≡ Env-move df
+move-lΔ {l = l} {l'} (diff-ten x)
+  = lookup-diff _ ([↦…]∈.lΔ l) ([↦…]∈.lΔ l') _ x ∙ ([↦…]∈.↦Δ l')
+move-lΔ {l = mk lI lE} {mk .lI lE'} (diff-in-ten refl x)
+  = lookup-same _ ([]∈.lΔ lI) _ ∙ ap (λ I → I [ ↦∈.lA lE ]≔' end) ([]∈.↦Δ lI)
+{-
+
+move…-lemma : ∀ {δI c d A B}{I : Proto δI}{l : [ c ↦ A ]∈ I}{l' : [ d ↦ B …]∈ I}
+  → DifferentVars… ([↦]∈.l… l) l'
+  → Proto.lookup (I / l) ([↦…]∈.lΔ l') ≡ [↦…]∈.E l'
+move…-lemma {I = I}{mk5 lΔ ↦Δ lA ↦A E/c} {mk4 lΔ₁ refl lA₁ ↦A₁} (diff-ten x)
   = lookup-diff I lΔ lΔ₁ _ x
-move…-lemma {I = I} {l = mk (mk ⟨ lΔ , refl ⟩ ⟨ lA , ↦A ⟩) E/c} {mk (mk ⟨ .lΔ , .refl ⟩ ⟨ lA₁ , ↦A₁ ⟩) E/c₁} (mk (diff-in-ten x))
+move…-lemma {I = I} {l = mk (mk ⟨ lΔ , refl ⟩ ⟨ lA , ↦A ⟩) E/c} {mk ⟨ .lΔ , .refl ⟩ ⟨ lA₁ , ↦A₁ ⟩ } (diff-in-ten refl x)
   = 𝟘-elim (tr Session.Ended (E-lookup-diff (Proto.lookup I lΔ) x ∙ ↦A₁) (All∈D E/c lA₁))
 
-{-
-move…-lemma : ∀ {δI δE δE₁ c d A B}{I : Proto δI}{E : Env δE}{E₁ : Env δE₁}(lΔ : [ δE ]∈D δI)(lΔ₁ : [ δE₁ ]∈D δI)
-     (lE : c ↦ « A » ∈ E)(lE₁ : d ↦ « B » ∈ E₁)
-     (↦Δ : Proto.lookup I lΔ ≡ E)(↦Δ₁ : Proto.lookup I lΔ₁ ≡ E₁)
-     (E/c : Env.Ended (E [ ↦∈.lA lE ]≔' end))
-     (E/c : Env.Ended (E₁ [ ↦∈.lA lE₁ ]≔' end))
-     (l/=l' : DifferentVars… (mk ⟨ lΔ , ↦Δ ⟩ lE) (mk ⟨ lΔ₁ , ↦Δ₁ ⟩ lE₁))
-    → Proto.lookup (I [ lΔ ≔ (λ Δ → Δ [ ↦∈.lA lE ]≔' end) ]) lΔ₁ ≡ E₁
-move…-lemma lΔ lΔ₁ lE lE₁ ↦Δ ↦Δ₁ E/c E/c₁ (diff-ten x) = {!!}
-move…-lemma lΔ .lΔ ._ ._ ↦Δ .↦Δ E/c E/c₁ (diff-in-ten x) = {!!}
 -}
 
-{-
+move-lA : ∀ {δI c d A B}{I : Proto δI}{l : [ c ↦ A …]∈ I}{l' : [ d ↦ B …]∈ I}(df : DifferentVars… l l')
+  → Env-move df ‼ [↦…]∈.lA l' ≡ « B »
+move-lA {l = l} {l'} (diff-ten x) = [↦…]∈.↦A l'
+move-lA {l = mk lI lE} {mk .lI lE'} (diff-in-ten refl x)
+  = E-lookup-diff _ x  ∙ ↦∈.↦A lE'
+
 move… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I) → DifferentVars… l l'
           → [ d ↦ B …]∈ (I /… l)
-move… (mk3 lΔ ↦Δ lE) (mk3 lΔ₁ ↦Δ₁ lE₁) l/=l' = mk3 lΔ₁ (move…-lemma lΔ lΔ₁ lE lE₁ ↦Δ ↦Δ₁ l/=l') lE₁
--}
+move… l l' df = mk4 ([↦…]∈.lΔ l') (move-lΔ df) ([↦…]∈.lA l') (move-lA df)
+
+move-E/c : ∀ {δI} {I : Proto δI} {c d A B} {l : [ c ↦ A …]∈ I} {l' : [ d ↦ B …]∈ I} (df : DifferentVars… l l')
+  → Env.Ended ([↦…]∈.E l' [ [↦…]∈.lA l' ]≔' end)
+  → Env.Ended (Env-move df [ [↦…]∈.lA l' ]≔' end)
+move-E/c {l = l} {l'} (diff-ten x) EE = EE
+move-E/c {l = mk lI lE} {mk .lI lE'} (diff-in-ten refl x) EE
+  = tr Env.Ended (≔'-com _ (↦∈.lA lE') (↦∈.lA lE)) (End/D _ (↦∈.lA lE) EE)
 
 move : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A ]∈ I)(l' : [ d ↦ B ]∈ I) → DifferentVars l l'
           → [ d ↦ B ]∈ (I / l)
-move l (mk5 lΔ₁ ↦Δ₁ lA₁ ↦A₁ E/c₁) df = mk5 lΔ₁ (move…-lemma df) lA₁ ↦A₁ E/c₁
--- mk (move… l… l…₁ (Diff… df)) E/c₁
-
-{-
-move-compute… : ∀ {δI}{I : Proto δI}{c d A B}(l : [ c ↦ A …]∈ I)(l' : [ d ↦ B …]∈ I)(l/=l' : DifferentVars… l l')
-    → (I /… l) /… move… l l' l/=l' ≈ (I /… l) /D[ [↦…]∈.lΔ l' >> [↦…]∈.lA l' ]
-move-compute… l l' l/l' = ≈-refl
--}
+move l (mk l… E/c₁) df = mk (move… ([↦]∈.l… l) l… (Diff… df)) (move-E/c (Diff… df) E/c₁)
 
 [/]-/D[>>]≡ : ∀ {c δE δF δI}(I : Proto δI)(l : [ δE ]∈D δI)(l' : [ δF ]∈D δI)(lc : c ∈D δE)
     → (I /D[ l >> lc ]) /Ds l' ≡ (I /Ds l') /D[ l >> lc ]

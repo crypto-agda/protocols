@@ -175,6 +175,10 @@ AtMost-wk : ∀ {n δs}{I : Proto δs}{σs : Selections δs} → AtMost n I σs 
 AtMost-wk · = ·
 AtMost-wk (A ,[ x ]) = (AtMost-wk A) ,[ SelAtMost-wk x ]
 
+AtMost-constmap : ∀ {δs}(I : Proto δs)(b : 𝟚) → AtMost 0 I (constMaps δs b)
+AtMost-constmap · b = ·
+AtMost-constmap (I ,[ Δ ]) b = (AtMost-constmap I b) ,[ ₀₁ b (pureEnvAll Δ b) ]
+
 {-
 data ZipP : ℕ → Proto → Proto → Proto → Set₁ where
   · : ∀ {n} → ZipP n · · ·
@@ -247,6 +251,16 @@ module _ {δ₀ δE}{I₀ : Proto δ₀}{f : Env δE → Env δE} where
   ≔[]∈♦₁ here (I₁ ,[ Δ ])= refl
   ≔[]∈♦₁ (there l) (I₁ ,[ Δ ]) rewrite ≔[]∈♦₁ l I₁ = refl
 
+
+record […]∈_ {δs}(I : Proto δs) : Set₁ where
+  constructor mk
+  field
+    {δE} : Dom
+    {E}  : Env δE
+    lI   : [ E ]∈ I
+
+module […]∈ = […]∈_
+
 infix 0 [_↦_…]∈_ [_↦_]∈_
 record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   constructor mk
@@ -259,6 +273,9 @@ record [_↦_…]∈_ {δs}(c : URI)(S : Session)(I : Proto δs) : Set₁ where
   open Env._↦_∈_ lE public
   E/ : Env δE
   E/ = E Env./' lE
+
+  […]∈ : […]∈ I
+  […]∈ = mk lI
 module [↦…]∈ = [_↦_…]∈_
 open [↦…]∈ using (E/) public
 
@@ -578,6 +595,10 @@ abstract
     Selections♦/not {K = ·} b σ = ≈-refl
     Selections♦/not {K = K ,[ Δ ]} b σ = ≈-trans (≈,[end] (Selection/[]not Δ b)) (Selections♦/not {K = K}b σ)
 
+    []/pure : ∀ {δI}(I : Proto δI)(b : 𝟚) → I []/[ b ] pure δI (const b) ≡ I
+    []/pure · b = refl
+    []/pure (I ,[ Δ ]) b rewrite []/pure I b | /pure Δ b = refl
+
     /[]-/D[>>] : ∀ {c δE δI}(b : 𝟚)(I : Proto δI)(σ : Selections δI)(l : [ δE ]∈D δI)(l' : c ∈D δE)
         → (I /D[ l >> l' ]) []/[ b ] σ ≈ (I []/[ b ] σ) /D[ l >> l' ]
     /[]-/D[>>] b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here l' = ≈,[] ≈-refl (/D/[] Δ l' b Δ₁)
@@ -604,6 +625,12 @@ abstract
       → (I /D[ l >> lc ]) []/[ b ] σ ≡ (I []/[ b ] σ) /D[ l >> lc ]
     /[]-/D[>>]≡ b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here lc = ap (_,[_] (I []/[ b ] σ)) ([]≔/[]≡ b Δ Δ₁ lc)
     /[]-/D[>>]≡ b (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) lc rewrite /[]-/D[>>]≡ b I σ l lc = refl -- ap (flip _,[_] (Δ /[ b ] Δ₁)) (/[]-/D[>>]≡ b I σ l lc)
+
+    []/[]-pureNot : ∀ {δI}(I : Proto δI)(b : 𝟚)
+      → I []/[ b ] pure δI (const (not b)) ≈ ·
+    []/[]-pureNot · b = ≈-refl
+    []/[]-pureNot (I ,[ Δ ]) 0₂ = ≈,[end] (All/not Δ _ _ (pureEnvAll Δ _)) ≈-∙ []/[]-pureNot I 0₂
+    []/[]-pureNot (I ,[ Δ ]) 1₂ = ≈,[end] (All/not Δ _ _ (pureEnvAll Δ _)) ≈-∙ []/[]-pureNot I 1₂
 
     select : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
       → Map.lookup (lookup I lΔ) lA

@@ -93,6 +93,11 @@ abstract
     End/[_] {E = E , .c ↦ v} 0₂ (σ , c ↦ 1₂) ⟨ EE , Ev ⟩ = ⟨ (End/[_] 0₂ σ EE) , _ ⟩
     End/[_] {E = E , .c ↦ v} 0₂ (σ , c ↦ 0₂) ⟨ EE , Ev ⟩ = ⟨ (End/[_] 0₂ σ EE) , Ev ⟩
 
+    /pure : ∀ {δ}(E : Env δ)(b : 𝟚) → E /[ b ] pure δ (λ _ → b) ≡ E
+    /pure ε b = refl
+    /pure (E , c ↦ v) 1₂ rewrite /pure E 1₂ = refl
+    /pure (E , c ↦ v) 0₂ rewrite /pure E 0₂ = refl
+
 module _ {δ}(Δ : Env δ)(σ : Selection δ) where
     _/₀_ : Env δ
     _/₀_ = Δ /[ 0₂ ] σ

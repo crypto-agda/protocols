@@ -48,6 +48,8 @@ record TC-Split (A : Session) {δK}(K : Proto δK) : Set₁ where
       → TC'⟨ (J /D[ [↦]∈.lΔ l >> [↦]∈.lA l ] /D[ [↦]∈.lΔ l' >> [↦]∈.lA l' ]) ♦Proto' K ⟩
     cont-⊗ : ∀ {S T} → A ≡ S ⊗ T → ∀ {d e δ₀ δ₁}{J₀ : Proto δ₀}{J₁ : Proto δ₁}(l : [ d ↦ S ]∈ J₀)(l' : [ e ↦ T ]∈ J₁)
       → TC'⟨ J₀ ⟩ → TC'⟨ J₁ ⟩ → TC'⟨ ((J₀ / l ♦Proto' J₁ / l')) ♦Proto' K ⟩
+    cont-𝟙 : A ≡ 𝟙' → ∀ {δs}{J : Proto δs} → TC'⟨ J ⟩ → TC'⟨ J ♦Proto' K ⟩
+    cont-⊥ : A ≡ ⊥' → ∀ {δs}{J : Proto δs} → TC'⟨ J ⟩ → TC'⟨ J ♦Proto' K ⟩
     cont-! : ∀ {M S} → A ≡ act (send {M} S) → ∀ {d δI}{I : Proto δI}(m : M)(l : [ d ↦ S m ]∈ I) → TC'⟨ I ⟩
       → TC'⟨ I / l ♦Proto' K ⟩
     cont-? : ∀ {M S} → A ≡ act (recv {M} S) → ∀ {d δE δI}{I : Proto δI}{E : Env δE}
@@ -106,6 +108,18 @@ TC-∈Split {δK = δK}{I = I}{K} cont (mk5 lΔ refl lA ↦A E/c) (TC-⊗-out {S
                     (TC-∈Split cont (mk5 (there lΔ) refl lA
                           (! x ∙ ap (flip _‼_ lA) (diff-lookup _ (mk {l = mk _ E/c}{l' = l₁} l/=l')) ∙ ↦A)
                           (EndItσ 1₂ (I / l₁) σs lΔ lA (EndIt/Ds I ([↦]∈.lΔ l₁) ([↦]∈.lA l₁) lΔ lA E/c))) (P₁ c₁)))
+TC-∈Split cont l (TC-𝟙-out l₁ P) with sameVar? ([↦]∈.l… l) l₁
+TC-∈Split cont l (TC-𝟙-out .([_↦_]∈_.l… l) P) | same = cont-𝟙 cont refl P
+TC-∈Split {I = I}{K} cont l (TC-𝟙-out l₁ P) | diff x = TC-𝟙-out (∈♦₀… {I₁ = K} (move… ([↦]∈.l… l) l₁ x))
+  (TC-conv (≈-sym (≈-reflexive (∈♦₀-compute… (move… ([↦]∈.l… l) l₁ x))
+           ≈-∙ ♦-cong₂ (/D[>>]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l) ([↦…]∈.lA l₁)) ≈-refl))
+    (TC-∈Split cont (mk (move… l₁ ([↦]∈.l… l) (Diff-sym… x)) (move-E/c (Diff-sym… x) ([↦]∈.E/c l))) P))
+TC-∈Split cont l (TC-⊥-inp (mk l₁ E/c) P) with sameVar? ([↦]∈.l… l) l₁
+TC-∈Split cont l (TC-⊥-inp (mk .([_↦_]∈_.l… l) E/c) P) | same = cont-⊥ cont refl P
+TC-∈Split {I = I}{K} cont l (TC-⊥-inp (mk l₁ E/c) P) | diff x = TC-⊥-inp (∈♦₀ {I₁ = K} (move l (mk l₁ E/c) (mk x)))
+  (TC-conv (≈-sym (≈-reflexive (∈♦₀-compute (move l (mk l₁ E/c) (mk x)))
+           ≈-∙ ♦-cong₂ (/D[>>]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l) ([↦…]∈.lA l₁)) ≈-refl))
+     (TC-∈Split cont (move (mk l₁ E/c) l (mk (Diff-sym… x))) P))
 TC-∈Split cont l (TC-?-inp (mk l₁ E/c) P) with sameVar? ([↦]∈.l… l) l₁
 TC-∈Split {I = I} cont (mk l E/c') (TC-?-inp {c} (mk .l E/c) P) | same = TC-conv
   ((♦-cong₂ (≈,[end] _) ≈-refl))
@@ -185,15 +199,8 @@ TC-∈Split cont l (TC-mix lF lG lF/=lG P) | inl x | inr y = {!!}
 TC-∈Split cont l (TC-mix lF lG lF/=lG P) | inl x | inl x₁ = {!!}
 
 -}
-{- 
-TC-mix {!!} {!!} {!!}
-   (TC-conv {!!}
-     (TC-∈Split cont {!!} P))
--}
 
-{-
--- move logic to ⊗
--}
+
 
 module _ {δK}{K : Proto δK} where
   TC-∈! : ∀ {δI c A S}{I : Proto δI}(l : [ c ↦ act (send {A} S) ]∈ I)
@@ -205,6 +212,8 @@ module _ {δK}{K : Proto δK} where
       cont' : TC-Split _ K
       cont-⅋ cont' () l₁ l' x₁ x₂
       cont-⊗ cont' () l₁ l' x₁ x₂
+      cont-𝟙 cont' () p
+      cont-⊥ cont' () p
       cont-! cont' refl m l₁ x₁ = cont m l₁ x₁
       cont-? cont' () lI lA E/c C
 
@@ -219,6 +228,8 @@ module _ {δK}{K : Proto δK} where
       cont' : TC-Split _ K
       cont-⅋ cont' () l₁ l' x₁ x₂
       cont-⊗ cont' () l₁ l' x₁ x₂
+      cont-𝟙 cont' () p
+      cont-⊥ cont' () p
       cont-! cont' () m l₁ x₁
       cont-? cont' refl lI lA E/c C = cont lI lA E/c C
 
@@ -232,6 +243,8 @@ module _ {δK}{K : Proto δK} where
       cont' : TC-Split _ K
       cont-⅋ cont' refl l₁ l' x₁ x₂ = cont l₁ l' x₁ x₂
       cont-⊗ cont' () l₁ l' x₁ x₂
+      cont-𝟙 cont' () p
+      cont-⊥ cont' () p
       cont-! cont' () m l₁ x₁
       cont-? cont' () lI lA E/c C
 
@@ -246,9 +259,40 @@ module _ {δK}{K : Proto δK} where
       cont' : TC-Split _ K
       cont-⅋ cont' () l₁ l' x₁ x₂
       cont-⊗ cont' refl l₁ l' x₁ x₂ = cont l₁ l' x₁ x₂
+      cont-𝟙 cont' () p
+      cont-⊥ cont' () p
       cont-! cont' () m l₁ x₁
       cont-? cont' () lI lA E/c C
 
+  TC-∈𝟙 : ∀ {δI c}{I : Proto δI}(l : [ c ↦ 𝟙' ]∈ I)
+    → TC'⟨ I ⟩
+    → (∀ {δJ}{J : Proto δJ} → TC'⟨ J ⟩
+       → TC'⟨ J ♦Proto' K ⟩)
+    → TC'⟨ I / l ♦Proto' K  ⟩
+  TC-∈𝟙 l p cont = TC-∈Split cont' l p
+    where
+      cont' : TC-Split _ K
+      cont-⅋ cont' () l₁ l' x₁ x₂
+      cont-⊗ cont' () l₁ l' x₁ x₂
+      cont-𝟙 cont' refl p = cont p
+      cont-⊥ cont' () p
+      cont-! cont' () m l₁ x₁
+      cont-? cont' () lI lA E/c C
+
+  TC-∈⊥ : ∀ {δI c}{I : Proto δI}(l : [ c ↦ ⊥' ]∈ I)
+    → TC'⟨ I ⟩
+    → (∀ {δJ}{J : Proto δJ} → TC'⟨ J ⟩
+       → TC'⟨ J ♦Proto' K ⟩)
+    → TC'⟨ I / l ♦Proto' K  ⟩
+  TC-∈⊥ l p cont = TC-∈Split cont' l p
+    where
+      cont' : TC-Split _ K
+      cont-⅋ cont' () l₁ l' x₁ x₂
+      cont-⊗ cont' () l₁ l' x₁ x₂
+      cont-𝟙 cont' () p
+      cont-⊥ cont' refl p = cont p
+      cont-! cont' () m l₁ x₁
+      cont-? cont' () lI lA E/c C
 -- -}
 -- -}
 -- -}

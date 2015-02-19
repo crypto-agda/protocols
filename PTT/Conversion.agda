@@ -159,18 +159,33 @@ mutual
 ∈D≔-conv ∼,[swap] (there here) ↦A = ∼,[swap]
 ∈D≔-conv ∼,[swap] (there (there lA)) ↦A = ∼,[swap]
 
+[↦…]∈-conv : ∀ {c A}{δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → [ c ↦ A …]∈ I → [ c ↦ A …]∈ J
+[↦…]∈-conv ≈-refl l = l
+[↦…]∈-conv (≈-trans eq eq₁) l = [↦…]∈-conv eq₁ ([↦…]∈-conv eq l)
+[↦…]∈-conv (≈,[] eq x) (mk4 here refl lA ↦A) = mk4 here refl (∈D-conv x lA ↦A) (∈D-conv‼ x lA ↦A ∙ ↦A)
+[↦…]∈-conv (≈,[] eq x) (mk4 (there lΔ) ↦Δ lA ↦A) = there…' ([↦…]∈-conv eq (mk4 lΔ ↦Δ lA ↦A))
+[↦…]∈-conv ≈,[ε] (mk4 here refl () ↦A)
+[↦…]∈-conv ≈,[ε] (mk4 (there lΔ) ↦Δ lA ↦A) = mk4 lΔ ↦Δ lA ↦A
+[↦…]∈-conv ≈,[ε]' l = there…' l
+[↦…]∈-conv ≈,[swap] (mk4 here ↦Δ lA ↦A) = mk4 (there here) ↦Δ lA ↦A
+[↦…]∈-conv ≈,[swap] (mk4 (there here) ↦Δ lA ↦A) = mk4 here ↦Δ lA ↦A
+[↦…]∈-conv ≈,[swap] (mk4 (there (there lΔ)) ↦Δ lA ↦A) = mk4 (there (there lΔ)) ↦Δ lA ↦A
+
+[↦…]∈-conv-end : ∀ {c A}{δI δJ}{I : Proto δI}{J : Proto δJ}(eq : I ≈ J)(l : [ c ↦ A …]∈ I)
+  → Env.Ended ([↦…]∈.E l /' [↦…]∈.lE l) → Env.Ended ([↦…]∈.E ([↦…]∈-conv eq l) /' [↦…]∈.lE ([↦…]∈-conv eq l))
+[↦…]∈-conv-end ≈-refl l E/c = E/c
+[↦…]∈-conv-end (≈-trans eq eq₁) l E/c = [↦…]∈-conv-end eq₁ ([↦…]∈-conv eq l) ([↦…]∈-conv-end eq l E/c)
+[↦…]∈-conv-end (≈,[] eq x) (mk4 here refl lA ↦A) E/c = EEnded-conv (∈D≔-conv x lA ↦A) E/c
+[↦…]∈-conv-end (≈,[] eq x) (mk4 (there lΔ) ↦Δ lA ↦A) E/c = [↦…]∈-conv-end eq (mk4 lΔ ↦Δ lA ↦A) E/c
+[↦…]∈-conv-end ≈,[ε] (mk4 here refl () ↦A) E/c
+[↦…]∈-conv-end ≈,[ε] (mk4 (there lΔ) ↦Δ lA ↦A) E/c = E/c
+[↦…]∈-conv-end ≈,[ε]' l E/c = E/c
+[↦…]∈-conv-end ≈,[swap] (mk4 here ↦Δ lA ↦A) E/c = E/c
+[↦…]∈-conv-end ≈,[swap] (mk4 (there here) ↦Δ lA ↦A) E/c = E/c
+[↦…]∈-conv-end ≈,[swap] (mk4 (there (there lΔ)) ↦Δ lA ↦A) E/c = E/c
+
 [↦]∈-conv : ∀ {c A}{δI δJ}{I : Proto δI}{J : Proto δJ} → I ≈ J → [ c ↦ A ]∈ I → [ c ↦ A ]∈ J
-[↦]∈-conv ≈-refl l = l
-[↦]∈-conv (≈-trans eq eq₁) l = [↦]∈-conv eq₁ ([↦]∈-conv eq l)
-[↦]∈-conv (≈,[] eq x) (mk5 here refl lA ↦A E/c) = mk5 here refl (∈D-conv x lA ↦A)
-      (∈D-conv‼ x lA ↦A ∙ ↦A) (EEnded-conv (∈D≔-conv x lA ↦A) E/c)
-[↦]∈-conv (≈,[] eq x) (mk5 (there lΔ) ↦Δ lA ↦A E/c) = there[]' ([↦]∈-conv eq (mk5 lΔ ↦Δ lA ↦A E/c))
-[↦]∈-conv ≈,[ε] (mk (mk ⟨ here , refl ⟩ ⟨ () , ↦A ⟩) E/c)
-[↦]∈-conv ≈,[ε] (mk (mk ⟨ there lΔ , ↦Δ ⟩ ⟨ lA , ↦A ⟩) E/c) = mk5 lΔ ↦Δ lA ↦A E/c
-[↦]∈-conv ≈,[ε]' l = there[]' l
-[↦]∈-conv ≈,[swap] (mk5 here ↦Δ lA ↦A E/c) = mk5 (there here) ↦Δ lA ↦A E/c
-[↦]∈-conv ≈,[swap] (mk5 (there here) ↦Δ lA ↦A E/c) = mk5 here ↦Δ lA ↦A E/c
-[↦]∈-conv ≈,[swap] (mk5 (there (there lΔ)) ↦Δ lA ↦A E/c) = mk5 (there (there lΔ)) ↦Δ lA ↦A E/c
+[↦]∈-conv eq (mk l… E/c) = mk ([↦…]∈-conv eq l…) ([↦…]∈-conv-end eq l… E/c)
 
 Selection-conv' : ∀ {δE δF} → δE ∼' δF → Selection δE → Selection δF
 Selection-conv' ∼-refl Δ = Δ
@@ -253,18 +268,22 @@ AtMost-conv ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) (An ,[ ₀₁ b x ] ,[ ₘ ]) = 
 AtMost-conv ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) (An ,[ ₘ ] ,[ ₀₁ b x ]) = An ,[ ₀₁ b x ] ,[ ₘ ]
 AtMost-conv ≈,[swap] (σs ,[ Δ ] ,[ Δ₁ ]) (An ,[ ₘ ] ,[ ₘ ]) = An ,[ ₘ ] ,[ ₘ ]
 
+≈-[/…] : ∀ {δI δJ c A}{I : Proto δI}{J : Proto δJ}(eq : I ≈ J)(l : [ c ↦ A …]∈ I)
+  → I /… l ≈ J /… [↦…]∈-conv eq l
+≈-[/…] ≈-refl l = ≈-refl
+≈-[/…] (≈-trans eq eq₁) l = ≈-trans (≈-[/…] eq l) (≈-[/…] eq₁ ([↦…]∈-conv eq l))
+≈-[/…] (≈,[] eq x) (mk4 here refl lA ↦A) = ≈,[] eq (∈D≔-conv x lA ↦A)
+≈-[/…] (≈,[] eq x) (mk4 (there lΔ) ↦Δ lA ↦A) = ≈,[] (≈-[/…] eq (mk4 lΔ ↦Δ lA ↦A)) x
+≈-[/…] ≈,[ε] (mk4 here refl () ↦A)
+≈-[/…] ≈,[ε] (mk4 (there lΔ) ↦Δ lA ↦A) = ≈,[ε]
+≈-[/…] ≈,[ε]' l = ≈,[ε]'
+≈-[/…] ≈,[swap] (mk4 here ↦Δ lA ↦A) = ≈,[swap]
+≈-[/…] ≈,[swap] (mk4 (there here) ↦Δ lA ↦A) = ≈,[swap]
+≈-[/…] ≈,[swap] (mk4 (there (there lΔ)) ↦Δ lA ↦A) = ≈,[swap]
+
 ≈-[/] : ∀ {δI δJ c A}{I : Proto δI}{J : Proto δJ}(eq : I ≈ J)(l : [ c ↦ A ]∈ I)
   → I / l ≈ J / [↦]∈-conv eq l
-≈-[/] ≈-refl l = ≈-refl
-≈-[/] (≈-trans eq eq₁) l = ≈-trans (≈-[/] eq l) (≈-[/] eq₁ ([↦]∈-conv eq l))
-≈-[/] (≈,[] eq x) (mk5 here refl lA ↦A E/c) = ≈,[] eq (∈D≔-conv x lA ↦A)
-≈-[/] (≈,[] eq x) (mk5 (there lΔ) ↦Δ lA ↦A E/c) = ≈,[] (≈-[/] eq (mk5 lΔ ↦Δ lA ↦A E/c)) x
-≈-[/] ≈,[ε] (mk5 here refl () ↦A E/c)
-≈-[/] ≈,[ε] (mk5 (there lΔ) ↦Δ lA ↦A E/c) = ≈,[ε]
-≈-[/] ≈,[ε]' l = ≈,[ε]'
-≈-[/] ≈,[swap] (mk5 here ↦Δ lA ↦A E/c) = ≈,[swap]
-≈-[/] ≈,[swap] (mk5 (there here) ↦Δ lA ↦A E/c) = ≈,[swap]
-≈-[/] ≈,[swap] (mk5 (there (there lΔ)) ↦Δ lA ↦A E/c) = ≈,[swap]
+≈-[/] eq l = ≈-[/…] eq ([↦]∈.l… l)
 
 ≈-[]/[] : ∀ {δI δJ}{I : Proto δI}{J : Proto δJ}(b : 𝟚)(eq : I ≈ J)(σs : Selections δI)
     → I []/[ b ] σs ≈ J []/[ b ] Selections-conv eq σs
@@ -307,6 +326,8 @@ TC-conv eq (TC-⊗-out l σs A0 P₀ P₁) = TC-⊗-out ([↦]∈-conv eq l) (Se
                                    (λ c₁ → TC-conv (≈,[] (≈-[]/[] 1₂ (≈-[/] eq l) σs) ∼-refl) (P₁ c₁))
 TC-conv eq (TC-⅋-inp l P) = TC-⅋-inp ([↦]∈-conv eq l) λ c₀ c₁ →
   TC-conv (≈,[] (≈,[] (≈-[/] eq l) ∼-refl) ∼-refl) (P c₀ c₁)
+TC-conv eq (TC-𝟙-out l P) = TC-𝟙-out ([↦…]∈-conv eq l) (TC-conv (≈-[/…] eq l) P)
+TC-conv eq (TC-⊥-inp l P) = TC-⊥-inp ([↦]∈-conv eq l) (TC-conv (≈-[/] eq l) P)
 TC-conv eq (TC-?-inp l P) = TC-?-inp ([↦]∈-conv eq l) λ m →
   TC-conv (≈,[] (≈-[/] eq l) ∼-refl) (P m)
 TC-conv eq (TC-!-out l m P) = TC-!-out ([↦]∈-conv eq l) m (TC-conv (≈,[] (≈-[/] eq l) ∼-refl) P)
