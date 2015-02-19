@@ -37,6 +37,20 @@ module _ {δ}(Δ : Env δ) where
     _/* : Env δ
     _/* = map (λ _ → end) Δ
 
+EnvSelectionAll≡ : ∀ {δ}(b : 𝟚) → Env δ → Selection δ → Set
+EnvSelectionAll≡ b ε ε = 𝟙
+EnvSelectionAll≡ b (E , c ↦ « S ») (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ × b ≡ v₁
+EnvSelectionAll≡ b (E , c ↦ end) (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ
+
+pureEnvAll : ∀ {δ}(Δ : Env δ)(b : 𝟚)
+  → EnvSelectionAll≡ b Δ (constMap δ b)
+pureEnvAll ε b = _
+pureEnvAll (Δ , c ↦ « S ») b = ⟨ pureEnvAll Δ b , refl ⟩
+pureEnvAll (Δ , c ↦ end) b = pureEnvAll Δ b
+
+Ended : ∀ {δ}(E : Env δ) → Set
+Ended = Map.All (λ _ → Session.Ended)
+
 abstract
     _/[_]_ : ∀ {δ}(Δ : Env δ)(b : 𝟚)(σ : Selection δ) → Env δ
     Δ /[ b ] σ = zipWith (selectProj b) Δ σ
@@ -44,6 +58,40 @@ abstract
     /[]-def : ∀ {δ}(Δ : Env δ)(b : 𝟚)(σ : Selection δ)
       → Δ /[ b ] σ ≡ zipWith (selectProj b) Δ σ
     /[]-def Δ b σ = refl
+
+    select-Map : ∀ {c δE}(Δ : Env δE)(σ : Selection δE)(lA : c ∈D δE)
+      → Δ ‼ lA ≡ Δ /[ σ ‼ lA ] σ ‼ lA
+    select-Map (Δ , c ↦ v) (σ , .c ↦ 1₂) here = refl
+    select-Map (Δ , c ↦ v) (σ , .c ↦ 0₂) here = refl
+    select-Map (Δ , c₁ ↦ v) (σ , .c₁ ↦ v₁) (there lA) = select-Map Δ σ lA
+
+    All/same : ∀ {δE}(E : Env δE)(σ : Selection δE)(b : 𝟚)
+      → EnvSelectionAll≡ b E σ → E /[ b ] σ ≡ E
+    All/same ε ε 1₂ all = refl
+    All/same ε ε 0₂ all = refl
+    All/same (E , c ↦ « S ») (σ , .c ↦ .1₂) 1₂ ⟨ all , refl ⟩ rewrite All/same E σ 1₂ all = refl
+    All/same (E , c ↦ « S ») (σ , .c ↦ .0₂) 0₂ ⟨ all , refl ⟩ rewrite All/same E σ 0₂ all = refl
+    All/same (E , c ↦ end) (σ , .c ↦ 1₂) 1₂ all rewrite All/same E σ 1₂ all = refl
+    All/same (E , c ↦ end) (σ , .c ↦ 0₂) 1₂ all rewrite All/same E σ 1₂ all = refl
+    All/same (E , c ↦ end) (σ , .c ↦ 1₂) 0₂ all rewrite All/same E σ 0₂ all = refl
+    All/same (E , c ↦ end) (σ , .c ↦ 0₂) 0₂ all rewrite All/same E σ 0₂ all = refl
+
+    All/not : ∀ {δE}(E : Env δE)(σ : Selection δE)(b : 𝟚)
+      → EnvSelectionAll≡ b E σ → Ended (E /[ not b ] σ)
+    All/not ε ε b all = _
+    All/not (E , c ↦ « S ») (σ , .c ↦ .1₂) 1₂ ⟨ all , refl ⟩ = ⟨ (All/not E σ 1₂ all) , _ ⟩
+    All/not (E , c ↦ « S ») (σ , .c ↦ .0₂) 0₂ ⟨ all , refl ⟩ = ⟨ (All/not E σ 0₂ all) , _ ⟩
+    All/not (E , c ↦ end) (σ , .c ↦ 1₂) 1₂ all = ⟨ All/not E σ 1₂ all , _ ⟩
+    All/not (E , c ↦ end) (σ , .c ↦ 0₂) 1₂ all = ⟨ All/not E σ 1₂ all , _ ⟩
+    All/not (E , c ↦ end) (σ , .c ↦ 1₂) 0₂ all = ⟨ All/not E σ 0₂ all , _ ⟩
+    All/not (E , c ↦ end) (σ , .c ↦ 0₂) 0₂ all = ⟨ All/not E σ 0₂ all , _ ⟩ -- ⟨ {!!} , {!!} ⟩
+
+    End/[_] : ∀ {δ}{E : Env δ}(b : 𝟚)(σ : Selection δ) → Ended E → Ended (E /[ b ] σ)
+    End/[_] {E = ε} b ε EE = _
+    End/[_] {E = E , .c ↦ v} 1₂ (σ , c ↦ 1₂) ⟨ EE , Ev ⟩ = ⟨ (End/[_] 1₂ σ EE) , Ev ⟩
+    End/[_] {E = E , .c ↦ v} 1₂ (σ , c ↦ 0₂) ⟨ EE , Ev ⟩ = ⟨ (End/[_] 1₂ σ EE) , _ ⟩
+    End/[_] {E = E , .c ↦ v} 0₂ (σ , c ↦ 1₂) ⟨ EE , Ev ⟩ = ⟨ (End/[_] 0₂ σ EE) , _ ⟩
+    End/[_] {E = E , .c ↦ v} 0₂ (σ , c ↦ 0₂) ⟨ EE , Ev ⟩ = ⟨ (End/[_] 0₂ σ EE) , Ev ⟩
 
 module _ {δ}(Δ : Env δ)(σ : Selection δ) where
     _/₀_ : Env δ
@@ -60,8 +108,6 @@ data Zip : ∀ {δ} → Env δ → Env δ → Env δ → Set₁ where
 [_is_⋎_] : ∀ {δ} → Env δ → Env δ → Env δ → Set₁
 [_is_⋎_] = Zip
 
-Ended : ∀ {δ}(E : Env δ) → Set
-Ended = Map.All (λ _ → Session.Ended)
 
 Ended-/* : ∀ {δ}(E : Env δ) → Ended (E /*)
 Ended-/* ε = _
@@ -177,10 +223,8 @@ _≡-End_ {E = E , c ↦ v} {F , .c ↦ v₁} ⟨ EE , x ⟩ ⟨ EF , y ⟩
   | Ended-≡end x
   | Ended-≡end y = refl
 
-postulate
-  End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₀ σ)
-  End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₁ σ)
-  End/[_] : ∀ {δ}{E : Env δ}(b : 𝟚)(σ : Selection δ) → Ended E → Ended (E /[ b ] σ)
+--  End/₀ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₀ σ)
+--  End/₁ : ∀ {δ}{E : Env δ}(σ : Selection δ) → Ended E → Ended (E /₁ σ)
 
 /*-End : ∀ {δE}(E : Env δE) → Ended (E /*)
 /*-End E = mapAll (λ _ → _) E
@@ -195,6 +239,13 @@ SEnd// 1₂ S 1₂ = 0₁
 SEnd// 1₂ S 0₂ = 0₁
 SEnd// 0₂ S 1₂ = 0₁
 SEnd// 0₂ S 0₂ = 0₁
+
+E-lookup-diff : ∀ {c d δE}{lA : c ∈D δE}{lB : d ∈D δE}(E : Env δE)
+  → DiffDom lA lB → (E [ lA ]≔' end) ‼ lB ≡ E ‼ lB
+E-lookup-diff (E , c₁ ↦ v) (h/t l) = refl
+E-lookup-diff (E , c₁ ↦ v) (t/h l) = refl
+E-lookup-diff (E , c₁ ↦ v) (t/t df) = E-lookup-diff E df
+
 
 abstract
     -- Really clever proof yay!

@@ -18,7 +18,7 @@ import PTT.Env as Env
 import PTT.Proto as Proto
 open Session hiding (Ended)
 open Env     hiding (_/₀_; _/₁_; _/[_]_; Ended)
-open Proto   hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com)
+open Proto   hiding (♦-assoc ; ♦-com ; ♦-com, ; /Ds-com ; ♦-cong₂ ; select ; Sel♦)
 open import PTT.Term
 open import PTT.Vars
 open import PTT.Conversion
@@ -60,7 +60,7 @@ TC-∈Split : ∀ {δI δK c A}{I : Proto δI}{K : Proto δK} → TC-Split A K �
   → TC'⟨ I ⟩ → TC'⟨ I /… [↦]∈.l… l ♦Proto' K ⟩
 TC-∈Split cont l (TC-⊗-out l₁ σs A0 P₀ P₁) with sameVar? ([↦]∈.l… l) ([↦]∈.l… l₁)
 TC-∈Split {I = I} cont (mk l Y) (TC-⊗-out (mk .l X) σs A0 P₀ P₁) | same = TC-conv
-  (♦-cong₂ (♦-cong₂ (≈,[end] _) (≈,[end] _) ≈-∙ Sel♦ σs) ≈-refl)
+  (♦-cong₂ (♦-cong₂ (≈,[end] _) (≈,[end] _) ≈-∙ Sel♦ A0) ≈-refl)
   (cont-⊗ cont refl (mk (mk heRe[] heRe) _)
                     (mk (mk heRe[] heRe) _)
                     (P₀ c₀) (P₁ c₁))
@@ -110,7 +110,7 @@ TC-∈Split cont l (TC-?-inp (mk l₁ E/c) P) with sameVar? ([↦]∈.l… l) l�
 TC-∈Split {I = I} cont (mk l E/c') (TC-?-inp {c} (mk .l E/c) P) | same = TC-conv
   ((♦-cong₂ (≈,[end] _) ≈-refl))
   (cont-? cont refl {I = I /… l ,[ c ↦end]} heRe[] here _ (λ m → P m ))
-TC-∈Split {I = I}{K}cont l (TC-?-inp (mk l₁ E/c) P) | diff x = TC-?-inp (mk (∈♦₀… {I₁ = K} (move… ([↦]∈.l… l) l₁ x)) E/c) λ m →
+TC-∈Split {I = I}{K}cont l (TC-?-inp (mk l₁ E/c) P) | diff x = TC-?-inp (∈♦₀ {I₁ = K} (move l (mk l₁ E/c) (mk x))) λ m →
   TC-conv (≈-trans ♦-com,
           (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute (move l (mk l₁ E/c) (mk x))))
           (♦-cong₂ (/D[>>]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l) ([↦…]∈.lA l₁))
@@ -122,9 +122,9 @@ TC-∈Split cont l (TC-!-out (mk l₁ E/c) m P) with sameVar? ([↦]∈.l… l) 
 TC-∈Split cont (mk l E/c') (TC-!-out (mk .l E/c) m P) | same = TC-conv
   (♦-cong₂ (≈,[end] _) ≈-refl)
  (cont-! cont refl m (mk (mk heRe[] heRe) _)  P )
-TC-∈Split {I = I}{K} cont l (TC-!-out (mk l₁ E/c) m P) | diff x = TC-!-out (mk (∈♦₀… {I₁ = K} (move… ([↦]∈.l… l) l₁ x)) E/c) m
+TC-∈Split {I = I}{K} cont l (TC-!-out (mk l₁ E/c) m P) | diff x = TC-!-out (∈♦₀ {I₁ = K} (move l (mk l₁ E/c) (mk x))) m
   (TC-conv (≈-trans ♦-com,
-           (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute… (move… ([↦]∈.l… l) l₁ x)))
+           (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute (move l (mk l₁ E/c) (mk x))))
            (♦-cong₂ (/D[>>]-/D[>>] I ([↦]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦]∈.lA l) ([↦…]∈.lA l₁))
            ≈-refl)))
            ∼-refl))
@@ -138,10 +138,10 @@ TC-∈Split cont (mk l E/c) (TC-⅋-inp (mk .l E/c₁) P) | same = TC-conv
                     (diff-ten (t/h _)) (P c₀ c₁))
   -- postulate for channels.. grr
   where postulate c₀ c₁ : _
-TC-∈Split {I = I}{K} cont (mk l E/c) (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (mk (∈♦₀… {I₁ = K} (move… l l₁ x)) X) λ c₀ c₁ →
+TC-∈Split {I = I}{K} cont (mk l E/c) (TC-⅋-inp (mk l₁ X) P) | diff x = TC-⅋-inp (∈♦₀ {I₁ = K} (move (mk l E/c) (mk l₁ X) (mk x))) λ c₀ c₁ →
   TC-conv (≈-trans ♦-com,
          (≈,[] (≈-trans ♦-com,
-         (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute… (move… l l₁ x)))
+         (≈,[] (≈-sym (≈-trans (≈-reflexive (∈♦₀-compute (move (mk l E/c) (mk l₁ X) (mk x))))
          (♦-cong₂ (/D[>>]-/D[>>] I ([↦…]∈.lΔ l) ([↦…]∈.lΔ l₁) ([↦…]∈.lA l) ([↦…]∈.lA l₁))
          ≈-refl)))
          ∼-refl))

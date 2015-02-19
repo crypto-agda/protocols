@@ -156,16 +156,6 @@ data SelAtMost (n : ℕ){δ : Dom} : Sel δ → ℕ → Set where
   ₘ : ∀ {σ} → SelAtMost n (ₘ σ) (suc n)
 -}
 
-EnvSelectionAll≡ : ∀ {δ}(b : 𝟚) → Env δ → Selection δ → Set
-EnvSelectionAll≡ b ε ε = 𝟙
-EnvSelectionAll≡ b (E , c ↦ « S ») (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ × b ≡ v₁
-EnvSelectionAll≡ b (E , c ↦ end) (σ , .c ↦ v₁) = EnvSelectionAll≡ b E σ
-
-pureEnvAll : ∀ {δ}(Δ : Env δ)(b : 𝟚)
-  → EnvSelectionAll≡ b Δ (constMap δ b)
-pureEnvAll ε b = _
-pureEnvAll (Δ , c ↦ « S ») b = ⟨ pureEnvAll Δ b , refl ⟩
-pureEnvAll (Δ , c ↦ end) b = pureEnvAll Δ b
 
 data SelAtMost (n : ℕ){δ : Dom}(E : Env δ)(σ : Sel δ) : ℕ → Set where
   ₀₁ : ∀ b → EnvSelectionAll≡ b E σ → SelAtMost n E σ n
@@ -518,6 +508,25 @@ _≈-∙_ = ≈-trans
 ♦-com {A = ·} = ♦-com·
 ♦-com {A = A ,[ Δ ]}{B} = ♦-com, {B = B} ≈-∙ (≈,[] (♦-com {A = A}) ∼-refl)
 
+·♦ :  ∀ {δI}{I : Proto δI} → · ♦Proto I ≈ I
+·♦ {I = ·} = ≈-refl
+·♦ {I = I ,[ Δ ]} = ≈,[] ·♦ ∼-refl
+
+♦-C : ∀ {δa δb δc} {A : Proto δa} {B : Proto δb} →
+      A ≈ B → (C : Maps MSession δc) → A ♦Proto C ≈ B ♦Proto C
+♦-C eq · = eq
+♦-C eq (C ,[ Δ ]) = ≈,[] (♦-C eq C) ∼-refl
+
+
+♦-cong₂ : ∀ {δa δb δc δd}{A : Proto δa}{B : Proto δb}{C : Proto δc}{D : Proto δd}
+          → A ≈ B → C ≈ D → A ♦Proto C ≈ B ♦Proto D
+♦-cong₂ {C = C} eq ≈-refl = ♦-C eq C
+♦-cong₂ eq (≈-trans eq' eq'') = ≈-trans (♦-cong₂ eq eq') (♦-cong₂ ≈-refl eq'')
+♦-cong₂ eq (≈,[] eq' x) = ≈,[] (♦-cong₂ eq eq') x
+♦-cong₂ {D = D} eq ≈,[ε] = ≈-trans (♦-C eq (D ,[ ε ])) ≈,[ε]
+♦-cong₂ {C = C} eq ≈,[ε]' = ≈-trans (♦-C eq C) ≈,[ε]'
+♦-cong₂ {C = I ,[ E ] ,[ F ]} eq ≈,[swap] = ≈-trans (♦-C eq (I ,[ E ] ,[ F ])) ≈,[swap]
+
 /Ds-com : ∀ {δs δ δ'}{I : Proto δs}(l : [ δ ]∈D δs)(l' : [ δ' ]∈D δs)
     → I /Ds l /Ds l' ≈ I /Ds l' /Ds l
 /Ds-com here here = ≈-refl
@@ -557,6 +566,7 @@ atMost/[>>] here lA (σs ,[ Δ ]) (AM ,[ ₀₁ b x ]) = AM ,[ ₀₁ b (EnvSelA
 atMost/[>>] here lA (σs ,[ Δ ]) (AM ,[ ₘ ]) = AM ,[ ₘ ]
 atMost/[>>] (there lΔ) lA (σs ,[ Δ ]) (AM ,[ x ]) = atMost/[>>] lΔ lA σs AM ,[ x ]
 
+
 abstract
     Selections♦/same : ∀ {δI}{δK}{I : Proto δI}{K : Proto δK}(b : 𝟚)(σ : Selections δI)
         → (I ♦Proto K) []/[ b ] (Selections♦ b σ δK) ≈ (I []/[ b ] σ) ♦Proto K
@@ -594,6 +604,19 @@ abstract
       → (I /D[ l >> lc ]) []/[ b ] σ ≡ (I []/[ b ] σ) /D[ l >> lc ]
     /[]-/D[>>]≡ b (I ,[ Δ ]) (σ ,[ Δ₁ ]) here lc = ap (_,[_] (I []/[ b ] σ)) ([]≔/[]≡ b Δ Δ₁ lc)
     /[]-/D[>>]≡ b (I ,[ Δ ]) (σ ,[ Δ₁ ]) (there l) lc rewrite /[]-/D[>>]≡ b I σ l lc = refl -- ap (flip _,[_] (Δ /[ b ] Δ₁)) (/[]-/D[>>]≡ b I σ l lc)
+
+    select : ∀ {c δI δE}{I : Proto δI}(σ : Selections δI)(lΔ : [ δE ]∈D δI)(lA : c ∈D δE)
+      → Map.lookup (lookup I lΔ) lA
+      ≡ Map.lookup (lookup (I []/[ (lookup σ lΔ) ‼ lA ] σ) lΔ) lA
+    select {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) here lA = select-Map Δ Δ₁ lA
+    select {I = I ,[ Δ ]} (σ ,[ Δ₁ ]) (there lΔ) lA = select {I = I} σ lΔ lA
+
+    Sel♦ : ∀ {δs}{I : Proto δs}{σ : Selections δs} → AtMost 0 I σ → I []/₀ σ ♦Proto I []/₁ σ ≈ I
+    Sel♦ · = ≈-refl
+    Sel♦ {I = I ,[ Δ ]}{σs ,[ σ ]} (A0 ,[ ₀₁ 1₂ x ]) rewrite All/same Δ σ 1₂ x
+      = ♦-cong₂ {A = I []/₀ σs ,[ Δ /[ 0₂ ] σ ]}{C = I []/₁ σs ,[ Δ ]} (≈,[end] (All/not Δ σ 1₂ x)) ≈-refl  ≈-∙ ≈,[] (Sel♦ A0) ∼-refl
+    Sel♦ {I = I ,[ Δ ]}{σs ,[ σ ]} (A0 ,[ ₀₁ 0₂ x ]) rewrite All/same Δ σ 0₂ x
+      = ♦-cong₂ {A = I []/₀ σs ,[ Δ ]}{C = I []/₁ σs ,[ Δ /[ 1₂ ] σ ]} ≈-refl (≈,[end] (All/not Δ σ 0₂ x))  ≈-∙ ♦-com, {A = I []/₀ σs}{I []/₁ σs} ≈-∙ ≈,[] (Sel♦ A0) ∼-refl
 -- -}
 -- -}
 -- -}
