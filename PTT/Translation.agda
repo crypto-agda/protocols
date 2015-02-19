@@ -1,3 +1,5 @@
+-- UNFINISHED
+
 open import Function
 open import Data.Product hiding (zip)
                          renaming (_,_ to ⟨_,_⟩; proj₁ to fst; proj₂ to snd;
@@ -99,8 +101,6 @@ module Translation
               (λ c₄ → T-conv (≈,[] (≈-! (≈,[swap] ≈-∙ {!≈,[] ≈-refl ?!})) (∼,↦ (∼-! ∼,↦end))) (T-fwd S₁ c₃ c₄))
               (λ c₄ → T-conv (≈,[] (≈,[] (≈-! (≈,[end] _ ≈-∙ (≈,[end] _ ≈-∙ ≈,[end] _))) ∼-refl) (∼,↦ (∼-! ∼,↦end))) (T-fwd S₃ c₃ c₄))
   T-fwd (⅋⊗ S S₁ S₂ S₃) c₀ c₁ = {!!}
-{-
-  -}
 
   go : ∀ {δI}{I : Proto δI} → ⟨ I ⟩ → T⟨ I ⟩
   go (end x) = T-end x
