@@ -1,10 +1,10 @@
 open import Data.Zero
 open import Data.One
 open import Data.Two
-open import Relation.Binary.PropositionalEquality.NP
 open import Data.Nat
+open import Relation.Binary.PropositionalEquality.NP
 
-module PTT.Session where
+module PTT-sub.Session where
 
 data Com : Set where IN OUT : Com
 
@@ -22,40 +22,41 @@ mutual
 pattern send {M} P = com OUT {M} P
 pattern recv {M} P = com IN {M} P
 
-mutual
-  data DualS : (P Q : Action) → Set₁ where
-    ?! : ∀ {M : Set}{F G : M → Session}
-       → (∀ m → Dual (F m) (G m))
-       → (∀ m → Dual (G m) (F m))
-       → DualS (recv F) (send G)
-    !? : ∀ {M : Set}{F G : M → Session}
-       → (∀ m → Dual (F m) (G m))
-       → (∀ m → Dual (G m) (F m))
-       → DualS (send F) (recv G)
+data DualC : Com → Com → Set₁ where
+  ?! : DualC IN  OUT
+  !? : DualC OUT IN
 
-  data Dual : (P Q : Session) → Set₁ where
-    -- end : Dual end end
-    𝟙⊥ : Dual 𝟙' ⊥'
-    ⊥𝟙 : Dual ⊥' 𝟙'
-    act : ∀ {P Q}
-        → DualS P Q → Dual (act P) (act Q)
-    ⊗⅋ : ∀ {A A' B B'}
-       → Dual A A' → Dual A' A
-       → Dual B B' → Dual B' B
-       → Dual (A ⊗ B) (A' ⅋ B')
-    ⅋⊗ : ∀ {A A' B B'}
-       → Dual A A' → Dual A' A
-       → Dual B B' → Dual B' B
-       → Dual (A ⅋ B) (A' ⊗ B')
 
-symDualS : ∀ {P Q} → DualS P Q → DualS Q P
-symDualS (?! x x₁) = !? x₁ x
-symDualS (!? x x₁) = ?! x₁ x
+data Dual : (P Q : Session) → Set₁ where
+  -- end : Dual end end
+  𝟙⊥ : Dual 𝟙' ⊥'
+  ⊥𝟙 : Dual ⊥' 𝟙'
+  act : ∀ {C C'}{M : Set}{F G : M → Session}
+      → DualC C C'
+      → (∀ m → Dual (F m) (G m))
+      → (∀ m → Dual (G m) (F m))
+      → Dual (act (com C F)) (act (com C' G))
+  {-
+  act : ∀ {P Q}
+      → DualS P Q → Dual (act P) (act Q)
+  -}
+  ⊗⅋ : ∀ {A A' B B'}
+     → Dual A A' → Dual A' A
+     → Dual B B' → Dual B' B
+     → Dual (A ⊗ B) (A' ⅋ B')
+  ⅋⊗ : ∀ {A A' B B'}
+     → Dual A A' → Dual A' A
+     → Dual B B' → Dual B' B
+     → Dual (A ⅋ B) (A' ⊗ B')
+
+symDualC : ∀ {P Q} → DualC P Q → DualC Q P
+symDualC ?! = !?
+symDualC !? = ?!
 
 symDual : ∀ {P Q} → Dual P Q → Dual Q P
 symDual 𝟙⊥ = ⊥𝟙
 symDual ⊥𝟙 = 𝟙⊥
-symDual (act p) = act (symDualS p)
+symDual (act p x x₁) = act (symDualC p) x₁ x -- act (symDualS p)
 symDual (⊗⅋ x x₁ x₂ x₃) = ⅋⊗ x₁ x x₃ x₂
 symDual (⅋⊗ x x₁ x₂ x₃) = ⊗⅋ x₁ x x₃ x₂
 
@@ -93,21 +94,20 @@ mutual
   CS-dual : ∀ n {M R C C'} → Dual C C' → Dual C' C
     → Dual (Client n M R C) (Server n M R C')
   CS-dual zero x _ = x
-  CS-dual (suc n) x x₁ = act (!? (λ m → act (?! (λ m₁ → CS-dual n x x₁) (λ m₁ → CS-dual' n x x₁)))
-                                 (λ m → act (!? (λ m₁ → CS-dual' n x x₁) (λ m₁ → CS-dual n x x₁))))
+  CS-dual (suc n) x x₁ = act !? (λ m → act ?! (λ m₁ → CS-dual n x x₁) (λ m₁ → CS-dual' n x x₁))
+                                (λ m → act !? (λ m₁ → CS-dual' n x x₁) (λ m₁ → CS-dual n x x₁))
 
   CS-dual' : ∀ n {M R C C'} → Dual C C' → Dual C' C
     → Dual (Server n M R C') (Client n M R C)
   CS-dual' zero x x₁ = x₁
-  CS-dual' (suc n) x x₁ = act (?! (λ m → act (!? (λ m₁ → CS-dual' n x x₁) (λ m₁ → CS-dual n x x₁)))
-                                  (λ m → act (?! (λ m₁ → CS-dual n x x₁) (λ m₁ → CS-dual' n x x₁))))
+  CS-dual' (suc n) x x₁ = act ?! (λ m → act !? (λ m₁ → CS-dual' n x x₁) (λ m₁ → CS-dual n x x₁))
+                                 (λ m → act ?! (λ m₁ → CS-dual n x x₁) (λ m₁ → CS-dual' n x x₁))
 
 _→'_ : Set → Session → Session
 M →' S = act (recv λ (_ : M) → S)
 
 _×'_ : Set → Session → Session
 M ×' S = act (send λ (_ : M) → S)
-
 {-
 data NotPar : Proto → Set₁ where
   act : ∀ {c S} → NotPar (act c S)
