@@ -26,5 +26,4 @@ find.file /\.agda$/, '.', (files) ->
     agda:
       include: [
         "."
-        "./lib"
       ]
