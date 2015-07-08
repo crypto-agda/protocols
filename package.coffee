@@ -1,6 +1,6 @@
 fs   = require 'fs'
 find = require 'find'
-find.file /\.agda$/, '.', (files) ->
+find.file /^[^.].*\.agda$/, '.', (files) ->
   fs.writeFile 'package.json', JSON.stringify
     name: "agda-protocols"
     version: "0.0.1"
