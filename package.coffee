@@ -3,7 +3,7 @@ find = require 'find'
 find.file /^[^.].*\.agda$/, '.', (files) ->
   fs.writeFile 'package.json', JSON.stringify
     name: "agda-protocols"
-    version: "0.0.1"
+    version: "0.0.2"
     description: "Shallow embedding of Protocols using Agda dependent types"
     main: "protocols.agda"
     scripts:
